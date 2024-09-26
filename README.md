@@ -1,21 +1,30 @@
-# 02.-Online-course-System
+# SE214 School Project - Backend
 
-# Branch for each project
+In ./main: very clean base source of NodeJS (Express) using DI with Inversify + Service - Repository Pattern with TypeORM
 
-- Backend:
+## Usage
 
-  - Development: backend/develop
+Start in production:
 
-  - Release: backend/release
+```
+docker compose up --build -d
+```
 
-- Frontend:
+Start in development:
 
-  - Development: frontend/develop
+-> Go to and read /main/README.md
 
-  - Release: frontend/release
+## Workflow:
 
-- Mobile:
+![alt text](https://images.viblo.asia/84f47fd1-a009-4beb-8957-26395fe1023d.png)
 
-  - Development: mobile/develop
+- 1. Clone this repository
+- 2. Create new feature branch from the develop branch,
+     the feature branch is describe each feature are being developed.
+     Ex:
+     Create user api: backend/feature/user/init-api
+     -> If want to fix the feature of user api, create backend/feature/user/fix
 
-  - Release: mobile/release
+THE BRANCH NAME MUST MATCH THIS: backend/feature/xxxx
+
+# se214-group2-backend
