@@ -1,0 +1,18 @@
+version: "3.9"
+
+services:
+  backend:
+    container_name: backend_online_course_system
+    build:
+      context: ./main
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    env_file:
+      - .docker.env
+    networks:
+      - main-network
+
+networks:
+  main-network:
+    driver: bridge
