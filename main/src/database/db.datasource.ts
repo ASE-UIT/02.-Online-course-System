@@ -66,10 +66,6 @@ export class AppDataSourceSingleton {
         database: process.env.DB_NAME || 'test',
         entities: models,
         synchronize: GlobalConfig.database.sync,
-        ssl: {
-          requestCert: false,
-          rejectUnauthorized: false
-        },
         logging: true,
         migrations: [__dirname + '/migrations/*.js']
       });
