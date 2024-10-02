@@ -1,4 +1,8 @@
 {
+  "ts-node": {
+    "files": true
+  },
+  "files": ["src/types/express/index.d.ts"],
   "compilerOptions": {
     "target": "es6",
     "lib": ["es6", "dom"],

@@ -18,12 +18,24 @@ export const globalErrorHanlder = (error: any, req: Request, res: Response, next
     switch (error.code) {
       case ErrorCode.VALIDATION_ERROR:
         return res.send_badRequest('Validation Error', error);
+      case ErrorCode.AUTH_02:
+        return res.send_unauthorized('Unauthorized', error);
+      case ErrorCode.AUTH_01:
+        return res.send_unauthorized('Unauthorized', error);
+      case ErrorCode.PERMISSION_01:
+        return res.send_forbidden('Forbidden', error);
     }
   }
 
   if (error instanceof TypeORMError) {
     if (error instanceof QueryFailedError) {
-      return res.send_badRequest('Query Failed Error', error.message);
+      if ((error as unknown as any).code === '23505') {
+        const duplicateError = {
+          code: ErrorCode.DUPLICATE_ERROR,
+          msg: (error as unknown as any).detail
+        };
+        return res.send_badRequest('Duplicate error', duplicateError);
+      }
     }
   }
 
