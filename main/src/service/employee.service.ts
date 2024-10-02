@@ -50,7 +50,7 @@ export class EmployeeService extends BaseCrudService<Employee> implements IEmplo
       throw new BaseError(ErrorCode.AUTH_01, 'Password is incorrect');
     }
 
-    const employeeRole = employee?.role;
+    const employeeRole = await employee?.role;
 
     const employeePermissions = await employeeRole?.permissions;
 
@@ -58,7 +58,7 @@ export class EmployeeService extends BaseCrudService<Employee> implements IEmplo
 
     const jwtClaim = new JwtClaimDto(employee!.id, '', employeePermissionIds, employeeRole!.id);
 
-    const secretKey = process.env.LOGIN_SECRET_KEY || '';
+    const secretKey = process.env.LOGIN_SECRET || '';
 
     const token = jwt.sign(_.toPlainObject(jwtClaim), secretKey, {
       expiresIn: TIME_CONSTANTS.DAY * 3
