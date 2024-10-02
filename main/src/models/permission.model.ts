@@ -7,16 +7,17 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany
+  ManyToMany,
+  PrimaryColumn
 } from 'typeorm';
 
 @Entity('permissions')
 export class Permission extends BaseModel {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn({ length: 40 })
   id!: string;
 
-  @Column({ length: 40 })
-  code!: string;
+  // @Column({ length: 40 })
+  // code!: string;
 
   @Column({ length: 100 })
   name!: string;

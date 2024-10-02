@@ -1,7 +1,8 @@
 import { LoginTypeEnum } from '@/enums/login-type.enum';
 import { BaseModel } from '@/models/base.model';
 import { Enrollment } from '@/models/enrollment.model';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Role } from '@/models/role.model';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('students')
 export class Student extends BaseModel {
@@ -25,4 +26,11 @@ export class Student extends BaseModel {
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.student)
   enrollments!: Promise<Enrollment[]>;
+
+  @Column({ nullable: true, name: 'role_id' })
+  roleId!: string;
+
+  @ManyToOne(() => Role, (role) => role.employees)
+  @JoinColumn({ name: 'role_id' })
+  role!: Role;
 }
