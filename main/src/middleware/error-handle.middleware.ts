@@ -24,6 +24,14 @@ export const globalErrorHanlder = (error: any, req: Request, res: Response, next
         return res.send_unauthorized('Unauthorized', error);
       case ErrorCode.PERMISSION_01:
         return res.send_forbidden('Forbidden', error);
+      case ErrorCode.BAD_REQUEST:
+        return res.send_badRequest('Bad Request', error);
+      case ErrorCode.PHONE_NUMBER_NOT_FOUND:
+        return res.send_notFound('Phone number not found', error);
+      case ErrorCode.INVALID_CODE:
+        return res.send_badRequest('Invalid code', error);
+      default:
+        return res.send_internalServerError(error.message, error);
     }
   }
 

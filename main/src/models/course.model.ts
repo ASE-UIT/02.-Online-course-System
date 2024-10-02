@@ -39,6 +39,9 @@ export class Course extends BaseModel {
   @JoinColumn({ name: 'category_id' })
   category!: CourseCategory;
 
+  @Column({ name: 'lecturer_id' })
+  lecturerId!: string;
+
   @ManyToOne(() => Lecturer)
   @JoinColumn({ name: 'lecturer_id' })
   lecturer!: Lecturer;
