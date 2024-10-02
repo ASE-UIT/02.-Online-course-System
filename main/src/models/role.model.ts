@@ -2,16 +2,26 @@ import { BaseModel } from '@/models/base.model';
 import { Employee } from '@/models/employee.model';
 import { Permission } from '@/models/permission.model';
 import { injectable } from 'inversify';
-import { Column, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+  Unique
+} from 'typeorm';
 
 @injectable()
 @Entity()
 export class Role extends BaseModel {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  // @PrimaryGeneratedColumn('uuid')
+  // id!: string;
 
-  @Column({ length: 40 })
-  name!: string;
+  @PrimaryColumn({ length: 40 })
+  id!: string;
 
   @Column({ type: 'text', nullable: true })
   description!: string;
@@ -25,5 +35,5 @@ export class Role extends BaseModel {
     joinColumn: { name: 'role_id' },
     inverseJoinColumn: { name: 'permission_id' }
   })
-  permissions!: Permission[];
+  permissions!: Promise<Permission[]>;
 }

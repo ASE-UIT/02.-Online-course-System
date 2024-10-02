@@ -16,10 +16,11 @@ class RoleContainer extends BaseContainer {
   export() {
     const roleController = this.container.get<RoleController>(RoleController);
     const roleService = this.container.get<IRoleService<any>>('RoleService');
-    return { roleController, roleService };
+    const roleRepository = this.container.get<IRoleRepository<any>>('RoleRepository');
+    return { roleController, roleService, roleRepository };
   }
 }
 
 const roleContainer = new RoleContainer();
-const { roleController, roleService } = roleContainer.export();
-export { roleController, roleService };
+const { roleController, roleService, roleRepository } = roleContainer.export();
+export { roleController, roleService, roleRepository };
