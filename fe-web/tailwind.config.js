@@ -18,11 +18,19 @@ export default {
           foreground: "hsl(var(--popover-foreground))"
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#0038FF",
           foreground: "hsl(var(--primary-foreground))"
         },
+        warning: {
+          default: "#562600",
+          foreground: "#FFFFFF"
+        },
+        error: {
+          default: "#540505",
+          foreground: "#FFFFFF"
+        },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "#757575",
           foreground: "hsl(var(--secondary-foreground))"
         },
         muted: {
@@ -36,6 +44,10 @@ export default {
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))"
+        },
+        loginOutline: {
+          default: "#FBFBFB",
+          border: "#0038FF"
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

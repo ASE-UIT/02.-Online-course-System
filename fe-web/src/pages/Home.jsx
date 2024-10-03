@@ -1,10 +1,12 @@
+import { Course } from "@/components/Courses/Course";
 import ProductCard from "../components/ProductCard";
 
 const Home = () => {
   return (
-    <div>
+    <div className="mt-20">
       Home
       <ProductCard />
+      <Course />
     </div>
   );
 };
