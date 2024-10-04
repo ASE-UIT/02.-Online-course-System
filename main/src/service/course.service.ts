@@ -5,6 +5,11 @@ import { ICourseCategoryRepository } from '@/repository/interface/i.course_categ
 import { BaseCrudService } from '@/service/base/base.service';
 import { ICourseService } from '@/service/interface/i.course.service';
 import { inject, injectable } from 'inversify';
+import { UpdateCourseRequest } from '@/dto/course/update-course-req';
+import { UpdateCourseResponse } from '@/dto/course/update-course.res';
+import { ITYPES } from '@/types/interface.types';
+import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
+import {} from 'typeorm'
 
 @injectable()
 export class CourseService extends BaseCrudService<Course> implements ICourseService<Course> {

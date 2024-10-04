@@ -3,10 +3,12 @@ import { BaseRepository } from '@/repository/base/base.repository';
 import { ICourseRepository } from '@/repository/interface/i.course.repository';
 import { ITYPES } from '@/types/interface.types';
 import { inject } from 'inversify';
-import { DataSource } from 'typeorm';
+import { DataSource } from 'typeorm'; 
+import { IBaseRepository } from './interface/i.base.repository';
 
 export class CourseRepository extends BaseRepository<Course> implements ICourseRepository<Course> {
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(Course));
   }
+ 
 }
