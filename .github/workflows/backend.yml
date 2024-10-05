@@ -13,8 +13,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Copy source code to server
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASSWORD }}
+          source: "./*"
+          target: "/root/se214_project/backend"
+
       - name: Deploy to server
-        uses: appleboy/ssh-action@v0.1.4 # Thiết lập SSH để kết nối tới server
+        uses: appleboy/ssh-action@v0.1.4
         with:
           host: ${{ secrets.EDU_HUB_BACKEND_SERVER_HOST }}
           username: ${{ secrets.EDU_HUB_BACKEND_SERVER_USER }}
