@@ -17,4 +17,4 @@ RUN npm run build
 
 EXPOSE 4000
 
-CMD ["sh", "-c", "npm run migration:sync && npm run start:prod"]
+CMD ["sh", "-c", "npm run start:prod"]
