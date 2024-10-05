@@ -1,20 +1,26 @@
-name: NodeJS Backend CI/CD
+name: Eduhub BACKEND CI/CD Pipeline
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+    branches:
+      - backend/release
 
 jobs:
-  build:
-    runs-on: self-hosted
-
-    strategy:
-      matrix:
-        node-version: [20.x]
+  deploy:
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - run: docker compose down
-      - run: docker compose up --build -d
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.4 # Thiết lập SSH để kết nối tới server
+        with:
+          host: ${{ secrets.EDU_HUB_BACKEND_SERVER_HOST }}
+          username: ${{ secrets.EDU_HUB_BACKEND_SERVER_USER }}
+          password: ${{ secrets.EDU_HUB_BACKEND_SERVER_PASSWORD }}
+          port: 22
+          script: |
+            cd /root/se214_project/backend/02.-Online-course-System   
+            sudo docker compose down       
+            docker compose up --build -d
