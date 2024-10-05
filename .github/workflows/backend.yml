@@ -30,6 +30,7 @@ jobs:
           password: ${{ secrets.EDU_HUB_BACKEND_SERVER_PASSWORD }}
           port: 22
           script: |
-            cd /root/se214_project/backend/02.-Online-course-System   
+            cp /root/se214_project/env_file/backend/.docker.env /root/se214_project/backend/
+            cd /root/se214_project/backend/  
             sudo docker compose down       
             docker compose up --build -d
