@@ -12,6 +12,11 @@ services:
       - .docker.env
     networks:
       - main-network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
 
 networks:
   main-network:
