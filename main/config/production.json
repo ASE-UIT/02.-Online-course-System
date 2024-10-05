@@ -1,0 +1,32 @@
+{
+  "request_limit": {
+    "limit": "100kb"
+  },
+  "server": {
+    "port": 4000,
+    "host": "localhost",
+    "api_version": "/api/v1"
+  },
+  "cors": {
+    "origin": "*",
+    "methods": ["GET", "POST", "PUT", "DELETE", "UPDATE"],
+    "allowedHeaders": [
+      "X-Requested-With",
+      "X-HTTP-Method-Override",
+      "Content-Type",
+      "Accept",
+      "Observe",
+      "Authorization"
+    ]
+  },
+  "helmet": {
+    "enable": true
+  },
+  "enviroment": "production",
+  "swagger": {
+    "enable": true
+  },
+  "database": {
+    "sync": false
+  }
+}

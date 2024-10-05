@@ -1,0 +1,26 @@
+name: Eduhub BACKEND CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - backend/release
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.4 # Thiết lập SSH để kết nối tới server
+        with:
+          host: ${{ secrets.EDU_HUB_BACKEND_SERVER_HOST }}
+          username: ${{ secrets.EDU_HUB_BACKEND_SERVER_USER }}
+          password: ${{ secrets.EDU_HUB_BACKEND_SERVER_PASSWORD }}
+          port: 22
+          script: |
+            cd /root/se214_project/backend/02.-Online-course-System   
+            sudo docker compose down       
+            docker compose up --build -d
