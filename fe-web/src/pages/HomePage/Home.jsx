@@ -1,7 +1,11 @@
+import CategoryCard from "@/components/Category/CategoryCard";
+import { CourseCard } from "@/components/Courses/CourseCard";
+import { FaArrowRight } from "react-icons/fa6";
+
 const Home = () => {
   return (
     <div>
-      <div className="w-full flex h-[400px] bg-primary-color px-24">
+      <div className="w-full mt-[65px] flex h-[400px] bg-primary-color px-24">
         <div className="basis-[40%]">
           <div
             className="w-[223px] h-[307px] bg-contain mx-auto mt-8"
@@ -21,34 +25,105 @@ const Home = () => {
             gian, EduHub mang lại một phương pháp học tập linh hoạt và hiện đại,
             giúp bạn chủ động xây dựng hành trình học tập của riêng mình.
           </p>
-          <div className="text-primary-color text-sm bg-white px-4 py-2 w-fit font-bold rounded-md ">
+          <div className="text-primary-color items-center gap-2 flex cursor-pointer transition-all hover:bg-gray-200 text-sm bg-white px-4 py-2 w-fit font-bold rounded-md ">
             <p>Tham gia ngay</p>
+            <FaArrowRight />
           </div>
         </div>
       </div>
       <div className="px-24">
         <div className="flex justify-between mt-6">
-          <p className="text-lg font-extrabold">Lịch học trực tiếp</p>
+          <p className="text-2xl font-extrabold">Lịch học trực tiếp</p>
           <p className="text-sm font-bold text-primary-color cursor-pointer">
             Xem tất cả
           </p>
         </div>
+        <div className="grid grid-cols-4 mt-4  gap-[1rem]">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((course, idx) => {
+            return (
+              <CourseCard
+                key={idx}
+                rating={0}
+                ratingNum={2}
+                title={"Tiêu đề"}
+                author={"Tác giả"}
+                price={500000}
+                img={
+                  "https://s3-alpha-sig.figma.com/img/7f12/ea13/00756f144a0fb5daaf68dbfc01103a46?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=CSSJdDE1TgT~XEce7zEFxHaiBYkErU7VYaC1AjxyFVGnIpNrGn8Q0oTUlD--uzUlYYJ9Ap7t~fqn-m4yfmF8b-j25anq0~THK4h~13BR1jGfel~WCFJHRwa0HqPlKzSocAlqbRxDvNh9Z8bCzFIF~~ifU95VFrp72fCAy7ekalCXk1FkWb2VSe0q5xENvT7dTY4VojE17qpRfJKihjquHmPlC3pJKmHXhUwkWD-2ZxnF3L8Vd-8IGUC1f61t1kGlOouGGiBlK8snPvgL7xmFzL-VLg69gJbCnw0uHPssIPSZYf99thi1EJ1N87ySGOvQIiw6ajiOQ9TM7TKunixi8w__"
+                }
+              ></CourseCard>
+            );
+          })}
+        </div>
         <div className="flex justify-between mt-6">
-          <p className="text-lg font-extrabold">Top bán chạy</p>
+          <p className="text-2xl font-extrabold">Top bán chạy</p>
           <p className="text-sm font-bold text-primary-color cursor-pointer">
             Xem tất cả
           </p>
         </div>
+        <div className="grid grid-cols-4 mt-4  gap-[1rem]">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((course, idx) => {
+            return (
+              <CourseCard
+                key={idx}
+                rating={0}
+                ratingNum={2}
+                title={"Tiêu đề"}
+                author={"Tác giả"}
+                price={500000}
+                img={
+                  "https://s3-alpha-sig.figma.com/img/7f12/ea13/00756f144a0fb5daaf68dbfc01103a46?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=CSSJdDE1TgT~XEce7zEFxHaiBYkErU7VYaC1AjxyFVGnIpNrGn8Q0oTUlD--uzUlYYJ9Ap7t~fqn-m4yfmF8b-j25anq0~THK4h~13BR1jGfel~WCFJHRwa0HqPlKzSocAlqbRxDvNh9Z8bCzFIF~~ifU95VFrp72fCAy7ekalCXk1FkWb2VSe0q5xENvT7dTY4VojE17qpRfJKihjquHmPlC3pJKmHXhUwkWD-2ZxnF3L8Vd-8IGUC1f61t1kGlOouGGiBlK8snPvgL7xmFzL-VLg69gJbCnw0uHPssIPSZYf99thi1EJ1N87ySGOvQIiw6ajiOQ9TM7TKunixi8w__"
+                }
+              ></CourseCard>
+            );
+          })}
+        </div>
         <div className="flex justify-between mt-6">
-          <p className="text-lg font-extrabold">Khóa học mới ra mắt</p>
+          <p className="text-2xl font-extrabold">Khóa học mới ra mắt</p>
           <p className="text-sm font-bold text-primary-color cursor-pointer">
             Xem tất cả
           </p>
         </div>
+        <div className="grid grid-cols-4 mt-4  gap-[1rem]">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((course, idx) => {
+            return (
+              <CourseCard
+                key={idx}
+                rating={0}
+                ratingNum={2}
+                title={"Tiêu đề"}
+                author={"Tác giả"}
+                price={500000}
+                img={
+                  "https://s3-alpha-sig.figma.com/img/7f12/ea13/00756f144a0fb5daaf68dbfc01103a46?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=CSSJdDE1TgT~XEce7zEFxHaiBYkErU7VYaC1AjxyFVGnIpNrGn8Q0oTUlD--uzUlYYJ9Ap7t~fqn-m4yfmF8b-j25anq0~THK4h~13BR1jGfel~WCFJHRwa0HqPlKzSocAlqbRxDvNh9Z8bCzFIF~~ifU95VFrp72fCAy7ekalCXk1FkWb2VSe0q5xENvT7dTY4VojE17qpRfJKihjquHmPlC3pJKmHXhUwkWD-2ZxnF3L8Vd-8IGUC1f61t1kGlOouGGiBlK8snPvgL7xmFzL-VLg69gJbCnw0uHPssIPSZYf99thi1EJ1N87ySGOvQIiw6ajiOQ9TM7TKunixi8w__"
+                }
+              ></CourseCard>
+            );
+          })}
+        </div>
         <div className="flex justify-between mt-6">
-          <p className="text-lg font-extrabold">
+          <p className="text-2xl font-extrabold">
             Khám phá <span className="text-primary-color">EduHub</span>
           </p>
+        </div>
+        <div className="grid grid-cols-3 mt-4  gap-[1rem]">
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((course, idx) => {
+            return (
+              <CategoryCard
+                category={"Tiếng Anh"}
+                subcategory={[
+                  "Grammar cho người mới",
+                  "Speaking",
+                  "Writing",
+                  "Listening",
+                ]}
+                img={
+                  "https://s3-alpha-sig.figma.com/img/7f12/ea13/00756f144a0fb5daaf68dbfc01103a46?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=CSSJdDE1TgT~XEce7zEFxHaiBYkErU7VYaC1AjxyFVGnIpNrGn8Q0oTUlD--uzUlYYJ9Ap7t~fqn-m4yfmF8b-j25anq0~THK4h~13BR1jGfel~WCFJHRwa0HqPlKzSocAlqbRxDvNh9Z8bCzFIF~~ifU95VFrp72fCAy7ekalCXk1FkWb2VSe0q5xENvT7dTY4VojE17qpRfJKihjquHmPlC3pJKmHXhUwkWD-2ZxnF3L8Vd-8IGUC1f61t1kGlOouGGiBlK8snPvgL7xmFzL-VLg69gJbCnw0uHPssIPSZYf99thi1EJ1N87ySGOvQIiw6ajiOQ9TM7TKunixi8w__"
+                }
+                key={idx}
+              ></CategoryCard>
+            );
+          })}
         </div>
       </div>
       <div className="w-full mt-8 px-[15%] h-[355px] bg-[#EEFEE7] flex">
