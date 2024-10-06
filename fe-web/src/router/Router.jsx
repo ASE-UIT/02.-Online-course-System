@@ -2,11 +2,11 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-  Navigate
+  Navigate,
 } from "react-router-dom";
 
 import UserLayout from "../layouts/UserLayout";
-import Home from "../pages/Home";
+import Home from "../pages/HomePage/Home";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
