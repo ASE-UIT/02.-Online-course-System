@@ -22,7 +22,7 @@ const Header = () => {
 
         <SearchBox />
 
-        <h1 className="forMentor font-bold text-lg md:text-xl whitespace-nowrap hover:cursor-pointer">
+        <h1 className="forMentor font-bold text-base whitespace-nowrap hover:cursor-pointer">
             Dành Cho Giảng Viên
         </h1>
 

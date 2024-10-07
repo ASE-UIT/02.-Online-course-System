@@ -32,7 +32,7 @@ export const CourseCard = ({
           </div>
         </div>
 
-        <div className="items-center justify-between border-t-2 py-3 !mt-3">
+        <div className="items-center justify-between  py-3 !mt-3">
           <p className="text-2xl  font-bold text-primary">{price}đ</p>
         </div>
       </div>
