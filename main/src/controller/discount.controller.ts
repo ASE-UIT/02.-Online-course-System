@@ -7,6 +7,8 @@ import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { DiscountRes } from '../dto/discount/discount.res';
 import { filter } from 'lodash';
+import { PagingDto } from '@/dto/paging.dto';
+import { PagingResponseDto } from '@/dto/paging-response.dto';
 
 @injectable()
 export class DiscountController {
@@ -36,4 +38,27 @@ export class DiscountController {
       next(error);
     }
   }
+  async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const discounts = await this.discountService.findAll();
+      const resultDto = convertToDto(DiscountRes, discounts);
+      res.send_ok('Get all discounts successfully', resultDto);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async findAllWithPaging(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const rpp = parseInt(req.query.rpp as string) || 10;
+     
+      const paging = new PagingDto(page, rpp);
+
+      const response: PagingResponseDto<Discount> = await this.discountService.findAllWithPaging({ paging: paging });
+      res.send_ok('Get all discounts successfully', response);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
+

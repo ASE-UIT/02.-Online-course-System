@@ -1,6 +1,7 @@
 import { PERMISSIONS } from '@/constants/permission.constants';
 import { discountController } from '@/container/discount.container';
 import { CreateDiscountReq } from '@/dto/discount/create-discount.req';
+import { DiscountRes } from '@/dto/discount/discount.res';
 import { UpdateDiscountReq } from '@/dto/discount/update-discount.req';
 import { authenticateJWT } from '@/middleware/authenticate.middleware';
 import { checkPermission } from '@/middleware/check-permission.middleware';
@@ -24,5 +25,16 @@ discountRouter
     checkPermission([PERMISSIONS.MANAGE_EMPLOYEE]),
     discountController.common.update.bind(discountController.common)
   );
+  .get(
+  '/findall',
+  authenticateJWT,
+  classValidate(DiscountRes),
+  discountController.findAll.bind(discountController) 
+  .get(
+    '/findallwithpaging',
+    authenticateJWT,
+    classValidate(DiscountRes),
+    discountController.findAllWithPaging.bind(discountController) 
+);
 
-export default discountRouter;
+

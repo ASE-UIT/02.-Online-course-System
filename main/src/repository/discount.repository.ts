@@ -5,10 +5,17 @@ import { IDiscountRepository } from '@/repository/interface/i.discount.repositor
 import { ITYPES } from '@/types/interface.types';
 import { RecordOrderType } from '@/types/record-order.types';
 import { inject } from 'inversify';
-import { DataSource, IsNull } from 'typeorm';
+import { DataSource, IsNull, Not } from 'typeorm';
 
 export class DiscountRepository extends BaseRepository<Discount> implements IDiscountRepository<Discount> {
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(Discount));
+  }
+  async findAll(): Promise<Discount[]> {
+    return await this.ormRepository.find({
+      where: {
+        deleteAt: Not(IsNull())
+      }
+    });
   }
 }
