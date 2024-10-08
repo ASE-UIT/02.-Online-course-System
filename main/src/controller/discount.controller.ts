@@ -28,6 +28,7 @@ export class DiscountController {
         res.status(204).send(); // Trả về trạng thái 204 No Content
     } catch (error) {
         res.status(400).json({ message: error }); // Trả về lỗi nếu có
+        //refixed
     }
   }
 }
