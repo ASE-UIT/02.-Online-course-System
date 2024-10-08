@@ -2,7 +2,7 @@ import { DifficultyLevel } from "@/enums/difficulty-level.enum";
 import {IsNotEmpty, IsOptional, IsUUID, IsString, IsNumber, IsEnum,IsDate, Validate } from 'class-validator';
 import { DecimalPrecision } from "./decimal-10-1-custom";
 
-export class CreateCourseRequest
+export class CourseRes
 {
 
     @IsNotEmpty()
