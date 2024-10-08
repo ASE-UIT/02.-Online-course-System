@@ -26,7 +26,6 @@ class CourseContainer extends BaseContainer {
     return { courseController, courseService, courseRepository };
   }
 }
-console.log('ok');
 
 const courseContainer = new CourseContainer();
 const { courseController, courseService, courseRepository } = courseContainer.export();
