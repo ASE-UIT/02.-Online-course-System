@@ -1,3 +1,4 @@
 .docker.env
 .docker-data/postgres/data
 .docker-data/redis/data
+node_modules

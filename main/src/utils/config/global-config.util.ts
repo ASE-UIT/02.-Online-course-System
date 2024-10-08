@@ -3,6 +3,15 @@ import cors from 'cors';
 
 export class GlobalConfig {
   /**
+   * * Media service config
+   */
+  static media_service: {
+    video_bucket: { path: string };
+    image_bucket: { path: string };
+    url: string;
+  } = config.get('media_service');
+
+  /**
    * * Server config
    *   This is config for server such as
    * + host: host of server

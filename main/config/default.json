@@ -29,5 +29,14 @@
   },
   "database": {
     "sync": false
+  },
+  "media_service": {
+    "url": "http://159.223.56.195/media",
+    "video_bucket": {
+      "path": "eduhub-video"
+    },
+    "image_bucket": {
+      "path": "eduhub-image"
+    }
   }
 }
