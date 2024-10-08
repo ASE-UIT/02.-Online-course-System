@@ -43,25 +43,4 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
     // Trả về thông tin khóa học đã cập nhật dưới dạng DTO
     return convertToDto(UpdateCourseResponse, updatedData);
   }
-
-  async softdelete(id: string): Promise<void> {
-    // Tìm khóa học theo ID
-    const existingCourse = await this.courseRepository.findOne({ filter: { id } });
-    
-    if (!existingCourse) {
-        throw new Error('Course not found'); // Thông báo lỗi nếu không tìm thấy khóa học
-    }
-
-    // Cập nhật trường deletedAt với thời gian hiện tại
-    const updatedData = {
-        ...existingCourse,
-        deletedAt: new Date() // Thiết lập thời gian xóa
-    };
-
-    // Gọi hàm findOneAndUpdate từ IBaseRepository để cập nhật khóa học
-    await this.courseRepository.findOneAndUpdate({
-        filter: { id },
-        updateData: updatedData
-    });
-}
 }
