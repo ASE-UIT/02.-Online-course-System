@@ -7,6 +7,7 @@ import discountRouter from '@/routes/discount.route';
 import employeeRouter from '@/routes/employee.route';
 import lecturerRouter from '@/routes/lecturer.route';
 import lessonRouter from '@/routes/lesson.route';
+import mediaRouter from '@/routes/media.route';
 import orderRouter from '@/routes/order.route';
 import quizRouter from '@/routes/quiz.route';
 import roleRouter from '@/routes/role.route';
@@ -26,6 +27,7 @@ export function route(app: any, root_api: string) {
   app.use(`${root_api}/course`, courseRouter);
   app.use(`${root_api}/account`, accountRouter);
   app.use(`${root_api}/role`, roleRouter);
+  app.use(`${root_api}/media`, mediaRouter);
 
   //Check health
   app.get(`${root_api}/health`, (req: any, res: any) => {

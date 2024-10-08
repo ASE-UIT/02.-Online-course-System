@@ -1,3 +1,6 @@
+/**
+ * Time constants in milliseconds
+ */
 export const TIME_CONSTANTS = {
   SECOND: 1000,
   MINUTE: 60000,
