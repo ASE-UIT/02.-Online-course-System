@@ -1,3 +1,5 @@
+import { PagingResponseDto } from '@/dto/paging-response.dto';
+import { PagingDto } from '@/dto/paging.dto';
 import { Course } from '@/models/course.model';
 import { CourseCategory } from '@/models/course_category.model';
 import { ICourseRepository } from '@/repository/interface/i.course.repository';
@@ -18,5 +20,20 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
     super(courseRepository);
     this.courseRepository = courseRepository;
     this.courseCategoryRepository = courseCategoryRepository;
+  }
+  async findAll(): Promise<Course[]> {
+    return await this.courseRepository.findAll();
+  }
+  async findAllWithPaging(options: { paging: PagingDto }): Promise<PagingResponseDto<Course>> {
+    const contents: Course[] = await this.baseRepository.findMany({
+      filter: {},
+      paging: options.paging
+    });
+
+    const totalRecords = await this.baseRepository.count({
+      filter: {}
+    });
+
+    return new PagingResponseDto<Course>(totalRecords, contents);
   }
 }
