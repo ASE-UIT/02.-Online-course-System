@@ -12,6 +12,5 @@ courseRouter
 
   .put('/:id', classValidate(UpdateCourseRequest), courseController.update.bind(courseController)) // Cập nhật khóa học
 
-  .delete('/:id', courseController.softDelete.bind(courseController)) // Xóa mềm khóa học
 
 export default courseRouter;

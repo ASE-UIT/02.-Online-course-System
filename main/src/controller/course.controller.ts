@@ -55,15 +55,4 @@ export class CourseController {
       next(error);
     }
   }
-
-  public async softDelete(req: Request, res: Response): Promise<void> {
-    const { id } = req.params; // Lấy ID từ tham số URL
-
-    try {
-        await this.courseService.softdelete(id); // Gọi hàm softDelete từ CourseService
-        res.status(204).send(); // Trả về trạng thái 204 No Content
-    } catch (error) {
-        res.status(400).json({ message: error }); // Trả về lỗi nếu có
-    }
-}
 }

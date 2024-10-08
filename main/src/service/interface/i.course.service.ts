@@ -5,5 +5,4 @@ import { UpdateCourseResponse } from '@/dto/course/update-course.res';
 
 export interface ICourseService<T extends BaseModelType> extends IBaseCrudService<T> {
     update(id: string, data: UpdateCourseRequest): Promise<UpdateCourseResponse>;
-    softdelete(id:string):Promise<void>;
 }
