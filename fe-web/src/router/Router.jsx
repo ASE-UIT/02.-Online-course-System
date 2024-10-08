@@ -7,12 +7,14 @@ import {
 
 import UserLayout from "../layouts/UserLayout";
 import Home from "../pages/HomePage/Home";
+import CourseDetail from "@/pages/CourseDetailPage/CourseDetail";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<UserLayout />}>
         <Route index element={<Home />} />
+        <Route path="/course/:id" element={<CourseDetail />} />
       </Route>
       <Route path="*" element={<Navigate to={"./"} />} />
     </Route>
