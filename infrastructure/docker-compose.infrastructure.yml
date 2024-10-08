@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  postgres:
+    container_name: postgres_se214
+    image: postgres:15.7
+    restart: unless-stopped
+    ports:
+      - "5440:5432"
+    env_file:
+      - docker-compose.infrastructure.env
+    volumes:
+      - ./.docker-data/postgres/data:/var/lib/postgresql/data
+    networks:
+      - main-network
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 200M
+
+  minio-service:
+    image: minio/minio:latest
+    volumes:
+      - ./.docker-data/minio/data:/data
+    ports:
+      - "9000:9000"
+      - "9099:9099"
+    env_file:
+      - docker-compose.infrastructure.env
+    command: server --address ":9099" --console-address ":9000" /data
+    restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 500M
+
+networks:
+  main-network:
+    driver: bridge
