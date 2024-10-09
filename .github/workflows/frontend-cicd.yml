@@ -1,0 +1,35 @@
+name: Eduhub Frontend CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - frontend/release
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Copy source code to server
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.EDU_HUB_FRONTEND_SERVER_HOST }}
+          username: ${{ secrets.EDU_HUB_FRONTEND_SERVER_USER }}
+          password: ${{ secrets.EDU_HUB_FRONTEND_SERVER_PASSWORD }}
+          source: "./*"
+          target: "/root/se214_project/frontend"
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.EDU_HUB_FRONTEND_SERVER_HOST }}
+          username: ${{ secrets.EDU_HUB_FRONTEND_SERVER_USER }}
+          password: ${{ secrets.EDU_HUB_FRONTEND_SERVER_PASSWORD }}
+          port: 22
+          script: |
+            cd /root/se214_project/frontend/  
+            sudo docker compose down       
+            docker compose up --build -d
