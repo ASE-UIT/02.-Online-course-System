@@ -31,7 +31,9 @@ export function route(app: any, root_api: string) {
 
   //Check health
   app.get(`${root_api}/health`, (req: any, res: any) => {
-    res.send('OK');
+    res.json({
+      message: 'OK'
+    });
   });
 
   // Handle API not exists

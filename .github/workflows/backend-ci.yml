@@ -1,0 +1,50 @@
+name: Eduhub BACKEND CI Pipeline
+
+on:
+  pull_request:
+    branches:
+      - backend/develop
+      - backend/release
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env: # Thiết lập biến môi trường
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      LOGIN_SECRET: ${{ secrets.LOGIN_SECRET }}
+      REDIS_URL: ${{ secrets.REDIS_URL }}
+      SMS_USERNAME: ${{ secrets.SMS_USERNAME }}
+      SMS_PASSWORD: ${{ secrets.SMS_PASSWORD }}
+      SMS_API: ${{ secrets.SMS_API }}
+      MINIO_ENDPOINT: ${{ secrets.MINIO_ENDPOINT }}
+      MINIO_PORT: ${{ secrets.MINIO_PORT }}
+      MINIO_ACCESS_KEY: ${{ secrets.MINIO_ACCESS_KEY }}
+      MINIO_SECRET_KEY: ${{ secrets.MINIO_SECRET_KEY }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "21.6.2"
+
+      - name: Install dependencies
+        run: |
+          cd ./main 
+          npm install
+
+      - name: Run tests
+        run: |
+          cd ./main 
+          npm run test
+
+      - name: Test results
+        if: failure()
+        run: echo "Tests failed, cannot merge!"
