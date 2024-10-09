@@ -29,6 +29,12 @@ jobs:
           cd ./main 
           npm run test
 
+      - name: Git Guardian Check
+        uses: GitGuardian/ggshield-action@v1
+        with:
+          ggshield_version: latest
+          gitguardian_token: ${{ secrets.GIT_GUARDIAN_TOKEN }}
+
       - name: Test results
         if: failure()
         run: echo "Tests failed, cannot merge!"
