@@ -1,5 +1,7 @@
-import { Check, Heart, Star } from "lucide-react";
+import { Check, Star } from "lucide-react";
 import "react-quill/dist/quill.snow.css";
+import CourseInfo from "./CourseInfo";
+import LecturerInfo from "./LecturerInfo";
 const cousreContent = `<p>Bạn có biết:</p><p>Khóa học "Cẩm nang A-Z Illustrator cho Designer" chính là dành cho bạn, người...</p><p>Đam mê yêu thích đồ họa, nhiếp ảnh, thiết kế sản phẩm.</p><p>Đang đi làm cần bổ sung, chuẩn hóa kiến thức, tăng khả năng hoàn thiện và thăng tiến trong nghề nghiệp</p><p>Sinh viên chuyên ngành marketing, truyền thông, mỹ thuật, thiết đồ họa, thời trang, họa viên… cần kỹ năng sử dụng thành thạo phần mềm illustrator để&nbsp; phục vụ cho công việc và&nbsp;học thiết kế...</p><p>Đang&nbsp;làm việc trong lĩnh vực marketing, truyền thông, kinh doanh,…</p><p>Và bất cứ ai yêu thích công việc sáng tạo và thiết kế với phần mềm Adobe Illustrator!</p><p>Hãy tham gia ngay khóa học&nbsp;"Cẩm nang A-Z Illustrator cho Designer"&nbsp;tại Unica!</p><p>&nbsp; &nbsp;✔️ Khóa học do giảng viên Phạm Đức Huy trực tiếp hướng dẫn. Khóa học sẽ giúp bạn có được những kiến thức và kỹ năng nền tảng nhất để các bạn tiến gần hơn và&nbsp;trở thành một Graphic Designer, Web Designer, Game UI UX Designer hoặc Motion Graphic Designer ngay tại nhà!</p><p>&nbsp; &nbsp;✔️ Khóa học là nền tảng để các bạn hiểu sâu hơn về bản chất công cụ của phần mềm Adobe Illustrator, từ đó các bạn dễ dàng xin được việc tại các công ty thiết kế lớn ở Việt Nam.</p><p>&nbsp; &nbsp;✔️ Khóa học được soạn từ những dự án thực tế với nhiều khách hàng, vì vậy tính ứng dụng của khóa học luôn gắn liền với thị trường hiện tại. Học viên có thể ứng dụng ngay những kiến thức và kỹ năng mình học được vào trong công việc hiện tại của bản thân.</p><p>Nội dung khóa học cụ thể:</p><p>Phần 1: Giới thiệu và hướng dẫn tạo các hình khối</p><p>Phần 2: Các tính năng của Shapes và bài tập thực hành</p><p>Phần 3: Hướng dẫn các công cụ Drawing Tools, Pen Tool và Brushes</p><p>Phần 4: Hướng dẫn các công cụ nâng cao trong thiết kế đồ họa</p><p>Trở thành nhà thiết kế chuyên nghiệp với phần mềm Ai ngay hôm nay với&nbsp;khóa học&nbsp;"Cẩm nang A-Z Illustrator cho Designer"&nbsp;tại EduHub thôi nào!</p>`;
 export default function CourseDetail() {
   return (
@@ -41,43 +43,9 @@ export default function CourseDetail() {
               </p>
             </div>
           </div>
-          <div
-            className="rounded-[4px] mt-[15%] basis-[40%] mx-auto w-[450px] h-fit overflow-hidden "
-            style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
-          >
-            <div
-              className="w-full bg-no-repeat bg-center bg-cover h-[276px]"
-              style={{
-                backgroundImage: `url(https://s3-alpha-sig.figma.com/img/577c/6528/ddf41450ca653083d12880f4c574cebb?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=TFyXXQfrC-gneKCaqPkM0BWPsStYenJpNHMkgtJu4pEPTuBQnqmSYh448Nquf~1Up7GikOp3BSWl6QZ5gXiWjb8Ul4bzyHkwoMFjZgL-VbPQnftuk3zRslugUPa6uIngBspYEhQypdrvJKX9wT3Q98MqR7glV1anccoGYRcZ7nIi1p6dWmy0tRT4TTcez0udY6pVO23VMzt57HroncUfcVwEzenl0ed1iQzZMqOXWAxsPM9OkDEdacD~knmp141N1XwiDnQucGuS6o62T9t~PA5dBKP1HRqpxu2vS0SWSs3ltvOZMj~TOtLRk73u60yVhyrHl0ESjO5HspLer21R0g__)`,
-              }}
-            ></div>
-            <div className="p-[20px] bg-white">
-              <div className="flex justify-between items-center gap-4">
-                <div className="flex items-end gap-2">
-                  <p className="text-display/md/bold text-primary-500">
-                    đ000,000
-                  </p>
-                  <p className="text-text/xl/semibold text-gray-600 line-through">
-                    đ000,000
-                  </p>
-                </div>
-                <p className="text-text/xl/regular mt-1">Giảm xx%</p>
-              </div>
-              <div className="flex mt-6 gap-2 justify-between">
-                <div
-                  style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
-                  className="text-warning-950 select-none  bg-warning-100 flex-1 h-[40px] leading-[40px] text-text/md/semibold rounded-[4px] text-center"
-                >
-                  Thêm vào giỏ hàng
-                </div>
-                <div
-                  style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
-                  className="w-[40px] flex items-center justify-center rounded-[4px] h-[40px] "
-                >
-                  <Heart className="w-[24px] h-[24px]" />
-                </div>
-              </div>
-            </div>
+          <div className="basis-[40%]">
+            <CourseInfo />
+            <LecturerInfo />
           </div>
         </div>
       </div>
