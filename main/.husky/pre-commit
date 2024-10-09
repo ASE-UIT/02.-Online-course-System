@@ -4,3 +4,4 @@
 cd ./main
 npm run lint
 npm run prettier
+npm run test
