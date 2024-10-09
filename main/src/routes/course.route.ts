@@ -13,8 +13,8 @@ courseRouter.put(
   checkPermission([PERMISSIONS.MANAGE_COURSE]),
   courseController.softDelete.bind(courseController)
 );
-courseRouter.get('/paging', authenticateJWT, courseController.findAllWithPaging.bind(courseController));
+courseRouter.get('/paging', courseController.findAllWithPaging.bind(courseController));
 
-courseRouter.get('/', authenticateJWT, courseController.findAll.bind(courseController));
+courseRouter.get('/', courseController.findAll.bind(courseController));
 
 export default courseRouter;
