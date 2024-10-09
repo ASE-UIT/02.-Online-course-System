@@ -1,3 +1,5 @@
+import { PagingResponseDto } from '@/dto/paging-response.dto';
+import { PagingDto } from '@/dto/paging.dto';
 import { Course } from '@/models/course.model';
 import { CourseCategory } from '@/models/course_category.model';
 import { ICourseRepository } from '@/repository/interface/i.course.repository';

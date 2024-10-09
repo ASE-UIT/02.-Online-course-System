@@ -1,3 +1,5 @@
+import { PagingResponseDto } from '@/dto/paging-response.dto';
+import { PagingDto } from '@/dto/paging.dto';
 import { Discount } from '@/models/discount.model';
 import { IDiscountRepository } from '@/repository/interface/i.discount.repository';
 import { BaseCrudService } from '@/service/base/base.service';
