@@ -1,4 +1,4 @@
-name: Eduhub BACKEND CI/CD Pipeline
+name: Eduhub BACKEND CD Pipeline
 
 on:
   push:
