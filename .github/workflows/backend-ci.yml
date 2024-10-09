@@ -20,10 +20,14 @@ jobs:
           node-version: "21"
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd ./main 
+          npm install
 
       - name: Run tests
-        run: npm run test
+        run: |
+          cd ./main 
+          npm run test
 
       - name: Test results
         if: failure()
