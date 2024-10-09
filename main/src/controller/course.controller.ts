@@ -1,5 +1,5 @@
 import { IBaseCrudController } from '@/controller/interfaces/i.base-curd.controller';
-import { CourseRes } from '@/dto/course/course.res';
+import { CourseSelectRes } from '@/dto/course/course-select.res';
 import { PagingResponseDto } from '@/dto/paging-response.dto';
 import { PagingDto } from '@/dto/paging.dto';
 import { Course } from '@/models/course.model';
@@ -40,9 +40,13 @@ export class CourseController {
   }
   async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const courses = await this.courseService.findAll();
-      const resultDto = convertToDto(CourseRes, courses);
-      res.send_ok('Get all courses successfully', resultDto);
+      const courses = await this.courseService.findMany({
+        filter: {},
+        relations: ['category', 'lecturer'],
+        select: CourseSelectRes
+      });
+      console.log('courses', courses);
+      res.send_ok('Get all courses successfully', courses);
     } catch (error) {
       next(error);
     }
@@ -51,12 +55,18 @@ export class CourseController {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const rpp = parseInt(req.query.rpp as string) || 10;
-     
+
       const paging = new PagingDto(page, rpp);
 
-      const response: PagingResponseDto<Course> = await this.courseService.findAllWithPaging({ paging: paging });
+      const response: PagingResponseDto<Course> = await this.courseService.findAllWithPaging({
+        paging: paging,
+        select: CourseSelectRes,
+        relations: ['category', 'lecturer']
+      });
+
       res.send_ok('Get all courses successfully', response);
     } catch (error) {
       next(error);
     }
+  }
 }

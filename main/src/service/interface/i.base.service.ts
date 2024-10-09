@@ -72,6 +72,7 @@ export interface IBaseCrudService<MODEL> {
   findAllWithPaging(options: {
     paging: PagingDto;
     select?: FindOptionsSelect<MODEL>;
+    relations?: string[];
   }): Promise<PagingResponseDto<MODEL>>;
 
   /**

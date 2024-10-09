@@ -73,10 +73,12 @@ export class BaseCrudService<MODEL> implements IBaseCrudService<MODEL> {
   async findAllWithPaging(options: {
     paging: PagingDto;
     select?: FindOptionsSelect<MODEL>;
+    relations?: string[];
   }): Promise<PagingResponseDto<MODEL>> {
     const contents = await this.baseRepository.findMany({
       paging: options.paging,
-      select: options.select
+      select: options.select,
+      relations: options.relations
     });
     const totalRecords = await this.baseRepository.count({
       filter: {}

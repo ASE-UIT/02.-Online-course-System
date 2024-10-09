@@ -11,11 +11,4 @@ export class DiscountRepository extends BaseRepository<Discount> implements IDis
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(Discount));
   }
-  async findAll(): Promise<Discount[]> {
-    return await this.ormRepository.find({
-      where: {
-        deleteAt: Not(IsNull())
-      }
-    });
-  }
 }

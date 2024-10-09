@@ -9,11 +9,4 @@ export class CourseRepository extends BaseRepository<Course> implements ICourseR
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(Course));
   }
-  async findAll(): Promise<Course[]> {
-    return await this.ormRepository.find({
-      where: {
-        deleteAt: Not(IsNull())
-      }
-    });
-  }
 }

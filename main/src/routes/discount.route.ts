@@ -25,16 +25,8 @@ discountRouter
     checkPermission([PERMISSIONS.MANAGE_EMPLOYEE]),
     discountController.common.update.bind(discountController.common)
   )
-  .get(
-    '/findall',
-    authenticateJWT,
-    classValidate(DiscountRes),
-    discountController.findAll.bind(discountController) 
-  )
-    .get(
-      '/findallwithpaging',
-      authenticateJWT,
-      classValidate(DiscountRes),
-      discountController.findAllWithPaging.bind(discountController) 
-    )
+  .get('/paging', authenticateJWT, discountController.findAllWithPaging.bind(discountController))
 
+  .get('/', authenticateJWT, discountController.findAll.bind(discountController));
+
+export default discountRouter;

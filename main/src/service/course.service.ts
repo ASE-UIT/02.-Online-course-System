@@ -21,19 +21,4 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
     this.courseRepository = courseRepository;
     this.courseCategoryRepository = courseCategoryRepository;
   }
-  async findAll(): Promise<Course[]> {
-    return await this.courseRepository.findAll();
-  }
-  async findAllWithPaging(options: { paging: PagingDto }): Promise<PagingResponseDto<Course>> {
-    const contents: Course[] = await this.baseRepository.findMany({
-      filter: {},
-      paging: options.paging
-    });
-
-    const totalRecords = await this.baseRepository.count({
-      filter: {}
-    });
-
-    return new PagingResponseDto<Course>(totalRecords, contents);
-  }
 }

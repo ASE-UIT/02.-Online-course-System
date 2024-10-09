@@ -51,7 +51,7 @@ export class DiscountController {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const rpp = parseInt(req.query.rpp as string) || 10;
-     
+
       const paging = new PagingDto(page, rpp);
 
       const response: PagingResponseDto<Discount> = await this.discountService.findAllWithPaging({ paging: paging });
@@ -61,4 +61,3 @@ export class DiscountController {
     }
   }
 }
-
