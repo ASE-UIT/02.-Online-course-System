@@ -65,3 +65,12 @@
     @apply bg-background text-foreground;
   }
 }
+.bg-course-ct {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(245, 245, 247, 0) 9%,
+    rgba(0, 0, 0, 0.8011537867099965) 73%
+  );
+}
