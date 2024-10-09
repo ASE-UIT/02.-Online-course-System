@@ -15,7 +15,7 @@ services:
     build: ./fe-admin
     ports:
       - "4051:80"
-    container_name: eduhub-web
+    container_name: eduhub-fe-admin
     deploy:
       resources:
         limits:
