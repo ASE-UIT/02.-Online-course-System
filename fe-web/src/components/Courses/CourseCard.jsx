@@ -6,7 +6,7 @@ export const CourseCard = ({
   author,
   rating,
   ratingNum,
-  price,
+  price
 }) => {
   function formatCurrency(amount) {
     return amount.toLocaleString().replace(/\./g, ",");

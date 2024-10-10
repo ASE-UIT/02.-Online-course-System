@@ -2,7 +2,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-  Navigate,
+  Navigate
 } from "react-router-dom";
 
 import UserLayout from "../layouts/UserLayout";

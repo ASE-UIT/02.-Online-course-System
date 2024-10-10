@@ -11,7 +11,7 @@ const Header = () => {
       <Link
         to={"/"}
         style={{
-          backgroundImage: `url('/picture/textLogo.png')`,
+          backgroundImage: `url('/picture/textLogo.png')`
         }}
         className="h-[40px] w-[100px] md:h-[60px] md:w-[120px] bg-no-repeat bg-contain bg-center"
       ></Link>

@@ -2,6 +2,20 @@
 
 # Branch for each project
 
-- Backend: develop/backend
-- Frontend: develop/frontend
-- Mobile: develop/mobile
+- Backend:
+
+  - Development: backend/develop
+
+  - Release: backend/release
+
+- Frontend:
+
+  - Development: frontend/develop
+
+  - Release: frontend/release
+
+- Mobile:
+
+  - Development: mobile/develop
+
+  - Release: mobile/release

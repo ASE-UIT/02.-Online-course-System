@@ -14,7 +14,7 @@ function AuthProvider({ children }) {
   };
   const ckLogged = async () => {
     // check login
-    
+
     setLoading(false);
   };
   useEffect(() => {
@@ -31,7 +31,7 @@ function AuthProvider({ children }) {
         showLoginModal,
         setShowLoginModal,
         showLogoutModal,
-        setShowLogoutModal,
+        setShowLogoutModal
       }}
     >
       {loading ? <div></div> : children}

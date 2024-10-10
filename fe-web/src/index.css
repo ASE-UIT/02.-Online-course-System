@@ -65,6 +65,7 @@
     @apply bg-background text-foreground;
   }
 }
+
 .bg-course-ct {
   background: rgb(255, 255, 255);
   background: linear-gradient(
