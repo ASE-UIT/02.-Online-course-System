@@ -1,0 +1,23 @@
+version: "3"
+services:
+  eduhub-fe-web:
+    build: ./fe-web
+    ports:
+      - "4050:80"
+    container_name: eduhub-fe-web
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 50M
+
+  eduhub-fe-admin:
+    build: ./fe-admin
+    ports:
+      - "4051:80"
+    container_name: eduhub-fe-admin
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 50M
