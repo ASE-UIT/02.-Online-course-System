@@ -6,13 +6,14 @@ export const CourseCard = ({
   author,
   rating,
   ratingNum,
-  price
+  price,
+  promotion
 }) => {
   function formatCurrency(amount) {
     return amount.toLocaleString().replace(/\./g, ",");
   }
   return (
-    <div className="border-[1px] border-black-50 transition-all duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white cursor-pointer overflow-hidden rounded-[4px]">
+    <div className="border-[1px] border-black-50 transition-all duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white cursor-pointer overflow-hidden rounded-[4px] h-full">
       <div className="overflow-hidden">
         <img
           src={img}
@@ -42,6 +43,13 @@ export const CourseCard = ({
             đ{formatCurrency(price)}
           </p>
         </div>
+        {promotion && 
+        <div className="promotion py-1 px-[6px] flex gap-[10px] justify-start">
+          <div className="bg-success-200 rounded-[4px] p-1 text-text/xs/regular">
+              {promotion}
+          </div>
+        </div>
+        }
       </div>
     </div>
   );

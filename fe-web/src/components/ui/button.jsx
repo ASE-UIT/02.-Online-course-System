@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default: "bg-primary text-primary-foreground hover:bg-primary/90 ",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-        outline: "bg-outline border-2 border-input y hover:bg-outline/90",
+        outline: "bg-outline border-2 border-input y hover:bg-outline/90 hover:shadow-md",
         loginOutline:
           "bg-loginOutline border-loginOutline text-primary border-2 border-input y ",
         secondary:
