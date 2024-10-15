@@ -1,4 +1,3 @@
-import { LoginTypeEnum } from '@/enums/login-type.enum';
 import { BaseModel } from '@/models/base.model';
 import { Enrollment } from '@/models/enrollment.model';
 import { Role } from '@/models/role.model';
@@ -15,14 +14,20 @@ export class Student extends BaseModel {
   @Column({ length: 70, nullable: true })
   email!: string;
 
+  @Column({ type: 'text', nullable: true })
+  avatar!: string;
+
   @Column({ length: 15, nullable: true, name: 'phone_number' })
   phoneNumber!: string;
 
-  @Column({ type: 'enum', enum: LoginTypeEnum, default: LoginTypeEnum.email, name: 'login_type' })
-  loginType!: LoginTypeEnum;
-
   @Column({ length: 150 })
   password!: string;
+
+  @Column({ length: 50, nullable: true, name: 'google_id' })
+  googleId!: string;
+
+  @Column({ length: 50, nullable: true, name: 'facebook_id' })
+  facebookId!: string;
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.student)
   enrollments!: Promise<Enrollment[]>;
@@ -32,5 +37,5 @@ export class Student extends BaseModel {
 
   @ManyToOne(() => Role, (role) => role.employees)
   @JoinColumn({ name: 'role_id' })
-  role!: Role;
+  role!: Promise<Role>;
 }
