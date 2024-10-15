@@ -6,12 +6,12 @@ import { ArrowRight } from "lucide-react";
 const Home = () => {
   return (
     <div>
-      <div className="w-full mt-[65px] flex h-[400px] bg-primary-color px-24">
+      <div className="w-full flex h-[400px] bg-primary-color px-24">
         <div className="basis-[40%]">
           <div
             className="w-[223px] h-[307px] bg-contain mx-auto mt-8"
             style={{
-              backgroundImage: `url(https://s3-alpha-sig.figma.com/img/6c9b/3735/e27d4216d0bc4c2fb59b453382b29e99?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NtXlr9dP0-dkByvnwnkyDWllxUquKz4QZj04S2Sl1zw~4OY4dzbEZa3vk9BYEz-8CyQFHMR0o8ZGGQpxE9Kb13-1AQ7YSeazd13N6MIugGuyj71AGJaz74n9Xz6qpNwMYN~PNrT-eHv6V82~oZeQ7U5-aatyGZks-0R3wDqSvZAwx4AhDvd4z59pN4bjOgu96dxQtAGge70b~Y-jBkxvTeZYBU7fGp1OIb9gNnIb8tlXba65sD45fWjKzhDIHJkKq~0GUbcyEV3hWoGU3Gg1WEcnJY1dXXm4Gl9N3W9ZoZtc3xYy5kuP-VcuozueQRvXD1bkpMhVST-bblUnUyxPsA__)`,
+              backgroundImage: `url(https://s3-alpha-sig.figma.com/img/6c9b/3735/e27d4216d0bc4c2fb59b453382b29e99?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=NtXlr9dP0-dkByvnwnkyDWllxUquKz4QZj04S2Sl1zw~4OY4dzbEZa3vk9BYEz-8CyQFHMR0o8ZGGQpxE9Kb13-1AQ7YSeazd13N6MIugGuyj71AGJaz74n9Xz6qpNwMYN~PNrT-eHv6V82~oZeQ7U5-aatyGZks-0R3wDqSvZAwx4AhDvd4z59pN4bjOgu96dxQtAGge70b~Y-jBkxvTeZYBU7fGp1OIb9gNnIb8tlXba65sD45fWjKzhDIHJkKq~0GUbcyEV3hWoGU3Gg1WEcnJY1dXXm4Gl9N3W9ZoZtc3xYy5kuP-VcuozueQRvXD1bkpMhVST-bblUnUyxPsA__)`
             }}
           ></div>
         </div>
@@ -145,7 +145,7 @@ const Home = () => {
           <div
             className="w-[223px] h-[250px] bg-no-repeat bg-contain"
             style={{
-              backgroundImage: `url(https://s3-alpha-sig.figma.com/img/d385/222b/c1f9e16924d9d7758f198407ff983e51?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mL5iBB3Co3foGxeH1nOPDOWtIeUW9o6~ksC~vii9pUceqOHxHlP9KXhHPdjso2XaUhv1XBRz48~YmA7Bt8QvWfUOQKnCbF9ZVbajRTtBgBP8yXnUSGALCgVHs7baUOVdKMnq2pIhyAFL15hwzj7PydaUP2OH9GCZxwA8wAYE1o~eIiATY4LN7N3EGippJoLUtGonIWodNUDy2lO9UG-X4sYD~t31kVscxNmXGAF0ItWqowKM~z-yKCVMQduqPrDtRJffHnfwc-DD9lTHs2xX8cQzkQPJ5AYfqKtCCSnQY8RxjvnqL0UiytVSjI4DlXU200DJZX~WMU~qqbeuvVgt3w__)`,
+              backgroundImage: `url(https://s3-alpha-sig.figma.com/img/d385/222b/c1f9e16924d9d7758f198407ff983e51?Expires=1728864000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mL5iBB3Co3foGxeH1nOPDOWtIeUW9o6~ksC~vii9pUceqOHxHlP9KXhHPdjso2XaUhv1XBRz48~YmA7Bt8QvWfUOQKnCbF9ZVbajRTtBgBP8yXnUSGALCgVHs7baUOVdKMnq2pIhyAFL15hwzj7PydaUP2OH9GCZxwA8wAYE1o~eIiATY4LN7N3EGippJoLUtGonIWodNUDy2lO9UG-X4sYD~t31kVscxNmXGAF0ItWqowKM~z-yKCVMQduqPrDtRJffHnfwc-DD9lTHs2xX8cQzkQPJ5AYfqKtCCSnQY8RxjvnqL0UiytVSjI4DlXU200DJZX~WMU~qqbeuvVgt3w__)`
             }}
           ></div>
         </div>
