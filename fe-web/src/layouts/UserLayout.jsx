@@ -1,6 +1,7 @@
-import Header from "@/components/header/Header";
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import Header from "@/components/header/Header";
+import Footer from "@/components/Footer/Footer";
 
 const UserLayout = () => {
   return (
@@ -9,6 +10,7 @@ const UserLayout = () => {
       <div className="w-full h-full overflow-x-hidden">
         <Outlet />
       </div>
+      <Footer />
       <ToastContainer />
     </div>
   );
