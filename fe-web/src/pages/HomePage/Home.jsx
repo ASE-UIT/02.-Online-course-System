@@ -3,6 +3,7 @@ import { CourseCard } from "@/components/Courses/CourseCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { FooterIcon, HomeIcon } from "@/assets";
+import CourseCardIcon from "/picture/CourseCardIcon.svg";
 
 const Home = () => {
   return (
@@ -47,9 +48,7 @@ const Home = () => {
                 title={"Tiêu đề"}
                 author={"Tác giả"}
                 price={500000}
-                img={
-                  "https://s3-alpha-sig.figma.com/img/d628/d693/04cfd323cc9721e8f01abd84ea0386b4?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=N4Q9mPBB3zqehHB-~QJqRbcNQBXi7IgEH3DC1PFKN8PkzO4mfIvGhy1cVcr060cbBw9bSpE9Q1Bc8HFdmyrOFNOJAMBmIRkmbTevy027HMnCHdEQX~T8nw66Wd90ZqKMVoEjkQPimYXWxTx8xjlX5zn-~GbLOUeAV5h68LYKx7a49THmrEw7uY0aPT5qkm9YIlYWbCnSC59INHZATCuOZ~oaIfHAr7js23vELKUW0NDwEQyl7PYL3BhWlFD8VBSVuBD7hXjgVFhufjZ0pjd3ZmXbhilfW~Dez8CRuACsQSA85rXN24ZklS3oaPWtBMs4rGH3YM7pWVlAKB3TF0sJAg__"
-                }
+                img={CourseCardIcon}
               ></CourseCard>
             );
           })}
