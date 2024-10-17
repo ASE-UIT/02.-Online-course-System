@@ -4,9 +4,9 @@ import { ToastContainer } from "react-toastify";
 
 const UserLayout = () => {
   return (
-    <div className="font-worksans mt-[285px] md:mt-[65px] w-screen h-screen">
+    <div className="font-worksans mt-[285px] md:mt-[65px] w-full">
       <Header />
-      <div className="w-full h-full overflow-x-hidden overflow-y-auto">
+      <div className="w-full h-full overflow-x-hidden">
         <Outlet />
       </div>
       <ToastContainer />
