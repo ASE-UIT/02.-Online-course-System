@@ -15,8 +15,7 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { Phone } from "lucide-react";
-import { GoogleIcon } from "@/assets";
-import FacebookIcon from "/picture/FacebookIcon.svg";
+import { GoogleIcon, FacebookIcon } from "@/assets";
 import VerifyCode from "./VerifyCode";
 
 const formSchema = z
@@ -223,7 +222,9 @@ function SignUpForm() {
             size="icon"
             className="w-full flex rounded-xl"
           >
-            <img src={FacebookIcon} alt="FacebookIcon" className="pl-4" />
+            <div className="pl-4">
+              <FacebookIcon />
+            </div>
             <span className="text-text/md/semibold w-full">Facebook</span>
           </Button>
         </div>
