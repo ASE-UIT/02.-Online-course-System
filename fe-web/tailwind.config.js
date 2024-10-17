@@ -539,6 +539,15 @@ export default {
       boxShadow:{
         'box-shadow': '3px 10px 20px 0px rgba(0, 56, 255, 0.38)',
       },
+      animation: {
+        scrollDown: 'scrollDown 0.5s linear',
+      },
+      keyframes: {
+        scrollDown: {
+          '0%': { transform: 'translateY(-20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+      },
     },
   },
   plugins: [tailwindcssAnimate],
