@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/constants/mockdata/courses.dart';
 import 'package:online_course_system/widgets/CourseListCategory.dart';
+import 'package:online_course_system/widgets/HomeExploreCategory.dart';
 
 class CourseListScreen extends StatelessWidget {
+  const CourseListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -12,14 +15,11 @@ class CourseListScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             title: Row(
               children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: SizedBox(
-                        height: 31,
-                        child: Image.asset("assets/eduhublogo.png")),
-                  ),
+                SizedBox(
+                  height: 31,
+                  child: Image.asset("assets/eduhublogo.png"),
                 ),
+                const Spacer(), // Thêm khoảng trống giữa logo và nút đăng nhập
                 TextButton(
                   onPressed: () {},
                   child: const Text(
@@ -43,18 +43,26 @@ class CourseListScreen extends StatelessWidget {
                     "assets/homeimage.jpg",
                   ),
                 ),
-                CourseListCategory(
-                  CategoryTitle: 'Lịch học trực tiếp',
-                  courses: homeCourses,
-                ),
-                CourseListCategory(
-                  CategoryTitle: 'Top bán chạy',
-                  courses: homeCourses,
-                ),
-                CourseListCategory(
-                  CategoryTitle: 'Khóa học mới ra mắt',
-                  courses: homeCourses,
-                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    children:[
+                      CourseListCategory(
+                        categoryTitle: 'Lịch học trực tiếp',
+                        courses: homeCourses,
+                      ),
+                      CourseListCategory(
+                        categoryTitle: 'Top bán chạy',
+                        courses: homeCourses,
+                      ),
+                      CourseListCategory(
+                        categoryTitle: 'Khóa học mới ra mắt',
+                        courses: homeCourses,
+                      ),
+                      HomeExploreCategory()
+                    ]
+                  ),
+                )
               ],
             ),
           )),
