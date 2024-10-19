@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/widgets/CourseCard.dart';
 import 'package:online_course_system/widgets/custombutton.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,7 +24,6 @@ class _LoginScreen extends State<LoginScreen> {
                 onPressed: () {},
                 width: double.infinity,
                 height: 50,
-
               ),
             ],
           ),
