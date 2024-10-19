@@ -11,11 +11,11 @@ class CourseCard extends StatelessWidget {
 
   const CourseCard({
     super.key,
-    this.title = 'Tiêu đề',
-    this.author = 'Tác giả',
-    this.rating = 0.0,
-    this.reviewCount = 0,
-    this.price = 100000,
+    required this.title,
+    required this.author,
+    required this.rating,
+    required this.reviewCount,
+    required this.price,
     this.imageUrl = 'assets/coursecard.png',
   });
 
@@ -34,7 +34,9 @@ class CourseCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+            borderRadius: const BorderRadius.vertical(
+              top: Radius.circular(4),
+            ),
             child: Image.asset(
               imageUrl,
               fit: BoxFit.fitWidth,

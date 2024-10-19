@@ -54,7 +54,7 @@ class CourseListCategory extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: 320, // Điều chỉnh chiều cao phù hợp với CourseCard
+            height: 290, // Điều chỉnh chiều cao phù hợp với CourseCard
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: courses.length,
