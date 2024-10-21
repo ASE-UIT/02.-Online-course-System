@@ -3,12 +3,12 @@ import { Circle, CirclePlay, Minus, Play, Plus } from 'lucide-react';
 import React,  { useState }  from 'react'
 
 function CourseContent() {
-    const [isExpanded, setIsExpanded] = useState(true);
+    // const [isExpanded, setIsExpanded] = useState(true);
     const [expandedSection, setExpandedSection] = useState(null);
 
-    const toggleExpand = () => {
-        setIsExpanded(!isExpanded);
-    };
+    // const toggleExpand = () => {
+    //     setIsExpanded(!isExpanded);
+    // };
     const toggleSection = (section) => {
         setExpandedSection(expandedSection === section ? null : section);
       };
@@ -19,11 +19,11 @@ function CourseContent() {
         <div className="title w-1/3">
             <header className=" bg-error-100 text-error-700 text-center leading-[48px] text-text/lg/semibold w-[240px] h-[48px] rounded-br-[4px] inline-block
             hover:shadow-md hover:cursor-pointer"
-            onClick={toggleExpand}
+            // onClick={toggleExpand}
             >Nội dung khóa học</header>
         </div>
-        {isExpanded && (
-            <>
+        {/* {isExpanded && (
+            <> */}
             <div className="content p-5 gap-5 flex flex-col">
                 <p className="text-text/md/regular">4 phần - 41 bài giảng - 05 giờ 30 phút</p>
 
@@ -135,8 +135,8 @@ function CourseContent() {
                 </div>
             </div>
             
-            </>
-        )}
+            {/* </>
+        )} */}
        
     </div>
   )

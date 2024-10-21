@@ -57,7 +57,7 @@ export default function CourseDetail() {
       </div>
       <div className="flex px-24 py-[24px] gap-12">
         <div className="basis-[60%] ">
-          <div className="border-[4px] border-primary-100 rounded-[4px]">
+          <div className="border-[4px] border-primary-100 rounded-[12px]">
             <header className="bg-primary-100 text-primary-500 text-center leading-[48px] text-text/lg/semibold w-[240px] h-[48px] rounded-br-[4px] inline-block">
               Bạn sẽ học được
             </header>
@@ -75,7 +75,7 @@ export default function CourseDetail() {
               })}
             </div>
           </div>
-          <div className={` border-[4px] relative mt-4 border-success-100 rounded-[4px]`}>
+          <div className={` border-[4px] relative mt-4 border-success-100 rounded-[12px]`}>
             <header className="bg-success-100 text-success-700 text-center leading-[48px] text-text/lg/semibold w-[240px] h-[48px] rounded-br-[4px] inline-block">
               Giới thiệu khóa học
             </header>
@@ -99,7 +99,7 @@ export default function CourseDetail() {
               )}
             </div>
           </div>
-          <div className="border-[4px] mt-4 rounded-[4px] border-red-100">
+          <div className="border-[4px] mt-4 rounded-[12px] border-red-100">
             <CourseContent />
           </div>
           {/* Banner */}
