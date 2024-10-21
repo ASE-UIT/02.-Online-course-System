@@ -13,7 +13,7 @@ export const CourseCard = ({
     return amount.toLocaleString().replace(/\./g, ",");
   }
   return (
-    <div className="border-[1px] border-black-50 transition-all duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white cursor-pointer overflow-hidden rounded-[4px] h-full">
+    <div className="border-[1px] border-black-50 transition-all duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white cursor-pointer overflow-hidden rounded-[12px] h-full">
       <div className="overflow-hidden">
         <img
           src={img}
