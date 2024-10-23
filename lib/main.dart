@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:online_course_system/screens/signin.dart';
-import 'package:online_course_system/screens/signup.dart';
+import 'package:online_course_system/screens/HomeScreen.dart';
+import 'package:online_course_system/screens/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SignUpScreen()
+      theme: ThemeData(fontFamily: 'WorkSans'),
+      home: HomeScreen(),
     );
   }
 }
