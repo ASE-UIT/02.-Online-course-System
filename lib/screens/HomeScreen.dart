@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/screens/CourseListScreen.dart';
+import 'package:online_course_system/screens/FavoriteScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,10 +15,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // Danh sách các màn hình tương ứng với mỗi tab
   final List<Widget> _screens = [
-    Center(child: CourseListScreen()),
+    const Center(child: CourseListScreen()),
     const Center(child: Text('Tìm kiếm')),
     const Center(child: Text('Học tập')),
-    const Center(child: Text('Yêu thích')),
+    const Center(child: FavoriteScreen()),
     const Center(child: Text('Tài khoản')),
   ];
 
@@ -33,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed, // Hiển thị tất cả các items
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: AppColors.primary500,
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
         items: const [

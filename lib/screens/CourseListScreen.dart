@@ -12,6 +12,7 @@ class CourseListScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          elevation: 0,
           backgroundColor: Colors.white,
           title: Row(
             children: [
