@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/constants/colors.dart';
 
 class BorderTag extends StatelessWidget {
   final String text;
@@ -7,24 +8,25 @@ class BorderTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.grey,
-          width: 1,
+    return FilterChip(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      label: Text(
+        text,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: AppColors.black,
         ),
+      ),
+      backgroundColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
+        side: const BorderSide(color: AppColors.black),
       ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.black,
-          ),
-        ),
-      ),
+      onSelected: (bool value) {
+        print("selected");
+      },
+      selected: false,
     );
   }
 }

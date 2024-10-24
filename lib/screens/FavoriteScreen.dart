@@ -9,7 +9,9 @@ class FavoriteScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
+
         title: const Center(
           child: Text(
             'Khóa học yêu thích',
