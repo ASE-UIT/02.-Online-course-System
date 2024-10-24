@@ -39,49 +39,51 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
   Widget build(BuildContext context) {
     const String courseIntroText = '...';  // Nội dung text của khoá học
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            controller: _scrollController,
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CourseHeader(),
-                const Image(
-                  image: AssetImage('assets/course_image.png'),
-                  width: double.infinity,
-                ),
-                const SizedBox(height: 20),
-                CourseInfo(),
-                const SizedBox(height: 16),
-                CourseIntro(text: courseIntroText),
-                const SizedBox(height: 16),
-                CourseContent(),
-                const SizedBox(height: 16),
-                CourseLecturerInfo(),
-                const SizedBox(height: 16),
-                CourseReviews(),
-                const SizedBox(height: 16),
-                // Các widget khác
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-
-            child: Visibility(
-              visible: !_isButtonVisible,
-              child: Padding( 
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                child: AddToCartButton(),                                         
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              controller: _scrollController,
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CourseHeader(),
+                  const Image(
+                    image: AssetImage('assets/course_image.png'),
+                    width: double.infinity,
+                  ),
+                  const SizedBox(height: 20),
+                  CourseInfo(),
+                  const SizedBox(height: 16),
+                  CourseIntro(text: courseIntroText),
+                  const SizedBox(height: 16),
+                  CourseContent(),
+                  const SizedBox(height: 16),
+                  CourseLecturerInfo(),
+                  const SizedBox(height: 16),
+                  CourseReviews(),
+                  const SizedBox(height: 16),
+                  // Các widget khác
+                ],
               ),
             ),
-          ),
-        ],
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+
+              child: Visibility(
+                visible: !_isButtonVisible,
+                child: Padding( 
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                  child: AddToCartButton(),                                         
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/screens/HomeScreen.dart';
-import 'package:online_course_system/screens/login.dart';
-import 'package:online_course_system/screens/signin.dart';
 import 'package:online_course_system/screens/course_detail/course_detail.dart';
+import 'package:online_course_system/screens/signin.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'WorkSans'),
-      home: HomeScreen(),
+      home: SignInScreen(),
     );
   }
 }
