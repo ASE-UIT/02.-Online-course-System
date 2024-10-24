@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:online_course_system/screens/signin.dart';
+import 'package:online_course_system/screens/SignInScreen.dart';
 import 'package:online_course_system/widgets/customtextfield.dart';
 import 'package:online_course_system/widgets/socialloginbutton.dart';
 
@@ -96,7 +96,10 @@ class SignUpScreen extends StatelessWidget {
                           child: const Text(
                             "ĐĂNG KÝ",
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 16, 
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white
+                            ),
                           ),
                         ),
                         const SizedBox(height: 24),

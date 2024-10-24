@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/constants/mockdata/courses.dart';
+import 'package:online_course_system/screens/SignInScreen.dart';
 import 'package:online_course_system/widgets/CourseListCategory.dart';
 import 'package:online_course_system/widgets/HomeExploreCategory.dart';
 
@@ -12,6 +13,7 @@ class CourseListScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           elevation: 0,
           backgroundColor: Colors.white,
           title: Row(
@@ -22,7 +24,17 @@ class CourseListScreen extends StatelessWidget {
               ),
               const Spacer(), // Thêm khoảng trống giữa logo và nút đăng nhập
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignInScreen()),
+                  );
+                },
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
                 child: const Text(
                   "Đăng nhập",
                   style: TextStyle(
@@ -105,6 +117,7 @@ class CourseListScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
+                          color: Colors.white
                         ),
                       ),
                     ),
@@ -127,18 +140,20 @@ Widget _buildInstructorInfoSection(BuildContext context) {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-              width: 252,
-              child: Text(
-                'Giảng viên trên toàn thế giới đã và đang dạy cho hàng triệu học viên trên EduHub. EduHub cung cấp công cụ và kỹ năng để giúp bạn hoàn thiện quá trình giảng dạy tốt hơn.',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
+          const Expanded(
+            child: Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 252,
+                child: Text(
+                  'Giảng viên trên toàn thế giới đã và đang dạy cho hàng triệu học viên trên EduHub. EduHub cung cấp công cụ và kỹ năng để giúp bạn hoàn thiện quá trình giảng dạy tốt hơn.',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  maxLines: 10,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                maxLines: 10,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/screens/HomeScreen.dart';
-import 'package:online_course_system/screens/signup.dart';
+import 'package:online_course_system/screens/SignOutScreen.dart';
 import 'package:online_course_system/widgets/customtextfield.dart';
 import 'package:online_course_system/widgets/socialloginbutton.dart';
 
@@ -87,7 +87,10 @@ class SignInScreen extends StatelessWidget {
                           child: const Text(
                             "ĐĂNG NHẬP",
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w600),
+                                fontSize: 16, 
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16),
