@@ -5,6 +5,8 @@ import { LecturerRepository } from '@/repository/lecturer.repository';
 import { ILecturerService } from '@/service/interface/i.lecturer.service';
 import { ILecturerRepository } from '@/repository/interface/i.lecturer.repository';
 import { BaseContainer } from '@/container/base.container';
+import { ICourseRepository } from '@/repository/interface/i.course.repository';
+import { courseRepository } from '@/container/course.container';
 
 class LecturerContainer extends BaseContainer {
   constructor() {
@@ -12,6 +14,9 @@ class LecturerContainer extends BaseContainer {
     this.container.bind<ILecturerService<Lecturer>>('LecturerService').to(LecturerService);
     this.container.bind<ILecturerRepository<Lecturer>>('LecturerRepository').to(LecturerRepository);
     this.container.bind<LecturerController>(LecturerController).toSelf();
+
+    //Import
+    this.container.bind<ICourseRepository<any>>('CourseRepository').toConstantValue(courseRepository);
   }
 
   export() {

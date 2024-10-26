@@ -46,6 +46,8 @@ app.use(globalErrorHanlder);
  */
 app.use(endRequestPipelineMiddleware);
 
+export default app;
+
 /**
  * Server
  */

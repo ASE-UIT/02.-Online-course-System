@@ -1,7 +1,11 @@
 {
+  "ts-node": {
+    "files": true
+  },
+  "files": ["src/types/express/index.d.ts"],
   "compilerOptions": {
-    "target": "es6",
-    "lib": ["es6", "dom"],
+    "target": "es2021",
+    "lib": ["es2021", "dom"],
     "module": "commonjs",
     "moduleResolution": "node",
     "experimentalDecorators": true,

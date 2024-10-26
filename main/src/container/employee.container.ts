@@ -5,6 +5,8 @@ import { EmployeeRepository } from '@/repository/employee.repository';
 import { IEmployeeService } from '@/service/interface/i.employee.service';
 import { IEmployeeRepository } from '@/repository/interface/i.employee.repository';
 import { BaseContainer } from '@/container/base.container';
+import { IRoleRepository } from '@/repository/interface/i.role.repository';
+import { roleRepository } from '@/container/role.container';
 
 class EmployeeContainer extends BaseContainer {
   constructor() {
@@ -12,6 +14,9 @@ class EmployeeContainer extends BaseContainer {
     this.container.bind<IEmployeeService<Employee>>('EmployeeService').to(EmployeeService);
     this.container.bind<IEmployeeRepository<Employee>>('EmployeeRepository').to(EmployeeRepository);
     this.container.bind<EmployeeController>(EmployeeController).toSelf();
+
+    //Import
+    this.container.bind<IRoleRepository<any>>('RoleRepository').toConstantValue(roleRepository);
   }
 
   export() {

@@ -1,8 +1,10 @@
 import { LoginTypeEnum } from '@/enums/login-type.enum';
 import { BaseModel } from '@/models/base.model';
 import { Role } from '@/models/role.model';
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, Unique } from 'typeorm';
 
+@Unique(['phoneNumber'])
+@Unique(['email'])
 @Entity('employees')
 export class Employee extends BaseModel {
   @PrimaryGeneratedColumn('uuid')
@@ -20,13 +22,13 @@ export class Employee extends BaseModel {
   @Column({ length: 15, nullable: true, name: 'phone_number' })
   phoneNumber!: string;
 
-  @Column({ type: 'enum', enum: LoginTypeEnum, default: LoginTypeEnum.email, name: 'login_type' })
-  loginType!: LoginTypeEnum;
+  // @Column({ type: 'enum', enum: LoginTypeEnum, default: LoginTypeEnum.email, name: 'login_type' })
+  // loginType!: LoginTypeEnum;
 
   @Column({ length: 150 })
   password!: string;
 
   @ManyToOne(() => Role, (role) => role.employees)
   @JoinColumn({ name: 'role_id' })
-  role!: Role;
+  role!: Promise<Role>;
 }

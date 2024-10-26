@@ -22,11 +22,11 @@ class CourseContainer extends BaseContainer {
   export() {
     const courseController = this.container.get<CourseController>(CourseController);
     const courseService = this.container.get<ICourseService<any>>('CourseService');
-    return { courseController, courseService };
+    const courseRepository = this.container.get<ICourseRepository<any>>('CourseRepository');
+    return { courseController, courseService, courseRepository };
   }
 }
-console.log('ok');
 
 const courseContainer = new CourseContainer();
-const { courseController, courseService } = courseContainer.export();
-export { courseController, courseService };
+const { courseController, courseService, courseRepository } = courseContainer.export();
+export { courseController, courseService, courseRepository };
