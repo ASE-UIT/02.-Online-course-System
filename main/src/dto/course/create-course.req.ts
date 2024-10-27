@@ -1,58 +1,54 @@
-import { DifficultyLevel } from "@/enums/difficulty-level.enum";
-import {IsNotEmpty, IsOptional, IsUUID, IsString, IsNumber, IsEnum,IsDate, Validate } from 'class-validator';
-import { DecimalPrecision } from "./decimal-10-1-custom";
+import { DifficultyLevel } from '@/enums/difficulty-level.enum';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsUUID,
+  IsString,
+  IsNumber,
+  IsEnum,
+  IsDate,
+  Validate,
+  IsDateString
+} from 'class-validator';
+import { DecimalPrecision } from './decimal-10-1-custom';
+import { CreateLessonRequest } from '@/dto/lessons/create-lesson.req';
 
+export class CreateCourseRequest {
+  @IsNotEmpty()
+  @IsString()
+  name!: string;
 
-export class CreateCourseRequest
-{
+  @IsOptional()
+  @IsString()
+  description?: string;
 
-    @IsNotEmpty()
-    @IsString()
-    id!:string
+  @IsOptional()
+  @IsString()
+  thumbnail?: string;
 
-    @IsNotEmpty()
-    @IsString()
-    name!:string;
+  @IsNotEmpty()
+  @IsNumber()
+  price!: number;
 
-    @IsOptional()
-    @IsString()
-    description?:string;
+  @IsNotEmpty()
+  @IsNumber()
+  duration!: number;
 
-    @IsOptional()
-    @IsString()
-    thumbnail?:string;
+  @IsEnum(DifficultyLevel)
+  @IsOptional()
+  difficultyLevel?: string;
 
-    @IsNotEmpty()
-    @IsNumber()
-    price!:number;
+  @IsOptional()
+  @IsDateString()
+  startDate?: Date;
 
-    @IsNotEmpty()
-    @IsNumber()
-    @Validate(DecimalPrecision, [10,1])
-    duration!:number;
+  @IsOptional()
+  @IsDateString()
+  endDate?: Date;
 
-    @IsEnum(DifficultyLevel)
-    @IsOptional()
-    difficultyLevel?:DifficultyLevel=DifficultyLevel.easy;
+  @IsNotEmpty()
+  categoryId!: string;
 
-    @IsOptional()
-    @IsDate()
-    startDate?:Date;
-
-    @IsOptional()
-    @IsDate()
-    endDate?:Date;
-
-    @IsNotEmpty()
-    @IsUUID()
-    categoryId!:string;
-
-    @IsNotEmpty()
-    @IsUUID()
-    lecturerId!:string;
-
-    @IsNotEmpty()
-    @IsUUID()
-    discountId?:string;
-
+  @IsNotEmpty()
+  lessons!: CreateLessonRequest[];
 }

@@ -1,4 +1,3 @@
-
 import { PERMISSIONS } from '@/constants/permission.constants';
 import { discountController } from '@/container/discount.container';
 import { CreateDiscountReq } from '@/dto/discount/create-discount.req';
@@ -11,8 +10,7 @@ import { classValidate } from '@/middleware/class-validate.middleware';
 import express from 'express';
 
 const discountRouter = express.Router();
-discountRouter
-.delete('/:id', discountController.softdelete.bind(discountController)) // Xóa mềm khóa học
+discountRouter.delete('/:id', discountController.softdelete.bind(discountController)); // Xóa mềm khóa học
 
 discountRouter
   .post(

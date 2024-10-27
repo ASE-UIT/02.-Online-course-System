@@ -10,5 +10,4 @@ export class CourseRepository extends BaseRepository<Course> implements ICourseR
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(Course));
   }
- 
 }

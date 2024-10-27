@@ -45,6 +45,29 @@ export class BaseCrudService<MODEL> implements IBaseCrudService<MODEL> {
     return await this.baseRepository.findMany(options);
   }
 
+  async findWithPaging(options: {
+    filter?: Partial<MODEL> | undefined;
+    paging?: PagingDto;
+    order?: RecordOrderType[];
+    relations?: string[];
+    select?: FindOptionsSelect<MODEL> | undefined;
+  }): Promise<PagingResponseDto<MODEL>> {
+    const contents = await this.baseRepository.findMany({
+      paging: options.paging,
+      select: options.select,
+      relations: options.relations,
+      order: options.order,
+      filter: options.filter
+    });
+    const totalRecords = await this.baseRepository.count({
+      filter: options.filter
+    });
+    return {
+      items: contents,
+      total: totalRecords
+    };
+  }
+
   async findOne(options: {
     filter: Partial<MODEL>;
     relations?: string[];

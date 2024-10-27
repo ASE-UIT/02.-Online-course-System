@@ -15,10 +15,10 @@ export class Course extends BaseModel {
   name!: string;
 
   @Column({ type: 'text', nullable: true })
-  description!: string;
+  description?: string;
 
   @Column({ type: 'text', nullable: true })
-  thumbnail!: string;
+  thumbnail?: string;
 
   @Column({ type: 'decimal' })
   price!: number;
@@ -27,13 +27,19 @@ export class Course extends BaseModel {
   duration!: number;
 
   @Column({ type: 'enum', enum: DifficultyLevel, default: DifficultyLevel.easy, name: 'difficulty_level' })
-  difficultyLevel!: DifficultyLevel;
+  difficultyLevel?: string;
 
   @Column({ type: 'date', nullable: true, name: 'start_date' })
-  startDate!: Date;
+  startDate?: Date;
 
   @Column({ type: 'date', nullable: true, name: 'end_date' })
-  endDate!: Date;
+  endDate?: Date;
+
+  @Column({ name: 'is_approved', default: false })
+  isApproved!: boolean;
+
+  @Column({ name: 'category_id' })
+  categoryId!: string;
 
   @ManyToOne(() => CourseCategory)
   @JoinColumn({ name: 'category_id' })
@@ -50,6 +56,6 @@ export class Course extends BaseModel {
   @JoinColumn({ name: 'discount_id' })
   discount!: Discount;
 
-  @OneToMany(() => Lesson, (lesson) => lesson.course)
-  lessons!: Promise<Lesson[]>;
+  @OneToMany(() => Lesson, (lesson) => lesson.course, { cascade: true })
+  lessons!: Lesson[];
 }

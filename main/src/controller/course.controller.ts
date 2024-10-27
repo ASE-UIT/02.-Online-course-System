@@ -8,17 +8,16 @@ import { Course } from '@/models/course.model';
 import { ICourseService } from '@/service/interface/i.course.service';
 import { ITYPES } from '@/types/interface.types';
 import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
-import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { CreateCourseRequest } from '@/dto/course/create-course.req';
 import { CreateCourseResponse } from '@/dto/course/create-course.res';
 import { IBaseCrudService } from '@/service/interface/i.base.service';
 import { validateRequest } from '@/utils/validate/validate-request.util';
 import { ErrorCode } from '@/enums/error-code.enums';
-import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
 import { UpdateCourseRequest } from '@/dto/course/update-course-req';
 import { UpdateCourseResponse } from '@/dto/course/update-course.res';
-
+import { SessionUtil } from '@/utils/session.util';
+import { CourseDetailSelectRes } from '@/dto/course/course-detail-select.res';
 
 @injectable()
 export class CourseController {
@@ -32,15 +31,15 @@ export class CourseController {
     this.common = common;
   }
 
-
-
-  
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      await validateRequest(CreateCourseRequest, req.body);
-      const result = await this.courseService.create({ data: req.body });
-      const responseBody = new CreateCourseResponse(result);
-      res.send_created('Tạo mới khóa học thành công', responseBody);
+      const lecturer = SessionUtil.getLecturerCurrentlyLoggedIn(req);
+
+      const lecturerId = lecturer.id;
+
+      const result = await this.courseService.lecturerCreateCourse(req.body, lecturerId);
+
+      res.send_created('Tạo mới khóa học thành công', result);
     } catch (error) {
       next(error);
     }
@@ -63,22 +62,82 @@ export class CourseController {
       next(error);
     }
   }
-  async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+
+  /**
+   * * GET /course/waiting-for-approve
+   */
+  async findWaitingForApprove(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const courses = await this.courseService.findMany({
-        filter: {},
+        filter: {
+          isApproved: false
+        },
         relations: ['category', 'lecturer'],
-        select: CourseSelectRes
+        select: CourseSelectRes,
+        order: [
+          {
+            column: 'createAt',
+            direction: 'DESC'
+          }
+        ]
       });
-      console.log('courses', courses);
       res.send_ok('Get all courses successfully', courses);
-
     } catch (error) {
       next(error);
     }
   }
 
+  /**
+   * * GET /course/waiting-for-approve
+   */
+  async findWaitingForApprovePaging(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const rpp = parseInt(req.query.rpp as string) || 10;
 
+      const paging = new PagingDto(page, rpp);
+
+      const courses = await this.courseService.findWithPaging({
+        filter: {
+          isApproved: false
+        },
+        relations: ['category', 'lecturer'],
+        select: CourseSelectRes,
+        paging: paging,
+        order: [
+          {
+            column: 'createAt',
+            direction: 'DESC'
+          }
+        ]
+      });
+      res.send_ok('Get all courses successfully', courses);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * GET /course
+   * @param req
+   * @param res
+   * @param next
+   */
+  async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const courses = await this.courseService.findMany({
+        filter: {
+          isApproved: true
+        },
+        relations: ['category', 'lecturer'],
+        select: CourseSelectRes
+      });
+      console.log('courses', courses);
+      res.send_ok('Get all courses successfully', courses);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -95,6 +154,12 @@ export class CourseController {
     }
   }
 
+  /**
+   * * GET /course/paging
+   * @param req
+   * @param res
+   * @param next
+   */
   async findAllWithPaging(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const page = parseInt(req.query.page as string) || 1;
@@ -102,13 +167,51 @@ export class CourseController {
 
       const paging = new PagingDto(page, rpp);
 
-      const response: PagingResponseDto<Course> = await this.courseService.findAllWithPaging({
+      const response: PagingResponseDto<Course> = await this.courseService.findWithPaging({
         paging: paging,
         select: CourseSelectRes,
-        relations: ['category', 'lecturer']
+        relations: ['category', 'lecturer'],
+        filter: {
+          isApproved: true
+        }
       });
 
       res.send_ok('Get all courses successfully', response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * PUT /course/approve/:id
+   */
+  async approveCourse(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const courseId = req.params.id;
+      const result = await this.courseService.findOneAndUpdate({
+        filter: { id: courseId },
+        updateData: {
+          isApproved: true
+        }
+      });
+      res.send_ok('Duyệt khóa học thành công', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * GET /course/:id
+   */
+  async findById(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const courseId = req.params.id;
+      const course = await this.courseService.findOne({
+        filter: { id: courseId },
+        relations: ['category', 'lecturer', 'lessons', 'discount'],
+        select: CourseDetailSelectRes
+      });
+      res.send_ok('Get course successfully', course);
     } catch (error) {
       next(error);
     }
