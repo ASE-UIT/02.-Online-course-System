@@ -40,7 +40,7 @@ function ResultPage() {
               </p>
             </div>
 
-            <Link to={"/sign-in"}>
+            <Link to={"/web/sign-in"}>
               <Button className="w-[240px] mt-5 rounded-xl shadow-[3px_10px_20px_0px_rgba(0,56,255,0.38)]">
                 Đăng nhập ngay
               </Button>
