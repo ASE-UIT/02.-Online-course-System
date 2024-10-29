@@ -8,8 +8,8 @@
 
 # Products
 - API documentation: https://documenter.getpostman.com/view/38470921/2sAXqy1eGR
-- Frontend web: http://152.42.232.101:4050
-- Frontend admin web: http://152.42.232.101:4051
+- Frontend web: http://eduhub.io.vn:4050/
+- Frontend admin web: http://eduhub.io.vn:4051/
 
 # Branch for each project
 
