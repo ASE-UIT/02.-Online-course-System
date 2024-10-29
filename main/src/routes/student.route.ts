@@ -4,10 +4,14 @@ import { classValidate } from '@/middleware/class-validate.middleware';
 import express from 'express';
 const studentRouter = express.Router();
 
-studentRouter.post(
-  '/auth/google/callback',
-  classValidate(StudentGoogleCallbackReq),
-  studentController.authGoogleCallback.bind(studentController)
-);
+studentRouter
+
+  .post('/auth/facebook/callback', studentController.authFacebookCallback.bind(studentController))
+
+  .post(
+    '/auth/google/callback',
+    classValidate(StudentGoogleCallbackReq),
+    studentController.authGoogleCallback.bind(studentController)
+  );
 
 export default studentRouter;

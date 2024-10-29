@@ -8,6 +8,7 @@ import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { OAuth2Client } from 'google-auth-library';
 import googleOauth2Client from '@/utils/google/google.oauth2.client';
+import BaseError from '@/utils/error/base.error';
 
 @injectable()
 export class StudentController {
@@ -28,6 +29,24 @@ export class StudentController {
     try {
       const { idToken } = req.body;
       const result = await this.studentService.authGoogleCallback(idToken);
+      res.send_ok('Đăng nhập thành công', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * POST /student/auth/facebook/callback
+   */
+  async authFacebookCallback(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { accessToken } = req.body;
+      if (!accessToken) {
+        throw new BaseError('ACCESS_TOKEN_INVALID', 'Không có access token');
+      }
+
+      const result = await this.studentService.authFacebookCallback(accessToken);
+
       res.send_ok('Đăng nhập thành công', result);
     } catch (error) {
       next(error);

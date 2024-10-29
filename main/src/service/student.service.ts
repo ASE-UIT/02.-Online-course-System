@@ -19,6 +19,7 @@ import _ from 'lodash';
 import { generateRandomString } from '@/utils/random/generate-random-string.util';
 import { GoogleAuthProfileDto } from '@/dto/google-auth-profile.dto';
 import googleOauth2Client from '@/utils/google/google.oauth2.client';
+import { FacebookAuthProfileDto } from '@/dto/facebook-auth-profile.dto';
 
 @injectable()
 export class StudentService extends BaseCrudService<Student> implements IStudentService<Student> {
@@ -27,6 +28,71 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
   constructor(@inject('StudentRepository') studentRepository: IStudentRepository<Student>) {
     super(studentRepository);
     this.studentRepository = studentRepository;
+  }
+  /**
+   * * Đây là hàm xử lý logic khi người dùng đăng nhập bằng Facebook
+   * @param accessToken // Token xác thực từ Facebook
+   */
+  async authFacebookCallback(accessToken: string): Promise<LoginRes> {
+    // Gửi yêu cầu đến Facebook để xác thực accessToken và lấy thông tin người dùng
+    const response = await fetch(
+      `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,email,name,picture`
+    );
+    const userData = await response.json();
+
+    if (userData.error) {
+      throw new BaseError(ErrorCode.AUTH_01, 'Đăng nhập/Đăng ký thất bại');
+    }
+
+    const facebookUser = convertToDto(FacebookAuthProfileDto, userData);
+
+    //Check if this account is already registered
+    const student = await this.studentRepository.findOne({
+      filter: {
+        facebookId: facebookUser.id
+      }
+    });
+    if (student) {
+      //Return token
+      const token = await this.generateToken(student);
+      return new LoginRes(token);
+    }
+
+    //If not, create new account
+    const newStudent = new Student();
+    if (!facebookUser.email) {
+      throw new BaseError(ErrorCode.BAD_REQUEST, 'Tài khoản Google của bạn không có email');
+    }
+    newStudent.email = facebookUser.email;
+
+    if (
+      await this.studentRepository.exists({
+        filter: {
+          email: newStudent.email
+        }
+      })
+    ) {
+      throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Email đã tồn tại');
+    }
+
+    newStudent.name = facebookUser.name || 'No name user';
+    if (facebookUser.picture) {
+      newStudent.avatar = facebookUser.picture.data.url;
+    }
+
+    newStudent.facebookId = facebookUser.id;
+    newStudent.roleId = RoleEnum.STUDENT;
+
+    const randomPassword = await generateRandomString();
+    newStudent.password = bcrypt.hashSync(randomPassword, 10);
+
+    await this.studentRepository.create({
+      data: newStudent
+    });
+
+    //Generate token
+    const token = await this.generateToken(newStudent);
+    return new LoginRes(token);
   }
 
   async generateToken(student: Student): Promise<string> {
