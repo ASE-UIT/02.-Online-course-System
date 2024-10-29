@@ -17,4 +17,6 @@ courseRouter.get('/paging', courseController.findAllWithPaging.bind(courseContro
 
 courseRouter.get('/', courseController.findAll.bind(courseController));
 
+courseRouter.get('/live/:amount', courseController.findLive.bind(courseController));
+
 export default courseRouter;

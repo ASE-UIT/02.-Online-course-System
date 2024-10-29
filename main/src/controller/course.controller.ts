@@ -69,4 +69,18 @@ export class CourseController {
       next(error);
     }
   }
+
+  /**
+   * * Get /course/live/:amount
+   */
+  async findLive(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const amount = parseInt(req.params.amount) || 1;
+      const result = await this.courseService.getClosetLiveCourse(amount);
+
+      res.send_ok(`Get live courses successfully`, result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
