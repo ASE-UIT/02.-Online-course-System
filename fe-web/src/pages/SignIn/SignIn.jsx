@@ -1,4 +1,4 @@
-import SignUpIcon from "/picture/signUpIcon.svg";
+import SignUpIcon from "/web/picture/signUpIcon.svg";
 import { SignUpLine } from "@/assets";
 import SignInForm from "./SignInForm";
 
