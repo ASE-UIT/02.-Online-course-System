@@ -29,7 +29,7 @@ const VerifyCode = () => {
   };
 
   const handleVerifyCode = () => {
-    navigate(`/result/${signUpType}`);
+    navigate(`/web/result/${signUpType}`);
   };
 
   return (
