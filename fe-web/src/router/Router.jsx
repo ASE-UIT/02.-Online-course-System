@@ -18,22 +18,22 @@ import InfoInput from "@/pages/SignUp/InfoInput";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<UserLayout />}>
+      <Route path="web/" element={<UserLayout />}>
         <Route index element={<Home />} />
-        <Route path="/course/:id" element={<CourseDetail />} />
-        <Route path="/sign-up" element={<SignUp />}>
+        <Route path="course/:id" element={<CourseDetail />} />
+        <Route path="sign-up" element={<SignUp />}>
           <Route
-            path="/sign-up"
-            element={<Navigate to={"/sign-up/step1/email"} />}
+            path="*"
+            element={<Navigate to={"/web/sign-up/step1/email"} />}
           />
           <Route path="step1/:signUpType" element={<StepOne />} />
           <Route path="step2/:signUpType" element={<VerifyCode />} />
         </Route>
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/callback" element={<InfoInput />} />
-        <Route path="/result/:content" element={<ResultPage />} />
+        <Route path="sign-in" element={<SignIn />} />
+        <Route path="callback" element={<InfoInput />} />
+        <Route path="result/:content" element={<ResultPage />} />
       </Route>
-      <Route path="*" element={<Navigate to={"./"} />} />
+      <Route path="*" element={<Navigate to={"./web/"} />} />
     </Route>
   )
 );

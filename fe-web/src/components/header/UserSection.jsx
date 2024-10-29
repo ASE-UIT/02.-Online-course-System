@@ -17,7 +17,7 @@ function UserSection() {
         <>
           <Button
             type="button"
-            onClick={() => navigate("/sign-in")}
+            onClick={() => navigate("/web/sign-in")}
             variant="loginOutline"
             className=" text-text/md/semibold text-primary-500 border-primary-500 border-[1px] md:text-base w-[140px]"
           >
@@ -25,7 +25,7 @@ function UserSection() {
           </Button>
           <Button
             type="button"
-            onClick={() => navigate("/sign-up")}
+            onClick={() => navigate("/web/sign-up/step1/email")}
             className="text-text/md/semibold text-white md:text-base w-[140px]"
           >
             Đăng Ký
