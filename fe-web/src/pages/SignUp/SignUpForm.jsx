@@ -21,7 +21,7 @@ function SignUpForm() {
       <div className="text-center text-text/md/medium text-black">
         Đã có tài khoản?{" "}
         <Link
-          to="/sign-in"
+          to="/web/sign-in"
           className="text-primary text-text/md/semibold underline"
         >
           Đăng nhập ngay
@@ -35,7 +35,7 @@ function SignUpForm() {
       </div>
       <div className="flex flex-col gap-5">
         {signUpType == "email" ? (
-          <Link to={"/sign-up/step1/phone"}>
+          <Link to={"/web/sign-up/step1/phone"}>
             <Button
               type="button"
               variant="outline"
@@ -51,7 +51,7 @@ function SignUpForm() {
             </Button>
           </Link>
         ) : (
-          <Link to={"/sign-up/step1/email"}>
+          <Link to={"/web/sign-up/step1/email"}>
             <Button
               type="button"
               variant="outline"
@@ -66,7 +66,7 @@ function SignUpForm() {
           </Link>
         )}
         <div className="flex justify-center items-center gap-5">
-          <Link to={"/callback"} className="w-full">
+          <Link to={"/web/callback"} className="w-full">
             <Button
               type="button"
               variant="outline"
@@ -79,7 +79,7 @@ function SignUpForm() {
               <span className="text-text/md/semibold w-full">Google</span>
             </Button>
           </Link>
-          <Link to={"/callback"} className="w-full">
+          <Link to={"/web/callback"} className="w-full">
             <Button
               variant="outline"
               type="button"

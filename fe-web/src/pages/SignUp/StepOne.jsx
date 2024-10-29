@@ -82,12 +82,12 @@ const StepOne = () => {
 
   function onSubmit(values) {
     console.log(values);
-    navigate(`/sign-up/step2/email`);
+    navigate(`/web/sign-up/step2/email`);
   }
 
   function onPhoneSubmit(values) {
     console.log(values);
-    navigate(`/sign-up/step2/phone`);
+    navigate(`/web/sign-up/step2/phone`);
   }
 
   return (

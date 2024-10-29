@@ -104,7 +104,7 @@ function SignInForm() {
       <div className="text-center text-text/md/medium text-black">
         Chưa có tài khoản?{" "}
         <Link
-          to="/sign-up"
+          to="/web/sign-up/step1/email"
           className="text-primary text-text/md/semibold underline"
         >
           Đăng ký ngay
@@ -128,26 +128,30 @@ function SignInForm() {
           <span className="text-text/md/semibold w-full">Số điện thoại</span>
         </Button> */}
         <div className="flex justify-center items-center gap-5">
-          <Button
-            variant="outline"
-            size="icon"
-            className="w-full flex rounded-xl"
-          >
-            <div className="pl-4">
-              <GoogleIcon />
-            </div>
-            <span className="text-text/md/semibold w-full">Google</span>
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="w-full flex rounded-xl"
-          >
-            <div className="pl-4">
-              <FacebookIcon />
-            </div>
-            <span className="text-text/md/semibold w-full">Facebook</span>
-          </Button>
+          <Link to={"/web/callback"} className="w-full">
+            <Button
+              variant="outline"
+              size="icon"
+              className="w-full flex rounded-xl"
+            >
+              <div className="pl-4">
+                <GoogleIcon />
+              </div>
+              <span className="text-text/md/semibold w-full">Google</span>
+            </Button>
+          </Link>
+          <Link to={"/web/callback"} className="w-full">
+            <Button
+              variant="outline"
+              size="icon"
+              className="w-full flex rounded-xl"
+            >
+              <div className="pl-4">
+                <FacebookIcon />
+              </div>
+              <span className="text-text/md/semibold w-full">Facebook</span>
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
