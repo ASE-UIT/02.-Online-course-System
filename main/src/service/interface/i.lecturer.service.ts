@@ -11,4 +11,6 @@ export interface ILecturerService<T extends BaseModelType> extends IBaseCrudServ
   activatePhoneNumber(phoneNumber: string, code: string): Promise<string>;
   login(data: LecturerLoginReq): Promise<LoginRes>;
   getDetail(id: string): Promise<LecturerDetailRes>;
+
+  changePassword(lecturerId: string, currentPassword: string, newPassword: string): Promise<void>;
 }
