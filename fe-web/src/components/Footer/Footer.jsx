@@ -1,6 +1,18 @@
 import { FooterIcon } from "@/assets";
+import { useLocation } from "react-router-dom";
 
 const Footer = () => {
+  const location = useLocation();
+
+  const isLecturerLayout =
+    location.pathname.startsWith("/web/lecturer") ||
+    location.pathname.startsWith("/web/sign-in") ||
+    location.pathname.startsWith("/web/sign-up");
+
+  if (isLecturerLayout) {
+    return null;
+  }
+
   return (
     <footer className="w-full mt-8 px-[15%] h-[355px] bg-[#EEFEE7] flex">
       <div className="basis-[60%] flex flex-col gap-6 justify-center">
