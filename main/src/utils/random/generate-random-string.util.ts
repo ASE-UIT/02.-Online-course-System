@@ -9,3 +9,15 @@ export async function generateRandomString(): Promise<string> {
   // Tạo chuỗi số
   return `${minutes}${seconds}${token}`;
 }
+
+export function generateRandomOTPString(length: number): string {
+  const characters = '0123456789';
+  let result = '';
+  const charactersLength = characters.length;
+
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+
+  return result;
+}

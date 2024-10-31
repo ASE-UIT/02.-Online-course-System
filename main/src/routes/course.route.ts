@@ -38,4 +38,8 @@ courseRouter
 
   .get('/', courseController.findAll.bind(courseController));
 
+courseRouter.get('/live/:amount', courseController.findLive.bind(courseController));
+
+courseRouter.get('/search', courseController.search.bind(courseController));
+
 export default courseRouter;

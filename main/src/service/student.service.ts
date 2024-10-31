@@ -16,7 +16,7 @@ import { TIME_CONSTANTS } from '@/constants/time.constants';
 import jwt from 'jsonwebtoken';
 import { JwtClaimDto } from '@/dto/jwt-claim.dto';
 import _ from 'lodash';
-import { generateRandomString } from '@/utils/random/generate-random-string.util';
+import { generateRandomOTPString, generateRandomString } from '@/utils/random/generate-random-string.util';
 import { GoogleAuthProfileDto } from '@/dto/google-auth-profile.dto';
 import googleOauth2Client from '@/utils/google/google.oauth2.client';
 import { FacebookAuthProfileDto } from '@/dto/facebook-auth-profile.dto';
@@ -28,6 +28,7 @@ import { sendEmail } from '@/utils/email/email-sender.util';
 import { EmailActivateCacheDto } from '@/dto/email-active-cache.dto';
 import { StudentLoginReq } from '@/dto/student/student-login.req';
 import { Cart } from '@/models/cart.model';
+import { sendSms } from '@/utils/sms/sms-sender.util';
 
 @injectable()
 export class StudentService extends BaseCrudService<Student> implements IStudentService<Student> {
@@ -351,5 +352,104 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
     });
 
     return 'Xác thực số điện thoại thành công, bạn có thể đăng nhập ngay bây giờ';
+  }
+
+  async initiateForgotPassword(emailOrPhone: string): Promise<void> {
+    const student = await this.studentRepository.findOne({
+      filter: emailOrPhone.includes('@') ? { email: emailOrPhone } : { phoneNumber: emailOrPhone }
+    });
+
+    if (!student) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Không tìm thấy tài khoản học viên');
+    }
+
+    const otp = await generateRandomOTPString(6); // Tạo OTP 6 ký tự
+    const otpKey = `student:forgotPassword:${student.id}`;
+    await redis.set(otpKey, otp, 'EX', TIME_CONSTANTS.MINUTE * 3);
+
+    if (emailOrPhone.includes('@')) {
+      await sendEmail({
+        from: { name: 'Hệ thống EduHub' },
+        to: { emailAddress: [student.email] },
+        subject: 'EduHub - Mã OTP đặt lại mật khẩu',
+        text: `Mã OTP để đặt lại mật khẩu của bạn là ${otp}. Mã có hiệu lực trong vòng 3 phút.`
+      });
+    } else {
+      await sendSms(`Mã OTP để đặt lại mật khẩu của bạn là ${otp}. Mã có hiệu lực trong vòng 3 phút.`, [
+        student.phoneNumber
+      ]);
+    }
+  }
+
+  /**
+   * Verifies OTP for forgot password functionality.
+   */
+  async verifyForgotPasswordOtp(studentId: string, otp: string): Promise<void> {
+    const otpKey = `student:forgotPassword:${studentId}`;
+    const storedOtp = await redis.get(otpKey);
+
+    if (!storedOtp || storedOtp !== otp) {
+      throw new BaseError(ErrorCode.INVALID_OTP, 'Mã OTP không hợp lệ hoặc hết hạn');
+    }
+    await redis.del(otpKey);
+  }
+
+  /**
+   * Resets the password after OTP verification.
+   */
+  async resetPassword(studentId: string, newPassword: string): Promise<void> {
+    const student = await this.studentRepository.findOne({ filter: { id: studentId } });
+
+    if (!student) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'không tìm thấy tài khoản học viên');
+    }
+
+    student.password = bcrypt.hashSync(newPassword, 10);
+    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
+  }
+
+  async changePassword(studentId: string, currentPassword: string, newPassword: string): Promise<void> {
+    // Tìm sinh viên theo ID
+    const student = await this.studentRepository.findOne({ filter: { id: studentId } });
+    if (!student) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Không tìm thấy tài khoản học viên');
+    }
+
+    // Kiểm tra mật khẩu hiện tại
+    const isMatch = bcrypt.compareSync(currentPassword, student.password);
+    if (!isMatch) {
+      throw new BaseError(ErrorCode.INVALID_PASSWORD, 'Mật khẩu hiện tại không chính xác');
+    }
+
+    // Mã hóa mật khẩu mới và cập nhật vào cơ sở dữ liệu
+    student.password = bcrypt.hashSync(newPassword, 10);
+    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
+  }
+
+  async updateProfile(studentId: string, updateData: Partial<Student>): Promise<void> {
+    const student = await this.studentRepository.findOne({ filter: { id: studentId } });
+    if (!student) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Không tìm thấy tài khoản học viên');
+    }
+
+    // Kiểm tra nếu email đã tồn tại và khác với email của sinh viên hiện tại
+    if (updateData.email && updateData.email !== student.email) {
+      const existingStudent = await this.studentRepository.findOne({ filter: { email: updateData.email } });
+      if (existingStudent) {
+        throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Email đã tồn tại');
+      }
+    }
+
+    // Kiểm tra nếu số điện thoại đã tồn tại và khác với số hiện tại
+    if (updateData.phoneNumber && updateData.phoneNumber !== student.phoneNumber) {
+      const existingStudent = await this.studentRepository.findOne({ filter: { phoneNumber: updateData.phoneNumber } });
+      if (existingStudent) {
+        throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Số điện thoại đã tồn tại');
+      }
+    }
+
+    // Cập nhật các thông tin mới
+    Object.assign(student, updateData);
+    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
   }
 }

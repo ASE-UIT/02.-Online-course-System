@@ -13,6 +13,10 @@ import { ITYPES } from '@/types/interface.types';
 import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
 import { CreateCourseRequest } from '@/dto/course/create-course.req';
 import BaseError from '@/utils/error/base.error';
+import { IsNull, Not } from 'typeorm';
+import { courseRepository } from '@/container/course.container';
+import { CourseSearchFilterReq } from '@/dto/course/course-search-filter.req';
+import { CourseSearchSortReq } from '@/dto/course/course-search-sort.req';
 
 @injectable()
 export class CourseService extends BaseCrudService<Course> implements ICourseService<Course> {
@@ -27,6 +31,7 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
     this.courseRepository = courseRepository;
     this.courseCategoryRepository = courseCategoryRepository;
   }
+
   /**
    * * Lecturer create course, and then waiting for approve from employee
    * Course này cũng bao gồm cả lession và quizz (nếu có)
@@ -67,5 +72,15 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
 
     // Trả về thông tin khóa học đã cập nhật dưới dạng DTO
     return convertToDto(UpdateCourseResponse, updatedData);
+  }
+
+  async getClosetLiveCourse(amount: number): Promise<Course[]> {
+    if (amount < 0) throw new Error('Courses amount should be positive');
+
+    return this.courseRepository.findClosetLiveCourse(amount);
+  }
+
+  search(filters: CourseSearchFilterReq[], sort: CourseSearchSortReq, rpp: number, page: number): Promise<Course[]> {
+    return this.courseRepository.search(filters, sort, rpp, page);
   }
 }

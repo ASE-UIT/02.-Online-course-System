@@ -1,5 +1,6 @@
 import { PERMISSIONS } from '@/constants/permission.constants';
 import { lecturerController } from '@/container/lecturer.container';
+import { ChangePasswordReqDto } from '@/dto/lecturer/lecturer-change-password.req';
 import { LecturerLoginReq } from '@/dto/lecturer/lecturer-login.req';
 import { LecturerRegisterReq } from '@/dto/lecturer/lecturer-register.req';
 import { authenticateJWT } from '@/middleware/authenticate.middleware';
@@ -44,5 +45,12 @@ lecturerRouter
     checkPermission([PERMISSIONS.MANAGE_LECTURER]),
     lecturerController.findAll.bind(lecturerController)
   );
+
+lecturerRouter.patch(
+  '/change-password',
+  classValidate(ChangePasswordReqDto),
+  authenticateJWT, // Middleware xác thực người dùng đã đăng nhập
+  lecturerController.changePassword.bind(lecturerController)
+);
 
 export default lecturerRouter;

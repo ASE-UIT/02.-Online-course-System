@@ -158,4 +158,22 @@ export class LecturerService extends BaseCrudService<Lecturer> implements ILectu
 
     return new LoginRes(token);
   }
+
+  async changePassword(lecturerId: string, currentPassword: string, newPassword: string): Promise<void> {
+    // Tìm giảng viên theo ID
+    const lecturer = await this.lecturerRepository.findOne({ filter: { id: lecturerId } });
+    if (!lecturer) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Không tìm thấy tài khoản giảng viên');
+    }
+
+    // Kiểm tra mật khẩu hiện tại
+    const isMatch = bcrypt.compareSync(currentPassword, lecturer.password);
+    if (!isMatch) {
+      throw new BaseError(ErrorCode.INVALID_PASSWORD, 'Mật khẩu hiện tại không chính xác');
+    }
+
+    // Mã hóa mật khẩu mới và cập nhật vào cơ sở dữ liệu
+    lecturer.password = bcrypt.hashSync(newPassword, 10);
+    await this.lecturerRepository.findOneAndUpdate({ filter: { id: lecturerId }, updateData: lecturer });
+  }
 }
