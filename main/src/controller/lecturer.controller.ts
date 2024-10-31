@@ -1,4 +1,5 @@
 import { IBaseCrudController } from '@/controller/interfaces/i.base-curd.controller';
+import { ChangePasswordReqDto } from '@/dto/lecturer/lecturer-change-password.req';
 import { LecturerRes } from '@/dto/lecturer/lecturer.res';
 import { LecturerSelect } from '@/dto/lecturer/lecturer.select';
 import { ErrorCode } from '@/enums/error-code.enums';
@@ -159,6 +160,19 @@ export class LecturerController {
         select: LecturerSelect
       });
       res.send_ok('Get all lecturers successfully', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
+  async changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { currentPassword, newPassword } = req.body as ChangePasswordReqDto;
+      const lecturerId = req.user.id; // Sử dụng ID của giảng viên đã đăng nhập từ `req.user`
+
+      await this.lecturerService.changePassword(lecturerId, currentPassword, newPassword);
+      res.send_ok('Đổi mật khẩu thành công');
     } catch (error) {
       next(error);
     }
