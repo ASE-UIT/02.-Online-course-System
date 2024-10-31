@@ -5,6 +5,7 @@ import { BaseRepository } from '@/repository/base/base.repository';
 import { ICourseRepository } from '@/repository/interface/i.course.repository';
 import { ITYPES } from '@/types/interface.types';
 import { inject } from 'inversify';
+import { IBaseRepository } from './interface/i.base.repository';
 import { Between, DataSource, FindOptionsOrder, FindOptionsWhere, Like } from 'typeorm';
 import { SearchOperator } from '@/enums/search-operator.enum';
 

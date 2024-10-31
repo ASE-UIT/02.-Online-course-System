@@ -5,6 +5,8 @@ import { ITYPES } from '@/types/interface.types';
 import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
 import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
+import { ErrorCode } from '@/enums/error-code.enums';
+import BaseError from '@/utils/error/base.error';
 import { DiscountRes } from '../dto/discount/discount.res';
 import { filter } from 'lodash';
 import { PagingDto } from '@/dto/paging.dto';
@@ -20,6 +22,17 @@ export class DiscountController {
   ) {
     this.discountService = discountService;
     this.common = common;
+  }
+
+  public async softdelete(req: Request, res: Response): Promise<void> {
+    const { id } = req.params; // Lấy ID từ tham số URL
+
+    try {
+      await this.discountService.softdelete(id); // Gọi hàm softDelete từ DiscountService
+      res.status(204).send(); // Trả về trạng thái 204 No Content
+    } catch (error) {
+      res.status(400).json({ message: error }); // Trả về lỗi nếu có
+    }
   }
 
   /**

@@ -8,6 +8,7 @@ import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { OAuth2Client } from 'google-auth-library';
 import googleOauth2Client from '@/utils/google/google.oauth2.client';
+import BaseError from '@/utils/error/base.error';
 import redis from '@/utils/redis/redis.util';
 import { TIME_CONSTANTS } from '@/constants/time.constants';
 import { sendEmail } from '@/utils/email/email-sender.util';
@@ -18,7 +19,6 @@ import { VerifyOtpReqDto } from '@/dto/student/verify-otp.req';
 import { ResetPasswordReqDto } from '@/dto/student/reset-password.req';
 import { ChangePasswordReqDto } from '@/dto/student/change-password.req';
 import { UpdateProfileReqDto } from '@/dto/student/update-profile.req';
-import BaseError from '@/utils/error/base.error';
 import { ErrorCode } from '@/enums/error-code.enums';
 
 @injectable()
@@ -31,6 +31,18 @@ export class StudentController {
   ) {
     this.studentService = studentService;
     this.common = common;
+  }
+  /**
+   * * POST /student/login
+   */
+  async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = req.body;
+      const result = await this.studentService.login(data);
+      res.send_ok('Đăng nhập thành công', result);
+    } catch (error) {
+      next(error);
+    }
   }
 
   /**
@@ -47,13 +59,44 @@ export class StudentController {
   }
 
   /**
-   * * POST /student/register
+   * * POST /student/auth/facebook/callback
    */
-  async register(req: Request, res: Response, next: NextFunction) {
+  async authFacebookCallback(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { accessToken } = req.body;
+      if (!accessToken) {
+        throw new BaseError('ACCESS_TOKEN_INVALID', 'Không có access token');
+      }
+
+      const result = await this.studentService.authFacebookCallback(accessToken);
+
+      res.send_ok('Đăng nhập thành công', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * POST /student/register-phone
+   */
+  async registerPhone(req: Request, res: Response, next: NextFunction) {
     try {
       const data = req.body;
-      const result = await this.studentService.register(data);
+      const result = await this.studentService.registerPhone(data);
       res.send_ok('Đăng ký thành công, tiếp đến hãy xác thực số điện thoại qua OTP', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * POST /student/register-email
+   */
+  async registerEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = req.body;
+      const result = await this.studentService.registerEmail(data);
+      res.send_ok('Đăng ký thành công, tiếp đến hãy xác thực email qua OTP', result);
     } catch (error) {
       next(error);
     }
@@ -70,7 +113,20 @@ export class StudentController {
   }
 
   /**
-   * POST /student/verify-otp
+   * * POST /student/activate-email
+   */
+  async activateEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, code } = req.body;
+      const result = await this.studentService.activateEmail(email, code);
+      res.send_ok(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * POST /student/verify-otp
    */
   async verifyOtp(req: Request, res: Response, next: NextFunction) {
     try {
@@ -83,7 +139,20 @@ export class StudentController {
   }
 
   /**
-   * POST /student/reset-password
+   * * POST /student/activate-phone
+   */
+  async activatePhoneNumber(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { phoneNumber, code } = req.body;
+      const result = await this.studentService.activatePhoneNumber(phoneNumber, code);
+      res.send_ok(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * POST /student/reset-password
    */
   async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {

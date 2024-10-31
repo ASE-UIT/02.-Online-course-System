@@ -6,6 +6,13 @@ import { DeepPartial, FindOptionsSelect } from 'typeorm';
 
 export interface IBaseRepository<T> {
   /**
+   * Save a record
+   * @param data
+   * @returns The saved record
+   */
+  save(data: T): Promise<T>;
+
+  /**
    * Create a new record with the given data
    * @param data
    * @returns The created record
@@ -18,6 +25,13 @@ export interface IBaseRepository<T> {
    * @returns The deleted record
    */
   findOneAndDelete(options: { filter: Partial<T> }): Promise<void>;
+
+  /**
+   * Find a record by the given filter and delete it
+   * @param filter
+   * @returns The deleted record
+   */
+  findOneAndHardDelete(options: { filter: Partial<T> }): Promise<void>;
 
   /**
    * Find a record by the given filter and update it

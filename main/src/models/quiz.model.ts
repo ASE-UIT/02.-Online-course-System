@@ -27,7 +27,7 @@ export class Quiz extends BaseModel {
   @Column({ type: 'enum', enum: QuizChoiceEnum, default: QuizChoiceEnum.A, name: 'correct_choice' })
   correctChoice!: QuizChoiceEnum;
 
-  @ManyToOne(() => Lesson)
+  @ManyToOne(() => Lesson, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'lesson_id' })
   lesson!: Lesson;
 

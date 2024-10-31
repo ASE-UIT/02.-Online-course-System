@@ -1,3 +1,5 @@
+import { id } from 'inversify';
+import { Course } from '@/models/course.model';
 import { IBaseRepository } from '@/repository/interface/i.base.repository';
 import { CourseSearchFilterReq } from '@/dto/course/course-search-filter.req';
 import { CourseSearchSortReq } from '@/dto/course/course-search-sort.req';

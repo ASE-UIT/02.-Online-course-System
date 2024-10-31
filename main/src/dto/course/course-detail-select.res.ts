@@ -1,9 +1,4 @@
-import { DifficultyLevel } from '@/enums/difficulty-level.enum';
-import { IsNotEmpty, IsOptional, IsUUID, IsString, IsNumber, IsEnum, IsDate, Validate } from 'class-validator';
-import { Expose } from 'class-transformer';
-import { update } from 'lodash';
-
-export const CourseSelectRes = {
+export const CourseDetailSelectRes = {
   id: true,
 
   name: true,
@@ -32,6 +27,16 @@ export const CourseSelectRes = {
     name: true
   },
 
+  discount: {
+    id: true,
+    code: true,
+    discountAmount: true,
+    discountPercentage: true,
+    startDate: true,
+    endDate: true
+  },
+
+  lessons: true,
   createAt: true,
   updateAt: true,
   createBy: true,

@@ -13,4 +13,25 @@ export class DiscountService extends BaseCrudService<Discount> implements IDisco
     super(discountRepository);
     this.discountRepository = discountRepository;
   }
+
+  async softdelete(id: string): Promise<void> {
+    // Tìm khóa học theo ID
+    const existingDiscount = await this.discountRepository.findOne({ filter: { id } });
+
+    if (!existingDiscount) {
+      throw new Error('Discount not found'); // Thông báo lỗi nếu không tìm thấy ma giam gia
+    }
+
+    // Cập nhật trường deletedAt với thời gian hiện tại
+    const updatedData = {
+      ...existingDiscount,
+      deletedAt: new Date() // Thiết lập thời gian xóa
+    };
+
+    // Gọi hàm findOneAndUpdate từ IBaseRepository để cập nhật ma giam gia
+    await this.discountRepository.findOneAndUpdate({
+      filter: { id },
+      updateData: updatedData
+    });
+  }
 }
