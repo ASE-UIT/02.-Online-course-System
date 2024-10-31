@@ -16,6 +16,7 @@ import ResultPage from "@/pages/Result/ResultPage";
 import InfoInput from "@/pages/SignUp/InfoInput";
 import LecturerLayout from "@/layouts/LecturerLayout";
 import LecturerSignUp from "@/pages/Lecturer/SignUp/LecturerSignUp";
+import LecturerResultPage from "@/pages/Lecturer/Result/ResultPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -37,6 +38,7 @@ const router = createBrowserRouter(
         {/* Lecturer layout */}
         <Route path="lecturer" element={<LecturerLayout />}>
           <Route path="sign-up" element={<LecturerSignUp />} />
+          <Route path="result" element={<LecturerResultPage />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to={"./web/"} />} />
