@@ -7,6 +7,11 @@ import { ICourseCategoryRepository } from '@/repository/interface/i.course_categ
 import { BaseCrudService } from '@/service/base/base.service';
 import { ICourseService } from '@/service/interface/i.course.service';
 import { inject, injectable } from 'inversify';
+import { IsNull, Not } from 'typeorm';
+import { courseRepository } from '@/container/course.container';
+import { CourseSearchFilterReq } from '@/dto/course/course-search-filter.req';
+import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
+import { CourseSearchSortReq } from '@/dto/course/course-search-sort.req';
 
 @injectable()
 export class CourseService extends BaseCrudService<Course> implements ICourseService<Course> {
@@ -20,5 +25,15 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
     super(courseRepository);
     this.courseRepository = courseRepository;
     this.courseCategoryRepository = courseCategoryRepository;
+  }
+
+  async getClosetLiveCourse(amount: number): Promise<Course[]> {
+    if (amount < 0) throw new Error('Courses amount should be positive');
+
+    return this.courseRepository.findClosetLiveCourse(amount);
+  }
+
+  search(filters: CourseSearchFilterReq[], sort: CourseSearchSortReq, rpp: number, page: number): Promise<Course[]> {
+    return this.courseRepository.search(filters, sort, rpp, page);
   }
 }

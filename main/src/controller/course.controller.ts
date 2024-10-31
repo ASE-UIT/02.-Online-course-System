@@ -5,9 +5,10 @@ import { PagingDto } from '@/dto/paging.dto';
 import { Course } from '@/models/course.model';
 import { ICourseService } from '@/service/interface/i.course.service';
 import { ITYPES } from '@/types/interface.types';
-import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
 import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
+import { CourseSearchFilterReq } from '@/dto/course/course-search-filter.req';
+import { CourseSearchSortReq } from '@/dto/course/course-search-sort.req';
 
 @injectable()
 export class CourseController {
@@ -65,6 +66,38 @@ export class CourseController {
       });
 
       res.send_ok('Get all courses successfully', response);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * GET /course/live/:amount
+   */
+  async findLive(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const amount = parseInt(req.params.amount) || 1;
+      const result = await this.courseService.getClosetLiveCourse(amount);
+
+      res.send_ok(`Get live courses successfully`, result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * GET /course/search/?filter=&sort=&rpp=&page=
+   */
+  async search(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const filters: CourseSearchFilterReq[] = JSON.parse(req.query.filter as string);
+      const sort: CourseSearchSortReq = JSON.parse(req.query.sort as string);
+      const rpp = parseInt(req.query.rpp as string) || 10;
+      const page = parseInt(req.query.page as string) || 1;
+
+      const result = await this.courseService.search(filters, sort, rpp, page);
+
+      res.send_ok(`Get search courses successfully`, result);
     } catch (error) {
       next(error);
     }
