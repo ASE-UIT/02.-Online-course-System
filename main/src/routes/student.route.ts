@@ -39,39 +39,35 @@ studentRouter
     studentController.authGoogleCallback.bind(studentController)
   )
 
-  .post('/login', classValidate(StudentLoginReq), studentController.login.bind(studentController));
+  .post('/login', classValidate(StudentLoginReq), studentController.login.bind(studentController))
 
-studentRouter.post(
-  '/forgot-password',
-  classValidate(ForgotPasswordReqDto),
-  studentController.forgotPassword.bind(studentController)
-);
+  .post(
+    '/forgot-password',
+    classValidate(ForgotPasswordReqDto),
+    studentController.forgotPassword.bind(studentController)
+  )
 
-studentRouter.post(
-  '/forgot-password',
-  classValidate(ForgotPasswordReqDto),
-  studentController.forgotPassword.bind(studentController)
-);
+  .post(
+    '/forgot-password',
+    classValidate(ForgotPasswordReqDto),
+    studentController.forgotPassword.bind(studentController)
+  )
 
-studentRouter.post('/verify-otp', classValidate(VerifyOtpReqDto), studentController.verifyOtp.bind(studentController));
+  .post('/verify-otp', classValidate(VerifyOtpReqDto), studentController.verifyOtp.bind(studentController))
 
-studentRouter.post(
-  '/reset-password',
-  classValidate(ResetPasswordReqDto),
-  studentController.resetPassword.bind(studentController)
-);
+  .post('/reset-password', classValidate(ResetPasswordReqDto), studentController.resetPassword.bind(studentController))
 
-studentRouter.post(
-  '/change-password',
-  classValidate(ChangePasswordReqDto),
-  authenticateJWT, // Middleware xác thực người dùng
-  studentController.changePassword.bind(studentController)
-);
+  .post(
+    '/change-password',
+    classValidate(ChangePasswordReqDto),
+    authenticateJWT, // Middleware xác thực người dùng
+    studentController.changePassword.bind(studentController)
+  )
 
-studentRouter.patch(
-  '/profile',
-  classValidate(UpdateProfileReqDto),
-  authenticateJWT, // Middleware xác thực người dùng
-  studentController.updateProfile.bind(studentController)
-);
+  .patch(
+    '/profile',
+    classValidate(UpdateProfileReqDto),
+    authenticateJWT, // Middleware xác thực người dùng
+    studentController.updateProfile.bind(studentController)
+  );
 export default studentRouter;
