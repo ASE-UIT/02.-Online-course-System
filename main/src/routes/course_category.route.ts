@@ -7,6 +7,8 @@ import express from 'express';
 
 const courseCategoryRouter = express.Router();
 
-courseCategoryRouter.get('/', courseCategoryController.findAll.bind(courseCategoryController));
+courseCategoryRouter
+  .get('/', courseCategoryController.findAll.bind(courseCategoryController))
+  .post('/', classValidate(CreateCourseCategoryReq), courseCategoryController.create.bind(courseCategoryController));
+
 export default courseCategoryRouter;
-courseCategoryRouter.post('/', classValidate(CreateCourseCategoryReq), courseCategoryController.create.bind(courseCategoryController))

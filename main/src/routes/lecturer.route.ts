@@ -46,11 +46,11 @@ lecturerRouter
     lecturerController.findAll.bind(lecturerController)
   );
 
-  lecturerRouter.patch(
-    '/change-password',
-    classValidate(ChangePasswordReqDto),
-    authenticateJWT, // Middleware xác thực người dùng đã đăng nhập
-    lecturerController.changePassword.bind(lecturerController)
-  );
+lecturerRouter.patch(
+  '/change-password',
+  classValidate(ChangePasswordReqDto),
+  authenticateJWT, // Middleware xác thực người dùng đã đăng nhập
+  lecturerController.changePassword.bind(lecturerController)
+);
 
 export default lecturerRouter;

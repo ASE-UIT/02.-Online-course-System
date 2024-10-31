@@ -10,8 +10,7 @@ export async function generateRandomString(): Promise<string> {
   return `${minutes}${seconds}${token}`;
 }
 
-
-export function generateRandomOTPString(length:number):string {
+export function generateRandomOTPString(length: number): string {
   const characters = '0123456789';
   let result = '';
   const charactersLength = characters.length;
@@ -22,6 +21,3 @@ export function generateRandomOTPString(length:number):string {
 
   return result;
 }
-
-
-

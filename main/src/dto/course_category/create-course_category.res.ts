@@ -1,9 +1,9 @@
 import { Expose } from 'class-transformer';
 
-export class CreateCourseCategoryRes{
-    @Expose()
-    id!: string;
+export class CreateCourseCategoryRes {
+  @Expose()
+  id!: string;
 
-    @Expose()
-    name!: string;
+  @Expose()
+  name!: string;
 }

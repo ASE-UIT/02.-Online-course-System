@@ -1,4 +1,4 @@
-  import { GoogleAuthProfileDto } from '@/dto/google-auth-profile.dto';
+import { GoogleAuthProfileDto } from '@/dto/google-auth-profile.dto';
 import { LoginRes } from '@/dto/login.res';
 import { StudentRegisterReq } from '@/dto/student/student-register.req';
 import { StudentRes } from '@/dto/student/student.res';
@@ -16,4 +16,3 @@ export interface IStudentService<T extends BaseModelType> extends IBaseCrudServi
   changePassword(studentId: string, currentPassword: string, newPassword: string): Promise<void>;
   updateProfile(studentId: string, updateData: Partial<T>): Promise<void>;
 }
-
