@@ -49,7 +49,7 @@ const SignUpForm = () => {
 
   function onSubmit(values) {
     console.log(values);
-    navigate(`/web/sign-up/step2/email`);
+    navigate(`/web/lecturer/result`);
   }
 
   return (

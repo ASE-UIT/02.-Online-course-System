@@ -9,9 +9,9 @@ const Header = () => {
   const [isLecturerLayout, setIsLecturerLayout] = useState(false);
 
   useEffect(() => {
-    if (location.pathname.startsWith("/web/lecturer")) {
+    if (location.pathname.startsWith("/web/lecturer"))
       setIsLecturerLayout(true);
-    }
+    else setIsLecturerLayout(false);
   }, [location]);
 
   const [open, setOpen] = useState(false);
