@@ -126,11 +126,15 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
     );
     const userData = await response.json();
 
+    console.log('Facebook user data', userData);
+
     if (userData.error) {
       throw new BaseError(ErrorCode.AUTH_01, 'Đăng nhập/Đăng ký thất bại');
     }
 
-    const facebookUser = convertToDto(FacebookAuthProfileDto, userData);
+    const facebookUser = userData as FacebookAuthProfileDto;
+
+    console.log('Facebook user', facebookUser);
 
     //Check if this account is already registered
     const student = await this.studentRepository.findOne({
