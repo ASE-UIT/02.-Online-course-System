@@ -1,4 +1,4 @@
-import { StudentRegisterReq } from '@/dto/student/student-register.req';
+import { StudentRegisterPhoneReq } from '@/dto/student/student-register-phone.req';
 import { StudentRes } from '@/dto/student/student.res';
 import { ErrorCode } from '@/enums/error-code.enums';
 import { Student } from '@/models/student.model';
@@ -16,9 +16,19 @@ import { TIME_CONSTANTS } from '@/constants/time.constants';
 import jwt from 'jsonwebtoken';
 import { JwtClaimDto } from '@/dto/jwt-claim.dto';
 import _ from 'lodash';
-import { generateRandomString } from '@/utils/random/generate-random-string.util';
+import { generateRandomOTPString, generateRandomString } from '@/utils/random/generate-random-string.util';
 import { GoogleAuthProfileDto } from '@/dto/google-auth-profile.dto';
 import googleOauth2Client from '@/utils/google/google.oauth2.client';
+import { FacebookAuthProfileDto } from '@/dto/facebook-auth-profile.dto';
+import redis from '@/utils/redis/redis.util';
+import { RedisSchemaEnum } from '@/enums/redis-schema.enum';
+import { SmsActivateCacheDto } from '@/dto/sms-active-cache.dto';
+import { StudentRegisterEmailReq } from '@/dto/student/student-register-email.req';
+import { sendEmail } from '@/utils/email/email-sender.util';
+import { EmailActivateCacheDto } from '@/dto/email-active-cache.dto';
+import { StudentLoginReq } from '@/dto/student/student-login.req';
+import { Cart } from '@/models/cart.model';
+import { sendSms } from '@/utils/sms/sms-sender.util';
 
 @injectable()
 export class StudentService extends BaseCrudService<Student> implements IStudentService<Student> {
@@ -27,6 +37,184 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
   constructor(@inject('StudentRepository') studentRepository: IStudentRepository<Student>) {
     super(studentRepository);
     this.studentRepository = studentRepository;
+  }
+
+  /**
+   * * Đây là hàm xử lý xác thực logic khi người dùng đăng ký bằng email
+   * @param email
+   * @param code
+   */
+  async activateEmail(email: string, code: string): Promise<string> {
+    const emailActivateCached = await redis.get(`${RedisSchemaEnum.noneActiveEmailUserData}::${email}`);
+    if (!emailActivateCached) {
+      throw new BaseError(ErrorCode.PHONE_NUMBER_NOT_FOUND, 'Số điện thoại không tồn tại');
+    }
+
+    const emailActivateCachedDto: EmailActivateCacheDto = JSON.parse(emailActivateCached);
+    if (emailActivateCachedDto.code !== code) {
+      throw new BaseError(ErrorCode.INVALID_CODE, 'Mã OTP không đúng');
+    }
+
+    const { tempUser } = emailActivateCachedDto;
+
+    console.log('Temp user', tempUser);
+
+    const student = convertToDto(StudentRegisterEmailReq, tempUser);
+
+    console.log('Student', student);
+
+    (student as Student).roleId = RoleEnum.STUDENT;
+
+    //Create cart for student
+    const cart = new Cart();
+    (student as Student).cart = cart;
+
+    await this.studentRepository.create({
+      data: student
+    });
+
+    return 'Xác thực email thành công, bạn có thể đăng nhập ngay bây giờ';
+  }
+
+  /**
+   * * Đây là hàm xử lý logic khi người dùng đăng ký bằng email
+   * @param data
+   */
+  async registerEmail(data: StudentRegisterEmailReq): Promise<void> {
+    if (
+      await this.studentRepository.exists({
+        filter: {
+          email: data.email
+        }
+      })
+    ) {
+      throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Số điện thoại đã tồn tại');
+    }
+
+    data.password = bcrypt.hashSync(data.password, 10);
+
+    const code = await generateRandomString();
+
+    redis.set(
+      `${RedisSchemaEnum.noneActiveEmailUserData}::${data.email}`,
+      JSON.stringify(new EmailActivateCacheDto(data, code)),
+      'EX',
+      (TIME_CONSTANTS.MINUTE * 3) / 1000
+    );
+
+    //Valid phone number or email
+    await sendEmail({
+      from: { name: 'Edhub.io.vn - Hệ thống học trực tuyến' },
+      to: {
+        emailAddress: [data.email]
+      },
+      subject: 'Xác thực tài khoản Edhub',
+      text: `Mã xác thực của bạn là: ${code}`
+    });
+
+    return;
+  }
+
+  /**
+   * * Đây là hàm xử lý logic khi người dùng đăng nhập bằng Facebook
+   * @param accessToken // Token xác thực từ Facebook
+   */
+  async authFacebookCallback(accessToken: string): Promise<LoginRes> {
+    // Gửi yêu cầu đến Facebook để xác thực accessToken và lấy thông tin người dùng
+    const response = await fetch(
+      `https://graph.facebook.com/me?access_token=${accessToken}&fields=id,email,name,picture`
+    );
+    const userData = await response.json();
+
+    if (userData.error) {
+      throw new BaseError(ErrorCode.AUTH_01, 'Đăng nhập/Đăng ký thất bại');
+    }
+
+    const facebookUser = convertToDto(FacebookAuthProfileDto, userData);
+
+    //Check if this account is already registered
+    const student = await this.studentRepository.findOne({
+      filter: {
+        facebookId: facebookUser.id
+      }
+    });
+    if (student) {
+      //Return token
+      const token = await this.generateToken(student);
+      return new LoginRes(token);
+    }
+
+    //If not, create new account
+    const newStudent = new Student();
+    if (!facebookUser.email) {
+      throw new BaseError(ErrorCode.BAD_REQUEST, 'Tài khoản Google của bạn không có email');
+    }
+    newStudent.email = facebookUser.email;
+
+    if (
+      await this.studentRepository.exists({
+        filter: {
+          email: newStudent.email
+        }
+      })
+    ) {
+      throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Email đã tồn tại');
+    }
+
+    newStudent.name = facebookUser.name || 'No name user';
+    if (facebookUser.picture) {
+      newStudent.avatar = facebookUser.picture.data.url;
+    }
+
+    newStudent.facebookId = facebookUser.id;
+    newStudent.roleId = RoleEnum.STUDENT;
+
+    const randomPassword = await generateRandomString();
+    newStudent.password = bcrypt.hashSync(randomPassword, 10);
+
+    //Create cart for student
+    const cart = new Cart();
+    newStudent.cart = cart;
+
+    await this.studentRepository.create({
+      data: newStudent
+    });
+
+    //Generate token
+    const token = await this.generateToken(newStudent);
+    return new LoginRes(token);
+  }
+
+  /**
+   * * Đây là hàm xử lý logic khi người dùng đăng nhập bằng email hoặc số điện thoại
+   * @param data
+   * @returns
+   */
+  async login(data: StudentLoginReq): Promise<LoginRes> {
+    const { phoneNumberOrEmail, password } = data;
+
+    //Get student by phone number
+    const studentWithPhone = await this.studentRepository.findOne({
+      filter: { phoneNumber: phoneNumberOrEmail }
+    });
+
+    //Get student by email
+    const studentWithEmail = await this.studentRepository.findOne({
+      filter: { email: phoneNumberOrEmail }
+    });
+
+    if (!studentWithPhone && !studentWithEmail) {
+      throw new BaseError(ErrorCode.NF_01, 'Tài khoản không tồn tại');
+    }
+    const student = studentWithPhone || studentWithEmail;
+
+    if (!bcrypt.compareSync(password, student!.password)) {
+      throw new BaseError(ErrorCode.AUTH_01, 'Sai mật khẩu');
+    }
+
+    const token = await this.generateToken(student!);
+
+    return new LoginRes(token);
   }
 
   async generateToken(student: Student): Promise<string> {
@@ -100,6 +288,10 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
     const randomPassword = await generateRandomString();
     newStudent.password = bcrypt.hashSync(randomPassword, 10);
 
+    //Create cart for student
+    const cart = new Cart();
+    newStudent.cart = cart;
+
     await this.studentRepository.create({
       data: newStudent
     });
@@ -109,17 +301,7 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
     return new LoginRes(token);
   }
 
-  async register(data: StudentRegisterReq): Promise<StudentRes> {
-    if (
-      await this.studentRepository.exists({
-        filter: {
-          email: data.email
-        }
-      })
-    ) {
-      throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Email đã tồn tại');
-    }
-
+  async registerPhone(data: StudentRegisterPhoneReq): Promise<void> {
     if (
       await this.studentRepository.exists({
         filter: {
@@ -131,12 +313,143 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
     }
 
     data.password = bcrypt.hashSync(data.password, 10);
-    (data as unknown as Student).roleId = RoleEnum.STUDENT;
 
     //Valid phone number or email
     await sendSmsForActivation(data.phoneNumber, data);
 
-    const resultDto = convertToDto(StudentRes, data);
-    return resultDto;
+    return;
+  }
+
+  async activatePhoneNumber(phoneNumber: string, code: string): Promise<string> {
+    console.log('Activate phone number', phoneNumber, code);
+
+    const smsActivateCache = await redis.get(`${RedisSchemaEnum.noneActivePhoneUserData}::${phoneNumber}`);
+    if (!smsActivateCache) {
+      throw new BaseError(ErrorCode.PHONE_NUMBER_NOT_FOUND, 'Số điện thoại không tồn tại');
+    }
+
+    const smsActivateCacheDto: SmsActivateCacheDto = JSON.parse(smsActivateCache);
+    if (smsActivateCacheDto.code !== code) {
+      throw new BaseError(ErrorCode.INVALID_CODE, 'Mã OTP không đúng');
+    }
+
+    const { tempUser } = smsActivateCacheDto;
+
+    console.log('Temp user', tempUser);
+
+    const student = convertToDto(StudentRegisterPhoneReq, tempUser);
+
+    console.log('Student', student);
+
+    (student as Student).roleId = RoleEnum.STUDENT;
+
+    //Create cart for student
+    const cart = new Cart();
+    (student as Student).cart = cart;
+
+    await this.studentRepository.create({
+      data: student
+    });
+
+    return 'Xác thực số điện thoại thành công, bạn có thể đăng nhập ngay bây giờ';
+  }
+
+  async initiateForgotPassword(emailOrPhone: string): Promise<void> {
+    const student = await this.studentRepository.findOne({
+      filter: emailOrPhone.includes('@') ? { email: emailOrPhone } : { phoneNumber: emailOrPhone }
+    });
+
+    if (!student) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Không tìm thấy tài khoản học viên');
+    }
+
+    const otp = await generateRandomOTPString(6); // Tạo OTP 6 ký tự
+    const otpKey = `student:forgotPassword:${student.id}`;
+    await redis.set(otpKey, otp, 'EX', TIME_CONSTANTS.MINUTE * 3);
+
+    if (emailOrPhone.includes('@')) {
+      await sendEmail({
+        from: { name: 'Hệ thống EduHub' },
+        to: { emailAddress: [student.email] },
+        subject: 'EduHub - Mã OTP đặt lại mật khẩu',
+        text: `Mã OTP để đặt lại mật khẩu của bạn là ${otp}. Mã có hiệu lực trong vòng 3 phút.`
+      });
+    } else {
+      await sendSms(`Mã OTP để đặt lại mật khẩu của bạn là ${otp}. Mã có hiệu lực trong vòng 3 phút.`, [
+        student.phoneNumber
+      ]);
+    }
+  }
+
+  /**
+   * Verifies OTP for forgot password functionality.
+   */
+  async verifyForgotPasswordOtp(studentId: string, otp: string): Promise<void> {
+    const otpKey = `student:forgotPassword:${studentId}`;
+    const storedOtp = await redis.get(otpKey);
+
+    if (!storedOtp || storedOtp !== otp) {
+      throw new BaseError(ErrorCode.INVALID_OTP, 'Mã OTP không hợp lệ hoặc hết hạn');
+    }
+    await redis.del(otpKey);
+  }
+
+  /**
+   * Resets the password after OTP verification.
+   */
+  async resetPassword(studentId: string, newPassword: string): Promise<void> {
+    const student = await this.studentRepository.findOne({ filter: { id: studentId } });
+
+    if (!student) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'không tìm thấy tài khoản học viên');
+    }
+
+    student.password = bcrypt.hashSync(newPassword, 10);
+    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
+  }
+
+  async changePassword(studentId: string, currentPassword: string, newPassword: string): Promise<void> {
+    // Tìm sinh viên theo ID
+    const student = await this.studentRepository.findOne({ filter: { id: studentId } });
+    if (!student) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Không tìm thấy tài khoản học viên');
+    }
+
+    // Kiểm tra mật khẩu hiện tại
+    const isMatch = bcrypt.compareSync(currentPassword, student.password);
+    if (!isMatch) {
+      throw new BaseError(ErrorCode.INVALID_PASSWORD, 'Mật khẩu hiện tại không chính xác');
+    }
+
+    // Mã hóa mật khẩu mới và cập nhật vào cơ sở dữ liệu
+    student.password = bcrypt.hashSync(newPassword, 10);
+    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
+  }
+
+  async updateProfile(studentId: string, updateData: Partial<Student>): Promise<void> {
+    const student = await this.studentRepository.findOne({ filter: { id: studentId } });
+    if (!student) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Không tìm thấy tài khoản học viên');
+    }
+
+    // Kiểm tra nếu email đã tồn tại và khác với email của sinh viên hiện tại
+    if (updateData.email && updateData.email !== student.email) {
+      const existingStudent = await this.studentRepository.findOne({ filter: { email: updateData.email } });
+      if (existingStudent) {
+        throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Email đã tồn tại');
+      }
+    }
+
+    // Kiểm tra nếu số điện thoại đã tồn tại và khác với số hiện tại
+    if (updateData.phoneNumber && updateData.phoneNumber !== student.phoneNumber) {
+      const existingStudent = await this.studentRepository.findOne({ filter: { phoneNumber: updateData.phoneNumber } });
+      if (existingStudent) {
+        throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Số điện thoại đã tồn tại');
+      }
+    }
+
+    // Cập nhật các thông tin mới
+    Object.assign(student, updateData);
+    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
   }
 }

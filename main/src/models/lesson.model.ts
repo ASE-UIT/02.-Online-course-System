@@ -10,7 +10,7 @@ export class Lesson extends BaseModel {
   id!: string;
 
   @Column({ type: 'text', nullable: true })
-  description!: string;
+  description?: string;
 
   @Column({ length: 150 })
   title!: string;
@@ -22,17 +22,23 @@ export class Lesson extends BaseModel {
   order!: number;
 
   @Column({ type: 'text', nullable: true, name: 'video_url' })
-  videoUrl!: string;
+  videoUrl?: string;
 
-  @Column({ type: 'text', nullable: true, name: 'resource_link' })
-  resourceLink!: string;
+  @Column({ type: 'simple-array', nullable: true, name: 'resource_link' })
+  resourceLink?: string[];
 
-  @ManyToOne(() => Course)
+  @Column({ name: 'parti_no', nullable: true })
+  partNo?: number;
+
+  @Column({ name: 'part_name', nullable: true })
+  partName?: string;
+
+  @ManyToOne(() => Course, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'course_id' })
   course!: Course;
 
-  @OneToMany(() => Quiz, (quiz) => quiz.lesson)
-  quizzes!: Promise<Quiz[]>;
+  @OneToMany(() => Quiz, (quiz) => quiz.lesson, { cascade: true, eager: true })
+  quizzes!: Quiz[];
 
   @OneToMany(() => StudentCompleteLesson, (studentCompleteLesson) => studentCompleteLesson.lesson, { cascade: true })
   studentCompleteLessons!: Promise<StudentCompleteLesson[]>;

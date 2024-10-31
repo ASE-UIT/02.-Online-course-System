@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Migrations1727862623338 implements MigrationInterface {
-  name = 'Migrations1727862623338';
+export class Migrations1730019829516 implements MigrationInterface {
+  name = 'Migrations1730019829516';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP CONSTRAINT "FK_337aa8dba227a1fe6b73998307b"`);
@@ -9,8 +9,8 @@ export class Migrations1727862623338 implements MigrationInterface {
     await queryRunner.query(`DROP INDEX "public"."IDX_7d2dad9f14eddeb09c256fea71"`);
     await queryRunner.query(`DROP INDEX "public"."IDX_337aa8dba227a1fe6b73998307"`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP COLUMN "update_at"`);
-    await queryRunner.query(`ALTER TABLE "roles_permissions" DROP COLUMN "create_at"`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP COLUMN "delete_at"`);
+    await queryRunner.query(`ALTER TABLE "roles_permissions" DROP COLUMN "create_at"`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP COLUMN "create_by"`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP COLUMN "update_by"`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "create_at" TIMESTAMP NOT NULL DEFAULT now()`);
@@ -18,8 +18,8 @@ export class Migrations1727862623338 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "create_by" character varying`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "update_by" character varying`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "delete_at" TIMESTAMP`);
-    await queryRunner.query(`ALTER TABLE "courses" DROP CONSTRAINT "FK_667f9ddd37aab68ff127dca9de2"`);
-    await queryRunner.query(`ALTER TABLE "courses" ALTER COLUMN "lecturer_id" SET NOT NULL`);
+    await queryRunner.query(`ALTER TABLE "courses" DROP CONSTRAINT "FK_e4c260fe6bb1131707c4617f745"`);
+    await queryRunner.query(`ALTER TABLE "courses" ALTER COLUMN "category_id" SET NOT NULL`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP CONSTRAINT "PK_0cd11f0b35c4d348c6ebb9b36b7"`);
     await queryRunner.query(
       `ALTER TABLE "roles_permissions" ADD CONSTRAINT "PK_337aa8dba227a1fe6b73998307b" PRIMARY KEY ("permission_id")`
@@ -63,7 +63,7 @@ export class Migrations1727862623338 implements MigrationInterface {
     await queryRunner.query(`CREATE INDEX "IDX_7d2dad9f14eddeb09c256fea71" ON "roles_permissions" ("role_id") `);
     await queryRunner.query(`CREATE INDEX "IDX_337aa8dba227a1fe6b73998307" ON "roles_permissions" ("permission_id") `);
     await queryRunner.query(
-      `ALTER TABLE "courses" ADD CONSTRAINT "FK_667f9ddd37aab68ff127dca9de2" FOREIGN KEY ("lecturer_id") REFERENCES "lecturers"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE "courses" ADD CONSTRAINT "FK_e4c260fe6bb1131707c4617f745" FOREIGN KEY ("category_id") REFERENCES "course_categories"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
       `ALTER TABLE "roles_permissions" ADD CONSTRAINT "FK_7d2dad9f14eddeb09c256fea719" FOREIGN KEY ("role_id") REFERENCES "role"("id") ON DELETE CASCADE ON UPDATE CASCADE`
@@ -76,7 +76,7 @@ export class Migrations1727862623338 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP CONSTRAINT "FK_337aa8dba227a1fe6b73998307b"`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP CONSTRAINT "FK_7d2dad9f14eddeb09c256fea719"`);
-    await queryRunner.query(`ALTER TABLE "courses" DROP CONSTRAINT "FK_667f9ddd37aab68ff127dca9de2"`);
+    await queryRunner.query(`ALTER TABLE "courses" DROP CONSTRAINT "FK_e4c260fe6bb1131707c4617f745"`);
     await queryRunner.query(`DROP INDEX "public"."IDX_337aa8dba227a1fe6b73998307"`);
     await queryRunner.query(`DROP INDEX "public"."IDX_7d2dad9f14eddeb09c256fea71"`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP CONSTRAINT "PK_0cd11f0b35c4d348c6ebb9b36b7"`);
@@ -119,9 +119,9 @@ export class Migrations1727862623338 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "roles_permissions" ADD CONSTRAINT "PK_0cd11f0b35c4d348c6ebb9b36b7" PRIMARY KEY ("role_id", "permission_id")`
     );
-    await queryRunner.query(`ALTER TABLE "courses" ALTER COLUMN "lecturer_id" DROP NOT NULL`);
+    await queryRunner.query(`ALTER TABLE "courses" ALTER COLUMN "category_id" DROP NOT NULL`);
     await queryRunner.query(
-      `ALTER TABLE "courses" ADD CONSTRAINT "FK_667f9ddd37aab68ff127dca9de2" FOREIGN KEY ("lecturer_id") REFERENCES "lecturers"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
+      `ALTER TABLE "courses" ADD CONSTRAINT "FK_e4c260fe6bb1131707c4617f745" FOREIGN KEY ("category_id") REFERENCES "course_categories"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP COLUMN "delete_at"`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP COLUMN "update_by"`);
@@ -130,8 +130,8 @@ export class Migrations1727862623338 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "roles_permissions" DROP COLUMN "create_at"`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "update_by" character varying`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "create_by" character varying`);
-    await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "delete_at" TIMESTAMP`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "create_at" TIMESTAMP NOT NULL DEFAULT now()`);
+    await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "delete_at" TIMESTAMP`);
     await queryRunner.query(`ALTER TABLE "roles_permissions" ADD "update_at" TIMESTAMP NOT NULL DEFAULT now()`);
     await queryRunner.query(`CREATE INDEX "IDX_337aa8dba227a1fe6b73998307" ON "roles_permissions" ("permission_id") `);
     await queryRunner.query(`CREATE INDEX "IDX_7d2dad9f14eddeb09c256fea71" ON "roles_permissions" ("role_id") `);

@@ -5,6 +5,8 @@ import { CartRepository } from '@/repository/cart.repository';
 import { ICartService } from '@/service/interface/i.cart.service';
 import { ICartRepository } from '@/repository/interface/i.cart.repository';
 import { BaseContainer } from '@/container/base.container';
+import { ICartItemRepository } from '@/repository/interface/i.cart_item.repository';
+import { cartItemRepository } from '@/container/cart_item.container';
 
 class CartContainer extends BaseContainer {
   constructor() {
@@ -12,6 +14,9 @@ class CartContainer extends BaseContainer {
     this.container.bind<ICartService<Cart>>('CartService').to(CartService);
     this.container.bind<ICartRepository<Cart>>('CartRepository').to(CartRepository);
     this.container.bind<CartController>(CartController).toSelf();
+
+    //Import
+    this.container.bind<ICartItemRepository<any>>('CartItemRepository').toConstantValue(cartItemRepository);
   }
 
   export() {

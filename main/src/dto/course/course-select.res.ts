@@ -1,6 +1,7 @@
 import { DifficultyLevel } from '@/enums/difficulty-level.enum';
 import { IsNotEmpty, IsOptional, IsUUID, IsString, IsNumber, IsEnum, IsDate, Validate } from 'class-validator';
 import { Expose } from 'class-transformer';
+import { update } from 'lodash';
 
 export const CourseSelectRes = {
   id: true,
@@ -29,5 +30,10 @@ export const CourseSelectRes = {
   lecturer: {
     id: true,
     name: true
-  }
+  },
+
+  createAt: true,
+  updateAt: true,
+  createBy: true,
+  updateBy: true
 };

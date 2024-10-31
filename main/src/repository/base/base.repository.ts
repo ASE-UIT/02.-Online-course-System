@@ -20,6 +20,13 @@ export class BaseRepository<T extends ObjectLiteral> implements IBaseRepository<
   ) {
     this.ormRepository = ormRepository;
   }
+  private hasDeleteAtColumn(): boolean {
+    return this.ormRepository.metadata.columns.some((column) => column.propertyName === 'deleteAt');
+  }
+
+  async save(data: T): Promise<T> {
+    return await this.ormRepository.save(data);
+  }
 
   async create(payload: { data: DeepPartial<T> }): Promise<T> {
     const data = payload.data;
@@ -39,11 +46,24 @@ export class BaseRepository<T extends ObjectLiteral> implements IBaseRepository<
     await this.ormRepository.save(recordToDelete);
   }
 
+  async findOneAndHardDelete(options: { filter: Partial<T> }): Promise<void> {
+    const { filter } = options;
+    const recordToDelete = await this.ormRepository.findOne({
+      where: filter
+    });
+    if (!recordToDelete) {
+      throw new BaseError(ErrorCode.NF_01, 'Record not found with given filter: ' + JSON.stringify(filter));
+    }
+    await this.ormRepository.delete(filter);
+  }
+
   async findOneAndUpdate(options: { filter: Partial<T>; updateData: Partial<T> }): Promise<void> {
     const { filter, updateData } = options;
 
-    if (filter && !filter.deleteAt) {
-      (filter as any).deleteAt = IsNull();
+    if (this.hasDeleteAtColumn()) {
+      if (filter && !filter.deleteAt) {
+        (filter as any).deleteAt = IsNull();
+      }
     }
 
     const recordToUpdate = await this.ormRepository.findOne({
@@ -66,8 +86,10 @@ export class BaseRepository<T extends ObjectLiteral> implements IBaseRepository<
   }): Promise<T | null> {
     const { filter, relations, select } = options;
 
-    if (!filter.deleteAt) {
-      (filter as any).deleteAt = IsNull();
+    if (this.hasDeleteAtColumn()) {
+      if (!filter.deleteAt) {
+        (filter as any).deleteAt = IsNull();
+      }
     }
 
     const result = await this.ormRepository.findOne({
@@ -96,14 +118,16 @@ export class BaseRepository<T extends ObjectLiteral> implements IBaseRepository<
       take = paging.rpp;
     }
 
-    if (filter && !filter.deleteAt) {
-      (filter as any).deleteAt = IsNull();
-    }
+    if (this.hasDeleteAtColumn()) {
+      if (filter && !filter.deleteAt) {
+        (filter as any).deleteAt = IsNull();
+      }
 
-    if (!filter) {
-      (filter as any) = {
-        deleteAt: IsNull()
-      };
+      if (!filter) {
+        (filter as any) = {
+          deleteAt: IsNull()
+        };
+      }
     }
 
     const orderObject: Record<string, 'ASC' | 'DESC'> = {};
@@ -125,7 +149,9 @@ export class BaseRepository<T extends ObjectLiteral> implements IBaseRepository<
 
   async findAll(): Promise<T[]> {
     const filter: Partial<T> = {};
-    (filter as any).deleteAt = IsNull();
+    if (this.hasDeleteAtColumn()) {
+      (filter as any).deleteAt = IsNull();
+    }
 
     return await this.ormRepository.find({
       where: filter
@@ -135,17 +161,17 @@ export class BaseRepository<T extends ObjectLiteral> implements IBaseRepository<
   async count(options: { filter?: Partial<T> }): Promise<number> {
     const { filter } = options;
 
-    if (filter && !filter.deleteAt) {
-      (filter as any).deleteAt = IsNull();
-    }
+    if (this.hasDeleteAtColumn()) {
+      if (filter && !filter.deleteAt) {
+        (filter as any).deleteAt = IsNull();
+      }
 
-    if (!filter) {
-      (filter as any) = {
-        deleteAt: IsNull()
-      };
+      if (!filter) {
+        (filter as any) = {
+          deleteAt: IsNull()
+        };
+      }
     }
-
-    console.log('count filter', filter);
 
     return await this.ormRepository.count({
       where: filter
@@ -155,8 +181,10 @@ export class BaseRepository<T extends ObjectLiteral> implements IBaseRepository<
   async exists(options: { filter: Partial<T> }): Promise<boolean> {
     const { filter } = options;
 
-    if (filter && !filter.deleteAt) {
-      (filter as any).deleteAt = IsNull();
+    if (this.hasDeleteAtColumn()) {
+      if (filter && !filter.deleteAt) {
+        (filter as any).deleteAt = IsNull();
+      }
     }
 
     const total = await this.ormRepository.count({

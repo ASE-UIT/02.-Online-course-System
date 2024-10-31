@@ -1,16 +1,12 @@
 import { Expose } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, MaxLength, MinLength } from 'class-validator';
 
-export class StudentRegisterReq {
+export class StudentRegisterPhoneReq {
   @Expose()
   @IsNotEmpty()
   @IsString()
   @MaxLength(50)
   name!: string;
-
-  @IsEmail()
-  @Expose()
-  email!: string;
 
   @IsPhoneNumber()
   @Expose()
@@ -21,8 +17,4 @@ export class StudentRegisterReq {
   @MaxLength(150)
   @Expose()
   password!: string;
-
-  @IsOptional()
-  @Expose()
-  avatar?: string;
 }
