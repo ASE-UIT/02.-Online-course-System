@@ -16,7 +16,6 @@ studentRouter.post(
   studentController.authGoogleCallback.bind(studentController)
 );
 
-
 studentRouter.post(
   '/forgot-password',
   classValidate(ForgotPasswordReqDto),
@@ -29,11 +28,7 @@ studentRouter.post(
   studentController.forgotPassword.bind(studentController)
 );
 
-studentRouter.post(
-  '/verify-otp',
-  classValidate(VerifyOtpReqDto),
-  studentController.verifyOtp.bind(studentController)
-);
+studentRouter.post('/verify-otp', classValidate(VerifyOtpReqDto), studentController.verifyOtp.bind(studentController));
 
 studentRouter.post(
   '/reset-password',

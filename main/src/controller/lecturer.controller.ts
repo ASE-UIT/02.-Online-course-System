@@ -165,11 +165,16 @@ export class LecturerController {
     }
   }
 
-
   async changePassword(req: Request, res: Response, next: NextFunction) {
     try {
       const { currentPassword, newPassword } = req.body as ChangePasswordReqDto;
-      const lecturerId = req.user.id; // Sử dụng ID của giảng viên đã đăng nhập từ `req.user`
+      const lecturer = req.user;
+
+      if (!lecturer) {
+        throw new BaseError(ErrorCode.AUTH_01, 'Giảng viên chưa đăng nhập');
+      }
+
+      const lecturerId = lecturer.id; // Sử dụng ID của giảng viên đã đăng nhập từ `req.user`
 
       await this.lecturerService.changePassword(lecturerId, currentPassword, newPassword);
       res.send_ok('Đổi mật khẩu thành công');

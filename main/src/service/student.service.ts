@@ -145,7 +145,7 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
 
   async initiateForgotPassword(emailOrPhone: string): Promise<void> {
     const student = await this.studentRepository.findOne({
-      filter: emailOrPhone.includes('@') ? { email: emailOrPhone } : { phoneNumber: emailOrPhone },
+      filter: emailOrPhone.includes('@') ? { email: emailOrPhone } : { phoneNumber: emailOrPhone }
     });
 
     if (!student) {
@@ -161,13 +161,15 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
         from: { name: 'Hệ thống EduHub' },
         to: { emailAddress: [student.email] },
         subject: 'EduHub - Mã OTP đặt lại mật khẩu',
-        text: `Mã OTP để đặt lại mật khẩu của bạn là ${otp}. Mã có hiệu lực trong vòng 3 phút.`,
+        text: `Mã OTP để đặt lại mật khẩu của bạn là ${otp}. Mã có hiệu lực trong vòng 3 phút.`
       });
     } else {
-      await sendSms(`Mã OTP để đặt lại mật khẩu của bạn là ${otp}. Mã có hiệu lực trong vòng 3 phút.`, [student.phoneNumber]);
+      await sendSms(`Mã OTP để đặt lại mật khẩu của bạn là ${otp}. Mã có hiệu lực trong vòng 3 phút.`, [
+        student.phoneNumber
+      ]);
     }
   }
-  
+
   /**
    * Verifies OTP for forgot password functionality.
    */
@@ -186,15 +188,14 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
    */
   async resetPassword(studentId: string, newPassword: string): Promise<void> {
     const student = await this.studentRepository.findOne({ filter: { id: studentId } });
-    
+
     if (!student) {
       throw new BaseError(ErrorCode.NOT_FOUND, 'không tìm thấy tài khoản học viên');
     }
 
     student.password = bcrypt.hashSync(newPassword, 10);
-    await this.studentRepository.findOneAndUpdate({ filter: {id: studentId}, updateData: student });
+    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
   }
-
 
   async changePassword(studentId: string, currentPassword: string, newPassword: string): Promise<void> {
     // Tìm sinh viên theo ID
@@ -211,9 +212,8 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
 
     // Mã hóa mật khẩu mới và cập nhật vào cơ sở dữ liệu
     student.password = bcrypt.hashSync(newPassword, 10);
-    await this.studentRepository.findOneAndUpdate({filter:{id: studentId}, updateData: student });
+    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
   }
-
 
   async updateProfile(studentId: string, updateData: Partial<Student>): Promise<void> {
     const student = await this.studentRepository.findOne({ filter: { id: studentId } });
@@ -239,7 +239,6 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
 
     // Cập nhật các thông tin mới
     Object.assign(student, updateData);
-    await this.studentRepository.findOneAndUpdate({ filter: {id:studentId}, updateData: student });
+    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
   }
-
 }

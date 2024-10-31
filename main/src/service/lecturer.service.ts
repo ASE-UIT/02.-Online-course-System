@@ -174,7 +174,6 @@ export class LecturerService extends BaseCrudService<Lecturer> implements ILectu
 
     // Mã hóa mật khẩu mới và cập nhật vào cơ sở dữ liệu
     lecturer.password = bcrypt.hashSync(newPassword, 10);
-    await this.lecturerRepository.findOneAndUpdate({filter: {id: lecturerId}, updateData: lecturer });
+    await this.lecturerRepository.findOneAndUpdate({ filter: { id: lecturerId }, updateData: lecturer });
   }
-
 }

@@ -18,6 +18,8 @@ import { VerifyOtpReqDto } from '@/dto/student/verify-otp.req';
 import { ResetPasswordReqDto } from '@/dto/student/reset-password.req';
 import { ChangePasswordReqDto } from '@/dto/student/change-password.req';
 import { UpdateProfileReqDto } from '@/dto/student/update-profile.req';
+import BaseError from '@/utils/error/base.error';
+import { ErrorCode } from '@/enums/error-code.enums';
 
 @injectable()
 export class StudentController {
@@ -68,7 +70,7 @@ export class StudentController {
   }
 
   /**
-   * POST /student/verify-otp 
+   * POST /student/verify-otp
    */
   async verifyOtp(req: Request, res: Response, next: NextFunction) {
     try {
@@ -80,9 +82,8 @@ export class StudentController {
     }
   }
 
-
   /**
-   * POST /student/reset-password 
+   * POST /student/reset-password
    */
   async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {
@@ -94,11 +95,17 @@ export class StudentController {
     }
   }
 
-
   async changePassword(req: Request, res: Response, next: NextFunction) {
     try {
       const { currentPassword, newPassword } = req.body as ChangePasswordReqDto;
-      const studentId = req.user.id; // Sử dụng ID sinh viên từ `req.user` đã được xác thực
+
+      const student = req.user;
+
+      if (!student) {
+        throw new BaseError(ErrorCode.AUTH_01, 'Học viên chưa đăng nhập');
+      }
+
+      const studentId = student.id; // Sử dụng ID sinh viên từ `req.user` đã được xác thực
 
       await this.studentService.changePassword(studentId, currentPassword, newPassword);
       res.send_ok('Đổi mật khẩu thành công');
@@ -107,11 +114,17 @@ export class StudentController {
     }
   }
 
-
   async updateProfile(req: Request, res: Response, next: NextFunction) {
     try {
       const updateData = req.body as UpdateProfileReqDto;
-      const studentId = req.user.id; // Sử dụng ID sinh viên từ `req.user` đã được xác thực
+
+      const student = req.user;
+
+      if (!student) {
+        throw new BaseError(ErrorCode.AUTH_01, 'Học viên chưa đăng nhập');
+      }
+
+      const studentId = student.id; // Sử dụng ID sinh viên từ `req.user` đã được xác thực
 
       await this.studentService.updateProfile(studentId, updateData);
       res.send_ok('Cập nhật thông tin cá nhân thành công');
