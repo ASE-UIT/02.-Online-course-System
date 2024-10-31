@@ -1,7 +1,8 @@
 import { BaseModel } from '@/models/base.model';
+import { Cart } from '@/models/cart.model';
 import { Enrollment } from '@/models/enrollment.model';
 import { Role } from '@/models/role.model';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity('students')
 export class Student extends BaseModel {
@@ -38,4 +39,7 @@ export class Student extends BaseModel {
   @ManyToOne(() => Role, (role) => role.employees)
   @JoinColumn({ name: 'role_id' })
   role!: Promise<Role>;
+
+  @OneToOne(() => Cart, (cart) => cart.student, { cascade: true })
+  cart!: Cart;
 }

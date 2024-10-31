@@ -21,6 +21,18 @@ export class StudentController {
     this.studentService = studentService;
     this.common = common;
   }
+  /**
+   * * POST /student/login
+   */
+  async login(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = req.body;
+      const result = await this.studentService.login(data);
+      res.send_ok('Đăng nhập thành công', result);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   /**
    * * POST /student/auth/google/callback
@@ -54,13 +66,52 @@ export class StudentController {
   }
 
   /**
-   * * POST /student/register
+   * * POST /student/register-phone
    */
-  async register(req: Request, res: Response, next: NextFunction) {
+  async registerPhone(req: Request, res: Response, next: NextFunction) {
     try {
       const data = req.body;
-      const result = await this.studentService.register(data);
+      const result = await this.studentService.registerPhone(data);
       res.send_ok('Đăng ký thành công, tiếp đến hãy xác thực số điện thoại qua OTP', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * POST /student/register-email
+   */
+  async registerEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = req.body;
+      const result = await this.studentService.registerEmail(data);
+      res.send_ok('Đăng ký thành công, tiếp đến hãy xác thực email qua OTP', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * POST /student/activate-email
+   */
+  async activateEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email, code } = req.body;
+      const result = await this.studentService.activateEmail(email, code);
+      res.send_ok(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * POST /student/activate-phone
+   */
+  async activatePhoneNumber(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { phoneNumber, code } = req.body;
+      const result = await this.studentService.activatePhoneNumber(phoneNumber, code);
+      res.send_ok(result);
     } catch (error) {
       next(error);
     }
