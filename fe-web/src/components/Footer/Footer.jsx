@@ -4,12 +4,13 @@ import { useLocation } from "react-router-dom";
 const Footer = () => {
   const location = useLocation();
 
-  const isLecturerLayout =
-    location.pathname.startsWith("/web/lecturer") ||
+  const isLecturerLayout = location.pathname.startsWith("/web/lecturer");
+
+  const isSignInPage =
     location.pathname.startsWith("/web/sign-in") ||
     location.pathname.startsWith("/web/sign-up");
 
-  if (isLecturerLayout) {
+  if (isLecturerLayout || isSignInPage) {
     return null;
   }
 
@@ -19,6 +20,7 @@ const Footer = () => {
         <p className="text-display/md/bold text-success-900">
           Trở thành giảng viên của EduHub
         </p>
+        :
         <p className="text-text/md/regular">
           Giảng viên trên toàn thế giới đã và đang dạy cho hàng triệu học viên
           trên EduHub. EduHub cung cấp công cụ và kỹ năng để giúp bạn hoàn thiện
