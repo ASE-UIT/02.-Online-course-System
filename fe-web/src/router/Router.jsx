@@ -15,6 +15,7 @@ import VerifyCode from "@/pages/SignUp/VerifyCode";
 import ResultPage from "@/pages/Result/ResultPage";
 import InfoInput from "@/pages/SignUp/InfoInput";
 import LecturerLayout from "@/layouts/LecturerLayout";
+import LecturerSignUp from "@/pages/Lecturer/SignUp/LecturerSignUp";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,7 +36,7 @@ const router = createBrowserRouter(
         <Route path="result/:content" element={<ResultPage />} />
         {/* Lecturer layout */}
         <Route path="lecturer" element={<LecturerLayout />}>
-          <Route path="sign-up" element={<SignUp />} />
+          <Route path="sign-up" element={<LecturerSignUp />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to={"./web/"} />} />

@@ -20,9 +20,11 @@ const Header = () => {
 
       <SearchBox />
 
-      <h1 className="forMentor text-text/md/semibold whitespace-nowrap hover:cursor-pointer">
-        Dành cho giảng viên
-      </h1>
+      <Link to={"lecturer/sign-up"}>
+        <h1 className="forMentor text-text/md/semibold whitespace-nowrap hover:cursor-pointer">
+          Dành cho giảng viên
+        </h1>
+      </Link>
 
       <UserSection />
     </div>
