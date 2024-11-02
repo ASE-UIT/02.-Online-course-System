@@ -14,17 +14,22 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { GoogleIcon, FacebookIcon } from "@/assets";
+import { toast } from "react-toastify";
+import { studentLogin } from "@/api";
+import { addAuth } from "@/store/slices/authSlice";
+import { useDispatch } from "react-redux";
 
 const formSchema = z.object({
-  email: z.string().email({
-    message: "Email không hợp lệ."
+  email: z.string().min(6, {
+    message: "Email hoặc số điện thoại không đúng"
   }),
-  password: z.string().min(8, {
-    message: "Mật khẩu phải có ít nhất 8 ký tự."
+  password: z.string().min(6, {
+    message: "Mật khẩu phải có ít nhất 6 ký tự."
   })
 });
 
 function SignInForm() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -34,9 +39,21 @@ function SignInForm() {
     }
   });
 
-  function onSubmit(values) {
-    console.log(values);
-    navigate("/");
+  async function onSubmit(values) {
+    const { email, password } = values;
+    const respone = await studentLogin(email, password);
+
+    if (respone.status === 200) {
+      console.log("respone.data.data.token", respone.data.data.token);
+      dispatch(addAuth(respone.data.data.token.toString()));
+      navigate("/");
+    } else if (respone.errors.code === "NF_01") {
+      form.setError("password", {
+        message: respone.errors.msg
+      });
+    } else {
+      toast.error("Đăng nhập thất bại");
+    }
   }
 
   return (
