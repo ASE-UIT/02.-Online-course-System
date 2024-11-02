@@ -1,4 +1,4 @@
-import { api } from "./apiConfig";
+import api from "./apiConfig";
 
 export const courseApi = {
   getLiveCourses: async () => {
@@ -8,5 +8,5 @@ export const courseApi = {
     } catch (error) {
       console.log(error);
     }
-  },
+  }
 };
