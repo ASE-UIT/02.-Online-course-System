@@ -32,7 +32,7 @@ return (
                 <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <h2 className="text-display/sm/semibold">Có quá nhiều lý do để bắt đầu</h2>
                     <div className="flex justify-around pt-5 ">
-                        <div className="max-w-xs flex flex-col items-center text-center p-1">
+                        <div className="lg:w-1/4 flex flex-col items-center text-center p-1">
                             <div>
                                 <LecturerLandingIconReason1/>
                             </div>
@@ -40,7 +40,7 @@ return (
                             <p className=" text-text/md/regular">Xuất bản khóa học mong muốn, theo cách mong muốn
                                 và bạn luôn có quyền kiểm soát nội dung của riêng mìnhn</p>
                         </div>
-                        <div className="max-w-xs flex flex-col items-center text-center p-1">
+                        <div className="lg:w-1/4 flex flex-col items-center text-center p-1">
                             <div>
                                 <LecturerLandingIconReason2/>
                             </div>
@@ -48,7 +48,7 @@ return (
                             <p className="text-text/md/regular">Dạy những gì bạn biết và giúp học viên khám phá
                                 sở thích, tiếp thu kỹ năng mới và thăng tiến trong sự nghiệp của họ.</p>
                         </div>
-                        <div className="max-w-xs flex flex-col items-center text-center p-1">
+                        <div className="lg:w-1/4 flex flex-col items-center text-center p-1">
                             <div>
                                 <LecturerLandingIconReason3/>
                             </div>
