@@ -14,7 +14,7 @@ export const loginLecturer = async (
     phoneNumber,
     address,
     bio,
-    password
+    password,
   });
   return res.data;
 };
