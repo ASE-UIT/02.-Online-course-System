@@ -14,7 +14,7 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { GoogleIcon, FacebookIcon } from "@/assets";
-import { toast } from "react-toastify";
+import { useToast } from "@/hooks/use-toast";
 import { studentLogin } from "@/api";
 import { addAuth } from "@/store/slices/authSlice";
 import { useDispatch } from "react-redux";
@@ -29,6 +29,7 @@ const formSchema = z.object({
 });
 
 function SignInForm() {
+  const { toast } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const form = useForm({
@@ -43,16 +44,33 @@ function SignInForm() {
     const { email, password } = values;
     const respone = await studentLogin(email, password);
 
-    if (respone.status === 200) {
-      console.log("respone.data.data.token", respone.data.data.token);
-      dispatch(addAuth(respone.data.data.token.toString()));
+    console.log("respone", respone);
+
+    if (respone.status === 200 || respone.data.code === 200) {
+      console.log("respone.data", respone.data.data.token);
+      const token = respone.data.data.token;
+      dispatch(
+        addAuth({
+          token
+        })
+      );
       navigate("/");
-    } else if (respone.errors.code === "NF_01") {
+      toast({
+        title: <p className=" text-green-700">Đăng nhập thành công</p>,
+        description: "Chào mừng bạn trở lại",
+        status: "success",
+        duration: 2000
+      });
+    } else if (respone.errors?.code === "NF_01") {
       form.setError("password", {
         message: respone.errors.msg
       });
     } else {
-      toast.error("Đăng nhập thất bại");
+      toast({
+        title: <p className=" text-red-700">Đăng nhập thất bại</p>,
+        description: "Lỗi không xác định",
+        duration: 2000
+      });
     }
   }
 
