@@ -30,7 +30,10 @@ const router = createBrowserRouter(
             element={<Navigate to={"/web/sign-up/step1/email"} />}
           />
           <Route path="step1/:signUpType" element={<StepOne />} />
-          <Route path="step2/:signUpType" element={<VerifyCode />} />
+          <Route
+            path="step2/:signUpType/:emailOrPhone"
+            element={<VerifyCode />}
+          />
         </Route>
         <Route path="sign-in" element={<SignIn />} />
         <Route path="callback" element={<InfoInput />} />

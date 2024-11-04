@@ -1,7 +1,6 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
-const OTPInput = ({ length = 6, onComplete }) => {
-  const [otp, setOtp] = useState(new Array(length).fill(""));
+const OTPInput = ({ length = 6, onComplete, otp, setOtp }) => {
   const inputRefs = useRef([]);
 
   const handleChange = (index, e) => {

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import OTPInput from "@/components/OTPInput";
+import { studentVerifyEmail, studentVerifyPhone } from "@/api";
+import { useToast } from "@/hooks/use-toast";
 
 const EmailTitle =
   "Chúng tôi đã gửi cho bạn một mã OTP để xác thực email tài khoản. Vui lòng nhập OTP được gửi trong email để hoàn tất quá trình tạo tài khoản.";
@@ -11,9 +13,13 @@ const EmailSendText = "Chưa nhận được email?";
 const PhoneSendText = "Chưa nhận được tin nhắn?";
 
 const VerifyCode = () => {
-  const { signUpType } = useParams();
+  const { signUpType, emailOrPhone } = useParams();
+  const { toast } = useToast();
+
   const navigate = useNavigate();
   const [countdown, setCountdown] = useState(0);
+  const otpLength = 6;
+  const [otp, setOtp] = useState(new Array(otpLength).fill(""));
 
   useEffect(() => {
     if (countdown > 0) {
@@ -28,8 +34,41 @@ const VerifyCode = () => {
     setCountdown(10);
   };
 
-  const handleVerifyCode = () => {
-    navigate(`/web/result/${signUpType}`);
+  const handleVerifyCode = async (otp) => {
+    if (emailOrPhone === null || otp === null) {
+      navigate(`/web/sign-up/step1/email`);
+    } else if (signUpType === "email") {
+      try {
+        const response = await studentVerifyEmail(emailOrPhone, otp);
+
+        if (response.data.code === 200) {
+          navigate(`/web/result/${signUpType}`);
+        }
+      } catch (error) {
+        toast({
+          title: <p className="text-red-700">Có lỗi xảy ra</p>,
+          description: error.response.data.errors.msg ?? "Xác thực thất bại",
+          status: "error",
+          duration: 2000
+        });
+      }
+    } else {
+      try {
+        const response = await studentVerifyPhone(emailOrPhone, otp);
+
+        if (response.data.code === 200) {
+          navigate(`/web/result/${signUpType}`);
+        }
+      } catch (error) {
+        toast({
+          title: <p className="text-red-700">Có lỗi xảy ra</p>,
+          description: error.response.data.errors.msg ?? "Xác thực thất bại",
+          status: "error",
+          duration: 2000
+        });
+      }
+    }
+    // navigate(`/web/result/${signUpType}`);
   };
 
   return (
@@ -41,7 +80,12 @@ const VerifyCode = () => {
         {signUpType === "email" ? EmailTitle : PhoneTitle}
       </p>
       <div className="w-full flex justify-center items-center mb-5">
-        <OTPInput />
+        <OTPInput
+          length={otpLength}
+          otp={otp}
+          setOtp={setOtp}
+          onComplete={handleVerifyCode}
+        />
       </div>
       <div className="flex gap-2 justify-center text-center text-text/md/medium text-black mb-5">
         {signUpType === "email" ? EmailSendText : PhoneSendText}
