@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/screens/CourseListScreen.dart';
 import 'package:online_course_system/screens/FavoriteScreen.dart';
+import 'package:online_course_system/screens/LearningScreen.dart';
 import 'package:online_course_system/screens/SearchScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const Center(child: CourseListScreen()),
     const Center(child: SearchScreen()),
-    const Center(child: Text('Học tập')),
+    const Center(child: LearningScreen()),
     const Center(child: FavoriteScreen()),
     const Center(child: Text('Tài khoản')),
   ];

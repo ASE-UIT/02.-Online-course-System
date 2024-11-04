@@ -43,7 +43,7 @@ class HomeExploreCategory extends StatelessWidget {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
         SizedBox(
