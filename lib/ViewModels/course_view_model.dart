@@ -1,14 +1,18 @@
 import '../models/course_model.dart';
-import 'HttpConfig.dart';
+import '../services/HttpConfig.dart';
+import 'package:flutter/foundation.dart';
 
-class CourseService {
+class CourseViewModel extends ChangeNotifier {
 
-  static const String _courseEndpoint = '/course';
+  final String _courseEndpoint = '/course';
+  bool isLoading = false;
 
-  static Future<Course> getCourseDetail(String courseId) async {
+  Future<Course> getCourseDetail(String courseId) async {
     try {
+      isLoading = true;
+      notifyListeners();
+
       final response = await HttpService.get('$_courseEndpoint/$courseId');
-      
       return Course.fromJson(response['data']);
 
     } on HttpException catch (e) {
@@ -16,13 +20,18 @@ class CourseService {
         e.statusCode,
         message: 'Failed to get course detail: ${e.message}',
       );
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
-  static Future<List<Course>> getAllCourses() async {
+  Future<List<Course>> getAllCourses() async {
     try {
-      final response = await HttpService.get(_courseEndpoint);
+      isLoading = true;
+      notifyListeners();
 
+      final response = await HttpService.get(_courseEndpoint);
       final List coursesList = response['data'] as List;
       return coursesList.map((courseJson) => Course.fromJson(courseJson)).toList();
       
@@ -31,6 +40,9 @@ class CourseService {
         e.statusCode,
         message: 'Failed to get all courses: ${e.message}',
       );
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 

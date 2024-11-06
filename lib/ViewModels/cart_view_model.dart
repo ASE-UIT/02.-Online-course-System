@@ -1,12 +1,17 @@
-import 'HttpConfig.dart';
+import 'package:flutter/foundation.dart';
 
-class CartService {
+import '../services/HttpConfig.dart';
+
+class CartService extends ChangeNotifier {
   // Endpoint cho cart
   static const String _cartEndpoint = '/cart';
+  bool isLoading = false;
 
   // Thêm khóa học vào giỏ hàng
-  static Future<void> addToCart(String courseId) async {
+  Future<void> addToCart(String courseId) async {
     try {
+      isLoading = true;
+      notifyListeners();
       await HttpService.post(
         '$_cartEndpoint/add',
         body: {
@@ -19,6 +24,9 @@ class CartService {
         e.statusCode,
         message: 'Failed to add to cart: ${e.message}',
       );
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 }
