@@ -1,23 +1,21 @@
-import { Quiz } from '@/models/quiz.model';
 import { StudentCompleteQuiz } from '@/models/student_complete_quiz.model';
-import { IQuizRepository } from '@/repository/interface/i.quiz.repository';
 import { IStudentCompleteQuizRepository } from '@/repository/interface/i.student_complete_quiz.repository';
 import { BaseCrudService } from '@/service/base/base.service';
-import { IQuizService } from '@/service/interface/i.quiz.service';
+import { IStudentCompleteQuizService } from '@/service/interface/i.student_complete_quiz.service';
 import { inject, injectable } from 'inversify';
 
 @injectable()
-export class QuizService extends BaseCrudService<Quiz> implements IQuizService<Quiz> {
-  private quizRepository: IQuizRepository<Quiz>;
+export class StudentCompleteQuizService
+  extends BaseCrudService<StudentCompleteQuiz>
+  implements IStudentCompleteQuizService<StudentCompleteQuiz>
+{
   private studentCompleteQuizRepository: IStudentCompleteQuizRepository<StudentCompleteQuiz>;
 
   constructor(
-    @inject('QuizRepository') quizRepository: IQuizRepository<Quiz>,
     @inject('StudentCompleteQuizRepository')
     studentCompleteQuizRepository: IStudentCompleteQuizRepository<StudentCompleteQuiz>
   ) {
-    super(quizRepository);
-    this.quizRepository = quizRepository;
+    super(studentCompleteQuizRepository);
     this.studentCompleteQuizRepository = studentCompleteQuizRepository;
   }
 }
