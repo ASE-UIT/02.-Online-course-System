@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/screens/HomeScreen.dart';
-import 'package:online_course_system/screens/SignOutScreen.dart';
+import 'package:online_course_system/screens/SignUpScreen.dart';
 import 'package:online_course_system/widgets/customtextfield.dart';
 import 'package:online_course_system/widgets/socialloginbutton.dart';
 
