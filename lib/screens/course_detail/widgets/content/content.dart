@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:online_course_system/models/lesson.dart';
+import 'package:online_course_system/models/lesson_model.dart';
 import 'package:online_course_system/models/section.dart';
 
 class CourseContent extends StatefulWidget {
