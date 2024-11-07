@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { FacebookIcon } from "@/assets";
 import config from "@/config";
+import axios from "axios";
 
 function CustomFacebookSignIn() {
   const dispatch = useDispatch();
@@ -32,27 +33,41 @@ function CustomFacebookSignIn() {
       }
       js = d.createElement(s);
       js.id = id;
-      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      js.src = "https://connect.facebook.net/vi_VN/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
     })(document, "script", "facebook-jssdk");
   }, []);
 
   const handleFacebookLogin = () => {
     FB.login(
-      function (response) {
+      async function (response) {
         if (response.authResponse) {
-          const token = response.authResponse.accessToken;
-          // Dispatch token to Redux store
-          dispatch(addAuth({ token }));
-          // Navigate to home page
-          navigate("/");
-          // Show success toast
-          toast({
-            title: <p className="text-green-700">Đăng nhập thành công</p>,
-            description: "Chào mừng bạn trở lại",
-            status: "success",
-            duration: 2000
-          });
+          const { accessToken } = response.authResponse;
+          try {
+            const backendResponse = await axios.post(
+              `${config.BASE_URL}student/auth/facebook/callback`,
+              { accessToken }
+            );
+            const token = backendResponse.data.accessToken;
+            // Dispatch token to Redux store
+            dispatch(addAuth({ token }));
+            // Navigate to home page
+            navigate("/");
+            // Show success toast
+            toast({
+              title: <p className="text-green-700">Đăng nhập thành công</p>,
+              description: "Chào mừng bạn trở lại",
+              status: "success",
+              duration: 2000
+            });
+          } catch (error) {
+            console.error("Facebook login error", error);
+            toast({
+              title: <p className="text-red-700">Đăng nhập thất bại</p>,
+              description: "Lỗi không xác định",
+              duration: 2000
+            });
+          }
         } else {
           toast({
             title: <p className="text-red-700">Đăng nhập thất bại</p>,
