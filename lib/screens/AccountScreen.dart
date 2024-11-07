@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
+import 'package:online_course_system/screens/AccountUpdateScreen.dart';
 import 'package:online_course_system/widgets/CustomListTitle.dart';
-import 'package:online_course_system/widgets/FavoriteCard.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -14,6 +14,7 @@ class AccountScreen extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
+        
         title: const Center(
           child: Text(
             'Tài khoản',
@@ -59,7 +60,13 @@ class AccountScreen extends StatelessWidget {
               const SizedBox(height: 24),
               CustomListTile(
                 title: 'Cập nhật thông tin',
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const AccountUpdateScreen()),
+                  );
+                },
               ),
               CustomListTile(
                 title: 'Đổi mật khẩu',
