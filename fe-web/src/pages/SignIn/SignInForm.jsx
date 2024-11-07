@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,12 +14,14 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-import { GoogleIcon, FacebookIcon } from "@/assets";
 import { useToast } from "@/hooks/use-toast";
 import { studentLogin } from "@/api";
 import { addAuth } from "@/store/slices/authSlice";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import config from "@/config";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleSignIn from "./Google/GoogleSignIn";
+import CustomFacebookSignIn from "./Facebook/FacebookSignIn";
 
 const formSchema = z.object({
   email: z.string().min(6, {
@@ -166,30 +169,10 @@ function SignInForm() {
           <span className="text-text/md/semibold w-full">Số điện thoại</span>
         </Button> */}
         <div className="flex justify-center items-center gap-5">
-          <Link to={"/web/callback"} className="w-full">
-            <Button
-              variant="outline"
-              size="icon"
-              className="w-full flex rounded-xl"
-            >
-              <div className="pl-4">
-                <GoogleIcon />
-              </div>
-              <span className="text-text/md/semibold w-full">Google</span>
-            </Button>
-          </Link>
-          <Link to={"/web/callback"} className="w-full">
-            <Button
-              variant="outline"
-              size="icon"
-              className="w-full flex rounded-xl"
-            >
-              <div className="pl-4">
-                <FacebookIcon />
-              </div>
-              <span className="text-text/md/semibold w-full">Facebook</span>
-            </Button>
-          </Link>
+          <GoogleOAuthProvider clientId={config.REACT_APP_GOOGLE_CLIENT_ID}>
+            <GoogleSignIn />
+          </GoogleOAuthProvider>
+          <CustomFacebookSignIn />
         </div>
       </div>
     </div>
