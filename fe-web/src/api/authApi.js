@@ -41,3 +41,13 @@ export const studentLogin = async (phoneNumberOrEmail, password) => {
   });
   return res;
 };
+
+export const studentGoogleLogin = async () => {
+  const res = await api.post("/student/auth/google/callback");
+  return res;
+};
+
+export const studentFacebookLogin = async () => {
+  const res = await api.post("/student/auth/facebook/callback");
+  return res;
+};
