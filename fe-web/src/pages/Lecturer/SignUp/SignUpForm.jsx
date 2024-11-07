@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z
   .object({
@@ -53,7 +54,7 @@ const SignUpForm = () => {
   });
 
   function onSubmit(values) {
-    console.log(values);
+    console.log("sign up lec values", values);
     navigate(`/web/lecturer/result`);
   }
 
@@ -205,6 +206,25 @@ const SignUpForm = () => {
                     <Input
                       className="border-gray-600"
                       type="text"
+                      placeholder={field.value}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="teachingExperience"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-text/md/medium">
+                    Kinh nghiệm giảng dạy
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="border-gray-600"
                       placeholder={field.value}
                       {...field}
                     />
