@@ -61,10 +61,9 @@ class AccountScreen extends StatelessWidget {
               CustomListTile(
                 title: 'Cập nhật thông tin',
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountUpdateScreen()),
+                    'AccountUpdateScreen',
                   );
                 },
               ),

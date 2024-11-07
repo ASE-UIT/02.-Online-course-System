@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:online_course_system/constants/colors.dart';
+import 'package:online_course_system/screens/AccountScreen.dart';
 import 'package:online_course_system/screens/AccountUpdateScreen.dart';
+import 'package:online_course_system/screens/HomeScreen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'dart:async';
 
@@ -111,10 +114,11 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                       style: TextStyle(fontWeight: FontWeight.w400),
                     ),
                     TextSpan(
-                      text: 'Gửi lại email sau ${_timerCountdown}s',
+                      text: 'Gửi lại SĐT sau ${_timerCountdown}s',
                       style: TextStyle(
-                        color: _timerCountdown == 0 ? Colors.blue : Colors.grey, fontSize: 16
-                      ),
+                          color:
+                              _timerCountdown == 0 ? Colors.blue : Colors.grey,
+                          fontSize: 16),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           if (_timerCountdown == 0) {
@@ -128,10 +132,25 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(Icons.check_circle, color: Colors.green),
+                          SizedBox(width: 10),
+                          Text("Xác thực SĐT thành công!"),
+                        ],
+                      ),
+                      backgroundColor: Colors.black87,
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+
+                  Navigator.popUntil(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountUpdateScreen()),
+                    (Route<dynamic> route) =>
+                        route.settings.name == 'AccountUpdateScreen',
                   );
                 },
                 style: ElevatedButton.styleFrom(

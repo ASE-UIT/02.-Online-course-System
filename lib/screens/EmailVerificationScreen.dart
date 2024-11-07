@@ -113,8 +113,9 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                     TextSpan(
                       text: 'Gửi lại email sau ${_timerCountdown}s',
                       style: TextStyle(
-                        color: _timerCountdown == 0 ? Colors.blue : Colors.grey, fontSize: 16
-                      ),
+                          color:
+                              _timerCountdown == 0 ? Colors.blue : Colors.grey,
+                          fontSize: 16),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           if (_timerCountdown == 0) {
@@ -128,10 +129,25 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Row(
+                        children: [
+                          Icon(Icons.check_circle, color: Colors.green),
+                          SizedBox(width: 10),
+                          Text("Xác thực email thành công!"),
+                        ],
+                      ),
+                      backgroundColor: Colors.black87,
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(seconds: 1),
+                    ),
+                  );
+
+                  Navigator.popUntil(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountUpdateScreen()),
+                    (Route<dynamic> route) =>
+                        route.settings.name == 'AccountUpdateScreen',
                   );
                 },
                 style: ElevatedButton.styleFrom(

@@ -68,10 +68,9 @@ class UpdateEmailScreen extends StatelessWidget {
             const SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const EmailVerificationScreen()),
+                  'EmailVerificationScreen'
                 );
               },
               style: ElevatedButton.styleFrom(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
+import 'package:online_course_system/screens/AccountScreen.dart';
+import 'package:online_course_system/screens/HomeScreen.dart';
 import 'package:online_course_system/screens/UpdateEmailScreen.dart';
 import 'package:online_course_system/screens/UpdatePhoneScreen.dart';
 import 'package:intl/intl.dart';
@@ -64,7 +66,7 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
                           color: AppColors.gray700,
                           fontSize: 16),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 8,),
                     _buildNavigationField(
                         context, Icons.account_circle, 'Họ và tên', _name,
                         onTap: () {
@@ -74,52 +76,50 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
                         });
                       });
                     }),
-                    const SizedBox(height: 14),
+                    
                     Container(
                       height: 1,
                       color: AppColors.gray500,
                     ),
-                    const SizedBox(height: 14),
+                    
                     _buildNavigationField(context, Icons.email, 'Email', _email,
                         onTap: () {
-                      Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const UpdateEmailScreen()),
+                        'UpdateEmailScreen',
                       );
                     }),
-                    const SizedBox(height: 14),
+                    
                     Container(
                       height: 1,
                       color: AppColors.gray500,
                     ),
-                    const SizedBox(height: 14),
+                    
                     _buildNavigationField(
                         context, Icons.phone, 'Số điện thoại', _phone,
                         onTap: () {
-                          Navigator.push(
+                      Navigator.pushNamed(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const UpdatePhoneScreen()),
+                        'UpdatePhoneScreen'
                       );
-                        }),
-                    const SizedBox(height: 14),
+                    }),
+                    
                     Container(
                       height: 1,
                       color: AppColors.gray500,
                     ),
-                    const SizedBox(height: 14),
+                    
                     _buildNavigationField(
                         context, Icons.calendar_month, 'Ngày sinh', _dob,
                         onTap: () {
-                          _showDatePicker(context, _dob);
-                        }),
-                    const SizedBox(height: 14),
+                      _showDatePicker(context, _dob);
+                    }),
+                    
                     Container(
                       height: 1,
                       color: AppColors.gray500,
                     ),
-                    const SizedBox(height: 14),
+                    
                     _buildNavigationField(
                         context, Icons.location_on, 'Địa chỉ', _address,
                         onTap: () {
@@ -134,7 +134,23 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Row(
+                      children: [
+                        Icon(Icons.check_circle, color: Colors.green),
+                        SizedBox(width: 10),
+                        Text("Cập nhật thông tin thành công!"),
+                      ],
+                    ),
+                    backgroundColor: Colors.black87,
+                    behavior: SnackBarBehavior.floating,
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+                Navigator.pop(context);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary500,
                 minimumSize: const Size(double.infinity, 60),
@@ -185,30 +201,29 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
   }
 
   void _showDatePicker(BuildContext context, String initialDate) async {
-  DateTime initial = DateTime.tryParse(initialDate) ?? DateTime.now();
+    DateTime initial = DateTime.tryParse(initialDate) ?? DateTime.now();
 
-  final DateTime? picked = await showDatePicker(
-    context: context,
-    initialDate: initial,
-    firstDate: DateTime(1900),
-    lastDate: DateTime(2100),
-  );
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initial,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
 
-  if (picked != null) {
-    setState(() {
-      _dob = DateFormat('dd-MM-yyyy').format(picked); 
-    });
+    if (picked != null) {
+      setState(() {
+        _dob = DateFormat('dd-MM-yyyy').format(picked);
+      });
+    }
   }
-}
-
 
   Widget _buildNavigationField(
       BuildContext context, IconData icon, String label, String value,
       {VoidCallback? onTap}) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 22.0),
         child: Row(
           children: [
             Icon(icon, size: 24, color: Colors.black),

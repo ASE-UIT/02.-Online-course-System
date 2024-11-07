@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/screens/EmailVerificationScreen.dart';
+import 'package:online_course_system/screens/PhoneVerificationScreen.dart';
 
 class UpdatePhoneScreen extends StatelessWidget {
   const UpdatePhoneScreen({super.key});
@@ -68,10 +69,9 @@ class UpdatePhoneScreen extends StatelessWidget {
             const SizedBox(height: 12),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const EmailVerificationScreen()),
+                  'PhoneVerificationScreen'
                 );
               },
               style: ElevatedButton.styleFrom(
