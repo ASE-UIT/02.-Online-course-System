@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { studentRegisterPhone } from "@/api";
+import { useState } from "react";
 
 const phoneFormSchema = z
   .object({
@@ -40,6 +41,7 @@ const StepOneWithPhone = () => {
   const { toast } = useToast();
   const { signUpType } = useParams();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const phoneForm = useForm({
     resolver: zodResolver(phoneFormSchema),
@@ -61,6 +63,7 @@ const StepOneWithPhone = () => {
 
   // phone form
   async function onPhoneSubmit(values) {
+    setIsLoading(true);
     if (values.password !== values.confirmPassword) {
       phoneForm.setError("confirmPassword", {
         message: "Mật khẩu không khớp."
@@ -99,6 +102,7 @@ const StepOneWithPhone = () => {
         message: error.response.data.errors.msg
       });
     }
+    setIsLoading(false);
   }
 
   return (
@@ -218,10 +222,11 @@ const StepOneWithPhone = () => {
             )}
           />
           <Button
+            disabled={isLoading}
             type="submit"
             className="w-full mt-5 rounded-xl shadow-[3px_10px_20px_0px_rgba(0,56,255,0.38)]"
           >
-            Tiếp tục
+            {isLoading ? "Đang xử lý..." : "Tiếp tục"}
           </Button>
         </form>
       </Form>

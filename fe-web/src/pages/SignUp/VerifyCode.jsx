@@ -34,12 +34,16 @@ const VerifyCode = () => {
     setCountdown(10);
   };
 
-  const handleVerifyCode = async (otp) => {
-    if (emailOrPhone === null || otp === null) {
+  const handleVerifyCode = async (otpFromInput) => {
+    let otpValue = otp.join("");
+    if (emailOrPhone === null) {
       navigate(`/web/sign-up/step1/email`);
     } else if (signUpType === "email") {
       try {
-        const response = await studentVerifyEmail(emailOrPhone, otp);
+        const response = await studentVerifyEmail(
+          emailOrPhone,
+          otpFromInput ?? otpValue
+        );
 
         if (response.data.code === 200) {
           navigate(`/web/result/${signUpType}`);

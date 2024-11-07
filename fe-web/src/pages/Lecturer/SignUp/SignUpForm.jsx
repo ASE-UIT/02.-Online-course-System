@@ -13,6 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
 
 const formSchema = z
   .object({
@@ -52,9 +53,12 @@ const SignUpForm = () => {
       confirmPassword: ""
     }
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   function onSubmit(values) {
+    setIsLoading(true);
     console.log("sign up lec values", values);
+    setIsLoading(false);
     navigate(`/web/lecturer/result`);
   }
 

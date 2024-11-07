@@ -18,6 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import { studentLogin } from "@/api";
 import { addAuth } from "@/store/slices/authSlice";
 import { useDispatch } from "react-redux";
+import { useState } from "react";
 
 const formSchema = z.object({
   email: z.string().min(6, {
@@ -39,12 +40,12 @@ function SignInForm() {
       password: ""
     }
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(values) {
+    setIsLoading(true);
     const { email, password } = values;
     const respone = await studentLogin(email, password);
-
-    console.log("respone", respone);
 
     if (respone.status === 200 || respone.data.code === 200) {
       console.log("respone.data", respone.data.data.token);
@@ -72,6 +73,7 @@ function SignInForm() {
         duration: 2000
       });
     }
+    setIsLoading(false);
   }
 
   return (
@@ -128,10 +130,11 @@ function SignInForm() {
               )}
             />
             <Button
+              disabled={isLoading}
               type="submit"
               className="w-full mt-5 rounded-xl shadow-[3px_10px_20px_0px_rgba(0,56,255,0.38)]"
             >
-              Tiếp tục
+              {isLoading ? "Đang xử lý..." : "Tiếp tục"}
             </Button>
           </form>
         </Form>
