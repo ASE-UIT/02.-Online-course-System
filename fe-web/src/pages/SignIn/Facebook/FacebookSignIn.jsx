@@ -20,7 +20,7 @@ function CustomFacebookSignIn() {
         appId: config.REACT_APP_FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
-        version: "v10.0"
+        version: "v21.0"
       });
     };
 
