@@ -15,6 +15,7 @@ function CustomGoogleSignIn() {
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+      console.log("tokenResponse", tokenResponse);
       const idToken = tokenResponse.credential;
 
       try {
