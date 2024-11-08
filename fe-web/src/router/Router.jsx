@@ -1,9 +1,4 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  Navigate
-} from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom";
 
 import UserLayout from "../layouts/UserLayout";
 import Home from "../pages/HomePage/Home";
@@ -18,6 +13,7 @@ import LecturerLayout from "@/layouts/LecturerLayout";
 import LecturerSignUp from "@/pages/Lecturer/SignUp/LecturerSignUp";
 import LecturerResultPage from "@/pages/Lecturer/Result/ResultPage";
 import TeacherCoursePage from "@/pages/Lecturer/TeacherCoursePage/TeacherCoursePage";
+import LecturerCourseDetail from "@/pages/Lecturer/CourseDetail/LecturerCourseDetail";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -26,15 +22,9 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path="course/:id" element={<CourseDetail />} />
         <Route path="sign-up" element={<SignUp />}>
-          <Route
-            path="*"
-            element={<Navigate to={"/web/sign-up/step1/email"} />}
-          />
+          <Route path="*" element={<Navigate to={"/web/sign-up/step1/email"} />} />
           <Route path="step1/:signUpType" element={<StepOne />} />
-          <Route
-            path="step2/:signUpType/:emailOrPhone"
-            element={<VerifyCode />}
-          />
+          <Route path="step2/:signUpType/:emailOrPhone" element={<VerifyCode />} />
         </Route>
         <Route path="sign-in" element={<SignIn />} />
         <Route path="callback" element={<InfoInput />} />
@@ -44,6 +34,7 @@ const router = createBrowserRouter(
           <Route path="sign-up" element={<LecturerSignUp />} />
           <Route path="result" element={<LecturerResultPage />} />
           <Route path="course" element={<TeacherCoursePage />} />
+          <Route path="course/:id" element={<LecturerCourseDetail />} />
         </Route>
       </Route>
       <Route path="*" element={<Navigate to={"./web/"} />} />
