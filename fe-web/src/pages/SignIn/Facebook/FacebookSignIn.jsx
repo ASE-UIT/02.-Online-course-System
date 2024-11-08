@@ -20,7 +20,7 @@ function CustomFacebookSignIn() {
         appId: config.REACT_APP_FACEBOOK_APP_ID,
         cookie: true,
         xfbml: true,
-        version: "v10.0"
+        version: "v21.0"
       });
     };
 
@@ -40,11 +40,13 @@ function CustomFacebookSignIn() {
 
   const handleFacebookLogin = () => {
     FB.login(
-      async function (response) {
+      function (response) {
+        console.log("facebook response", response);
+
         if (response.authResponse) {
-          const { accessToken } = response.authResponse;
+          const { accessToken } = response.authResponse.accessToken;
           try {
-            const backendResponse = await axios.post(
+            const backendResponse = axios.post(
               `${config.BASE_URL}student/auth/facebook/callback`,
               { accessToken }
             );
