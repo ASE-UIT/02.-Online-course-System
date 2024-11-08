@@ -1,9 +1,9 @@
+import { useEffect } from "react";
 import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Phone, Mail } from "lucide-react";
 import { GoogleIcon, FacebookIcon } from "@/assets";
-import { useEffect } from "react";
 
 function SignUpForm() {
   const { signUpType } = useParams();

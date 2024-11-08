@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,18 +14,27 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-import { GoogleIcon, FacebookIcon } from "@/assets";
+import { useToast } from "@/hooks/use-toast";
+import { studentLogin } from "@/api";
+import { addAuth } from "@/store/slices/authSlice";
+import { useDispatch } from "react-redux";
+import config from "@/config";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleSignIn from "./Google/GoogleSignIn";
+import CustomFacebookSignIn from "./Facebook/FacebookSignIn";
 
 const formSchema = z.object({
-  email: z.string().email({
-    message: "Email không hợp lệ."
+  email: z.string().min(6, {
+    message: "Email hoặc số điện thoại không đúng"
   }),
-  password: z.string().min(8, {
-    message: "Mật khẩu phải có ít nhất 8 ký tự."
+  password: z.string().min(6, {
+    message: "Mật khẩu phải có ít nhất 6 ký tự."
   })
 });
 
 function SignInForm() {
+  const { toast } = useToast();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -33,10 +43,40 @@ function SignInForm() {
       password: ""
     }
   });
+  const [isLoading, setIsLoading] = useState(false);
 
-  function onSubmit(values) {
-    console.log(values);
-    navigate("/");
+  async function onSubmit(values) {
+    setIsLoading(true);
+    const { email, password } = values;
+    const respone = await studentLogin(email, password);
+
+    if (respone.status === 200 || respone.data.code === 200) {
+      console.log("respone.data", respone.data.data.token);
+      const token = respone.data.data.token;
+      dispatch(
+        addAuth({
+          token
+        })
+      );
+      navigate("/");
+      toast({
+        title: <p className=" text-green-700">Đăng nhập thành công</p>,
+        description: "Chào mừng bạn trở lại",
+        status: "success",
+        duration: 2000
+      });
+    } else if (respone.errors?.code === "NF_01") {
+      form.setError("password", {
+        message: respone.errors.msg
+      });
+    } else {
+      toast({
+        title: <p className=" text-red-700">Đăng nhập thất bại</p>,
+        description: "Lỗi không xác định",
+        duration: 2000
+      });
+    }
+    setIsLoading(false);
   }
 
   return (
@@ -93,10 +133,11 @@ function SignInForm() {
               )}
             />
             <Button
+              disabled={isLoading}
               type="submit"
               className="w-full mt-5 rounded-xl shadow-[3px_10px_20px_0px_rgba(0,56,255,0.38)]"
             >
-              Tiếp tục
+              {isLoading ? "Đang xử lý..." : "Tiếp tục"}
             </Button>
           </form>
         </Form>
@@ -128,30 +169,10 @@ function SignInForm() {
           <span className="text-text/md/semibold w-full">Số điện thoại</span>
         </Button> */}
         <div className="flex justify-center items-center gap-5">
-          <Link to={"/web/callback"} className="w-full">
-            <Button
-              variant="outline"
-              size="icon"
-              className="w-full flex rounded-xl"
-            >
-              <div className="pl-4">
-                <GoogleIcon />
-              </div>
-              <span className="text-text/md/semibold w-full">Google</span>
-            </Button>
-          </Link>
-          <Link to={"/web/callback"} className="w-full">
-            <Button
-              variant="outline"
-              size="icon"
-              className="w-full flex rounded-xl"
-            >
-              <div className="pl-4">
-                <FacebookIcon />
-              </div>
-              <span className="text-text/md/semibold w-full">Facebook</span>
-            </Button>
-          </Link>
+          <GoogleOAuthProvider clientId={config.REACT_APP_GOOGLE_CLIENT_ID}>
+            <GoogleSignIn />
+          </GoogleOAuthProvider>
+          <CustomFacebookSignIn />
         </div>
       </div>
     </div>

@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import testRedux from "./slices/testRedux";
+import auth from "./slices/authSlice";
 
 export default configureStore({
   reducer: {
-    testRedux: testRedux
+    auth: auth
   }
 });
