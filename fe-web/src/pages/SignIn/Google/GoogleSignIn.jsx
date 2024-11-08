@@ -88,7 +88,7 @@ function CustomGoogleSignIn() {
       <GoogleLogin
         onSuccess={async (credentialResponse) => {
           console.log("credentialResponse (with id token)", credentialResponse);
-          const idToken = credentialResponse.id_token;
+          const idToken = credentialResponse.credential;
 
           try {
             const response = await axios.post(
