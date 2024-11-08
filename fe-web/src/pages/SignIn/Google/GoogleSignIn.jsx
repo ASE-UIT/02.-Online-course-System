@@ -16,7 +16,7 @@ function CustomGoogleSignIn() {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       console.log("tokenResponse", tokenResponse);
-      const idToken = tokenResponse.access_token;
+      const idToken = tokenResponse.id_token;
 
       try {
         const response = await axios.post(
@@ -52,7 +52,9 @@ function CustomGoogleSignIn() {
         description: "Lỗi không xác định",
         duration: 2000
       });
-    }
+    },
+    scope: "openid profile email",
+    responseType: "id_token"
   });
 
   return (
