@@ -15,7 +15,8 @@ function CustomGoogleSignIn() {
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      const idToken = tokenResponse.id_token;
+      const idToken = tokenResponse.credential;
+
       try {
         const response = await axios.post(
           `${config.BASE_URL}/student/auth/google/callback`,
