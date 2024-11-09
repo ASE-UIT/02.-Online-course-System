@@ -119,7 +119,72 @@ const FormMessage = React.forwardRef(({ className, children, ...props }, ref) =>
     </p>)
   );
 })
+
 FormMessage.displayName = "FormMessage"
+
+const FormSelect = ({ options, ...props }) => {
+  const { formItemId, error } = useFormField();
+
+  return (
+    <select
+      id={formItemId}
+      {...props}
+      className={cn(
+        "w-full px-3 py-2 rounded-md border border-gray-600 h-[40px]",
+        "text-gray-900 bg-white",
+        error ? "border-destructive" : "border-gray-600",
+        "focus:outline-none focus:ring-2 focus:ring-black focus:border-gray-600",
+        "hover:border-gray-800 transition-all hover:cursor-pointer",
+        "disabled:bg-gray-100 disabled:cursor-not-allowed"
+      )}
+    >
+      <option value="">Chọn một mục</option>
+      {options.map((option, index) => (
+        <option key={index} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+  );
+};
+FormSelect.displayName = "FormSelect"
+
+const FormUpload = ({ ...props }) => {
+  const { formItemId, error } = useFormField();
+  const [fileName, setFileName] = React.useState("");
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) setFileName(file.name);
+    props.onChange(event);
+  };
+
+  return (
+    <div className="space-y-2">
+      <input
+        type="file"
+        id={formItemId}
+        className="hidden"
+        onChange={handleFileChange}
+      />
+      <label
+        htmlFor={formItemId}
+        className={cn(
+          "block w-full px-3 py-2 rounded-md border cursor-pointer",
+          "text-gray-900 bg-white",
+          error ? "border-destructive" : "border-gray-600",
+          "focus:outline-none focus:ring-2 focus:ring-black focus:border-gray-600",
+          "hover:border-gray-800 transition-all",
+          "disabled:bg-gray-100 disabled:cursor-not-allowed"
+        )}
+      >
+        Chọn tệp
+      </label>
+    </div>
+  );
+};
+FormUpload.displayName = "FormUpload"
+
 
 export {
   useFormField,
@@ -130,4 +195,6 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormSelect,
+  FormUpload,
 }
