@@ -15,11 +15,11 @@ function CustomGoogleSignIn() {
   const navigate = useNavigate();
 
   const login = useGoogleLogin({
-    flow: "implicit",
+    flow: "auth-code",
     onSuccess: async (tokenResponse) => {
-      console.log("tokenResponse (with id token)", tokenResponse);
+      console.log("tokenResponse (with code)", tokenResponse);
       try {
-        const idToken = tokenResponse.id_token;
+        const idToken = tokenResponse.id_token ?? tokenResponse.code;
 
         const response = await axios.post(
           `${config.BASE_URL}/student/auth/google/callback`,
