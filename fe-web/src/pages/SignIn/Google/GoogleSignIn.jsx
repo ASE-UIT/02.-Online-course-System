@@ -15,6 +15,7 @@ function CustomGoogleSignIn() {
   const navigate = useNavigate();
 
   const login = useGoogleLogin({
+    flow: "auth-code",
     onSuccess: async (tokenResponse) => {
       console.log("tokenResponse (with id token)", tokenResponse);
       try {

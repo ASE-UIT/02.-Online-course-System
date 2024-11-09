@@ -8,11 +8,11 @@ export default function LecturerCourseDetail() {
   const hash = location.hash;
 
   return (
-    <div className="px-16 flex">
+    <div className="px-16 flex gap-8">
       <div className="">
         <SideBar />
       </div>
-      <div className="">
+      <div className=" flex-1">
         {hash === "" && <CourseInfo />}
         {hash === "#lesson" && <Lesson />}
       </div>
