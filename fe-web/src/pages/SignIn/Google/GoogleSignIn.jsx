@@ -54,7 +54,8 @@ function CustomGoogleSignIn() {
         duration: 2000
       });
     },
-    scope: "https://www.googleapis.com/auth/userinfo.profile openid"
+    scope:
+      "openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.profile	"
   });
 
   return (
