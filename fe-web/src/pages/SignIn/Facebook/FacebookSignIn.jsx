@@ -47,7 +47,7 @@ function CustomFacebookSignIn() {
           const { accessToken } = response.authResponse.accessToken;
           try {
             const backendResponse = axios.post(
-              `${config.BASE_URL}student/auth/facebook/callback`,
+              `${config.BASE_URL}/student/auth/facebook/callback`,
               { accessToken }
             );
             const token = backendResponse.data.accessToken;
