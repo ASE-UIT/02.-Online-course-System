@@ -11,7 +11,7 @@ import Home from "../pages/Home";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<UserLayout />}>
+      <Route path="/admin" element={<UserLayout />}>
         <Route index element={<Home />} />
       </Route>
       <Route path="*" element={<Navigate to={"./"} />} />

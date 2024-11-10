@@ -1,12 +1,5 @@
-import ProductCard from "../components/ProductCard";
-
 const Home = () => {
-  return (
-    <div>
-      Home
-      <ProductCard />
-    </div>
-  );
+  return <div>Home</div>;
 };
 
 export default Home;
