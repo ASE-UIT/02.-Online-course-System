@@ -44,13 +44,13 @@ function CustomFacebookSignIn() {
         console.log("facebook response", response);
 
         if (response.authResponse) {
-          const { accessToken } = response.authResponse.accessToken;
+          const accessToken = response.authResponse.accessToken;
           try {
             const backendResponse = axios.post(
               `${config.BASE_URL}/student/auth/facebook/callback`,
               { accessToken }
             );
-            const token = backendResponse.data.accessToken;
+            const token = backendResponse.data.token;
             // Dispatch token to Redux store
             dispatch(addAuth({ token }));
             // Navigate to home page
@@ -78,7 +78,7 @@ function CustomFacebookSignIn() {
           });
         }
       },
-      { scope: "public_profile,email" }
+      { scope: "email" }
     );
   };
 
