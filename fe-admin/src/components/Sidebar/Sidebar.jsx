@@ -1,13 +1,14 @@
-import { UserCircle } from "lucide-react";
+import { LogOutIcon, UserCircle } from "lucide-react";
 import { useNavigation, menuItems } from "@/context/NavigationContext";
 import LogoIcon from "@/assets/LogoIcon";
+import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const { activeItem, setActiveItem } = useNavigation();
 
   return (
-    <div className="w-64 bg-white border-r h-screen flex flex-col">
-      <div className="pt-10 border-b">
+    <div className=" z-50 w-80 bg-white border-r shadow-[0px_0px_8px_0px_rgba(0,0,0,0.25)] h-screen flex flex-col">
+      <div className="pt-10 ">
         <div className="w-full flex justify-center items-center gap-1">
           <LogoIcon className=" text-blue-600 w-[143px] h-[33px]" />
           <div className="flex items-end h-full">
@@ -18,35 +19,42 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <nav className="flex-1 p-4">
+      <nav className="flex-1 px-5 py-[60px]">
         <ul className="space-y-2">
           {menuItems.map((item) => (
             <li key={item.id}>
-              <button
-                onClick={() => setActiveItem(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm ${
-                  activeItem === item.id
-                    ? "bg-blue-600 text-white"
-                    : "text-gray-700 hover:bg-gray-100"
-                }`}
-              >
-                <item.icon size={20} />
-                <span>{item.text}</span>
-              </button>
+              <Link to={`${item.path}`}>
+                <button
+                  onClick={() => setActiveItem(item.id)}
+                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm ${
+                    activeItem === item.id
+                      ? "bg-primary-500 text-white"
+                      : "text-black hover:bg-gray-400"
+                  }`}
+                >
+                  <item.icon size={20} className="font-light" />
+                  <span className="text-sm font-medium">{item.text}</span>
+                </button>
+              </Link>
             </li>
           ))}
         </ul>
       </nav>
 
-      <div className="p-4 border-t">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-            <UserCircle className="w-6 h-6 text-gray-600" />
+      <div className="py-4 px-5">
+        <div className="flex justify-between items-center gap-3">
+          <div className="flex gap-1">
+            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
+              <UserCircle className="w-6 h-6 text-gray-600" />
+            </div>
+            <div className="flex flex-row items-center justify-center gap-1">
+              <div className="text-sm font-medium">Kiet Tran</div>
+              <div className="text-sm font-medium">|</div>
+              <div className="text-sm font-medium">Admin</div>
+            </div>
           </div>
-          <div className="flex flex-row items-center justify-center gap-1">
-            <div className="text-sm font-medium">Kiet Tran</div>
-            <div className="text-sm font-medium">|</div>
-            <div className="text-sm font-medium">Admin</div>
+          <div>
+            <LogOutIcon className="w-6 h-6 text-error-700" />
           </div>
         </div>
       </div>

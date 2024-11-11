@@ -6,6 +6,9 @@ export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      placeholderColor: {
+        black: "#747474"
+      },
       colors: {
         "primary-color": "#0038FF",
         background: "hsl(var(--background))",

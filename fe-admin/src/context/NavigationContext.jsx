@@ -1,18 +1,38 @@
 import { createContext, useContext, useState } from "react";
 import {
-  LayoutGrid,
+  LayoutDashboard,
+  UserRoundCog,
   Users,
-  UserCircle,
   Building2,
   Settings
 } from "lucide-react";
 
 export const menuItems = [
-  { icon: LayoutGrid, text: "Bảng điều khiển", id: "dashboard" },
-  { icon: Users, text: "Quản lý người dùng", id: "users" },
-  { icon: UserCircle, text: "Quản lý nhân viên", id: "employees" },
-  { icon: Building2, text: "Quản lý doanh nghiệp", id: "business" },
-  { icon: Settings, text: "Cài đặt", id: "settings" }
+  {
+    icon: LayoutDashboard,
+    text: "Bảng điều khiển",
+    id: "dashboard",
+    path: "/admin/"
+  },
+  {
+    icon: UserRoundCog,
+    text: "Quản lý người dùng",
+    id: "users",
+    path: "users"
+  },
+  {
+    icon: Users,
+    text: "Quản lý nhân viên",
+    id: "employees",
+    path: "employees"
+  },
+  {
+    icon: Building2,
+    text: "Quản lý doanh nghiệp",
+    id: "business",
+    path: "business"
+  },
+  { icon: Settings, text: "Cài đặt", id: "settings", path: "setting" }
 ];
 
 const NavigationContext = createContext();
