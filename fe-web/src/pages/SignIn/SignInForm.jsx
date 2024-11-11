@@ -18,10 +18,10 @@ import { useToast } from "@/hooks/use-toast";
 import { studentLogin } from "@/api";
 import { addAuth } from "@/store/slices/authSlice";
 import { useDispatch } from "react-redux";
-import config from "@/config";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleSignIn from "./Google/GoogleSignIn";
 import CustomFacebookSignIn from "./Facebook/FacebookSignIn";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import config from "@/config";
 
 const formSchema = z.object({
   email: z.string().min(6, {
@@ -168,11 +168,15 @@ function SignInForm() {
           </div>
           <span className="text-text/md/semibold w-full">Số điện thoại</span>
         </Button> */}
-        <div className="flex justify-center items-center gap-5">
-          <GoogleOAuthProvider clientId={config.REACT_APP_GOOGLE_CLIENT_ID}>
-            <GoogleSignIn />
-          </GoogleOAuthProvider>
-          <CustomFacebookSignIn />
+        <div className="flex gap-2">
+          <div className="w-1/2">
+            <GoogleOAuthProvider clientId={config.REACT_APP_GOOGLE_CLIENT_ID}>
+              <GoogleSignIn />
+            </GoogleOAuthProvider>
+          </div>
+          <div className="w-1/2">
+            <CustomFacebookSignIn />
+          </div>
         </div>
       </div>
     </div>

@@ -86,13 +86,15 @@ function CustomFacebookSignIn() {
     <Button
       variant="outline"
       size="icon"
-      className="w-full flex rounded-xl"
+      className="w-full flex rounded-xl hover:bg-black-100 border-2"
       onClick={handleFacebookLogin}
     >
-      <div className="pl-4">
-        <FacebookIcon />
+      <div className="pl-2 pr-1">
+        <FacebookIcon className="w-3 h-3" />
       </div>
-      <span className="text-text/md/semibold w-full">Facebook</span>
+      <span className="text-text/sm/regular w-full">
+        Đăng nhập bằng Facebook
+      </span>
     </Button>
   );
 }
