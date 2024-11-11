@@ -11,6 +11,16 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      function renderButton() {
+        console.log("Google API loaded");
+      }
+    </script>
+    <script
+      src="https://apis.google.com/js/platform.js?onload=renderButton"
+      async
+      defer
+    ></script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
