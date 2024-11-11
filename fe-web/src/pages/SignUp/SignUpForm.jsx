@@ -3,7 +3,10 @@ import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Phone, Mail } from "lucide-react";
-import { GoogleIcon, FacebookIcon } from "@/assets";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import config from "@/config";
+import CustomGoogleSignIn from "../SignIn/Google/GoogleSignIn";
+import CustomFacebookSignIn from "../SignIn/Facebook/FacebookSignIn";
 
 function SignUpForm() {
   const { signUpType } = useParams();
@@ -65,33 +68,15 @@ function SignUpForm() {
             </Button>
           </Link>
         )}
-        <div className="flex justify-center items-center gap-5">
-          <Link to={"/web/callback"} className="w-full">
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              className="w-full flex rounded-xl"
-            >
-              <div className="pl-4">
-                <GoogleIcon />
-              </div>
-              <span className="text-text/md/semibold w-full">Google</span>
-            </Button>
-          </Link>
-          <Link to={"/web/callback"} className="w-full">
-            <Button
-              variant="outline"
-              type="button"
-              size="icon"
-              className="w-full flex rounded-xl"
-            >
-              <div className="pl-4">
-                <FacebookIcon />
-              </div>
-              <span className="text-text/md/semibold w-full">Facebook</span>
-            </Button>
-          </Link>
+        <div className="flex gap-2">
+          <div className="w-1/2">
+            <GoogleOAuthProvider clientId={config.REACT_APP_GOOGLE_CLIENT_ID}>
+              <CustomGoogleSignIn />
+            </GoogleOAuthProvider>
+          </div>
+          <div className="w-1/2">
+            <CustomFacebookSignIn />
+          </div>
         </div>
       </div>
     </div>
