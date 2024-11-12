@@ -11,6 +11,7 @@ import ManageBusiness from "@/pages/ManageBusiness/ManageBusiness";
 import ManageEmployee from "@/pages/ManageEmployee/ManageEmployee";
 import ManageUser from "@/pages/ManageUser/ManageUser";
 import Setting from "@/pages/Setting/Setting";
+import ManageCategories from "@/pages/ManageCategories/ManageCategories";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,6 +19,7 @@ const router = createBrowserRouter(
       <Route path="admin/" element={<UserLayout />}>
         <Route index element={<Dashboard />} />
         <Route path="business" element={<ManageBusiness />} />
+        <Route path="categories" element={<ManageCategories />} />
         <Route path="employees" element={<ManageEmployee />} />
         <Route path="users" element={<ManageUser />} />
         <Route path="setting" element={<Setting />} />

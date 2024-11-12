@@ -1,4 +1,3 @@
-import { LogOutIcon, UserCircle } from "lucide-react";
 import { useNavigation, menuItems } from "@/context/NavigationContext";
 import LogoIcon from "@/assets/LogoIcon";
 import { Link } from "react-router-dom";
@@ -7,7 +6,7 @@ export default function Sidebar() {
   const { activeItem, setActiveItem } = useNavigation();
 
   return (
-    <div className=" z-50 w-80 bg-white border-r shadow-[0px_0px_8px_0px_rgba(0,0,0,0.25)] h-screen flex flex-col">
+    <div className=" z-50 w-80 bg-white shadow-md h-screen flex flex-col">
       <div className="pt-10 ">
         <div className="w-full flex justify-center items-center gap-1">
           <LogoIcon className=" text-blue-600 w-[143px] h-[33px]" />
@@ -20,7 +19,7 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex-1 px-5 py-[60px]">
-        <ul className="space-y-2">
+        <ul className="space-y-1">
           {menuItems.map((item) => (
             <li key={item.id}>
               <Link to={`${item.path}`}>
@@ -41,7 +40,7 @@ export default function Sidebar() {
         </ul>
       </nav>
 
-      <div className="py-4 px-5">
+      {/* <div className="py-4 px-5">
         <div className="flex justify-between items-center gap-3">
           <div className="flex gap-1">
             <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
@@ -57,7 +56,7 @@ export default function Sidebar() {
             <LogOutIcon className="w-6 h-6 text-error-700" />
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
