@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import {
   LayoutDashboard,
+  Layers,
   UserRoundCog,
   Users,
   Building2,
@@ -15,10 +16,10 @@ export const menuItems = [
     path: "/admin/"
   },
   {
-    icon: UserRoundCog,
-    text: "Quản lý người dùng",
-    id: "users",
-    path: "users"
+    icon: Layers,
+    text: "Quản lý danh mục",
+    id: "categories",
+    path: "categories"
   },
   {
     icon: Users,
@@ -32,6 +33,13 @@ export const menuItems = [
     id: "business",
     path: "business"
   },
+  {
+    icon: UserRoundCog,
+    text: "Quản lý người dùng",
+    id: "users",
+    path: "users"
+  },
+
   { icon: Settings, text: "Cài đặt", id: "settings", path: "setting" }
 ];
 
