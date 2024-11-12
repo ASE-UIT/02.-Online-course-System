@@ -11,10 +11,10 @@ const UserLayout = () => {
         <div className="flex h-screen bg-gray-50">
           <Sidebar />
 
-          <div className="z-10 flex-1 p-5">
+          <div className="z-10 flex-1 m-5">
             <Header />
-            <main className="z-30 py-5 w-full h-[calc(100vh-104px)] overflow-y-auto overflow-x-auto">
-              <div className="p-5 bg-white border-2 border-[rgba(0,0,0,0.07)] rounded-xl shadow-[0px_8px_15.9px_0px_rgba(0,0,0,0.07)] w-full h-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-x-hidden">
+            <main className="z-30 py-5 w-full h-[calc(100vh-104px)]">
+              <div className="p-5 bg-white rounded-xl shadow-[0px_8px_15.9px_0px_rgba(0,0,0,0.07)] w-full h-full overflow-x-hidden">
                 <Outlet />
               </div>
             </main>
