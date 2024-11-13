@@ -48,7 +48,7 @@ const LESSONS_TABLE_HEADER = [
     width: "8%",
   },
 ];
-export default function Lesson() {
+export default function ModuleLesson() {
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
   return (
     <div className="p-[20px]">
