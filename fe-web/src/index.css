@@ -62,7 +62,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-worksans;
   }
 }
 
@@ -74,4 +74,12 @@
     rgba(245, 245, 247, 0) 9%,
     rgba(0, 0, 0, 0.8011537867099965) 73%
   );
+}
+
+.nsm7Bb-HzV7m-LgbsSe.hJDwNd-SxQuSe.i5vt6e-Ia7Qfc.uaxL4e-RbRzK {
+  @apply border-2 border-[rgb(229,229,229)] rounded-xl inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+}
+
+.nsm7Bb-HzV7m-LgbsSe.hJDwNd-SxQuSe.i5vt6e-Ia7Qfc.uaxL4e-RbRzK:hover {
+  @apply shadow-sm bg-black-100;
 }

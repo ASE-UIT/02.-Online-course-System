@@ -6,15 +6,25 @@ import {
 } from "react-router-dom";
 
 import UserLayout from "../layouts/UserLayout";
-import Home from "../pages/Home";
+import Dashboard from "@/pages/Dashboard/Dashboard";
+import ManageBusiness from "@/pages/ManageBusiness/ManageBusiness";
+import ManageEmployee from "@/pages/ManageEmployee/ManageEmployee";
+import ManageUser from "@/pages/ManageUser/ManageUser";
+import Setting from "@/pages/Setting/Setting";
+import ManageCategories from "@/pages/ManageCategories/ManageCategories";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      <Route path="/" element={<UserLayout />}>
-        <Route index element={<Home />} />
+      <Route path="admin/" element={<UserLayout />}>
+        <Route index element={<Dashboard />} />
+        <Route path="business" element={<ManageBusiness />} />
+        <Route path="categories" element={<ManageCategories />} />
+        <Route path="employees" element={<ManageEmployee />} />
+        <Route path="users" element={<ManageUser />} />
+        <Route path="setting" element={<Setting />} />
       </Route>
-      <Route path="*" element={<Navigate to={"./"} />} />
+      <Route path="*" element={<Navigate to={"./admin/"} />} />
     </Route>
   )
 );

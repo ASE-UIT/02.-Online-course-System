@@ -1,4 +1,4 @@
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
 import { addAuth } from "@/store/slices/authSlice";
 import { useToast } from "@/hooks/use-toast";
@@ -18,7 +18,6 @@ function CustomGoogleSignIn() {
         onSuccess={async (credentialResponse) => {
           console.log("credentialResponse (with id token)", credentialResponse);
           const idToken = credentialResponse.credential;
-
           try {
             const response = await axios.post(
               `${config.BASE_URL}/student/auth/google/callback`,
