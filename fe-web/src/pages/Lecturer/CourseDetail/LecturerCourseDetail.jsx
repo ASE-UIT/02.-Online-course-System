@@ -1,7 +1,11 @@
 import { useLocation } from "react-router-dom";
 import SideBar from "./SideBar";
 import CourseInfo from "./CourseInfo/CourseInfo";
-import Lesson from "./Lesson/Lesson";
+import ModuleLesson from "./Module/ModuleLesson";
+import PriceInfo from "./PriceInfo/PriceInfo";
+import TargetInfo from "./TargetInfo/TargetInfo";
+import Introduction from "./Introduction/Introduction";
+import Addition from "./Addition/Addition";
 
 export default function LecturerCourseDetail() {
   const location = useLocation();
@@ -14,7 +18,11 @@ export default function LecturerCourseDetail() {
       </div>
       <div className=" flex-1">
         {hash === "" && <CourseInfo />}
-        {hash === "#lesson" && <Lesson />}
+        {hash === "#price" && <PriceInfo />}
+        {hash === "#target" && <TargetInfo />}
+        {hash === "#lesson" && <ModuleLesson />}
+        {hash === "#img&video" && <Introduction />}
+        {hash === "#doc&gift" && <Addition />}
       </div>
     </div>
   );
