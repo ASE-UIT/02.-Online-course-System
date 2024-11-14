@@ -1,6 +1,6 @@
 import SignUpIcon from "/picture/signUpIcon.svg";
 import { SignUpLine } from "@/assets";
-import SignInForm from "./SignInForm";
+import { Outlet } from "react-router-dom";
 
 const SignIn = () => {
   return (
@@ -19,7 +19,7 @@ const SignIn = () => {
           </div>
           {/* Form */}
           <div className="w-full lg:w-1/2">
-            <SignInForm />
+            <Outlet />
           </div>
         </div>
       </div>
