@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,27 +14,27 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { studentLogin } from "@/api";
-import { addAuth } from "@/store/slices/authSlice";
-import { useDispatch } from "react-redux";
+import TextLogo from "@/assets/TextLogo";
+import { employeeLogin } from "@/api";
+import { useAuth } from "@/context/AuthContext";
 
 const formSchema = z.object({
-  password: z.string().min(6, {
-    message: "Mật khẩu phải có ít nhất 6 ký tự."
+  email: z.string().min(6, {
+    message: "Email hoặc số điện thoại không đúng"
   }),
-  confirmPassword: z.string().min(6, {
+  password: z.string().min(6, {
     message: "Mật khẩu phải có ít nhất 6 ký tự."
   })
 });
 
-function ResetPassword() {
+function SignInForm() {
   const { toast } = useToast();
-  const dispatch = useDispatch();
+  const { login, checkLogin } = useAuth();
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      confirmPassword: "",
+      email: "",
       password: ""
     }
   });
@@ -43,17 +43,17 @@ function ResetPassword() {
   async function onSubmit(values) {
     setIsLoading(true);
     const { email, password } = values;
-    const respone = await studentLogin(email, password);
+    const respone = await employeeLogin(email, password);
 
     if (respone.status === 200 || respone.data.code === 200) {
       console.log("respone.data", respone.data.data.token);
       const token = respone.data.data.token;
-      dispatch(
-        addAuth({
-          token
-        })
-      );
-      navigate("/");
+
+      login({
+        token: token
+      });
+
+      navigate("/admin/");
       toast({
         title: <p className=" text-green-700">Đăng nhập thành công</p>,
         description: "Chào mừng bạn trở lại",
@@ -74,31 +74,36 @@ function ResetPassword() {
     setIsLoading(false);
   }
 
+  useEffect(() => {
+    if (checkLogin()) {
+      navigate("/admin/");
+    }
+  }, [checkLogin, navigate]);
+
   return (
     <div className="flex px-10 flex-col align-center gap-5 flex-1">
       <>
-        <div className="text-center flex flex-col gap-3">
-          <h2 className="text-display/lg/semibold text-black">
-            Đặt lại mật khẩu
-          </h2>
-          <p className="text-text/md/regular text-[#747474]">
-            Chọn mật khẩu mới cho tài khoản của bạn
-          </p>
+        <div className="text-center flex flex-col justify-center items-center gap-3">
+          <TextLogo className="w-[240px] h-[56px]" />
+          <p className="text-text/md/regular text-[#747474]">Admin Portal </p>
+          <h2 className="text-display/lg/semibold text-black">Đăng nhập</h2>
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <FormField
               control={form.control}
-              name="password"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
-                    Mật khẩu<span className="text-error-500">*</span>
+                    Email/ Số điện thoại
+                    <span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       className="border-gray-600"
-                      type="password"
+                      type="text"
+                      autoComplete="email"
                       placeholder={field.value}
                       {...field}
                     />
@@ -107,48 +112,42 @@ function ResetPassword() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-text/md/medium">
-                    Xác nhận mật khẩu<span className="text-error-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="border-gray-600"
-                      type="password"
-                      placeholder={field.value}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-text/md/medium">
+                      Mật khẩu<span className="text-error-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-gray-600"
+                        type="password"
+                        autoComplete="current-password"
+                        placeholder={field.value}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <Button
               disabled={isLoading}
               type="submit"
               className="w-full mt-5 rounded-xl shadow-[3px_10px_20px_0px_rgba(0,56,255,0.38)]"
             >
-              {isLoading ? "Đang xử lý..." : "Lưu"}
+              {isLoading ? "Đang xử lý..." : "Đăng nhập"}
             </Button>
           </form>
         </Form>
       </>
-      {/* <div className="text-center text-text/md/medium text-black">
-        Quay lại{" "}
-        <Link
-          to={"sign-in"}
-          className="text-primary text-text/md/semibold underline"
-        >
-          đăng nhập
-        </Link>
-      </div> */}
     </div>
   );
 }
 
-export default ResetPassword;
+export default SignInForm;

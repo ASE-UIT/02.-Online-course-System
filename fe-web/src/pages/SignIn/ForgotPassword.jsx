@@ -75,10 +75,10 @@ function ForgotPassword() {
     <div className="flex px-10 flex-col align-center gap-5 flex-1">
       <>
         <div className="text-center flex flex-col gap-3">
-          <h2 className="text-display/lg/semibold text-black">Đăng nhập</h2>
-          <p className="text-text/md/regular text-[#747474]">
+          <h2 className="text-display/lg/semibold text-black">Quên mật khẩu</h2>
+          {/* <p className="text-text/md/regular text-[#747474]">
             Đăng nhập để tiếp tục con đường tri thức của bạn
-          </p>
+          </p> */}
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">

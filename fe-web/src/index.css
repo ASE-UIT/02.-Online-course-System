@@ -77,9 +77,13 @@
 }
 
 .nsm7Bb-HzV7m-LgbsSe.hJDwNd-SxQuSe.i5vt6e-Ia7Qfc.uaxL4e-RbRzK {
-  @apply border-2 border-[rgb(229,229,229)] rounded-xl inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  @apply w-full border-2 border-[rgb(229,229,229)] rounded-xl inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 !important;
+}
+
+.nsm7Bb-HzV7m-LgbsSe-BPrWId {
+  @apply font-worksans text-text/md/semibold text-black !important;
 }
 
 .nsm7Bb-HzV7m-LgbsSe.hJDwNd-SxQuSe.i5vt6e-Ia7Qfc.uaxL4e-RbRzK:hover {
-  @apply shadow-sm bg-black-100;
+  @apply shadow-sm bg-black-100 !important;
 }

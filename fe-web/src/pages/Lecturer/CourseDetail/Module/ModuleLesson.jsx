@@ -1,57 +1,100 @@
-import { FileText, Pen, PlusIcon, Trash2 } from "lucide-react";
-import { useState } from "react";
+// ModuleLesson.jsx
+import { PlusIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import AddLessonForm from "./AddLessonForm";
 import AddSelectionForm from "./AddSelectionForm";
-const lessons = [
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { ModuleCard } from "./ModuleCard";
+const modules = [
   {
-    name: "Bài 1: Giới thiệu",
+    id: "1",
+    part: "Phần I: MỞ ĐẦU",
+    lesson: [
+      {
+        id: "I1",
+        name: "Bài 1: Giới thiệu",
+      },
+      { id: "I2", name: "Bài 2: Giới thiệu" },
+      {
+        id: "I3",
+        name: "Bài 3: Giới thiệu",
+      },
+      {
+        id: "I4",
+        name: "Bài 4: Giới thiệu",
+      },
+    ],
   },
   {
-    name: "Bài 2: Giới thiệu",
+    id: "2",
+    part: "Phần II : GIỚI THIỆU",
+    lesson: [
+      { id: "II1", name: "Bài 1: Giới thiệu" },
+      { id: "II2", name: "Bài 2: Giới thiệu" },
+      { id: "II3", name: "Bài 3: Giới thiệu" },
+      { id: "II4", name: "Bài 4: Giới thiệu" },
+    ],
   },
+  {
+    id: "3",
+    part: "Phần III : KẾT THÚC",
+    lesson: [
+      { id: "III1", name: "Bài 1: Giới thiệu" },
+      { id: "III2", name: "Bài 2: Giới thiệu" },
 
-  {
-    name: "Bài 3: Giới thiệu",
-  },
-  {
-    name: "Bài 4: Giới thiệu",
+      { id: "III3", name: "Bài 3: Giới thiệu" },
+      { id: "III4", name: "Bài 4: Giới thiệu" },
+    ],
   },
 ];
-const LESSONS_TABLE_HEADER = [
-  {
-    label: "Phần I: MỞ ĐẦU",
-    width: "42%",
-  },
-  {
-    label: "Học thứ",
-    width: "10%",
-  },
 
-  {
-    label: "Xem",
-    width: "8%",
-  },
-  {
-    label: "Thời lượng",
-    width: "15%",
-  },
-  {
-    label: "Ngày cập nhật",
-    width: "17%",
-  },
-  {
-    label: (
-      <div className="flex gap-2">
-        <Pen className="w-[16px] h-[16px] text-primary-400" />
-        <Trash2 className="w-[16px] h-[16px] text-error-500" />
-      </div>
-    ),
-    width: "8%",
-  },
-];
+// CustomPointerSensor.js
+
+export class CustomPointerSensor extends PointerSensor {
+  static activators = [
+    {
+      eventName: "onPointerDown",
+      handler: ({ nativeEvent: event }) => {
+        // Chỉ cho phép drag khi click vào phần tử có class 'drag-handle'
+        if (!event.target.closest(".drag-handle")) {
+          return false;
+        }
+        return true;
+      },
+    },
+  ];
+}
 export default function ModuleLesson() {
+  const [items, setItems] = useState(modules);
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
   const [showAddSelectionForm, setShowAddSelectionForm] = useState(false);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (active.id !== over.id) {
+      setItems((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        return arrayMove(items, oldIndex, newIndex);
+      });
+    }
+  };
+  useEffect(() => {
+    console.log(items);
+  }, [items]);
   return (
     <div className="p-[20px]">
       {!showAddLessonForm && !showAddSelectionForm && (
@@ -59,73 +102,20 @@ export default function ModuleLesson() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-display/md/medium">DANH SÁCH BÀI HỌC</p>
-              <p className="text-text/md/medium">(Giữ và kéo thả để sắp xếp vị trí phần học và bài họ)</p>
+              <p className="text-text/md/medium">(Giữ và kéo thả để sắp xếp vị trí phần học và bài học)</p>
             </div>
             <div className="flex items-center py-[10px] px-[16px] bg-primary-500 rounded-[8px] gap-2 text-white cursor-pointer hover:bg-primary-600 transition-all">
               <PlusIcon />
               <p className="text-text/md/medium">Phần học mới</p>
             </div>
           </div>
-          <div className="w-full p-[10px] border-[1px] border-gray-500 rounded-[4px] mt-4">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b-[1px]">
-                  {LESSONS_TABLE_HEADER.map((header) => (
-                    <th
-                      key={header.label}
-                      className={` text-start py-2  text-base-black`}
-                      style={{ width: header.width }}
-                    >
-                      <span className="text-text/md/regular">{header.label}</span>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {lessons.map((lesson, index) => {
-                  return (
-                    <tr key={`row-${index}`} className={`border-b-[1px] border-dashed	`}>
-                      <td className={`text-start text-text/md/regular items-center  border-gray-300 py-3 flex gap-2`}>
-                        <FileText className="w-[16px] h-[16px]" />
-                        <p>{lesson.name}</p>
-                      </td>
-                      <td className={`text-start text-text/md/regular  border-gray-300 py-3`}>{}</td>
-                      <td className={`text-start text-text/md/regular  border-gray-300 py-3`}>{}</td>
-                      <td className={`text-start text-text/md/regular  border-gray-300 py-3`}>{}</td>
-                      <td className={`text-start text-text/md/regular  border-gray-300 py-3`}>{}</td>
-                      <td className={`text-start text-text/md/regular  border-gray-300 py-3`}>
-                        <div className="flex gap-2">
-                          <Pen className="w-[16px] cursor-pointer h-[16px] text-primary-400" />
-                          <Trash2 className="w-[16px] cursor-pointer h-[16px] text-error-500" />
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            <div className="flex gap-3 mt-2 items-center">
-              <div
-                onClick={() => {
-                  setShowAddLessonForm(true);
-                }}
-                className="flex items-center py-[10px] px-[16px] bg-success-600 rounded-[8px] gap-2 text-white cursor-pointer hover:bg-success-700 transition-all"
-              >
-                <PlusIcon />
-                <p className="text-text/md/medium">Bài học mới</p>
-              </div>
-              <div
-                onClick={() => {
-                  setShowAddSelectionForm(true);
-                }}
-                className="flex items-center py-[10px] px-[16px] bg-warning-700 rounded-[8px] gap-2 text-white cursor-pointer hover:bg-warning-800 transition-all"
-              >
-                <PlusIcon />
-                <p className="text-text/md/medium">Bài trắc nghiệm</p>
-              </div>
-              <p className="text-text/md/regular">Một phần học nên có một bài trắc nghiệm</p>
-            </div>
-          </div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
+              {items.map((module) => (
+                <ModuleCard key={module.id} module={module} setItems={setItems} />
+              ))}
+            </SortableContext>
+          </DndContext>
         </div>
       )}
       {showAddLessonForm && <AddLessonForm setShowAddLessonForm={setShowAddLessonForm} />}

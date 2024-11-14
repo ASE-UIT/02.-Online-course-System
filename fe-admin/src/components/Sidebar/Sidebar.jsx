@@ -32,7 +32,7 @@ export default function Sidebar() {
                   }`}
                 >
                   <item.icon size={20} className="font-light" />
-                  <span className="text-sm font-medium">{item.text}</span>
+                  <span className="text-text/md/medium">{item.text}</span>
                 </button>
               </Link>
             </li>

@@ -1,5 +1,6 @@
-import { Bell, MenuIcon, UserCircle } from "lucide-react";
+import { Bell, MenuIcon } from "lucide-react";
 import Searchbar from "../Searchbar/Searchbar";
+import DropdownUser from "./DropdownUser";
 
 export default function Header() {
   return (
@@ -9,7 +10,7 @@ export default function Header() {
         <Searchbar placeholder={"Tìm kiếm gì đó"} />
         <Bell className="w-6 h-6" />
         <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-          <UserCircle className="w-10 h-10 text-gray-600" />
+          <DropdownUser />
         </div>
       </div>
     </header>

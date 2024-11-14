@@ -2,11 +2,11 @@ import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Header from "../components/Header/Header";
-import { NavigationProvider } from "../context/NavigationContext";
+import { NavigationProvider } from "@/context/NavigationContext";
 
 const UserLayout = () => {
   return (
-    <div className="-z-10">
+    <div className="-z-10 font-worksans">
       <NavigationProvider>
         <div className="flex h-screen bg-gray-50">
           <Sidebar />
