@@ -78,9 +78,11 @@ function ResetPassword() {
     <div className="flex px-10 flex-col align-center gap-5 flex-1">
       <>
         <div className="text-center flex flex-col gap-3">
-          <h2 className="text-display/lg/semibold text-black">Đăng nhập</h2>
+          <h2 className="text-display/lg/semibold text-black">
+            Đặt lại mật khẩu
+          </h2>
           <p className="text-text/md/regular text-[#747474]">
-            Đăng nhập để tiếp tục con đường tri thức của bạn
+            Chọn mật khẩu mới cho tài khoản của bạn
           </p>
         </div>
         <Form {...form}>
