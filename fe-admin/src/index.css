@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -62,6 +64,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-background;
+    @apply bg-background font-worksans;
+    font-family: "Work Sans";
   }
 }

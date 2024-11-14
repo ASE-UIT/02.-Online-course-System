@@ -138,7 +138,7 @@ export default {
         }
       },
       fontFamily: {
-        worksans: ["Work Sans", "sans-serif"]
+        worksans: ["Work Sans"]
       },
       fontSize: {
         "display/2xl/extrabold": [
