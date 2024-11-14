@@ -1,6 +1,7 @@
 import { FileText, Pen, PlusIcon, Trash2 } from "lucide-react";
 import { useState } from "react";
 import AddLessonForm from "./AddLessonForm";
+import AddSelectionForm from "./AddSelectionForm";
 const lessons = [
   {
     name: "Bài 1: Giới thiệu",
@@ -50,9 +51,10 @@ const LESSONS_TABLE_HEADER = [
 ];
 export default function ModuleLesson() {
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
+  const [showAddSelectionForm, setShowAddSelectionForm] = useState(false);
   return (
     <div className="p-[20px]">
-      {!showAddLessonForm && (
+      {!showAddLessonForm && !showAddSelectionForm && (
         <div>
           <div className="flex items-center justify-between">
             <div>
@@ -112,7 +114,12 @@ export default function ModuleLesson() {
                 <PlusIcon />
                 <p className="text-text/md/medium">Bài học mới</p>
               </div>
-              <div className="flex items-center py-[10px] px-[16px] bg-warning-700 rounded-[8px] gap-2 text-white cursor-pointer hover:bg-warning-800 transition-all">
+              <div
+                onClick={() => {
+                  setShowAddSelectionForm(true);
+                }}
+                className="flex items-center py-[10px] px-[16px] bg-warning-700 rounded-[8px] gap-2 text-white cursor-pointer hover:bg-warning-800 transition-all"
+              >
                 <PlusIcon />
                 <p className="text-text/md/medium">Bài trắc nghiệm</p>
               </div>
@@ -122,6 +129,7 @@ export default function ModuleLesson() {
         </div>
       )}
       {showAddLessonForm && <AddLessonForm setShowAddLessonForm={setShowAddLessonForm} />}
+      {showAddSelectionForm && <AddSelectionForm setShowAddSelectionForm={setShowAddSelectionForm} />}
     </div>
   );
 }

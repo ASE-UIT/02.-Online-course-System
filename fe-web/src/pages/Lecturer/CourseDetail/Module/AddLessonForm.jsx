@@ -46,7 +46,6 @@ export default function AddLessonForm({ setShowAddLessonForm }) {
           <VideoIcon />
           <p>Tải lên video</p>
         </div>
-        <p className="text-text/md/regular">Hoặc nhập link video Youtube</p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-12">
