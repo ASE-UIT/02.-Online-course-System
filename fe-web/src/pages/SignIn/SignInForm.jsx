@@ -176,13 +176,13 @@ function SignInForm() {
           </div>
           <span className="text-text/md/semibold w-full">Số điện thoại</span>
         </Button> */}
-        <div className="flex gap-2">
-          <div className="w-1/2">
+        <div className="flex flex-col gap-2">
+          <div className="w-full">
             <GoogleOAuthProvider clientId={config.REACT_APP_GOOGLE_CLIENT_ID}>
               <GoogleSignIn />
             </GoogleOAuthProvider>
           </div>
-          <div className="w-1/2">
+          <div className="w-full">
             <CustomFacebookSignIn />
           </div>
         </div>
