@@ -31,7 +31,7 @@ const formSchema = z.object({
   date_close: z.date({
     required_error: "Vui lòng chọn ngày kết thúc",
   }),
-  original_price: z
+  original_price: z.coerce
     .number({
       invalid_type_error: "Vui lòng nhập số hợp lệ",
     })
