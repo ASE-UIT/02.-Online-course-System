@@ -1,4 +1,5 @@
 import { IBaseCrudController } from '@/controller/interfaces/i.base-curd.controller';
+import { CourseRatingSortReq } from '@/dto/course_rating/course_rating-sort.req';
 import { CreateCourseRatingReq } from '@/dto/course_rating/create-course_rating.req';
 import { UpdateCourseRatingReq } from '@/dto/course_rating/update-course_rating.req';
 import { UpdateCourseRatingRes } from '@/dto/course_rating/update-course_rating.res';
@@ -44,7 +45,20 @@ export class CourseRatingController {
       await validateRequest(UpdateCourseRatingReq, req.body);
       const result = await this.courseRatingService.update(req.params.id, req.body);
       const responseBody = new UpdateCourseRatingRes(result);
-      res.send_ok('Cập nhật khóa học thành công', responseBody);
+      res.send_ok('Update rating successful', responseBody);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async search(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const sort: CourseRatingSortReq = JSON.parse(req.query.sort as string);
+      const rpp = parseInt(req.query.rpp as string) || 10;
+      const page = parseInt(req.query.page as string) || 1;
+
+      const result = await this.courseRatingService.search(sort, rpp, page);
+
+      res.send_ok(`Get search rating successfully`, result);
     } catch (error) {
       next(error);
     }

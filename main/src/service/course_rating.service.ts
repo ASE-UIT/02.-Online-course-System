@@ -1,3 +1,5 @@
+import { CourseSearchFilterReq } from '@/dto/course/course-search-filter.req';
+import { CourseRatingSortReq } from '@/dto/course_rating/course_rating-sort.req';
 import { CreateCourseRatingReq } from '@/dto/course_rating/create-course_rating.req';
 import { UpdateCourseRatingReq } from '@/dto/course_rating/update-course_rating.req';
 import { UpdateCourseRatingRes } from '@/dto/course_rating/update-course_rating.res';
@@ -29,10 +31,7 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
     this.courseRepository = courseRepository;
     this.studentRepository = studentRepository;
   }
-  update(id: string, data: UpdateCourseRatingReq): Promise<UpdateCourseRatingRes> {
-    throw new Error('Method not implemented.');
-  }
-
+  
   async createrating(data: CreateCourseRatingReq, studentId: string) {
     const course = await this.courseRepository.findOne({ filter: { id: data.courseId } });
     if (!course) {
@@ -43,7 +42,7 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
     rating.studentId = studentId;
     return await this.courseRatingRepository.create({ data: rating });
   }
-  async updaterating(id: string, data: UpdateCourseRatingReq): Promise<UpdateCourseRatingRes> {
+  async update(id: string, data: UpdateCourseRatingReq): Promise<UpdateCourseRatingRes> {
     const existingRating = await this.courseRepository.findOne({ filter: { id } });
 
     if (!existingRating) {
@@ -58,5 +57,8 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
     });
 
     return convertToDto(UpdateCourseRatingRes, updatedData);
+  }
+  search(sort: CourseRatingSortReq, rpp: number, page: number): Promise<CourseRating[]> {
+    return this.courseRatingRepository.search(sort, rpp, page);
   }
 }
