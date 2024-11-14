@@ -20,4 +20,8 @@ export class QuizService extends BaseCrudService<Quiz> implements IQuizService<Q
     this.quizRepository = quizRepository;
     this.studentCompleteQuizRepository = studentCompleteQuizRepository;
   }
+
+  async findByLessonId(lessonId: string): Promise<Quiz[]> {
+    return await this.quizRepository.findByLessonId(lessonId);
+  }
 }
