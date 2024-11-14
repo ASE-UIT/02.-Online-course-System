@@ -1,4 +1,9 @@
-import { createBrowserRouter, createRoutesFromElements, Route, Navigate } from "react-router-dom";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Route,
+  Navigate
+} from "react-router-dom";
 
 import UserLayout from "../layouts/UserLayout";
 import Home from "../pages/HomePage/Home";
@@ -15,6 +20,9 @@ import LecturerResultPage from "@/pages/Lecturer/Result/ResultPage";
 import TeacherCoursePage from "@/pages/Lecturer/TeacherCoursePage/TeacherCoursePage";
 import LecturerCourseDetail from "@/pages/Lecturer/CourseDetail/LecturerCourseDetail";
 import CourseAdd from "@/pages/Lecturer/TeacherCoursePage/AddCourse/CourseAdd";
+import SignInForm from "@/pages/SignIn/SignInForm";
+import ForgotPassword from "@/pages/SignIn/ForgotPassword";
+import ResetPassword from "@/pages/SignIn/ResetPassword";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,11 +31,23 @@ const router = createBrowserRouter(
         <Route index element={<Home />} />
         <Route path="course/:id" element={<CourseDetail />} />
         <Route path="sign-up" element={<SignUp />}>
-          <Route path="*" element={<Navigate to={"/web/sign-up/step1/email"} />} />
+          <Route
+            path="*"
+            element={<Navigate to={"/web/sign-up/step1/email"} />}
+          />
           <Route path="step1/:signUpType" element={<StepOne />} />
-          <Route path="step2/:signUpType/:emailOrPhone" element={<VerifyCode />} />
+          <Route
+            path="step2/:signUpType/:emailOrPhone"
+            element={<VerifyCode />}
+          />
         </Route>
-        <Route path="sign-in" element={<SignIn />} />
+        <Route path="sign-in" element={<SignIn />}>
+          <Route path="*" element={<Navigate to={"/web/sign-in"} />} />
+          <Route index element={<SignInForm />} />
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+          <Route path="step2/:type/:emailOrPhone" element={<VerifyCode />} />
+        </Route>
         <Route path="callback" element={<InfoInput />} />
         <Route path="result/:content" element={<ResultPage />} />
         {/* Lecturer layout */}

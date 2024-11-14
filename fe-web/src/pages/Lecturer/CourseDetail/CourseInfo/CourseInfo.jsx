@@ -31,7 +31,7 @@ const formSchema = z.object({
   date_close: z.date({
     required_error: "Vui lòng chọn ngày kết thúc",
   }),
-  original_price: z
+  original_price: z.coerce
     .number({
       invalid_type_error: "Vui lòng nhập số hợp lệ",
     })
@@ -325,7 +325,7 @@ export default function CourseInfo() {
             <Checkbox id="terms" />
             <label
               htmlFor="terms"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-sm cursor-pointer font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Khóa học miễn phí
             </label>
