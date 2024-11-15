@@ -37,14 +37,17 @@ function ForgotPassword() {
   async function onSubmit(values) {
     setIsLoading(true);
     const { emailOrPhone } = values;
-    try {
-      const respone = await studentForgotPassword(emailOrPhone);
+    const verifyType = isEmail(emailOrPhone) ? "email" : "phone";
+    const emailOrPhoneFormatted = isEmail(emailOrPhone)
+      ? emailOrPhone
+      : `+84${emailOrPhone.slice(1)}`;
 
-      const verifyType = isEmail(emailOrPhone) ? "email" : "phone";
+    try {
+      const respone = await studentForgotPassword(emailOrPhoneFormatted);
 
       if (respone.status === 200 || respone.data.code === 200) {
         console.log("respone.data", respone.data);
-        navigate(`/web/sign-in/step2/${verifyType}/${emailOrPhone}`);
+        navigate(`/web/sign-in/step2/${verifyType}/${emailOrPhoneFormatted}`);
         toast({
           title: <p className=" text-green-700">Thành công</p>,
           description: "OTP đã được gửi để đặt lại mật khẩu",
@@ -52,11 +55,11 @@ function ForgotPassword() {
           duration: 2000
         });
       }
-    } catch (respone) {
-      if (respone.errors?.code === "INVALID_OTP") {
-        console.log("respone.errors.INVALID_OTP", respone.errors);
+    } catch (error) {
+      if (error.response.errors?.code === "INVALID_OTP") {
+        console.log("respone.errors.INVALID_OTP", error.response.errors);
         form.setError("emailOrPhone", {
-          message: respone.errors.msg
+          message: error.response.errors.msg
         });
         setIsLoading(false);
       } else {
