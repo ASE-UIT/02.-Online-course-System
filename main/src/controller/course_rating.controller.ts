@@ -37,7 +37,7 @@ export class CourseRatingController {
       next(error);
     }
   }
-  
+
   async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       if (!req.params.id) throw new BaseError(ErrorCode.NF_01, 'Id là bắt buộc');

@@ -14,7 +14,8 @@ export class QuizController {
   private studentCompleteQuizRepository: IStudentCompleteQuizRepository<StudentCompleteQuiz>;
   constructor(
     @inject('QuizService') quizService: IQuizService<Quiz>,
-    @inject('StudentCompleteQuizRepository') studentCompleteQuizRepository: IStudentCompleteQuizRepository<StudentCompleteQuiz>,
+    @inject('StudentCompleteQuizRepository')
+    studentCompleteQuizRepository: IStudentCompleteQuizRepository<StudentCompleteQuiz>,
     @inject(ITYPES.Controller) common: IBaseCrudController<Quiz>
   ) {
     this.quizService = quizService;

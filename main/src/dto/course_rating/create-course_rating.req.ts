@@ -2,8 +2,8 @@ import { IsInt, IsOptional, IsString, IsUUID, Min, Max } from 'class-validator';
 
 export class CreateCourseRatingReq {
   @IsUUID()
-  id!: string
-  
+  id!: string;
+
   @IsUUID()
   courseId!: string;
 
