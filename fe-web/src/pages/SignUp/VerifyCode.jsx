@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import OTPInput from "@/components/OTPInput";
-import { studentVerifyEmail, studentVerifyPhone } from "@/api";
+import {
+  studentForgotPassword,
+  studentVerifyEmail,
+  studentVerifyOtp,
+  studentVerifyPhone
+} from "@/api";
 import { useToast } from "@/hooks/use-toast";
 
 const EmailTitle =
@@ -14,12 +19,15 @@ const PhoneSendText = "Chưa nhận được tin nhắn?";
 
 const VerifyCode = () => {
   const { signUpType, emailOrPhone } = useParams();
+  const url = useLocation();
   const { toast } = useToast();
 
   const navigate = useNavigate();
+  const isForgotPassword = url.pathname.includes("sign-in");
   const [countdown, setCountdown] = useState(0);
   const otpLength = 6;
   const [otp, setOtp] = useState(new Array(otpLength).fill(""));
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -28,10 +36,65 @@ const VerifyCode = () => {
     }
   }, [countdown]);
 
-  const handleResendEmail = () => {
+  const handleResendEmail = async () => {
     // TODO: Implement email resend logic here
-    console.log("Resending email...");
+    setIsLoading(true);
+    if (isForgotPassword) {
+      try {
+        const response = await studentForgotPassword(emailOrPhone);
+        if (response.data.code === 200) {
+          toast({
+            title: <p className="text-green-700">Thành công</p>,
+            description: "OTP đã được gửi để đặt lại mật khẩu",
+            status: "success",
+            duration: 2000
+          });
+        }
+      } catch (error) {
+        toast({
+          title: <p className="text-red-700">Có lỗi xảy ra</p>,
+          description: error.response.data.errors.msg,
+          duration: 2000
+        });
+      }
+    }
+
     setCountdown(10);
+    setIsLoading(false);
+  };
+
+  const handleForgotPasswordCode = async (otpFromInput) => {
+    let otpValue = otp.join("");
+    if (emailOrPhone === null) {
+      navigate(`/web/sign-in`);
+    } else if (signUpType === "email") {
+      try {
+        const response = await studentVerifyOtp(
+          emailOrPhone,
+          otpFromInput ?? otpValue
+        );
+
+        if (response.data.code === 200) {
+          navigate(`/web/sign-in/reset-password/${emailOrPhone}/${otpValue}`);
+        }
+      } catch (error) {
+        if (error.response.data.errors?.code === "INVALID_OTP") {
+          toast({
+            title: <p className=" text-red-700">Có lỗi xảy ra</p>,
+            description: error.response.data.errors.msg,
+            duration: 2000
+          });
+          setIsLoading(false);
+        } else {
+          toast({
+            title: <p className=" text-red-700">Có lỗi xảy ra</p>,
+            description: "Lỗi không xác định",
+            duration: 2000
+          });
+          setIsLoading(false);
+        }
+      }
+    }
   };
 
   const handleVerifyCode = async (otpFromInput) => {
@@ -94,7 +157,7 @@ const VerifyCode = () => {
       <div className="flex gap-2 justify-center text-center text-text/md/medium text-black mb-5">
         {signUpType === "email" ? EmailSendText : PhoneSendText}
         <button
-          disabled={countdown > 0}
+          disabled={countdown > 0 || isLoading}
           className="text-primary text-text/md/semibold cursor-pointer"
           onClick={handleResendEmail}
         >
@@ -103,7 +166,10 @@ const VerifyCode = () => {
         </button>
       </div>
       <Button
-        onClick={() => handleVerifyCode()}
+        disabled={isLoading}
+        onClick={() => {
+          isForgotPassword ? handleForgotPasswordCode() : handleVerifyCode();
+        }}
         className="w-full text-white rounded-xl shadow-[3px_10px_20px_0px_rgba(0,56,255,0.38)] disabled:opacity-100 disabled:shadow-none"
       >
         Xác thực

@@ -58,7 +58,7 @@ function SignInForm() {
           token
         })
       );
-      navigate("/");
+      navigate("/web/");
       toast({
         title: <p className=" text-green-700">Đăng nhập thành công</p>,
         description: "Chào mừng bạn trở lại",
