@@ -4,6 +4,7 @@ import { CourseCategory } from '@/models/course_category.model';
 import { Discount } from '@/models/discount.model';
 import { Lecturer } from '@/models/lecturer.model';
 import { Lesson } from '@/models/lesson.model';
+import { LessonPart } from '@/models/lesson_part.model';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 
 @Entity('courses')
@@ -11,8 +12,11 @@ export class Course extends BaseModel {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ length: 150 })
-  name!: string;
+  @Column({ length: 150, nullable: true })
+  name?: string;
+
+  @Column({ length: 150, name: 'name_en', nullable: true })
+  nameEn?: string;
 
   @Column({ type: 'text', nullable: true })
   description?: string;
@@ -20,10 +24,13 @@ export class Course extends BaseModel {
   @Column({ type: 'text', nullable: true })
   thumbnail?: string;
 
-  @Column({ type: 'decimal' })
-  price!: number;
+  @Column({ type: 'decimal', default: 0, name: 'original_price' })
+  originalPrice!: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 1 })
+  @Column({ type: 'decimal', default: 0, name: 'sell_price' })
+  sellPrice!: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 1, default: 0 })
   duration!: number;
 
   @Column({ type: 'enum', enum: DifficultyLevel, default: DifficultyLevel.easy, name: 'difficulty_level' })
@@ -56,6 +63,6 @@ export class Course extends BaseModel {
   @JoinColumn({ name: 'discount_id' })
   discount!: Discount;
 
-  @OneToMany(() => Lesson, (lesson) => lesson.course, { cascade: true })
-  lessons!: Lesson[];
+  @OneToMany(() => LessonPart, (lessonPart) => lessonPart.course, { cascade: true })
+  lessonParts!: LessonPart[];
 }

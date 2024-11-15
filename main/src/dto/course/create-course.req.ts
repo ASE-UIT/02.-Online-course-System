@@ -27,28 +27,5 @@ export class CreateCourseRequest {
   thumbnail?: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  price!: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  duration!: number;
-
-  @IsEnum(DifficultyLevel)
-  @IsOptional()
-  difficultyLevel?: string;
-
-  @IsOptional()
-  @IsDateString()
-  startDate?: Date;
-
-  @IsOptional()
-  @IsDateString()
-  endDate?: Date;
-
-  @IsNotEmpty()
   categoryId!: string;
-
-  @IsNotEmpty()
-  lessons!: CreateLessonRequest[];
 }

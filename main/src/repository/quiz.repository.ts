@@ -11,13 +11,13 @@ export class QuizRepository extends BaseRepository<Quiz> implements IQuizReposit
     super(dataSource.getRepository(Quiz));
   }
 
-  async findByLessonId(lessonId: string): Promise<Quiz[]> {
-    return await this.ormRepository.find({
-      where: {
-        lesson: {
-          id: lessonId
-        }
-      }
-    });
-  }
+  // async findByLessonId(lessonId: string): Promise<Quiz[]> {
+  //   return await this.ormRepository.find({
+  //     where: {
+  //       lesson: {
+  //         id: lessonId
+  //       }
+  //     }
+  //   });
+  // }
 }
