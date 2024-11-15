@@ -24,6 +24,7 @@ import { StudentCompleteLesson } from '@/models/student_complete_lesson.model';
 import { StudentCompleteQuiz } from '@/models/student_complete_quiz.model';
 import { Student } from '@/models/student.model';
 import { GlobalConfig } from '@/utils/config/global-config.util';
+import { CourseRating } from '@/models/course_rating.model';
 
 const models = [
   Account,
@@ -47,7 +48,8 @@ const models = [
   RolePermission,
   StudentCompleteLesson,
   StudentCompleteQuiz,
-  Student
+  Student,
+  CourseRating
 ];
 
 export class AppDataSourceSingleton {

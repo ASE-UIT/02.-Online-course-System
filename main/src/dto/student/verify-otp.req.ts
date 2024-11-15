@@ -6,6 +6,6 @@ export class VerifyOtpReqDto {
   otp!: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'ID của sinh viên không được để trống' })
-  studentId!: string;
+  @IsNotEmpty({ message: 'Số điện thoại hoặc email của học viên không được để trống' })
+  emailOrPhone!: string;
 }
