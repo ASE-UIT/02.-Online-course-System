@@ -149,8 +149,7 @@ export class CourseController {
       // Validate request body dựa vào DTO (UpdateCourseReq)
       await validateRequest(UpdateCourseRequest, req.body);
       const result = await this.courseService.update(req.params.id, req.body);
-      const responseBody = new UpdateCourseResponse(result);
-      res.send_ok('Cập nhật khóa học thành công', responseBody);
+      res.send_ok('Cập nhật khóa học thành công', result);
     } catch (error) {
       next(error);
     }
@@ -224,8 +223,8 @@ export class CourseController {
       const courseId = req.params.id;
       const course = await this.courseService.findOne({
         filter: { id: courseId },
-        relations: ['category', 'lecturer', 'lessons', 'discount'],
-        select: CourseDetailSelectRes
+        relations: ['category', 'lecturer', 'lessonParts', 'discount']
+        //select: CourseDetailSelectRes
       });
       res.send_ok('Get course successfully', course);
     } catch (error) {

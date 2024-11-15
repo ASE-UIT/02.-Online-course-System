@@ -1,11 +1,27 @@
 import { DifficultyLevel } from '@/enums/difficulty-level.enum';
-import { IsOptional, IsString, IsNumber, IsEnum, IsUUID, IsDate, Validate } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsEnum,
+  IsUUID,
+  IsDate,
+  IsOptional,
+  ValidateNested,
+  IsISO8601
+} from 'class-validator';
 import { DecimalPrecision } from './decimal-10-1-custom';
+import { UpdateLessonPartReq } from '@/dto/lesson_part/update-lesson-part.req';
+import { Type } from 'class-transformer';
 
 export class UpdateCourseRequest {
   @IsOptional()
   @IsString()
   name?: string;
+
+  @IsOptional()
+  @IsString()
+  nameEn?: string;
 
   @IsOptional()
   @IsString()
@@ -17,34 +33,30 @@ export class UpdateCourseRequest {
 
   @IsOptional()
   @IsNumber()
-  price?: number;
+  originalPrice?: number;
 
   @IsOptional()
   @IsNumber()
-  @Validate(DecimalPrecision, [10, 1])
-  duration?: number;
+  sellPrice?: number;
 
   @IsOptional()
   @IsEnum(DifficultyLevel)
-  difficultyLevel?: DifficultyLevel = DifficultyLevel.easy;
+  difficultyLevel?: DifficultyLevel;
 
   @IsOptional()
-  @IsDate()
+  @IsISO8601()
   startDate?: Date;
 
   @IsOptional()
-  @IsDate()
+  @IsISO8601()
   endDate?: Date;
 
   @IsOptional()
-  @IsUUID()
+  @IsString()
   categoryId?: string;
 
   @IsOptional()
-  @IsUUID()
-  lecturerId?: string;
-
-  @IsOptional()
-  @IsUUID()
-  discountId?: string;
+  @Type(() => UpdateLessonPartReq)
+  @ValidateNested({ each: true })
+  lessonParts?: UpdateLessonPartReq[];
 }

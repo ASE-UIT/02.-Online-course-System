@@ -15,16 +15,16 @@ export class LessonPart {
   @Column({ name: 'part_name', type: 'varchar', length: 100 })
   partName!: string;
 
-  @Column({ name: 'course_id' })
-  courseId!: string;
+  @Column({ name: 'course_id', nullable: true })
+  courseId?: string;
 
-  @ManyToOne(() => Course)
+  @ManyToOne(() => Course, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
   @JoinColumn({ name: 'course_id' })
   course!: Course;
 
-  @OneToMany(() => Lesson, (lesson) => lesson.lessonPart, { cascade: true })
+  @OneToMany(() => Lesson, (lesson) => lesson.lessonPart, { cascade: true, eager: true })
   lessons!: Lesson[];
 
-  @OneToMany(() => Quiz, (quiz) => quiz.lessonPart, { cascade: true })
+  @OneToMany(() => Quiz, (quiz) => quiz.lessonPart, { cascade: true, eager: true })
   quizzes!: Quiz[];
 }

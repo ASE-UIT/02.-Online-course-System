@@ -1,7 +1,15 @@
 import { CreateQuizzReq } from '@/dto/quizz/create-quizz.req';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
-export class CreateLessonRequest {
+export class UpdateLessonRequest {
+  @IsOptional()
+  id?: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(1)
+  order!: number;
+
   @IsOptional()
   description?: string;
 
@@ -10,9 +18,6 @@ export class CreateLessonRequest {
 
   @IsNotEmpty()
   duration!: number;
-
-  @IsNotEmpty()
-  order!: number;
 
   @IsOptional()
   videoUrl?: string;

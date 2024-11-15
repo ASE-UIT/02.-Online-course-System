@@ -12,8 +12,11 @@ export class Course extends BaseModel {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ length: 150 })
-  name!: string;
+  @Column({ length: 150, nullable: true })
+  name?: string;
+
+  @Column({ length: 150, name: 'name_en', nullable: true })
+  nameEn?: string;
 
   @Column({ type: 'text', nullable: true })
   description?: string;
@@ -21,10 +24,13 @@ export class Course extends BaseModel {
   @Column({ type: 'text', nullable: true })
   thumbnail?: string;
 
-  @Column({ type: 'decimal' })
-  price!: number;
+  @Column({ type: 'decimal', default: 0, name: 'original_price' })
+  originalPrice!: number;
 
-  @Column({ type: 'decimal', precision: 10, scale: 1 })
+  @Column({ type: 'decimal', default: 0, name: 'sell_price' })
+  sellPrice!: number;
+
+  @Column({ type: 'decimal', precision: 10, scale: 1, default: 0 })
   duration!: number;
 
   @Column({ type: 'enum', enum: DifficultyLevel, default: DifficultyLevel.easy, name: 'difficulty_level' })
