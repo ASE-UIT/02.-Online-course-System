@@ -11,20 +11,17 @@ const courseRatingRouter = express.Router();
 
 export default courseRatingRouter;
 courseRatingRouter
-.post(
-  '/',
-  authenticateJWT,
-  classValidate(CreateCourseRatingReq),
-  courseRatingController.create.bind(courseRatingController)
-)
+  .post(
+    '/',
+    authenticateJWT,
+    classValidate(CreateCourseRatingReq),
+    courseRatingController.create.bind(courseRatingController)
+  )
 
-.put(
-  '/',
-  authenticateJWT,
-  classValidate(UpdateCourseRatingReq),
-  courseRatingController.update.bind(courseRatingController)
-)
-.get(
-  '/',
-  courseRatingController.search.bind(courseRatingController)
-)
+  .put(
+    '/',
+    authenticateJWT,
+    classValidate(UpdateCourseRatingReq),
+    courseRatingController.update.bind(courseRatingController)
+  )
+  .get('/', courseRatingController.search.bind(courseRatingController));

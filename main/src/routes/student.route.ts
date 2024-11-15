@@ -47,12 +47,6 @@ studentRouter
     studentController.forgotPassword.bind(studentController)
   )
 
-  .post(
-    '/forgot-password',
-    classValidate(ForgotPasswordReqDto),
-    studentController.forgotPassword.bind(studentController)
-  )
-
   .post('/verify-otp', classValidate(VerifyOtpReqDto), studentController.verifyOtp.bind(studentController))
 
   .post('/reset-password', classValidate(ResetPasswordReqDto), studentController.resetPassword.bind(studentController))

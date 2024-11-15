@@ -31,7 +31,7 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
     this.courseRepository = courseRepository;
     this.studentRepository = studentRepository;
   }
-  
+
   async createrating(data: CreateCourseRatingReq, studentId: string) {
     const course = await this.courseRepository.findOne({ filter: { id: data.courseId } });
     if (!course) {
@@ -46,10 +46,10 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
     const existingRating = await this.courseRepository.findOne({ filter: { id } });
 
     if (!existingRating) {
-      throw new Error('Rating not found'); 
+      throw new Error('Rating not found');
     }
 
-    const updatedData = { ...existingRating, ...data }; 
+    const updatedData = { ...existingRating, ...data };
 
     await this.courseRepository.findOneAndUpdate({
       filter: { id },

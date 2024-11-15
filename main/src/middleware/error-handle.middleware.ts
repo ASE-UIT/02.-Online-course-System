@@ -30,6 +30,8 @@ export const globalErrorHanlder = (error: any, req: Request, res: Response, next
         return res.send_notFound('Phone number not found', error);
       case ErrorCode.INVALID_CODE:
         return res.send_badRequest('Invalid code', error);
+      case ErrorCode.INVALID_OTP:
+        return res.send_badRequest('Invalid OTP', error);
       default:
         return res.send_internalServerError(error.message, error);
     }

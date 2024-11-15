@@ -7,6 +7,10 @@ export class ResetPasswordReqDto {
   newPassword!: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'ID của sinh viên không được để trống' })
-  studentId!: string;
+  @IsNotEmpty({ message: 'Email hoặc số điện thoại của học viên không được để trống' })
+  emailOrPhone!: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'Mã OTP không được để trống' })
+  otp!: string;
 }

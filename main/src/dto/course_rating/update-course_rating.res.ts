@@ -1,5 +1,4 @@
-
-export class UpdateCourseRatingRes{
+export class UpdateCourseRatingRes {
   id!: string;
   courseId!: string;
   ratingPoint!: number;
