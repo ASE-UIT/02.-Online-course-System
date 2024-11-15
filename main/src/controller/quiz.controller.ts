@@ -23,18 +23,18 @@ export class QuizController {
     this.common = common;
   }
 
-  /**
-   * * GET /quiz/:lessonId
-   */
-  async findByLessonId(req: Request, res: Response, next: NextFunction): Promise<void> {
-    try {
-      const lessonId = req.params.lessonId;
-      const result = await this.quizService.findByLessonId(lessonId);
-      res.send_ok('Get quizzes successfully', result);
-    } catch (error) {
-      next(error);
-    }
-  }
+  // /**
+  //  * * GET /quiz/:lessonId
+  //  */
+  // async findByLessonId(req: Request, res: Response, next: NextFunction): Promise<void> {
+  //   try {
+  //     const lessonId = req.params.lessonId;
+  //     const result = await this.quizService.findByLessonId(lessonId);
+  //     res.send_ok('Get quizzes successfully', result);
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // }
 
   /**
    * * GET /quiz/answer?quizId&studentId&choice

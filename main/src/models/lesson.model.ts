@@ -1,5 +1,6 @@
 import { BaseModel } from '@/models/base.model';
 import { Course } from '@/models/course.model';
+import { LessonPart } from '@/models/lesson_part.model';
 import { Quiz } from '@/models/quiz.model';
 import { StudentCompleteLesson } from '@/models/student_complete_lesson.model';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
@@ -27,18 +28,25 @@ export class Lesson extends BaseModel {
   @Column({ type: 'simple-array', nullable: true, name: 'resource_link' })
   resourceLink?: string[];
 
-  @Column({ name: 'parti_no', nullable: true })
-  partNo?: number;
+  // @Column({ name: 'parti_no', nullable: true })
+  // partNo?: number;
 
-  @Column({ name: 'part_name', nullable: true })
-  partName?: string;
+  // @Column({ name: 'part_name', nullable: true })
+  // partName?: string;
 
-  @ManyToOne(() => Course, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'course_id' })
-  course!: Course;
+  @Column({ name: 'lesson_part_id', nullable: true })
+  lessonPartId?: string;
 
-  @OneToMany(() => Quiz, (quiz) => quiz.lesson, { cascade: true, eager: true })
-  quizzes!: Quiz[];
+  @ManyToOne(() => LessonPart, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'lesson_part_id' })
+  lessonPart!: LessonPart;
+
+  // @ManyToOne(() => Course, { onDelete: 'CASCADE' })
+  // @JoinColumn({ name: 'course_id' })
+  // course!: Course;
+
+  // @OneToMany(() => Quiz, (quiz) => quiz.lesson, { cascade: true, eager: true })
+  // quizzes!: Quiz[];
 
   @OneToMany(() => StudentCompleteLesson, (studentCompleteLesson) => studentCompleteLesson.lesson, { cascade: true })
   studentCompleteLessons!: Promise<StudentCompleteLesson[]>;

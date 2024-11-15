@@ -4,6 +4,7 @@ import { CourseCategory } from '@/models/course_category.model';
 import { Discount } from '@/models/discount.model';
 import { Lecturer } from '@/models/lecturer.model';
 import { Lesson } from '@/models/lesson.model';
+import { LessonPart } from '@/models/lesson_part.model';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 
 @Entity('courses')
@@ -56,6 +57,6 @@ export class Course extends BaseModel {
   @JoinColumn({ name: 'discount_id' })
   discount!: Discount;
 
-  @OneToMany(() => Lesson, (lesson) => lesson.course, { cascade: true })
-  lessons!: Lesson[];
+  @OneToMany(() => LessonPart, (lessonPart) => lessonPart.course, { cascade: true })
+  lessonParts!: LessonPart[];
 }

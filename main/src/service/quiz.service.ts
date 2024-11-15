@@ -22,9 +22,9 @@ export class QuizService extends BaseCrudService<Quiz> implements IQuizService<Q
     this.studentCompleteQuizRepository = studentCompleteQuizRepository;
   }
 
-  async findByLessonId(lessonId: string): Promise<Quiz[]> {
-    return await this.quizRepository.findByLessonId(lessonId);
-  }
+  // async findByLessonId(lessonId: string): Promise<Quiz[]> {
+  //   return await this.quizRepository.findByLessonId(lessonId);
+  // }
 
   async answerQuiz(
     quizId: string | undefined,
@@ -32,7 +32,7 @@ export class QuizService extends BaseCrudService<Quiz> implements IQuizService<Q
     choice: string | undefined
   ): Promise<boolean> {
     const quiz = await this.quizRepository.findOne({ filter: { id: quizId } });
-    if (quiz?.correctChoice === choice) {
+    if (quiz?.correctChoices!.includes(choice!)) {
       await this.studentCompleteQuizRepository.create({ data: { quizId, studentId } });
       return true;
     }
