@@ -103,7 +103,6 @@ function SignInForm() {
                     <Input
                       className="border-gray-600"
                       type="text"
-                      autoComplete="email"
                       placeholder={field.value}
                       {...field}
                     />
@@ -125,7 +124,6 @@ function SignInForm() {
                       <Input
                         className="border-gray-600"
                         type="password"
-                        autoComplete="current-password"
                         placeholder={field.value}
                         {...field}
                       />
