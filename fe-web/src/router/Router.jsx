@@ -24,6 +24,7 @@ import SignInForm from "@/pages/SignIn/SignInForm";
 import ForgotPassword from "@/pages/SignIn/ForgotPassword";
 import ResetPassword from "@/pages/SignIn/ResetPassword";
 import NotFound from "@/pages/NotFound";
+import SearchPage from "@/pages/searchPage/searchPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -55,6 +56,7 @@ const router = createBrowserRouter(
             element={<ResetPassword />}
           />
         </Route>
+        <Route path="search/" element={<SearchPage />} />
         <Route path="callback" element={<InfoInput />} />
         <Route path="result/:content" element={<ResultPage />} />
         {/* Lecturer layout */}
