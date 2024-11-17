@@ -69,5 +69,14 @@ studentRouter
     classValidate(UpdateProfileReqDto),
     authenticateJWT, // Middleware xác thực người dùng
     studentController.updateProfile.bind(studentController)
-  );
+  )
+
+ .get('/getall', studentController.getAllStudents.bind(studentController))
+
+.get('/getwithpaging', studentController.getStudentsWithPaging.bind(studentController))
+
+.get('/:id', studentController.getStudentById.bind(studentController))
+
+.delete('/:id', studentController.softDeleteStudent.bind(studentController))
+
 export default studentRouter;

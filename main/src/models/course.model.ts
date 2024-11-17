@@ -58,4 +58,8 @@ export class Course extends BaseModel {
 
   @OneToMany(() => Lesson, (lesson) => lesson.course, { cascade: true })
   lessons!: Lesson[];
+
+  @Column({ default: 'Pending', length: 20 }) // Default status is "Pending"
+  status!: string;
+
 }

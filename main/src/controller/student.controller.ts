@@ -20,6 +20,7 @@ import { ResetPasswordReqDto } from '@/dto/student/reset-password.req';
 import { ChangePasswordReqDto } from '@/dto/student/change-password.req';
 import { UpdateProfileReqDto } from '@/dto/student/update-profile.req';
 import { ErrorCode } from '@/enums/error-code.enums';
+import { PagingDto } from '@/dto/paging.dto';
 
 @injectable()
 export class StudentController {
@@ -201,4 +202,54 @@ export class StudentController {
       next(error);
     }
   }
+
+  async getAllStudents(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const result = await this.studentService.findAll();
+      res.send_ok('Danh sách tất cả học viên', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getStudentsWithPaging(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { page, rpp } = req.query;
+      const paging = new PagingDto(Number(page) || 1, Number(rpp) || 10);
+      const result = await this.studentService.findAllWithPaging({ paging });
+      res.send_ok('Danh sách học viên theo phân trang', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getStudentById(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { id } = req.params;
+      if (!id) throw new Error('Student ID is required');
+
+      const student = await this.studentService.findOne({ filter: { id } });
+      if (!student) {
+        res.status(404).send({ message: 'Không tìm thấy học viên' });
+        return;
+      }
+
+      res.send_ok('Học viên được tìm thấy', student);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async softDeleteStudent(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { id } = req.params;
+      if (!id) throw new Error('Student ID is required');
+
+      await this.studentService.findOneAndDelete({ filter: { id } });
+      res.send_ok('Xóa mềm học viên thành công');
+    } catch (error) {
+      next(error);
+    }
+  }
+
 }
