@@ -7,15 +7,9 @@ import {
   getSortedRowModel,
   useReactTable
 } from "@tanstack/react-table";
-import { ChevronDown, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
 // import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -27,6 +21,9 @@ import {
 } from "@/components/ui/table";
 import Searchbar from "../Searchbar/Searchbar";
 import PenLineIcon from "@/assets/PenLineIcon";
+import DialogComponent from "../Dialog/DialogComponent";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
 
 const data = [
   {
@@ -121,6 +118,7 @@ export default function DataTable() {
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [dialogContentValue, setDialogContentValue] = React.useState("");
 
   const table = useReactTable({
     data,
@@ -141,6 +139,24 @@ export default function DataTable() {
     }
   });
 
+  const addButton = (
+    <Button variant="primary" className="bg-primary-500 text-white px-10 py-2">
+      Thêm
+    </Button>
+  );
+
+  const dialogContent = (
+    <Label className="text-text/md/medium">
+      <span>Tên</span>
+      <Input
+        className="border-gray-600"
+        type="text"
+        placeholder={dialogContentValue}
+        onChange={(event) => setDialogContentValue(event.target.value)}
+      />
+    </Label>
+  );
+
   return (
     <div className="h-full min-w-[calc(100vh-320px-40px)] space-y-5">
       <div className="w-full flex gap-[10px]">
@@ -151,38 +167,13 @@ export default function DataTable() {
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Hiện cột <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <Button
-          variant="primary"
-          className="bg-primary-500 text-white px-10 py-2"
-        >
-          Thêm
-        </Button>
+
+        <DialogComponent
+          triggerButton={addButton}
+          title="Thêm"
+          description={null}
+          content={null}
+        />
       </div>
       <div className="rounded-md border">
         <Table>
