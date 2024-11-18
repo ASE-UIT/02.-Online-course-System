@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'WorkSans'),
-      home: const LoginScreen(),
+      home: HomeScreen(),
       routes: {
         'HomeScreen': (context) => const HomeScreen(),
         'AccountUpdateScreen': (context) => const AccountUpdateScreen(),
