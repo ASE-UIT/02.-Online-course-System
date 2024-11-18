@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/screens/AccountUpdateScreen.dart';
+import 'package:online_course_system/screens/EmailVerificationScreen.dart';
 import 'package:online_course_system/screens/HomeScreen.dart';
+import 'package:online_course_system/screens/PhoneVerificationScreen.dart';
+import 'package:online_course_system/screens/UpdateEmailScreen.dart';
+import 'package:online_course_system/screens/UpdatePhoneScreen.dart';
 import 'package:online_course_system/screens/course_detail/course_detail.dart';
 import 'package:online_course_system/screens/SignInScreen.dart';
 
@@ -17,7 +22,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(fontFamily: 'WorkSans'),
-      home: LoginScreen(),
+      home: const LoginScreen(),
+      routes: {
+        'HomeScreen': (context) => const HomeScreen(),
+        'AccountUpdateScreen': (context) => const AccountUpdateScreen(),
+        'UpdateEmailScreen': (context) => const UpdateEmailScreen(),
+        'UpdatePhoneScreen': (context) => const UpdatePhoneScreen(),
+        'PhoneVerificationScreen': (context) => const PhoneVerificationScreen(),
+        'EmailVerificationScreen': (context) => const EmailVerificationScreen(),
+      },
     );
   }
 }

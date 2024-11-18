@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
+import 'package:online_course_system/screens/AccountScreen.dart';
 import 'package:online_course_system/screens/CourseListScreen.dart';
 import 'package:online_course_system/screens/FavoriteScreen.dart';
 import 'package:online_course_system/screens/SearchScreen.dart';
@@ -20,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const Center(child: SearchScreen()),
     const Center(child: Text('Học tập')),
     const Center(child: FavoriteScreen()),
-    const Center(child: Text('Tài khoản')),
+    const Center(child: AccountScreen()),
   ];
 
   void _onItemTapped(int index) {
