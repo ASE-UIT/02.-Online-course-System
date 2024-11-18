@@ -31,19 +31,22 @@ import PenLineIcon from "@/assets/PenLineIcon";
 const data = [
   {
     id: "1",
-    name: "Nguyen Van A",
+    name: "Phần mềm",
+    thumbnail: "https://via.placeholder.com/150",
     courses: 5,
     createdBy: "Admin"
   },
   {
     id: "2",
-    name: "Tran Thi B",
+    name: "Phần mềm",
+    thumbnail: "https://via.placeholder.com/150",
     courses: 3,
     createdBy: "Admin"
   },
   {
     id: "3",
-    name: "Le Van C",
+    name: "Phần mềm",
+    thumbnail: "https://via.placeholder.com/150",
     courses: 8,
     createdBy: "Admin"
   }
@@ -54,6 +57,19 @@ export const columns = [
     accessorKey: "id",
     header: "ID",
     cell: ({ row }) => <div>{row.getValue("id")}</div>
+  },
+  {
+    accessorKey: "thumbnail",
+    header: "Ảnh đại diện",
+    cell: ({ row }) => (
+      <div>
+        <img
+          src={row.getValue("thumbnail")}
+          alt="Thumbnail"
+          style={{ width: "50px", height: "50px" }}
+        />
+      </div>
+    )
   },
   {
     accessorKey: "name",
@@ -175,7 +191,10 @@ export default function DataTable() {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      className="border-r text-text/md/semibold"
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -196,7 +215,7 @@ export default function DataTable() {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className="border-r ">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
