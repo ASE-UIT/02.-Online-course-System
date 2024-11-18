@@ -25,47 +25,50 @@ import ForgotPassword from "@/pages/SignIn/ForgotPassword";
 import ResetPassword from "@/pages/SignIn/ResetPassword";
 import NotFound from "@/pages/NotFound";
 import SearchPage from "@/pages/searchPage/searchPage";
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="web/" element={<UserLayout />}>
-        <Route index element={<Home />} />
-        <Route path="course/:id" element={<CourseDetail />} />
-        <Route path="sign-up" element={<SignUp />}>
-          <Route
-            path="*"
-            element={<Navigate to={"/web/sign-up/step1/email"} />}
-          />
-          <Route path="step1/:signUpType" element={<StepOne />} />
-          <Route
-            path="step2/:signUpType/:emailOrPhone"
-            element={<VerifyCode />}
-          />
-        </Route>
-        <Route path="sign-in" element={<SignIn />}>
-          <Route path="*" element={<Navigate to={"/web/sign-in"} />} />
-          <Route index element={<SignInForm />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route
-            path="step2/:signUpType/:emailOrPhone"
-            element={<VerifyCode />}
-          />
-          <Route
-            path="reset-password/:emailOrPhone/:otp"
-            element={<ResetPassword />}
-          />
-        </Route>
-        <Route path="search/" element={<SearchPage />} />
-        <Route path="callback" element={<InfoInput />} />
-        <Route path="result/:content" element={<ResultPage />} />
-        {/* Lecturer layout */}
-        <Route path="lecturer" element={<LecturerLayout />}>
-          <Route path="sign-up" element={<LecturerSignUp />} />
-          <Route path="result" element={<LecturerResultPage />} />
-          <Route path="course" element={<TeacherCoursePage />} />
-          <Route path="courseAdd" element={<CourseAdd />} />
-          <Route path="course/:id" element={<LecturerCourseDetail />} />
+        <Route path="*" element={<DefaultLayout />}>
+          <Route index element={<Home />} />
+          <Route path="course/:id" element={<CourseDetail />} />
+          <Route path="sign-up" element={<SignUp />}>
+            <Route
+              path="*"
+              element={<Navigate to={"/web/sign-up/step1/email"} />}
+            />
+            <Route path="step1/:signUpType" element={<StepOne />} />
+            <Route
+              path="step2/:signUpType/:emailOrPhone"
+              element={<VerifyCode />}
+            />
+          </Route>
+          <Route path="sign-in" element={<SignIn />}>
+            <Route path="*" element={<Navigate to={"/web/sign-in"} />} />
+            <Route index element={<SignInForm />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route
+              path="step2/:signUpType/:emailOrPhone"
+              element={<VerifyCode />}
+            />
+            <Route
+              path="reset-password/:emailOrPhone/:otp"
+              element={<ResetPassword />}
+            />
+          </Route>
+          <Route path="search/" element={<SearchPage />} />
+          <Route path="callback" element={<InfoInput />} />
+          <Route path="result/:content" element={<ResultPage />} />
+          {/* Lecturer layout */}
+          <Route path="lecturer" element={<LecturerLayout />}>
+            <Route path="sign-up" element={<LecturerSignUp />} />
+            <Route path="result" element={<LecturerResultPage />} />
+            <Route path="course" element={<TeacherCoursePage />} />
+            <Route path="courseAdd" element={<CourseAdd />} />
+            <Route path="course/:id" element={<LecturerCourseDetail />} />
+          </Route>
         </Route>
       </Route>
       <Route path="*" element={<Navigate to={<NotFound />} />} />
