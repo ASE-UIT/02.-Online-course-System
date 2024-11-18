@@ -23,6 +23,8 @@ import CourseAdd from "@/pages/Lecturer/TeacherCoursePage/AddCourse/CourseAdd";
 import SignInForm from "@/pages/SignIn/SignInForm";
 import ForgotPassword from "@/pages/SignIn/ForgotPassword";
 import ResetPassword from "@/pages/SignIn/ResetPassword";
+import NotFound from "@/pages/NotFound";
+import SearchPage from "@/pages/searchPage/searchPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,9 +47,16 @@ const router = createBrowserRouter(
           <Route path="*" element={<Navigate to={"/web/sign-in"} />} />
           <Route index element={<SignInForm />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="reset-password" element={<ResetPassword />} />
-          <Route path="step2/:type/:emailOrPhone" element={<VerifyCode />} />
+          <Route
+            path="step2/:signUpType/:emailOrPhone"
+            element={<VerifyCode />}
+          />
+          <Route
+            path="reset-password/:emailOrPhone/:otp"
+            element={<ResetPassword />}
+          />
         </Route>
+        <Route path="search/" element={<SearchPage />} />
         <Route path="callback" element={<InfoInput />} />
         <Route path="result/:content" element={<ResultPage />} />
         {/* Lecturer layout */}
@@ -59,7 +68,7 @@ const router = createBrowserRouter(
           <Route path="course/:id" element={<LecturerCourseDetail />} />
         </Route>
       </Route>
-      <Route path="*" element={<Navigate to={"./web/"} />} />
+      <Route path="*" element={<Navigate to={<NotFound />} />} />
     </Route>
   ),
   {
