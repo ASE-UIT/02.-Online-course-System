@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -14,9 +14,7 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { studentLogin } from "@/api";
-import { addAuth } from "@/store/slices/authSlice";
-import { useDispatch } from "react-redux";
+import { studentResetPassword } from "@/api";
 
 const formSchema = z.object({
   password: z.string().min(6, {
@@ -29,7 +27,7 @@ const formSchema = z.object({
 
 function ResetPassword() {
   const { toast } = useToast();
-  const dispatch = useDispatch();
+  const { emailOrPhone, otp } = useParams();
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -42,34 +40,43 @@ function ResetPassword() {
 
   async function onSubmit(values) {
     setIsLoading(true);
-    const { email, password } = values;
-    const respone = await studentLogin(email, password);
 
-    if (respone.status === 200 || respone.data.code === 200) {
-      console.log("respone.data", respone.data.data.token);
-      const token = respone.data.data.token;
-      dispatch(
-        addAuth({
-          token
-        })
-      );
-      navigate("/");
-      toast({
-        title: <p className=" text-green-700">Đăng nhập thành công</p>,
-        description: "Chào mừng bạn trở lại",
-        status: "success",
-        duration: 2000
+    const { confirmPassword, password } = values;
+    if (confirmPassword !== password) {
+      form.setError("confirmPassword", {
+        message: "Mật khẩu không trùng khớp"
       });
-    } else if (respone.errors?.code === "NF_01") {
-      form.setError("password", {
-        message: respone.errors.msg
-      });
-    } else {
-      toast({
-        title: <p className=" text-red-700">Đăng nhập thất bại</p>,
-        description: "Lỗi không xác định",
-        duration: 2000
-      });
+      setIsLoading(false);
+      return;
+    }
+    try {
+      const respone = await studentResetPassword(emailOrPhone, otp, password);
+
+      if (respone.code === 200 || respone.data.code === 200) {
+        console.log("respone.data", respone.data.data.token);
+        navigate("/web/sign-in");
+        toast({
+          title: <p className=" text-green-700">Đổi mật khẩu thành công</p>,
+          description: "OTP đã được gửi để đặt lại mật khẩu",
+          status: "success",
+          duration: 2000
+        });
+      }
+    } catch (error) {
+      if (error.response.data.errors?.code === "INVALID_OTP") {
+        toast({
+          title: <p className=" text-red-700">Lỗi OTP</p>,
+          description: error.response.data.errors.msg,
+          duration: 2000
+        });
+      } else {
+        toast({
+          title: <p className=" text-red-700">Thất bại</p>,
+          description: "Lỗi không xác định",
+          duration: 2000
+        });
+      }
+      setIsLoading(false);
     }
     setIsLoading(false);
   }
