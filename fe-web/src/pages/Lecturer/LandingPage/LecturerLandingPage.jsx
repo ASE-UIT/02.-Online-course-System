@@ -231,8 +231,7 @@ return (
 
         </section>
 
-        {/* Call to Action Section */}
-        <section className="py-5 text-center bg-gray-300">
+        <section className="my-5 py-5 text-center bg-gray-300">
         <div className="max-w-full mx-auto px-8 flex flex-col items-center justify-between space-y-5">
                 <p className="text-display/sm/semibold">Trở thành giảng viên ngay hôm nay</p>
                 <p className="text-text/sm/regular">Tham gia một trong những thị trường học tập trực tuyến lớn nhất thế giới.</p>
