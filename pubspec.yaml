@@ -38,8 +38,12 @@ dependencies:
   pin_code_fields: ^8.0.1
   intl: ^0.18.0
   fluttertoast: ^8.1.3
+  http: ^1.1.0
+  provider: ^6.0.0
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
+
   flutter_test:
     sdk: flutter
 
