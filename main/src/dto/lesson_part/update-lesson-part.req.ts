@@ -1,7 +1,7 @@
 import { UpdateLessonRequest } from '@/dto/lessons/update-lesson.req';
 import { UpdateQuizzReq } from '@/dto/quizz/update-quizz.req';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsString, Min, Validate, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Min, Validate, ValidateNested } from 'class-validator';
 
 export class UpdateLessonPartReq {
   @IsNotEmpty()
@@ -13,13 +13,13 @@ export class UpdateLessonPartReq {
   @IsString()
   partName!: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => UpdateLessonRequest)
   @ValidateNested({ each: true })
-  lessons!: UpdateLessonRequest[];
+  lessons?: UpdateLessonRequest[];
 
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => UpdateQuizzReq)
   @ValidateNested({ each: true })
-  quizzes!: UpdateQuizzReq[];
+  quizzes?: UpdateQuizzReq[];
 }

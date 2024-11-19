@@ -8,11 +8,13 @@ import {
   IsDate,
   IsOptional,
   ValidateNested,
-  IsISO8601
+  IsISO8601,
+  IsBoolean
 } from 'class-validator';
 import { DecimalPrecision } from './decimal-10-1-custom';
 import { UpdateLessonPartReq } from '@/dto/lesson_part/update-lesson-part.req';
 import { Type } from 'class-transformer';
+import { CourseStatus } from '@/enums/course-status.enum';
 
 export class UpdateCourseRequest {
   @IsOptional()
@@ -25,7 +27,29 @@ export class UpdateCourseRequest {
 
   @IsOptional()
   @IsString()
-  description?: string;
+  shortDescription?: string;
+
+  @IsOptional()
+  @IsString()
+  introduction?: string;
+
+  @IsOptional()
+  @IsString()
+  participants?: string;
+
+  @IsOptional()
+  courseTargets?: string[];
+
+  @IsOptional()
+  @IsString()
+  welcomeJoin?: string;
+
+  @IsOptional()
+  @IsString()
+  videoSale?: string;
+
+  @IsOptional()
+  courseMaterials?: string[];
 
   @IsOptional()
   @IsString()
@@ -40,8 +64,35 @@ export class UpdateCourseRequest {
   sellPrice?: number;
 
   @IsOptional()
-  @IsEnum(DifficultyLevel)
-  difficultyLevel?: DifficultyLevel;
+  @IsNumber()
+  lowestPrice?: number;
+
+  @IsOptional()
+  @IsString()
+  socialGroupLink?: string;
+
+  @IsOptional()
+  @IsString()
+  courseLink?: string;
+
+  @IsOptional()
+  tags?: string[];
+
+  @IsBoolean()
+  @IsOptional()
+  isFreeCourse?: boolean;
+
+  @IsOptional()
+  @IsISO8601()
+  startFreeDate?: Date;
+
+  @IsOptional()
+  @IsISO8601()
+  endFreeDate?: Date;
+
+  @IsEnum(CourseStatus)
+  @IsOptional()
+  status?: boolean;
 
   @IsOptional()
   @IsISO8601()

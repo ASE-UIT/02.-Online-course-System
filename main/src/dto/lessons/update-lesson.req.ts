@@ -1,5 +1,5 @@
 import { CreateQuizzReq } from '@/dto/quizz/create-quizz.req';
-import { IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 export class UpdateLessonRequest {
   @IsOptional()
@@ -24,4 +24,12 @@ export class UpdateLessonRequest {
 
   @IsOptional()
   resourceLink?: string[];
+
+  @IsOptional()
+  @IsBoolean()
+  isFreeTrial?: boolean;
+
+  @IsOptional()
+  @IsString()
+  introduction?: string;
 }
