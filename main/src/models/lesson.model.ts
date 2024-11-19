@@ -16,6 +16,9 @@ export class Lesson extends BaseModel {
   @Column({ length: 150 })
   title!: string;
 
+  @Column({ type: 'text', nullable: true })
+  introduction?: string;
+
   @Column({ type: 'decimal', precision: 10, scale: 1 })
   duration!: number;
 
@@ -27,6 +30,9 @@ export class Lesson extends BaseModel {
 
   @Column({ type: 'simple-array', nullable: true, name: 'resource_link' })
   resourceLink?: string[];
+
+  @Column({ type: 'boolean', name: 'is_free_trial', default: false })
+  isFreeTrial!: boolean;
 
   // @Column({ name: 'parti_no', nullable: true })
   // partNo?: number;

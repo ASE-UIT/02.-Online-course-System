@@ -61,6 +61,8 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
       relations: ['lessonParts']
     });
 
+    console.log('existingCourse', JSON.stringify(existingCourse));
+
     if (!existingCourse) {
       throw new Error('Course not found'); // Thông báo lỗi nếu không tìm thấy khóa học
     }
