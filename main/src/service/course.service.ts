@@ -17,6 +17,7 @@ import { IsNull, Not } from 'typeorm';
 import { courseRepository } from '@/container/course.container';
 import { CourseSearchFilterReq } from '@/dto/course/course-search-filter.req';
 import { CourseSearchSortReq } from '@/dto/course/course-search-sort.req';
+import { LessonPart } from '@/models/lesson_part.model';
 
 @injectable()
 export class CourseService extends BaseCrudService<Course> implements ICourseService<Course> {
@@ -54,8 +55,13 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
     return await this.courseRepository.create({ data: course });
   }
 
-  async update(id: string, data: UpdateCourseRequest): Promise<UpdateCourseResponse> {
-    const existingCourse = await this.courseRepository.findOne({ filter: { id } });
+  async update(id: string, data: UpdateCourseRequest): Promise<Course> {
+    const existingCourse = await this.courseRepository.findOne({
+      filter: { id },
+      relations: ['lessonParts']
+    });
+
+    console.log('existingCourse', JSON.stringify(existingCourse));
 
     if (!existingCourse) {
       throw new Error('Course not found'); // Thông báo lỗi nếu không tìm thấy khóa học
@@ -64,14 +70,17 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
     // Cập nhật các thuộc tính của khóa học
     const updatedData = { ...existingCourse, ...data }; // Gộp dữ liệu cũ với dữ liệu mới
 
+    // for (const lessonPart of updatedData.lessonParts) {
+    //   (lessonPart as unknown as LessonPart).courseId = id;
+    // }
+
+    console.log('updatedData', JSON.stringify(updatedData));
+
     // Gọi hàm findOneAndUpdate từ IBaseRepository để cập nhật khóa học
-    await this.courseRepository.findOneAndUpdate({
-      filter: { id },
-      updateData: updatedData
-    });
+    const updatedResult = await this.courseRepository.save(updatedData as Course);
 
     // Trả về thông tin khóa học đã cập nhật dưới dạng DTO
-    return convertToDto(UpdateCourseResponse, updatedData);
+    return updatedResult;
   }
 
   async getClosetLiveCourse(amount: number): Promise<Course[]> {

@@ -25,6 +25,7 @@ import { StudentCompleteQuiz } from '@/models/student_complete_quiz.model';
 import { Student } from '@/models/student.model';
 import { GlobalConfig } from '@/utils/config/global-config.util';
 import { CourseRating } from '@/models/course_rating.model';
+import { LessonPart } from '@/models/lesson_part.model';
 
 const models = [
   Account,
@@ -49,7 +50,8 @@ const models = [
   StudentCompleteLesson,
   StudentCompleteQuiz,
   Student,
-  CourseRating
+  CourseRating,
+  LessonPart
 ];
 
 export class AppDataSourceSingleton {

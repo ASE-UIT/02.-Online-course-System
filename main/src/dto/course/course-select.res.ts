@@ -8,15 +8,25 @@ export const CourseSelectRes = {
 
   name: true,
 
-  description: true,
+  nameEn: true,
+
+  shortDescription: true,
+
+  status: true,
 
   thumbnail: true,
 
-  price: true,
+  originalPrice: true,
+
+  sellPrice: true,
+
+  totalStudents: true,
+
+  totalReviews: true,
+
+  averageRating: true,
 
   duration: true,
-
-  difficultyLevel: true,
 
   startDate: true,
 
