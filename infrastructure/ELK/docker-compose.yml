@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  elasticsearch-eduhub:
+    container_name: elasticsearch-eduhub
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.3
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
+      - xpack.security.transport.ssl.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticvolume:/usr/share/elasticsearch/data
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+
+  logstash-eduhub:
+    container_name: logstash-eduhub
+    build:
+      context: ./logstash/
+      dockerfile: Dockerfile
+    ports:
+      - "5098:5000"
+    env_file:
+      - .env
+    environment:
+      - CONFIG_SUPPORT_ESCAPE=true
+      - ELASTICSEARCH_URL=http://elasticsearch-eduhub:9200
+
+    depends_on:
+      - elasticsearch-eduhub
+    volumes:
+      - logstashvolume:/usr/share/logstash/data
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 1G
+
+  kibana-eduhub:
+    container_name: kibana-eduhub
+    image: docker.elastic.co/kibana/kibana:8.5.3
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch-eduhub
+    environment:
+      SERVER_NAME: kibana.example.org
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch-eduhub:9200"]'
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 500M
+
+volumes:
+  elasticvolume:
+  logstashvolume:
