@@ -20,7 +20,7 @@ const CourseList = () => {
     }, []);
     return (
         <div className="w-full flex flex-col space-y-5">
-            <div className="w-full flex px-24">
+            <div className="w-full flex px-24 mt-5">
                 <p className="text-display/md/bold text-black">Danh sách khóa học</p>
             </div>
             <section className="flex flex-col px-24 space-y-4">
