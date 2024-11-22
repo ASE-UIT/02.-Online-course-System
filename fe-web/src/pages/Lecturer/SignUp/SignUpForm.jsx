@@ -249,7 +249,7 @@ const SignUpForm = () => {
       <div className="text-center text-text/md/medium text-black">
         Đã có tài khoản?{" "}
         <Link
-          to="/web/sign-in"
+          to="../sign-in"
           className="text-primary text-text/md/semibold underline"
         >
           Đăng nhập ngay
