@@ -45,36 +45,58 @@ function SignInForm() {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  const formatPhoneNumber = (phone) => {
+    if (phone.startsWith("0")) {
+      return `+84${phone.slice(1)}`;
+    }
+    return phone;
+  };
+
   async function onSubmit(values) {
     setIsLoading(true);
     const { email, password } = values;
-    const respone = await studentLogin(email, password);
+    try {
+      const formatEmail = email.includes("@")
+        ? email
+        : formatPhoneNumber(email);
+      const respone = await studentLogin(formatEmail, password);
 
-    if (respone.status === 200 || respone.data.code === 200) {
-      console.log("respone.data", respone.data.data.token);
-      const token = respone.data.data.token;
-      dispatch(
-        addAuth({
-          token
-        })
-      );
-      navigate("/web/");
-      toast({
-        title: <p className=" text-green-700">Đăng nhập thành công</p>,
-        description: "Chào mừng bạn trở lại",
-        status: "success",
-        duration: 2000
-      });
-    } else if (respone.errors?.code === "NF_01") {
-      form.setError("password", {
-        message: respone.errors.msg
-      });
-    } else {
-      toast({
-        title: <p className=" text-red-700">Đăng nhập thất bại</p>,
-        description: "Lỗi không xác định",
-        duration: 2000
-      });
+      if (respone.status === 200 || respone.data.code === 200) {
+        console.log("respone.data", respone.data.data.token);
+        const token = respone.data.data.token;
+        dispatch(
+          addAuth({
+            token
+          })
+        );
+        navigate("/web/");
+        toast({
+          title: <p className=" text-green-700">Đăng nhập thành công</p>,
+          description: "Chào mừng bạn trở lại",
+          status: "success",
+          duration: 2000
+        });
+      }
+    } catch (error) {
+      if (error.response.data.errors?.code === "NF_01") {
+        form.setError("email", {
+          message: error.response.data.errors.msg
+        });
+        toast({
+          title: <p className=" text-red-700">Đăng nhập thất bại</p>,
+          description:
+            error.response.data.errors?.msg || "Tài khoản không tồn tại",
+          duration: 2000
+        });
+        setIsLoading(false);
+      } else {
+        toast({
+          title: <p className=" text-red-700">Đăng nhập thất bại</p>,
+          description: "Lỗi không xác định",
+          duration: 2000
+        });
+        setIsLoading(false);
+      }
     }
     setIsLoading(false);
   }
