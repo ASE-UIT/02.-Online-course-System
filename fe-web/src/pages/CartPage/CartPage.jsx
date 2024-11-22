@@ -2,7 +2,7 @@ import { CourseCard } from "@/components/Courses/CourseCard";
 import {CourseCartCard} from "@/pages/CartPage/CourseCartCard.jsx";
 
 import { useEffect, useState } from "react";
-import { courseApi } from "@/api/courseApi";
+import { courseApi, courseCartApi } from "@/api/courseApi";
 import * as React from 'react';
 import { Checkbox } from '@/components/ui/checkbox'
 import {CheckIcon} from "lucide-react";
@@ -91,14 +91,20 @@ const mockCourseData = [
 ];
 
 const CartPage = () => {
-    const [liveCourses, setLiveCourses] = useState([]);
-    const [selectedAllCourses, setSelectedAllCourses] = useState([]);
-
-    const getLiveCourses = async () => {
-        const response = await courseApi.getLiveCourses();
-        if (response?.success) {
-            setLiveCourses(response.data);
+    const [myCart, setMyCart] = useState([]);
+    const [cartResponse, setCartResponse] = useState(null);
+    const getMyCart = async () => {
+        try {
+            const response = await courseCartApi.getMyCart();
+            if (response?.success) {
+                setMyCart(response.data.items);
+                setCartResponse(response.data);
+                console.log(response.data);
+            }
+        } catch (error) {
+            console.log(error.response?.errors.msg);
         }
+        
     };
     const [selectedCourses, setSelectedCourses] = useState([]);
 
@@ -117,7 +123,7 @@ const CartPage = () => {
     };
 
     useEffect(() => {
-        getLiveCourses();
+        getMyCart();
     }, []);
     return (
         <div className="w-full flex flex-col space-y-5">
@@ -142,9 +148,9 @@ const CartPage = () => {
                     </label>
                 </div>
                 <div className="space-y-5 grid grid-cols-1">
-                    {mockCourseData.map((course) => (
+                    {myCart.map((course) => (
                         <CourseCartCard
-                            key={course.id}
+                            key={course.courseId}
                             course={course}
                             checked={selectedCourses.includes(course.id)}
                             onChange={(checked) => handleSelectCourse(course.id, checked)}
