@@ -26,6 +26,7 @@ import ResetPassword from "@/pages/SignIn/ResetPassword";
 import NotFound from "@/pages/NotFound";
 import SearchPage from "@/pages/searchPage/searchPage";
 import DefaultLayout from "@/layouts/DefaultLayout";
+import LecturerSignIn from "@/pages/Lecturer/SignIn/LecturerSignIn";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -63,6 +64,7 @@ const router = createBrowserRouter(
           <Route path="result/:content" element={<ResultPage />} />
           {/* Lecturer layout */}
           <Route path="lecturer" element={<LecturerLayout />}>
+            <Route path="sign-in" element={<LecturerSignIn />} />
             <Route path="sign-up" element={<LecturerSignUp />} />
             <Route path="result" element={<LecturerResultPage />} />
             <Route path="course" element={<TeacherCoursePage />} />
