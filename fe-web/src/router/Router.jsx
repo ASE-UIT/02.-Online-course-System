@@ -68,8 +68,8 @@ const router = createBrowserRouter(
             <Route path="sign-in" element={<LecturerSignIn />} />
             <Route path="sign-up" element={<LecturerSignUp />} />
             <Route path="result" element={<LecturerResultPage />} />
-              <Route path="landing" element={<LecturerLandingPage />} />
-              <Route path="course" element={<TeacherCoursePage />} />
+            <Route path="landing" element={<LecturerLandingPage />} />
+            <Route path="course" element={<TeacherCoursePage />} />
             <Route path="courseAdd" element={<CourseAdd />} />
             <Route path="course/:id" element={<LecturerCourseDetail />} />
           </Route>
