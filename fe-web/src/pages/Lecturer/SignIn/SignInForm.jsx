@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,13 +16,8 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { studentLogin } from "@/api";
+import { loginLecturer } from "@/api";
 import { addAuth } from "@/store/slices/authSlice";
-import { useDispatch } from "react-redux";
-import GoogleSignIn from "./Google/GoogleSignIn";
-import CustomFacebookSignIn from "./Facebook/FacebookSignIn";
-import { GoogleOAuthProvider } from "@react-oauth/google";
-import config from "@/config";
 
 const formSchema = z.object({
   email: z.string().min(6, {
@@ -59,7 +55,7 @@ function SignInForm() {
       const formatEmail = email.includes("@")
         ? email
         : formatPhoneNumber(email);
-      const respone = await studentLogin(formatEmail, password);
+      const respone = await loginLecturer(formatEmail, password);
 
       if (respone.status === 200 || respone.data.code === 200) {
         console.log("respone.data", respone.data.data.token);
@@ -69,7 +65,7 @@ function SignInForm() {
             token
           })
         );
-        navigate("/web/");
+        navigate("/web/lecturer/");
         toast({
           title: <p className=" text-green-700">Đăng nhập thành công</p>,
           description: "Chào mừng bạn trở lại",
@@ -80,7 +76,7 @@ function SignInForm() {
     } catch (error) {
       if (error.response.data.errors?.code === "NF_01") {
         form.setError("email", {
-          message: error.response.data.errors.msg
+          message: error.response.data.errors?.msg || "Tài khoản không tồn tại"
         });
         toast({
           title: <p className=" text-red-700">Đăng nhập thất bại</p>,
@@ -107,7 +103,7 @@ function SignInForm() {
         <div className="text-center flex flex-col gap-3">
           <h2 className="text-display/lg/semibold text-black">Đăng nhập</h2>
           <p className="text-text/md/regular text-[#747474]">
-            Đăng nhập để tiếp tục con đường tri thức của bạn
+            Đăng nhập để bắt đầu giảng dạy
           </p>
         </div>
         <Form {...form}>
@@ -118,13 +114,13 @@ function SignInForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
-                    Email<span className="text-error-500">*</span>
+                    Email hoặc số điện thoại
+                    <span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       className="border-gray-600"
-                      type="email"
-                      autoComplete="email"
+                      type="text"
                       placeholder={field.value}
                       {...field}
                     />
@@ -155,7 +151,7 @@ function SignInForm() {
                   </FormItem>
                 )}
               />
-              <Link to={"forgot-password"}>
+              <Link to={"forgot-password"} className="hidden">
                 <p className="hover:cursor-pointer mt-2 text-text/md/medium text-primary-500 text-right self-stretch">
                   Quên mật khẩu?
                 </p>
@@ -175,7 +171,7 @@ function SignInForm() {
       <div className="text-center text-text/md/medium text-black">
         Chưa có tài khoản?{" "}
         <Link
-          to="/web/sign-up/step1/email"
+          to="../sign-up"
           className="text-primary text-text/md/semibold underline"
         >
           Đăng ký ngay
@@ -198,16 +194,6 @@ function SignInForm() {
           </div>
           <span className="text-text/md/semibold w-full">Số điện thoại</span>
         </Button> */}
-        <div className="flex flex-col gap-2">
-          <div className="w-full">
-            <GoogleOAuthProvider clientId={config.REACT_APP_GOOGLE_CLIENT_ID}>
-              <GoogleSignIn />
-            </GoogleOAuthProvider>
-          </div>
-          <div className="w-full">
-            <CustomFacebookSignIn />
-          </div>
-        </div>
       </div>
     </div>
   );
