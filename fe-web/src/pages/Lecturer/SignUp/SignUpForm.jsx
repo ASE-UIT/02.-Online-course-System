@@ -12,22 +12,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
 
 const formSchema = z
   .object({
-    firstName: z.string().min(2, {
+    fullName: z.string().min(2, {
       message: "Họ phải có ít nhất 2 ký tự."
     }),
-    lastName: z.string().min(2, {
-      message: "Tên phải có ít nhất 2 ký tự."
-    }),
+    title: z.string(),
     email: z.string().email({
       message: "Email không hợp lệ."
     }),
-    password: z.string().min(8, {
-      message: "Mật khẩu phải có ít nhất 8 ký tự."
+    phone: z.string().min(10, {
+      message: "Số điện thoại phải có ít nhất 10 ký tự."
     }),
-    confirmPassword: z.string()
+    sampleVideoLink: z.string().url({
+      message: "Link video không hợp lệ."
+    }),
+    socialMediaLink: z.string().url({
+      message: "Link mạng xã hội không hợp lệ."
+    }),
+    teachingTopic: z.string(),
+    teachingExperience: z.string()
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Mật khẩu không khớp.",
@@ -46,9 +53,12 @@ const SignUpForm = () => {
       confirmPassword: ""
     }
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   function onSubmit(values) {
-    console.log(values);
+    setIsLoading(true);
+    console.log("sign up lec values", values);
+    setIsLoading(false);
     navigate(`/web/lecturer/result`);
   }
 
@@ -67,14 +77,16 @@ const SignUpForm = () => {
             <div className="grid grid-cols-2 gap-5">
               <FormField
                 control={form.control}
-                name="firstName"
+                name="fullName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-text/md/medium">Họ</FormLabel>
+                    <FormLabel className="text-text/md/medium">
+                      Họ tên<span className="text-error-500">*</span>
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className="border-gray-600"
-                        autoComplete="given-name"
+                        autoComplete="name"
                         placeholder={field.value}
                         {...field}
                       />
@@ -85,16 +97,57 @@ const SignUpForm = () => {
               />
               <FormField
                 control={form.control}
-                name="lastName"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-text/md/medium">
-                      Tên<span className="text-error-500">*</span>
+                      Chức danh
                     </FormLabel>
                     <FormControl>
                       <Input
                         className="border-gray-600"
-                        autoComplete="family-name"
+                        placeholder={field.value}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-5">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-text/md/medium">
+                      Email<span className="text-error-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-gray-600"
+                        autoComplete="email"
+                        placeholder={field.value}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-text/md/medium">
+                      Số điện thoại
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-gray-600"
+                        autoComplete="phone"
                         placeholder={field.value}
                         {...field}
                       />
@@ -106,17 +159,16 @@ const SignUpForm = () => {
             </div>
             <FormField
               control={form.control}
-              name="email"
+              name="sampleVideoLink"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
-                    Email<span className="text-error-500">*</span>
+                    Link video mẫu
                   </FormLabel>
                   <FormControl>
                     <Input
                       className="border-gray-600"
-                      type="email"
-                      autoComplete="email"
+                      type="text"
                       placeholder={field.value}
                       {...field}
                     />
@@ -128,17 +180,16 @@ const SignUpForm = () => {
 
             <FormField
               control={form.control}
-              name="password"
+              name="socialMediaLink"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
-                    Mật khẩu<span className="text-error-500">*</span>
+                    Liên kết mạng xã hội
                   </FormLabel>
                   <FormControl>
                     <Input
                       className="border-gray-600"
-                      type="password"
-                      autoComplete="new-password"
+                      type="text"
                       placeholder={field.value}
                       {...field}
                     />
@@ -149,17 +200,35 @@ const SignUpForm = () => {
             />
             <FormField
               control={form.control}
-              name="confirmPassword"
+              name="teachingTopic"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
-                    Xác nhận mật khẩu<span className="text-error-500">*</span>
+                    Chủ đề giảng dạy
                   </FormLabel>
                   <FormControl>
                     <Input
                       className="border-gray-600"
-                      type="password"
-                      autoComplete="new-password"
+                      type="text"
+                      placeholder={field.value}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="teachingExperience"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-text/md/medium">
+                    Kinh nghiệm giảng dạy
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="border-gray-600"
                       placeholder={field.value}
                       {...field}
                     />
@@ -180,7 +249,7 @@ const SignUpForm = () => {
       <div className="text-center text-text/md/medium text-black">
         Đã có tài khoản?{" "}
         <Link
-          to="/web/sign-in"
+          to="../sign-in"
           className="text-primary text-text/md/semibold underline"
         >
           Đăng nhập ngay

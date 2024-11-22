@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,11 +14,14 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form";
-import { GoogleIcon, FacebookIcon } from "@/assets";
-import { toast } from "react-toastify";
+import { useToast } from "@/hooks/use-toast";
 import { studentLogin } from "@/api";
 import { addAuth } from "@/store/slices/authSlice";
 import { useDispatch } from "react-redux";
+import GoogleSignIn from "./Google/GoogleSignIn";
+import CustomFacebookSignIn from "./Facebook/FacebookSignIn";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import config from "@/config";
 
 const formSchema = z.object({
   email: z.string().min(6, {
@@ -29,6 +33,7 @@ const formSchema = z.object({
 });
 
 function SignInForm() {
+  const { toast } = useToast();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const form = useForm({
@@ -38,22 +43,62 @@ function SignInForm() {
       password: ""
     }
   });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const formatPhoneNumber = (phone) => {
+    if (phone.startsWith("0")) {
+      return `+84${phone.slice(1)}`;
+    }
+    return phone;
+  };
 
   async function onSubmit(values) {
+    setIsLoading(true);
     const { email, password } = values;
-    const respone = await studentLogin(email, password);
+    try {
+      const formatEmail = email.includes("@")
+        ? email
+        : formatPhoneNumber(email);
+      const respone = await studentLogin(formatEmail, password);
 
-    if (respone.status === 200) {
-      console.log("respone.data.data.token", respone.data.data.token);
-      dispatch(addAuth(respone.data.data.token.toString()));
-      navigate("/");
-    } else if (respone.errors.code === "NF_01") {
-      form.setError("password", {
-        message: respone.errors.msg
-      });
-    } else {
-      toast.error("Đăng nhập thất bại");
+      if (respone.status === 200 || respone.data.code === 200) {
+        console.log("respone.data", respone.data.data.token);
+        const token = respone.data.data.token;
+        dispatch(
+          addAuth({
+            token
+          })
+        );
+        navigate("/web/");
+        toast({
+          title: <p className=" text-green-700">Đăng nhập thành công</p>,
+          description: "Chào mừng bạn trở lại",
+          status: "success",
+          duration: 2000
+        });
+      }
+    } catch (error) {
+      if (error.response.data.errors?.code === "NF_01") {
+        form.setError("email", {
+          message: error.response.data.errors.msg
+        });
+        toast({
+          title: <p className=" text-red-700">Đăng nhập thất bại</p>,
+          description:
+            error.response.data.errors?.msg || "Tài khoản không tồn tại",
+          duration: 2000
+        });
+        setIsLoading(false);
+      } else {
+        toast({
+          title: <p className=" text-red-700">Đăng nhập thất bại</p>,
+          description: "Lỗi không xác định",
+          duration: 2000
+        });
+        setIsLoading(false);
+      }
     }
+    setIsLoading(false);
   }
 
   return (
@@ -88,32 +133,41 @@ function SignInForm() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-text/md/medium">
-                    Mật khẩu<span className="text-error-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="border-gray-600"
-                      type="password"
-                      autoComplete="current-password"
-                      placeholder={field.value}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-text/md/medium">
+                      Mật khẩu<span className="text-error-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="border-gray-600"
+                        type="password"
+                        autoComplete="current-password"
+                        placeholder={field.value}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Link to={"forgot-password"}>
+                <p className="hover:cursor-pointer mt-2 text-text/md/medium text-primary-500 text-right self-stretch">
+                  Quên mật khẩu?
+                </p>
+              </Link>
+            </div>
+
             <Button
+              disabled={isLoading}
               type="submit"
               className="w-full mt-5 rounded-xl shadow-[3px_10px_20px_0px_rgba(0,56,255,0.38)]"
             >
-              Tiếp tục
+              {isLoading ? "Đang xử lý..." : "Tiếp tục"}
             </Button>
           </form>
         </Form>
@@ -144,31 +198,15 @@ function SignInForm() {
           </div>
           <span className="text-text/md/semibold w-full">Số điện thoại</span>
         </Button> */}
-        <div className="flex justify-center items-center gap-5">
-          <Link to={"/web/callback"} className="w-full">
-            <Button
-              variant="outline"
-              size="icon"
-              className="w-full flex rounded-xl"
-            >
-              <div className="pl-4">
-                <GoogleIcon />
-              </div>
-              <span className="text-text/md/semibold w-full">Google</span>
-            </Button>
-          </Link>
-          <Link to={"/web/callback"} className="w-full">
-            <Button
-              variant="outline"
-              size="icon"
-              className="w-full flex rounded-xl"
-            >
-              <div className="pl-4">
-                <FacebookIcon />
-              </div>
-              <span className="text-text/md/semibold w-full">Facebook</span>
-            </Button>
-          </Link>
+        <div className="flex flex-col gap-2">
+          <div className="w-full">
+            <GoogleOAuthProvider clientId={config.REACT_APP_GOOGLE_CLIENT_ID}>
+              <GoogleSignIn />
+            </GoogleOAuthProvider>
+          </div>
+          <div className="w-full">
+            <CustomFacebookSignIn />
+          </div>
         </div>
       </div>
     </div>

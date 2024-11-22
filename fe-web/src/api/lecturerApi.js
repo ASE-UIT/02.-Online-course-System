@@ -1,6 +1,6 @@
 import api from "./apiConfig";
 
-export const loginLecturer = async (
+export const registerLecturer = async (
   name,
   email,
   phoneNumber,
@@ -14,7 +14,15 @@ export const loginLecturer = async (
     phoneNumber,
     address,
     bio,
-    password,
+    password
   });
   return res.data;
+};
+
+export const loginLecturer = async (phoneNumberOrEmail, password) => {
+  const res = await api.post("/lecturer/login", {
+    phoneNumberOrEmail,
+    password
+  });
+  return res;
 };

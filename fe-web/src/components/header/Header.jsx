@@ -18,7 +18,7 @@ const Header = () => {
   return (
     <div className="flex flex-col md:flex-row fixed bg-white/95  left-0 right-0 top-0 items-center px-6 md:px-24 justify-between gap-4 py-4 md:py-0  z-[10]">
       <Link
-        to={"/"}
+        to={"./"}
         style={{
           backgroundImage: `url('/web/picture/textLogo.png')`
         }}
@@ -29,9 +29,9 @@ const Header = () => {
 
       <SearchBox />
 
-      <Link to={"lecturer/sign-up"}>
+      <Link to={isLecturerLayout ? "./sign-in" : "lecturer/sign-in"}>
         <h1 className="forMentor text-text/md/semibold whitespace-nowrap hover:cursor-pointer">
-          {isLecturerLayout ? "Dành cho doanh nghiệp" : "Dành cho giảng viên"}
+          {isLecturerLayout ? "Dành cho học viên" : "Dành cho giảng viên"}
         </h1>
       </Link>
 
