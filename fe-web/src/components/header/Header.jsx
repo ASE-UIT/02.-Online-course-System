@@ -29,9 +29,9 @@ const Header = () => {
 
       <SearchBox />
 
-      <Link to={"lecturer/sign-up"}>
+      <Link to={isLecturerLayout ? "./sign-in" : "lecturer/sign-in"}>
         <h1 className="forMentor text-text/md/semibold whitespace-nowrap hover:cursor-pointer">
-          {isLecturerLayout ? "Dành cho doanh nghiệp" : "Dành cho giảng viên"}
+          {isLecturerLayout ? "Dành cho học viên" : "Dành cho giảng viên"}
         </h1>
       </Link>
 
