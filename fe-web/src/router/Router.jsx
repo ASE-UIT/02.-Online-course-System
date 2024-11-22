@@ -27,6 +27,7 @@ import NotFound from "@/pages/NotFound";
 import SearchPage from "@/pages/searchPage/searchPage";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import LecturerSignIn from "@/pages/Lecturer/SignIn/LecturerSignIn";
+import CourseList from "@/pages/CourseList/CourseList.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -62,6 +63,7 @@ const router = createBrowserRouter(
           <Route path="search/" element={<SearchPage />} />
           <Route path="callback" element={<InfoInput />} />
           <Route path="result/:content" element={<ResultPage />} />
+          <Route path="course-list" element={<CourseList/>}/>
           {/* Lecturer layout */}
           <Route path="lecturer" element={<LecturerLayout />}>
             <Route path="sign-in" element={<LecturerSignIn />} />
