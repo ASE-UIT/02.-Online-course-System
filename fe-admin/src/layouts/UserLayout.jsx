@@ -20,7 +20,6 @@ const UserLayout = () => {
           </div>
         </div>
       </NavigationProvider>
-      <ToastContainer />
     </div>
   );
 };
