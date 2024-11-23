@@ -3,7 +3,6 @@ import {
   LecturerLandingIcon4,
   LecturerLandingIcon5
 } from "@/assets/LecturerLandingIcon.jsx";
-import { LecturerLandingIcon6 } from "@/assets/LecturerLandingIconB.jsx";
 import {
   LecturerLandingIconReason1,
   LecturerLandingIconReason2,
@@ -15,6 +14,7 @@ import * as React from "react";
 import * as Tabs from "@radix-ui/react-tabs";
 
 import LecturerLandingIcon7 from "/picture/LecturerLandingIcon7.svg";
+import LecturerLandingIcon6 from "/picture/LecturerLandingIcon6.svg";
 
 function LecturerLandingPage() {
   return (
@@ -281,7 +281,10 @@ function LecturerLandingPage() {
                     </div>
                     {/* Image */}
                     <div className="max-h-full">
-                      <LecturerLandingIcon6 />
+                      <img
+                        src={LecturerLandingIcon6}
+                        alt="Lecturer Landing Icon"
+                      />
                     </div>
                   </div>
                 </section>
