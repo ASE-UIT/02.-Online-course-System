@@ -1,16 +1,44 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { List, LogOut, ShoppingCart, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 function UserSection() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const location = useLocation();
+  const [isLecturerLayout, setIsLecturerLayout] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname.startsWith("/web/lecturer"))
+      setIsLecturerLayout(true);
+    else setIsLecturerLayout(false);
+  }, [location]);
+
+  useEffect(() => {
+    const auth = JSON.parse(localStorage.getItem("auth"));
+    if (auth && auth.length > 0) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
 
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const handleLogout = () => {
     setIsLoggedIn(false);
+    localStorage.removeItem("auth");
+  };
+
+  const handleLoginOnClick = () => {
+    navigate(isLecturerLayout ? "/web/lecturer/sign-in" : "/web/sign-in");
+  };
+
+  const handleSignUpOnClick = () => {
+    navigate(
+      isLecturerLayout ? "/web/lecturer/sign-up" : "/web/sign-up/step1/email"
+    );
   };
 
   return (
@@ -64,7 +92,7 @@ function UserSection() {
         <>
           <Button
             type="button"
-            onClick={() => navigate("/web/sign-in")}
+            onClick={handleLoginOnClick}
             variant="loginOutline"
             className=" text-text/md/semibold text-primary-500 border-primary-500 border-[1px] md:text-base w-[140px]"
           >
@@ -72,7 +100,7 @@ function UserSection() {
           </Button>
           <Button
             type="button"
-            onClick={() => navigate("/web/sign-up/step1/email")}
+            onClick={handleSignUpOnClick}
             className="text-text/md/semibold text-white md:text-base w-[140px]"
           >
             Đăng Ký
