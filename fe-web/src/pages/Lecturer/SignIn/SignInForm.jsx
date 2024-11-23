@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
@@ -65,7 +64,7 @@ function SignInForm() {
             token
           })
         );
-        navigate("/web/lecturer/");
+        navigate("/web/lecturer/course");
         toast({
           title: <p className=" text-green-700">Đăng nhập thành công</p>,
           description: "Chào mừng bạn trở lại",

@@ -1,8 +1,4 @@
-import {
-  LecturerLandingIcon,
-  LecturerLandingIcon4,
-  LecturerLandingIcon5
-} from "@/assets/LecturerLandingIcon.jsx";
+import { LecturerLandingIcon } from "@/assets/LecturerLandingIcon.jsx";
 import {
   LecturerLandingIconReason1,
   LecturerLandingIconReason2,
@@ -15,6 +11,9 @@ import * as Tabs from "@radix-ui/react-tabs";
 
 import LecturerLandingIcon7 from "/picture/LecturerLandingIcon7.svg";
 import LecturerLandingIcon6 from "/picture/LecturerLandingIcon6.svg";
+import LecturerLandingIcon5 from "/picture/LecturerLandingIcon5.svg";
+import LecturerLandingIcon4 from "/picture/LecturerLandingIcon4.svg";
+import { Link } from "react-router-dom";
 
 function LecturerLandingPage() {
   return (
@@ -30,17 +29,21 @@ function LecturerLandingPage() {
                 Trở thành giảng viên và thay đổi cuộc sống của mọi người, bao
                 gồm cả cuộc sống của chính bạn
               </p>
-              <Button
-                variant="default"
-                size="lg"
-                className="bg-warning-700 hover:bg-warning-700/90 mt-2"
-              >
-                <span className="text-text/md/medium text-white">Bắt đầu</span>
-                <AiOutlineArrowRight
-                  className="ml-2"
-                  size={24}
-                ></AiOutlineArrowRight>
-              </Button>
+              <Link to={"../sign-in"} className="w-full">
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="bg-warning-700 hover:bg-warning-700/90 mt-2"
+                >
+                  <span className="text-text/md/medium text-white">
+                    Bắt đầu
+                  </span>
+                  <AiOutlineArrowRight
+                    className="ml-2"
+                    size={24}
+                  ></AiOutlineArrowRight>
+                </Button>
+              </Link>
             </div>
             <div className="flex-shrink-0 ">
               <LecturerLandingIcon />
@@ -214,8 +217,13 @@ function LecturerLandingPage() {
                       </p>
                     </div>
                     {/* Image */}
-                    <div className="max-h-full">
-                      <LecturerLandingIcon4></LecturerLandingIcon4>
+                    <div className="max-h-full w-full">
+                      <img
+                        src={LecturerLandingIcon4}
+                        alt="Lecturer Landing Icon 4"
+                        width={326}
+                        height={327}
+                      />
                     </div>
                   </div>
                 </section>
@@ -246,8 +254,13 @@ function LecturerLandingPage() {
                       </p>
                     </div>
                     {/* Image */}
-                    <div className="max-h-full">
-                      <LecturerLandingIcon5 />
+                    <div className="max-h-full w-full">
+                      <img
+                        src={LecturerLandingIcon5}
+                        alt="Lecturer Landing Icon 5"
+                        width={326}
+                        height={327}
+                      />
                     </div>
                   </div>
                 </section>
@@ -280,10 +293,12 @@ function LecturerLandingPage() {
                       </p>
                     </div>
                     {/* Image */}
-                    <div className="max-h-full">
+                    <div className="max-h-full w-full">
                       <img
                         src={LecturerLandingIcon6}
-                        alt="Lecturer Landing Icon"
+                        alt="Lecturer Landing Icon 6"
+                        width={326}
+                        height={327}
                       />
                     </div>
                   </div>
@@ -324,7 +339,9 @@ function LecturerLandingPage() {
             Tham gia một trong những thị trường học tập trực tuyến lớn nhất thế
             giới.
           </p>
-          <Button className="w-1/5">Bắt đầu</Button>
+          <Link to={"../sign-in"} className="w-full">
+            <Button className="w-1/5">Bắt đầu</Button>
+          </Link>
         </div>
       </section>
     </div>
