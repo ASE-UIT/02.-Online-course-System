@@ -5,13 +5,15 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useUpdateCourseMutation } from "@/store/rtk/course.services";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 const formSchema = z.object({
   name_course: z.string().min(6, {
     message: "Vui lòng nhập tên khóa học",
@@ -25,12 +27,8 @@ const formSchema = z.object({
   category: z.string().min(1, {
     message: "Vui lòng nhập danh mục của khóa học",
   }),
-  date_open: z.date({
-    required_error: "Vui lòng chọn ngày mở",
-  }),
-  date_close: z.date({
-    required_error: "Vui lòng chọn ngày kết thúc",
-  }),
+  date_open: z.preprocess((arg) => (arg === "" ? null : arg), z.date().nullish()),
+  date_close: z.preprocess((arg) => (arg === "" ? null : arg), z.date().nullish()),
   original_price: z.coerce
     .number({
       invalid_type_error: "Vui lòng nhập số hợp lệ",
@@ -58,28 +56,63 @@ const formSchema = z.object({
   }),
 });
 
-export default function CourseInfo() {
+export default function CourseInfo({ course }) {
+  const { toast } = useToast();
+  const [isFreeCourse, setIsFreeCourse] = useState(false);
+  const [updateCourse, { isLoading }] = useUpdateCourseMutation();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name_course: "",
-      name_course_en: "",
-      summary: "",
-      category: "",
-      date_open: "",
-      date_close: "",
-      original_price: "",
-      link_ref: "",
-      link: "",
-      lecturer_profile: "",
-      lecturer_account: "",
-      tags: "",
-      description: "",
+      name_course: course.name,
+      name_course_en: course.nameEn,
+      summary: course.shortDescription,
+      category: course.category.name,
+      date_open: null,
+      date_close: null,
+      original_price: course.originalPrice,
+      link_ref: course.socialGroupLink,
+      link: course.courseLink,
+      lecturer_profile: course.lecturer.name,
+      lecturer_account: course.lecturer.name,
+      tags: course.tags.join(),
+      description: course.introduction,
     },
   });
+  const dateClose = form.watch("date_close");
+  const dateOpen = form.watch("date_open");
   async function onSubmit(values) {
-    console.log(values);
+    const payload = {
+      name: values.name_course,
+      nameEn: values.name_course_en,
+      shortDescription: values.summary,
+      originalPrice: values.original_price,
+      socialGroupLink: values.link_ref,
+      courseLink: values.link,
+      introduction: values.description,
+      tags: values.tags.split(","),
+    };
+    try {
+      await updateCourse({ courseId: course.id, payload }).unwrap();
+      toast({
+        title: <p className=" text-green-700">Cập nhật khóa học thành công</p>,
+        description: "Khóa học đã được cập nhật",
+        status: "success",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: <p className=" text-red-700">Cập nhật khóa học thất bại</p>,
+        description: "Lỗi không xác định",
+        duration: 2000,
+      });
+    }
   }
+  useEffect(() => {
+    if (course) {
+      setIsFreeCourse(course.isFreeCourse);
+    }
+  }, [course]);
   return (
     <div className="p-[20px]">
       <header className="text-display/md/medium">THÔNG TIN CƠ BẢN</header>
@@ -147,86 +180,99 @@ export default function CourseInfo() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="date_open"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-1 mt-1">
-                    <FormLabel className="text-text/md/medium">Ngày mở miễn phí</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "pl-3 text-left font-normal border-gray-600 border-[1px] ",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span className="font-worksans">Chọn ngày bắt đầu</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 " align="start">
-                        <Calendar
-                          mode="single"
-                          className={"border-gray-300"}
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="date_close"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-1 mt-1">
-                    <FormLabel className="text-text/md/medium">Ngày đóng miễn phí</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "pl-3 text-left font-normal border-gray-600 border-[1px] ",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span className="font-worksans">Chọn ngày kết thúc</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0 " align="start">
-                        <Calendar
-                          mode="single"
-                          className={"border-gray-300"}
-                          selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) => date < new Date()}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+              <div className={`${!isFreeCourse && "opacity-50 select-none pointer-events-none"} flex flex-col gap-3`}>
+                <FormField
+                  control={form.control}
+                  name="date_open"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1 mt-1">
+                      <FormLabel className="text-text/md/medium">Ngày mở miễn phí</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "pl-3 text-left font-normal border-gray-600 border-[1px] ",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span className="font-worksans">Chọn ngày bắt đầu</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 " align="start">
+                          <Calendar
+                            mode="single"
+                            className={"border-gray-300"}
+                            selected={field.value}
+                            onSelect={(e) => {
+                              if (e > dateClose) {
+                                form.setValue("date_close", null);
+                              }
+                              return field.onChange(e);
+                            }}
+                            disabled={(date) => date < new Date()}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="date_close"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-1 mt-1">
+                      <FormLabel className="text-text/md/medium">Ngày đóng miễn phí</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "pl-3 text-left font-normal border-gray-600 border-[1px] ",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span className="font-worksans">Chọn ngày kết thúc</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 " align="start">
+                          <Calendar
+                            mode="single"
+                            className={"border-gray-300"}
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) => {
+                              if (dateOpen) {
+                                return date < dateOpen;
+                              }
+                              return date < new Date();
+                            }}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             <div className="basis-[50%] flex flex-col gap-3">
               <FormField
@@ -322,7 +368,7 @@ export default function CourseInfo() {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Checkbox id="terms" />
+            <Checkbox id="terms" checked={isFreeCourse} onCheckedChange={(e) => setIsFreeCourse(e)} />
             <label
               htmlFor="terms"
               className="text-sm cursor-pointer font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -345,8 +391,12 @@ export default function CourseInfo() {
               </FormItem>
             )}
           />
-          <Button type="submit" className=" inline-block mt-5 px-8 rounded-xl">
-            Lưu
+          <Button disabled={isLoading} type="submit" className=" inline-block mt-5 px-8 rounded-xl">
+            {isLoading ? (
+              <div className="w-4 h-4 border-[3px] border-t-transparent border-white rounded-full animate-spin"></div>
+            ) : (
+              "Lưu"
+            )}
           </Button>
         </form>
       </Form>
