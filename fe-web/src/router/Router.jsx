@@ -1,35 +1,74 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   Navigate
 } from "react-router-dom";
+import withSuspense from "./WithSuspense";
 
-import UserLayout from "@/layouts/UserLayout";
-import Home from "@/pages/HomePage/Home";
-import CourseDetail from "@/pages/CourseDetailPage/CourseDetail";
-import SignUp from "@/pages/SignUp/SignUp";
-import SignIn from "@/pages/SignIn/SignIn";
-import StepOne from "@/pages/SignUp/StepOne";
-import VerifyCode from "@/pages/SignUp/VerifyCode";
-import ResultPage from "@/pages/Result/ResultPage";
-import InfoInput from "@/pages/SignUp/InfoInput";
-import LecturerLayout from "@/layouts/LecturerLayout";
-import LecturerSignUp from "@/pages/Lecturer/SignUp/LecturerSignUp";
-import LecturerResultPage from "@/pages/Lecturer/Result/ResultPage";
-import LecturerLandingPage from "@/pages/Lecturer/LandingPage/LecturerLandingPage.jsx";
-import TeacherCoursePage from "@/pages/Lecturer/TeacherCoursePage/TeacherCoursePage";
-import LecturerCourseDetail from "@/pages/Lecturer/CourseDetail/LecturerCourseDetail";
-import CourseAdd from "@/pages/Lecturer/TeacherCoursePage/AddCourse/CourseAdd";
-import SignInForm from "@/pages/SignIn/SignInForm";
-import ForgotPassword from "@/pages/SignIn/ForgotPassword";
-import ResetPassword from "@/pages/SignIn/ResetPassword";
-import NotFound from "@/pages/NotFound";
-import SearchPage from "@/pages/searchPage/searchPage";
-import DefaultLayout from "@/layouts/DefaultLayout";
-import LecturerSignIn from "@/pages/Lecturer/SignIn/LecturerSignIn";
-import CartPage from "@/pages/CartPage/CartPage.jsx";
-import CourseList from "@/pages/CourseList/CourseList.jsx";
+const UserLayout = withSuspense(lazy(() => import("../layouts/UserLayout")));
+const Home = withSuspense(lazy(() => import("../pages/HomePage/Home")));
+const CourseDetail = withSuspense(
+  lazy(() => import("@/pages/CourseDetailPage/CourseDetail"))
+);
+const SignUp = withSuspense(lazy(() => import("@/pages/SignUp/SignUp")));
+const SignIn = withSuspense(lazy(() => import("@/pages/SignIn/SignIn")));
+const StepOne = withSuspense(lazy(() => import("@/pages/SignUp/StepOne")));
+const VerifyCode = withSuspense(
+  lazy(() => import("@/pages/SignUp/VerifyCode"))
+);
+const ResultPage = withSuspense(
+  lazy(() => import("@/pages/Result/ResultPage"))
+);
+const InfoInput = withSuspense(lazy(() => import("@/pages/SignUp/InfoInput")));
+const LecturerLayout = withSuspense(
+  lazy(() => import("@/layouts/LecturerLayout"))
+);
+const LecturerSignUp = withSuspense(
+  lazy(() => import("@/pages/Lecturer/SignUp/LecturerSignUp"))
+);
+const LecturerResultPage = withSuspense(
+  lazy(() => import("@/pages/Lecturer/Result/ResultPage"))
+);
+const LecturerLandingPage = withSuspense(
+  lazy(() => import("@/pages/Lecturer/LandingPage/LecturerLandingPage.jsx"))
+);
+const TeacherCoursePage = withSuspense(
+  lazy(() => import("@/pages/Lecturer/TeacherCoursePage/TeacherCoursePage"))
+);
+const LecturerCourseDetail = withSuspense(
+  lazy(() => import("@/pages/Lecturer/CourseDetail/LecturerCourseDetail"))
+);
+const CourseAdd = withSuspense(
+  lazy(() => import("@/pages/Lecturer/TeacherCoursePage/AddCourse/CourseAdd"))
+);
+const SignInForm = withSuspense(
+  lazy(() => import("@/pages/SignIn/SignInForm"))
+);
+const ForgotPassword = withSuspense(
+  lazy(() => import("@/pages/SignIn/ForgotPassword"))
+);
+const ResetPassword = withSuspense(
+  lazy(() => import("@/pages/SignIn/ResetPassword"))
+);
+const NotFound = withSuspense(lazy(() => import("@/pages/NotFound")));
+const SearchPage = withSuspense(
+  lazy(() => import("@/pages/searchPage/searchPage"))
+);
+const DefaultLayout = withSuspense(
+  lazy(() => import("@/layouts/DefaultLayout"))
+);
+const LecturerSignIn = withSuspense(
+  lazy(() => import("@/pages/Lecturer/SignIn/LecturerSignIn"))
+);
+const CartPage = withSuspense(
+  lazy(() => import("@/pages/CartPage/CartPage.jsx"))
+);
+const CourseList = withSuspense(
+  lazy(() => import("@/pages/CourseList/CourseList.jsx"))
+);
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -79,7 +118,7 @@ const router = createBrowserRouter(
           </Route>
         </Route>
       </Route>
-      <Route path="*" element={<Navigate to={<NotFound />} />} />
+      <Route path="*" element={<NotFound />} />
     </Route>
   ),
   {
