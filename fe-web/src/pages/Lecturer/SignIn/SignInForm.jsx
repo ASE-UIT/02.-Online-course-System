@@ -177,12 +177,12 @@ function SignInForm() {
           Đăng ký ngay
         </Link>
       </div>
-      <div className="relative my-2.5 flex justify-center text-black-300">
+      {/* <div className="relative my-2.5 flex justify-center text-black-300">
         <Separator className="w-full" />
         <span className="absolute -top-2.5 bg-white px-5 text-text/sm/regular">
           Hoặc đăng nhập với
         </span>
-      </div>
+      </div> */}
       <div className="flex flex-col gap-5">
         {/* <Button
           variant="outline"
