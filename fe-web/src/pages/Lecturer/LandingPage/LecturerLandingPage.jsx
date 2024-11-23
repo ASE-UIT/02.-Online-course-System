@@ -1,8 +1,4 @@
-import {
-  LecturerLandingIcon,
-  LecturerLandingIcon4,
-  LecturerLandingIcon5
-} from "@/assets/LecturerLandingIcon.jsx";
+import { LecturerLandingIcon } from "@/assets/LecturerLandingIcon.jsx";
 import {
   LecturerLandingIconReason1,
   LecturerLandingIconReason2,
@@ -15,6 +11,8 @@ import * as Tabs from "@radix-ui/react-tabs";
 
 import LecturerLandingIcon7 from "/picture/LecturerLandingIcon7.svg";
 import LecturerLandingIcon6 from "/picture/LecturerLandingIcon6.svg";
+import LecturerLandingIcon5 from "/picture/LecturerLandingIcon5.svg";
+import LecturerLandingIcon4 from "/picture/LecturerLandingIcon4.svg";
 
 function LecturerLandingPage() {
   return (
@@ -214,8 +212,13 @@ function LecturerLandingPage() {
                       </p>
                     </div>
                     {/* Image */}
-                    <div className="max-h-full">
-                      <LecturerLandingIcon4></LecturerLandingIcon4>
+                    <div className="max-h-full w-full">
+                      <img
+                        src={LecturerLandingIcon4}
+                        alt="Lecturer Landing Icon 4"
+                        width={326}
+                        height={327}
+                      />
                     </div>
                   </div>
                 </section>
@@ -246,8 +249,13 @@ function LecturerLandingPage() {
                       </p>
                     </div>
                     {/* Image */}
-                    <div className="max-h-full">
-                      <LecturerLandingIcon5 />
+                    <div className="max-h-full w-full">
+                      <img
+                        src={LecturerLandingIcon5}
+                        alt="Lecturer Landing Icon 5"
+                        width={326}
+                        height={327}
+                      />
                     </div>
                   </div>
                 </section>
@@ -280,10 +288,12 @@ function LecturerLandingPage() {
                       </p>
                     </div>
                     {/* Image */}
-                    <div className="max-h-full">
+                    <div className="max-h-full w-full">
                       <img
                         src={LecturerLandingIcon6}
-                        alt="Lecturer Landing Icon"
+                        alt="Lecturer Landing Icon 6"
+                        width={326}
+                        height={327}
                       />
                     </div>
                   </div>
