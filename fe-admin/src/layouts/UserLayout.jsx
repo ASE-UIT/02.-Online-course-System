@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Header from "../components/Header/Header";
 import { NavigationProvider } from "@/context/NavigationContext";
