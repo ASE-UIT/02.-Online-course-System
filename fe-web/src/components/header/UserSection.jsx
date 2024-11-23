@@ -43,7 +43,9 @@ function UserSection() {
 
   return (
     <div className="flex gap-2 md:gap-5 items-center">
-      <ShoppingCart className="text-xl md:text-2xl hover:cursor-pointer" />
+      <Link to={"./cart"}>
+        <ShoppingCart className="text-xl md:text-2xl hover:cursor-pointer" />
+      </Link>{" "}
       {isLoggedIn ? (
         <div
           className="relative"
