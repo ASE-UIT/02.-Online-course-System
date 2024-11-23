@@ -5,8 +5,8 @@ import {
   Navigate
 } from "react-router-dom";
 
-import UserLayout from "../layouts/UserLayout";
-import Home from "../pages/HomePage/Home";
+import UserLayout from "@/layouts/UserLayout";
+import Home from "@/pages/HomePage/Home";
 import CourseDetail from "@/pages/CourseDetailPage/CourseDetail";
 import SignUp from "@/pages/SignUp/SignUp";
 import SignIn from "@/pages/SignIn/SignIn";
@@ -64,9 +64,9 @@ const router = createBrowserRouter(
           </Route>
           <Route path="search/" element={<SearchPage />} />
           <Route path="callback" element={<InfoInput />} />
-          <Route path="cart" element={<CartPage/>} />
+          <Route path="cart" element={<CartPage />} />
           <Route path="result/:content" element={<ResultPage />} />
-          <Route path="course-list" element={<CourseList />}/>
+          <Route path="course-list" element={<CourseList />} />
           {/* Lecturer layout */}
           <Route path="lecturer" element={<LecturerLayout />}>
             <Route path="sign-in" element={<LecturerSignIn />} />
