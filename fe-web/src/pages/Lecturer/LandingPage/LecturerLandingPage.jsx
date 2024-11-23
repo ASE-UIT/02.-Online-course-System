@@ -13,6 +13,7 @@ import LecturerLandingIcon7 from "/picture/LecturerLandingIcon7.svg";
 import LecturerLandingIcon6 from "/picture/LecturerLandingIcon6.svg";
 import LecturerLandingIcon5 from "/picture/LecturerLandingIcon5.svg";
 import LecturerLandingIcon4 from "/picture/LecturerLandingIcon4.svg";
+import { Link } from "react-router-dom";
 
 function LecturerLandingPage() {
   return (
@@ -28,17 +29,21 @@ function LecturerLandingPage() {
                 Trở thành giảng viên và thay đổi cuộc sống của mọi người, bao
                 gồm cả cuộc sống của chính bạn
               </p>
-              <Button
-                variant="default"
-                size="lg"
-                className="bg-warning-700 hover:bg-warning-700/90 mt-2"
-              >
-                <span className="text-text/md/medium text-white">Bắt đầu</span>
-                <AiOutlineArrowRight
-                  className="ml-2"
-                  size={24}
-                ></AiOutlineArrowRight>
-              </Button>
+              <Link to={"../sign-in"} className="w-full">
+                <Button
+                  variant="default"
+                  size="lg"
+                  className="bg-warning-700 hover:bg-warning-700/90 mt-2"
+                >
+                  <span className="text-text/md/medium text-white">
+                    Bắt đầu
+                  </span>
+                  <AiOutlineArrowRight
+                    className="ml-2"
+                    size={24}
+                  ></AiOutlineArrowRight>
+                </Button>
+              </Link>
             </div>
             <div className="flex-shrink-0 ">
               <LecturerLandingIcon />
@@ -334,7 +339,9 @@ function LecturerLandingPage() {
             Tham gia một trong những thị trường học tập trực tuyến lớn nhất thế
             giới.
           </p>
-          <Button className="w-1/5">Bắt đầu</Button>
+          <Link to={"../sign-in"} className="w-full">
+            <Button className="w-1/5">Bắt đầu</Button>
+          </Link>
         </div>
       </section>
     </div>
