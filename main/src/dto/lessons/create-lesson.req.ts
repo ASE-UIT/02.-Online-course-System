@@ -19,14 +19,4 @@ export class CreateLessonRequest {
 
   @IsOptional()
   resourceLink?: string[];
-
-  @IsOptional()
-  partNo?: number;
-
-  @IsOptional()
-  @IsString()
-  partName?: string;
-
-  @IsOptional()
-  quizzes?: CreateQuizzReq[];
 }

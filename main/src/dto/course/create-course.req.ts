@@ -14,41 +14,32 @@ import { DecimalPrecision } from './decimal-10-1-custom';
 import { CreateLessonRequest } from '@/dto/lessons/create-lesson.req';
 
 export class CreateCourseRequest {
+  //Tên khóa học
   @IsNotEmpty()
   @IsString()
   name!: string;
 
+  //Mô tả ngắn
   @IsOptional()
   @IsString()
-  description?: string;
+  shortDescription?: string;
 
+  //Giới thiệu
+  @IsOptional()
+  @IsString()
+  introduction?: string;
+
+  //Ảnh khoá học
   @IsOptional()
   @IsString()
   thumbnail?: string;
 
-  @IsNotEmpty()
-  @IsNumber()
-  price!: number;
-
-  @IsNotEmpty()
-  @IsNumber()
-  duration!: number;
-
-  @IsEnum(DifficultyLevel)
+  //Đối tượng tham gia
   @IsOptional()
-  difficultyLevel?: string;
+  @IsString()
+  participants?: string;
 
-  @IsOptional()
-  @IsDateString()
-  startDate?: Date;
-
-  @IsOptional()
-  @IsDateString()
-  endDate?: Date;
-
+  //Mã danh mục khóa học
   @IsNotEmpty()
   categoryId!: string;
-
-  @IsNotEmpty()
-  lessons!: CreateLessonRequest[];
 }

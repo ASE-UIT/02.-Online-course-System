@@ -1,6 +1,20 @@
 import { DifficultyLevel } from '@/enums/difficulty-level.enum';
-import { IsOptional, IsString, IsNumber, IsEnum, IsUUID, IsDate, Validate } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsEnum,
+  IsUUID,
+  IsDate,
+  IsOptional,
+  ValidateNested,
+  IsISO8601,
+  IsBoolean
+} from 'class-validator';
 import { DecimalPrecision } from './decimal-10-1-custom';
+import { UpdateLessonPartReq } from '@/dto/lesson_part/update-lesson-part.req';
+import { Type } from 'class-transformer';
+import { CourseStatus } from '@/enums/course-status.enum';
 
 export class UpdateCourseRequest {
   @IsOptional()
@@ -9,7 +23,33 @@ export class UpdateCourseRequest {
 
   @IsOptional()
   @IsString()
-  description?: string;
+  nameEn?: string;
+
+  @IsOptional()
+  @IsString()
+  shortDescription?: string;
+
+  @IsOptional()
+  @IsString()
+  introduction?: string;
+
+  @IsOptional()
+  @IsString()
+  participants?: string;
+
+  @IsOptional()
+  courseTargets?: string[];
+
+  @IsOptional()
+  @IsString()
+  welcomeJoin?: string;
+
+  @IsOptional()
+  @IsString()
+  videoSale?: string;
+
+  @IsOptional()
+  courseMaterials?: string[];
 
   @IsOptional()
   @IsString()
@@ -17,34 +57,57 @@ export class UpdateCourseRequest {
 
   @IsOptional()
   @IsNumber()
-  price?: number;
+  originalPrice?: number;
 
   @IsOptional()
   @IsNumber()
-  @Validate(DecimalPrecision, [10, 1])
-  duration?: number;
+  sellPrice?: number;
 
   @IsOptional()
-  @IsEnum(DifficultyLevel)
-  difficultyLevel?: DifficultyLevel = DifficultyLevel.easy;
+  @IsNumber()
+  lowestPrice?: number;
 
   @IsOptional()
-  @IsDate()
+  @IsString()
+  socialGroupLink?: string;
+
+  @IsOptional()
+  @IsString()
+  courseLink?: string;
+
+  @IsOptional()
+  tags?: string[];
+
+  @IsBoolean()
+  @IsOptional()
+  isFreeCourse?: boolean;
+
+  @IsOptional()
+  @IsISO8601()
+  startFreeDate?: Date;
+
+  @IsOptional()
+  @IsISO8601()
+  endFreeDate?: Date;
+
+  @IsEnum(CourseStatus)
+  @IsOptional()
+  status?: boolean;
+
+  @IsOptional()
+  @IsISO8601()
   startDate?: Date;
 
   @IsOptional()
-  @IsDate()
+  @IsISO8601()
   endDate?: Date;
 
   @IsOptional()
-  @IsUUID()
+  @IsString()
   categoryId?: string;
 
   @IsOptional()
-  @IsUUID()
-  lecturerId?: string;
-
-  @IsOptional()
-  @IsUUID()
-  discountId?: string;
+  @Type(() => UpdateLessonPartReq)
+  @ValidateNested({ each: true })
+  lessonParts?: UpdateLessonPartReq[];
 }

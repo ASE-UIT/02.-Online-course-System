@@ -5,6 +5,12 @@ import { CourseRatingRepository } from '@/repository/course_rating.repository';
 import { ICourseRatingService } from '@/service/interface/i.course_rating.service';
 import { ICourseRatingRepository } from '@/repository/interface/i.course_rating.repository';
 import { BaseContainer } from '@/container/base.container';
+import { ICourseRepository } from '@/repository/interface/i.course.repository';
+import { Course } from '@/models/course.model';
+import { CourseRepository } from '@/repository/course.repository';
+import { StudentRepository } from '@/repository/student.repository';
+import { Student } from '@/models/student.model';
+import { IStudentRepository } from '@/repository/interface/i.student.repository';
 
 class CourseRatingContainer extends BaseContainer {
   constructor() {
@@ -12,6 +18,8 @@ class CourseRatingContainer extends BaseContainer {
     this.container.bind<ICourseRatingService<CourseRating>>('CourseRatingService').to(CourseRatingService);
     this.container.bind<ICourseRatingRepository<CourseRating>>('CourseRatingRepository').to(CourseRatingRepository);
     this.container.bind<CourseRatingController>(CourseRatingController).toSelf();
+    this.container.bind<ICourseRepository<Course>>('CourseRepository').to(CourseRepository);
+    this.container.bind<IStudentRepository<Student>>('StudentRepository').to(StudentRepository);
   }
 
   export() {

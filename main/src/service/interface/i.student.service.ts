@@ -17,8 +17,8 @@ export interface IStudentService<T extends BaseModelType> extends IBaseCrudServi
   authGoogleCallback(idToken: string): Promise<LoginRes>;
   login(data: StudentLoginReq): Promise<LoginRes>;
   initiateForgotPassword(emailOrPhone: string): Promise<void>;
-  verifyForgotPasswordOtp(studentId: string, otp: string): Promise<void>;
-  resetPassword(studentId: string, newPassword: string): Promise<void>;
+  verifyForgotPasswordOtp(emailOrPhone: string, otp: string): Promise<void>;
+  resetPassword(emailOrPhone: string, newPassword: string, otp: string): Promise<void>;
   changePassword(studentId: string, currentPassword: string, newPassword: string): Promise<void>;
   updateProfile(studentId: string, updateData: Partial<T>): Promise<void>;
 }

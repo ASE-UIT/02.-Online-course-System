@@ -359,6 +359,14 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
   }
 
   async initiateForgotPassword(emailOrPhone: string): Promise<void> {
+    const otpKey = `student:forgotPassword:${emailOrPhone}`;
+
+    const extistOtp = await redis.get(otpKey);
+
+    if (extistOtp) {
+      throw new BaseError(ErrorCode.INVALID_OTP, 'Mã OTP đã được gửi, vui lòng kiểm tra email hoặc số điện thoại');
+    }
+
     const student = await this.studentRepository.findOne({
       filter: emailOrPhone.includes('@') ? { email: emailOrPhone } : { phoneNumber: emailOrPhone }
     });
@@ -368,8 +376,7 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
     }
 
     const otp = await generateRandomOTPString(6); // Tạo OTP 6 ký tự
-    const otpKey = `student:forgotPassword:${student.id}`;
-    await redis.set(otpKey, otp, 'EX', TIME_CONSTANTS.MINUTE * 3);
+    await redis.set(otpKey, otp, 'EX', (TIME_CONSTANTS.MINUTE * 3) / 1000);
 
     if (emailOrPhone.includes('@')) {
       await sendEmail({
@@ -388,28 +395,53 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
   /**
    * Verifies OTP for forgot password functionality.
    */
-  async verifyForgotPasswordOtp(studentId: string, otp: string): Promise<void> {
-    const otpKey = `student:forgotPassword:${studentId}`;
+  async verifyForgotPasswordOtp(emailOrPhone: string, otp: string): Promise<void> {
+    const otpKey = `student:forgotPassword:${emailOrPhone}`;
     const storedOtp = await redis.get(otpKey);
 
     if (!storedOtp || storedOtp !== otp) {
       throw new BaseError(ErrorCode.INVALID_OTP, 'Mã OTP không hợp lệ hoặc hết hạn');
     }
-    await redis.del(otpKey);
+    await redis.set(otpKey, otp, 'EX', (TIME_CONSTANTS.MINUTE * 5) / 1000);
   }
 
   /**
    * Resets the password after OTP verification.
    */
-  async resetPassword(studentId: string, newPassword: string): Promise<void> {
-    const student = await this.studentRepository.findOne({ filter: { id: studentId } });
+  async resetPassword(emailOrPhone: string, newPassword: string, otp: string): Promise<void> {
+    const otpKey = `student:forgotPassword:${emailOrPhone}`;
+    const storedOtp = await redis.get(otpKey);
+
+    if (!storedOtp) {
+      throw new BaseError(ErrorCode.INVALID_OTP, 'Mã OTP hết hạn');
+    }
+
+    if (storedOtp !== otp) {
+      throw new BaseError(ErrorCode.INVALID_OTP, 'Mã OTP không hợp lệ');
+    }
+
+    const student = await this.studentRepository.findOne({
+      filter: emailOrPhone.includes('@') ? { email: emailOrPhone } : { phoneNumber: emailOrPhone }
+    });
+
+    if (!student) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Không tìm thấy tài khoản học viên');
+    }
 
     if (!student) {
       throw new BaseError(ErrorCode.NOT_FOUND, 'không tìm thấy tài khoản học viên');
     }
 
     student.password = bcrypt.hashSync(newPassword, 10);
-    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
+
+    await this.studentRepository.findOneAndUpdate({
+      filter: { id: student.id },
+      updateData: {
+        password: student.password
+      }
+    });
+
+    redis.del(otpKey);
   }
 
   async changePassword(studentId: string, currentPassword: string, newPassword: string): Promise<void> {

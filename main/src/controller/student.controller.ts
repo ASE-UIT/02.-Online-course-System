@@ -131,8 +131,8 @@ export class StudentController {
    */
   async verifyOtp(req: Request, res: Response, next: NextFunction) {
     try {
-      const { studentId, otp } = req.body as VerifyOtpReqDto;
-      await this.studentService.verifyForgotPasswordOtp(studentId, otp);
+      const { emailOrPhone, otp } = req.body as VerifyOtpReqDto;
+      await this.studentService.verifyForgotPasswordOtp(emailOrPhone, otp);
       res.send_ok('OTP xác thực thành công');
     } catch (error) {
       next(error);
@@ -157,8 +157,8 @@ export class StudentController {
    */
   async resetPassword(req: Request, res: Response, next: NextFunction) {
     try {
-      const { studentId, newPassword } = req.body as ResetPasswordReqDto;
-      await this.studentService.resetPassword(studentId, newPassword);
+      const { emailOrPhone, newPassword, otp } = req.body as ResetPasswordReqDto;
+      await this.studentService.resetPassword(emailOrPhone, newPassword, otp);
       res.send_ok('Mật khẩu đã được đặt lại thành công');
     } catch (error) {
       next(error);

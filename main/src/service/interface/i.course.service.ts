@@ -9,7 +9,8 @@ import { CourseSearchSortReq } from '@/dto/course/course-search-sort.req';
 
 export interface ICourseService<T extends BaseModelType> extends IBaseCrudService<T> {
   lecturerCreateCourse(data: CreateCourseRequest, lecturerId: string): Promise<Course>;
-  update(id: string, data: UpdateCourseRequest): Promise<UpdateCourseResponse>;
+  update(id: string, data: UpdateCourseRequest): Promise<Course>;
   getClosetLiveCourse(amount: number): Promise<Course[]>;
   search(filters: CourseSearchFilterReq[], sort: CourseSearchSortReq, rpp: number, page: number): Promise<Course[]>;
+  getCourseDetail(courseId: string): Promise<Course>;
 }
