@@ -251,5 +251,4 @@ export class StudentController {
       next(error);
     }
   }
-
 }

@@ -12,7 +12,7 @@ import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import bcrypt from 'bcrypt';
 import { Course } from '@/models/course.model';
-import {getRepository} from 'typeorm'
+import { getRepository } from 'typeorm';
 
 @injectable()
 export class EmployeeController {
@@ -128,7 +128,6 @@ export class EmployeeController {
     try {
       const { courseId } = req.body;
 
-   
       const courseRepository = getRepository(Course);
       const course = await courseRepository.findOne(courseId);
 
@@ -136,7 +135,6 @@ export class EmployeeController {
         return res.status(404).json({ message: 'Không tìm thấy khóa học' });
       }
 
-    
       course.status = 'Approved';
       await courseRepository.save(course);
 
@@ -146,5 +144,4 @@ export class EmployeeController {
       return res.status(500).json({ message: 'Internal server error' });
     }
   }
-
 }

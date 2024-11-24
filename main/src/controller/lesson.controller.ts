@@ -19,7 +19,7 @@ export class LessonController {
     this.common = common;
   }
 
-  static async markLessonComplete(req: Request, res: Response) {
+  async markLessonComplete(req: Request, res: Response) {
     const { studentId, lessonId } = req.body;
 
     try {
@@ -49,8 +49,7 @@ export class LessonController {
     }
   }
 
-
-  static async getCompletedLessons(req: Request, res: Response) {
+  async getCompletedLessons(req: Request, res: Response) {
     const { studentId, courseId } = req.params;
 
     try {
@@ -58,7 +57,7 @@ export class LessonController {
       const completeLessonRepo = getRepository(StudentCompleteLesson);
 
       // Get all lessons for the course
-      const lessons = await lessonRepo.find({ where: { course: { id: courseId } } });
+      const lessons = await lessonRepo.find({ where: { lessonPart: { courseId: courseId } } });
 
       if (lessons.length === 0) {
         return res.status(404).json({ message: 'Không tìm thấy bài học nào trong khóa học' });
@@ -67,12 +66,12 @@ export class LessonController {
       // Get completed lessons for the student
       const completedLessons = await completeLessonRepo.find({
         where: { studentId },
-        relations: ['lesson'],
+        relations: ['lesson']
       });
 
       // Filter completed lessons for the specific course
-      const completedLessonIds = completedLessons.map((cl:StudentCompleteLesson) => cl.lessonId);
-      const filteredCompletedLessons = lessons.filter((lesson:Lesson) => completedLessonIds.includes(lesson.id));
+      const completedLessonIds = completedLessons.map((cl: StudentCompleteLesson) => cl.lessonId);
+      const filteredCompletedLessons = lessons.filter((lesson: Lesson) => completedLessonIds.includes(lesson.id));
 
       return res.status(200).json(filteredCompletedLessons);
     } catch (error) {
@@ -80,5 +79,4 @@ export class LessonController {
       return res.status(500).json({ message: 'Xảy ra lỗi khi tìm kiếm bài học đã hoàn thành' });
     }
   }
-
 }

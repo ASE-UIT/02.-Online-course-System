@@ -60,7 +60,6 @@ export class CourseCategoryController {
     }
   }
 
-
   async updateCate(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const id = req.params.id;
@@ -81,5 +80,4 @@ export class CourseCategoryController {
       next(error);
     }
   }
-
 }
