@@ -41,4 +41,45 @@ export class CourseCategoryController {
       next(error);
     }
   }
+
+  async softDeleteCate(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const id = req.params.id;
+      if (!id) {
+        res.status(400).send({ message: 'Id là bắt buộc' });
+        return;
+      }
+
+      await this.courseCategoryService.findOneAndDelete({
+        filter: { id: id }
+      });
+
+      res.send_ok('Xóa mềm thành công');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+
+  async updateCate(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const id = req.params.id;
+      if (!id) {
+        res.status(400).send({ message: 'Id là bắt buộc' });
+        return;
+      }
+
+      const updateData = req.body;
+
+      await this.courseCategoryService.findOneAndUpdate({
+        filter: { id: id },
+        updateData
+      });
+
+      res.send_ok('Cập nhật thành công');
+    } catch (error) {
+      next(error);
+    }
+  }
+
 }

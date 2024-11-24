@@ -14,4 +14,15 @@ export class CourseCategoryService
     super(courseCategoryRepository);
     this.courseCategoryRepository = courseCategoryRepository;
   }
+  async softDelete(id: string): Promise<void> {
+    await this.courseCategoryRepository.findOneAndDelete({ filter: { id } });
+  }
+
+  async updateCategory(id: string, data: Partial<CourseCategory>): Promise<void> {
+    await this.courseCategoryRepository.findOneAndUpdate({
+      filter: { id },
+      updateData: data
+    });
+  }
+
 }
