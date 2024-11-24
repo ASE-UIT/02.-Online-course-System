@@ -11,7 +11,6 @@ courseCategoryRouter
   .get('/', courseCategoryController.findAll.bind(courseCategoryController))
   .post('/', classValidate(CreateCourseCategoryReq), courseCategoryController.create.bind(courseCategoryController))
   .delete('/delete/:id', courseCategoryController.softDeleteCate.bind(courseCategoryController))
-  .put('/update/:id', courseCategoryController.updateCate.bind(courseCategoryController))
-
+  .put('/update/:id', courseCategoryController.updateCate.bind(courseCategoryController));
 
 export default courseCategoryRouter;

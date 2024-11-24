@@ -145,7 +145,6 @@ export class Course extends BaseModel {
   @JoinColumn({ name: 'discount_id' })
   discount!: Discount;
 
-
   @OneToMany(() => LessonPart, (lessonPart) => lessonPart.course, { cascade: true })
   lessonParts!: LessonPart[];
 }

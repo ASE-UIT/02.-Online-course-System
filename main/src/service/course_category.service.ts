@@ -24,5 +24,4 @@ export class CourseCategoryService
       updateData: data
     });
   }
-
 }
