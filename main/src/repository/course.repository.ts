@@ -63,4 +63,20 @@ export class CourseRepository extends BaseRepository<Course> implements ICourseR
       take
     });
   }
+
+  async getCourseDetail(courseId: string): Promise<Course | null> {
+    return await this.ormRepository
+      .createQueryBuilder('course')
+      .leftJoinAndSelect('course.category', 'category')
+      .leftJoinAndSelect('course.lecturer', 'lecturer')
+      .leftJoinAndSelect('course.discount', 'discount')
+      .leftJoinAndSelect('course.lessonParts', 'lessonParts')
+      .leftJoinAndSelect('lessonParts.lessons', 'lessons')
+      .leftJoinAndSelect('lessonParts.quizzes', 'quizzes')
+      .where('course.id = :courseId', { courseId })
+      .orderBy('lessonParts.partNo', 'ASC') // Sort lessonParts by partNo
+      .addOrderBy('lessons.order', 'ASC') // Sort lessons by order within each lessonPart
+      .addOrderBy('quizzes.order', 'ASC') // Sort quizzes by order within each lessonPart
+      .getOne();
+  }
 }
