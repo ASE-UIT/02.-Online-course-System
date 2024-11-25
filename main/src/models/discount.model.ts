@@ -1,5 +1,6 @@
 import { BaseModel } from '@/models/base.model';
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Course } from '@/models/course.model';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 @Entity('discounts')
 export class Discount extends BaseModel {
@@ -20,4 +21,10 @@ export class Discount extends BaseModel {
 
   @Column({ type: 'date', name: 'end_date' })
   endDate!: Date;
+
+  @Column({ name: 'course_id' })
+  courseId!: string;
+
+  @ManyToOne(() => Course, (course) => course.discounts, { onDelete: 'CASCADE' })
+  course!: Course;
 }

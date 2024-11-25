@@ -16,10 +16,11 @@ class DiscountContainer extends BaseContainer {
   export() {
     const discountController = this.container.get<DiscountController>(DiscountController);
     const discountService = this.container.get<IDiscountService<any>>('DiscountService');
-    return { discountController, discountService };
+    const discountRepository = this.container.get<IDiscountRepository<any>>('DiscountRepository');
+    return { discountController, discountService, discountRepository };
   }
 }
 
 const discountContainer = new DiscountContainer();
-const { discountController, discountService } = discountContainer.export();
-export { discountController, discountService };
+const { discountController, discountService, discountRepository } = discountContainer.export();
+export { discountController, discountService, discountRepository };
