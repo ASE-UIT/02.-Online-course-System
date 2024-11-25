@@ -22,10 +22,11 @@ class CartContainer extends BaseContainer {
   export() {
     const cartController = this.container.get<CartController>(CartController);
     const cartService = this.container.get<ICartService<any>>('CartService');
-    return { cartController, cartService };
+    const cartRepository = this.container.get<ICartRepository<any>>('CartRepository');
+    return { cartController, cartService, cartRepository };
   }
 }
 
 const cartContainer = new CartContainer();
-const { cartController, cartService } = cartContainer.export();
-export { cartController, cartService };
+const { cartController, cartService, cartRepository } = cartContainer.export();
+export { cartController, cartService, cartRepository };

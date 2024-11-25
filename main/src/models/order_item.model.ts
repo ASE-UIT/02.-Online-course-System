@@ -12,16 +12,15 @@ export class OrderItem {
   @Column({ type: 'decimal' })
   price!: number;
 
-  @Column({ type: 'decimal' })
-  discount!: number;
+  // @Column({ type: 'decimal' })
+  // discount!: number;
+
+  @Column({ name: 'course_id' })
+  courseId!: string;
 
   @ManyToOne(() => Course, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'course_id' })
   course!: Course;
-
-  @ManyToOne(() => Student, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'student_id' })
-  student!: Student;
 
   @ManyToOne(() => Order, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'order_id' })
