@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Rating from "../Rating/Rating";
 import CourseCardIcon from "/picture/CourseCardIcon.svg";
 export const CourseCard = ({ course }) => {
@@ -6,7 +7,10 @@ export const CourseCard = ({ course }) => {
     return numberPrice.toLocaleString("en-US");
   }
   return (
-    <div className="border-[1px] border-black-50 transition-all duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white cursor-pointer overflow-hidden rounded-[12px] h-full">
+    <Link
+      to={course?.id ? `./course/${course.id}` : "#"}
+      className="border-[1px] border-black-50 transition-all duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white cursor-pointer overflow-hidden rounded-[12px] h-full"
+    >
       <div className="overflow-hidden">
         <img
           src={CourseCardIcon}
@@ -16,12 +20,18 @@ export const CourseCard = ({ course }) => {
       </div>
       <div className=" p-3 items-center ">
         <h1 className="line-clamp-2 text-text/md/bold">{course.name}</h1>
-        <h1 className="line-clamp-1 py-1 text-text/sm/medium text-black-300">{"Tác giả"}</h1>
+        <h1 className="line-clamp-1 py-1 text-text/sm/medium text-black-300">
+          {"Tác giả"}
+        </h1>
         <div className="flex items-center gap-2 opacity-70">
           <div className="rating flex justify-center items-center gap-3">
-            <h1 className="text-text/xs/semibold text-black-500">{course?.averageRating ? course.averageRating : 0}</h1>
+            <h1 className="text-text/xs/semibold text-black-500">
+              {course?.averageRating ? course.averageRating : 0}
+            </h1>
             <span className="mb-[2px]">
-              <Rating rating={course?.averageRating ? course.averageRating : 0} />
+              <Rating
+                rating={course?.averageRating ? course.averageRating : 0}
+              />
             </span>
             <h1 className="text-text/xs/regular text-black-300">
               ( {course?.totalReviews ? course?.totalReviews : 0} đánh giá)
@@ -39,6 +49,6 @@ export const CourseCard = ({ course }) => {
           </div>
         )} */}
       </div>
-    </div>
+    </Link>
   );
 };
