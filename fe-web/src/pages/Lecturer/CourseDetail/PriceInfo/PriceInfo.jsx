@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { useUpdateCourseMutation } from "@/store/rtk/course.services";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -10,35 +12,57 @@ const formSchema = z.object({
     .number({
       invalid_type_error: "Vui lòng nhập số hợp lệ",
     })
-    .min(1, {
+    .min(0, {
       message: "Vui lòng nhập giá gốc khóa học",
     }),
   price: z.coerce
     .number({
       invalid_type_error: "Vui lòng nhập số hợp lệ",
     })
-    .min(1, {
+    .min(0, {
       message: "Vui lòng nhập giá bán khóa học",
     }),
   min_price: z.coerce
     .number({
       invalid_type_error: "Vui lòng nhập số hợp lệ",
     })
-    .min(1, {
+    .min(0, {
       message: "Vui lòng nhập giá bán thấp nhất khóa học",
     }),
 });
-export default function PriceInfo() {
+export default function PriceInfo({ course }) {
+  const { toast } = useToast();
+  const [updateCourse, { isLoading }] = useUpdateCourseMutation();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      summary: "",
-      intro: "",
+      original_price: course.originalPrice,
+      price: course.sellPrice,
+      min_price: course.lowestPrice,
     },
   });
   async function onSubmit(values) {
-    console.log(values);
+    const payload = {
+      originalPrice: values.original_price,
+      sellPrice: values.sellPrice,
+      lowestPrice: values.lowestPrice,
+    };
+    try {
+      await updateCourse({ courseId: course.id, payload }).unwrap();
+      toast({
+        title: <p className=" text-green-700">Cập nhật khóa học thành công</p>,
+        description: "Khóa học đã được cập nhật",
+        status: "success",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: <p className=" text-red-700">Cập nhật khóa học thất bại</p>,
+        description: "Lỗi không xác định",
+        duration: 2000,
+      });
+    }
   }
   return (
     <div className="p-[20px]">
@@ -98,8 +122,12 @@ export default function PriceInfo() {
               />
             </div>
           </div>
-          <Button type="submit" className=" inline-block mt-5 px-8 rounded-xl">
-            Lưu
+          <Button disabled={isLoading} type="submit" className=" inline-block mt-5 px-8 rounded-xl">
+            {isLoading ? (
+              <div className="w-4 h-4 border-[3px] border-t-transparent border-white rounded-full animate-spin"></div>
+            ) : (
+              "Lưu"
+            )}
           </Button>
         </form>
       </Form>
