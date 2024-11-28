@@ -111,7 +111,7 @@ export class Course extends BaseModel {
 
   //Trạng thái
   @Column({ type: 'enum', enum: CourseStatus, default: CourseStatus.WAITING_FOR_APPROVAL })
-  status!: boolean;
+  status!: string;
 
   //Các trường thống kê
 
@@ -141,9 +141,12 @@ export class Course extends BaseModel {
   @JoinColumn({ name: 'lecturer_id' })
   lecturer!: Lecturer;
 
-  @ManyToOne(() => Discount, { nullable: true, onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'discount_id' })
-  discount!: Discount;
+  // @ManyToOne(() => Discount, { nullable: true, onDelete: 'SET NULL' })
+  // @JoinColumn({ name: 'discount_id' })
+  // discount!: Discount;
+
+  @OneToMany(() => Discount, (discount) => discount.course, { cascade: true })
+  discounts!: Discount[];
 
   @OneToMany(() => LessonPart, (lessonPart) => lessonPart.course, { cascade: true })
   lessonParts!: LessonPart[];

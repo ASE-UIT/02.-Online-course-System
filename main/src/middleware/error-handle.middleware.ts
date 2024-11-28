@@ -32,6 +32,10 @@ export const globalErrorHanlder = (error: any, req: Request, res: Response, next
         return res.send_badRequest('Invalid code', error);
       case ErrorCode.INVALID_OTP:
         return res.send_badRequest('Invalid OTP', error);
+      case ErrorCode.CART_NOT_FOUND:
+        return res.send_notFound('Cart not found', error);
+      case ErrorCode.CART_EMPTY:
+        return res.send_badRequest('Cart empty', error);
       default:
         return res.send_internalServerError(error.message, error);
     }

@@ -34,6 +34,21 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
   }
 
   /**
+   * * Get course detail
+   * @mhhung0811 do this task
+   * @param courseId
+   */
+  async getCourseDetail(courseId: string): Promise<Course> {
+    const course = await this.courseRepository.getCourseDetail(courseId);
+
+    if (!course) {
+      throw new BaseError('COURSE_NOT_FOUND', 'Không tìm thấy khóa học');
+    }
+
+    return course;
+  }
+
+  /**
    * * Lecturer create course, and then waiting for approve from employee
    * Course này cũng bao gồm cả lession và quizz (nếu có)
    * @param body //data của course

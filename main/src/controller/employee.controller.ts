@@ -11,6 +11,8 @@ import BaseError from '@/utils/error/base.error';
 import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import bcrypt from 'bcrypt';
+import { Course } from '@/models/course.model';
+import { getRepository } from 'typeorm';
 
 @injectable()
 export class EmployeeController {
@@ -119,6 +121,27 @@ export class EmployeeController {
       res.send_ok('Get me successfully', resultDto);
     } catch (error) {
       next(error);
+    }
+  }
+
+  static async approveCourse(req: Request, res: Response) {
+    try {
+      const { courseId } = req.body;
+
+      const courseRepository = getRepository(Course);
+      const course = await courseRepository.findOne(courseId);
+
+      if (!course) {
+        return res.status(404).json({ message: 'Không tìm thấy khóa học' });
+      }
+
+      course.status = 'Approved';
+      await courseRepository.save(course);
+
+      return res.status(200).json({ message: 'Khóa học đã được duyệt thành công', course });
+    } catch (error) {
+      console.error('Đã xảy ra lỗi:', error);
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }
 }

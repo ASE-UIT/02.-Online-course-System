@@ -57,4 +57,5 @@ employeeRouter
     checkPermission([PERMISSIONS.MANAGE_EMPLOYEE]),
     employeeController.common.delete.bind(employeeController.common)
   );
+
 export default employeeRouter;

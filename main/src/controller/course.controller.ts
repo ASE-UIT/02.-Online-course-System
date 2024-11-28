@@ -221,11 +221,7 @@ export class CourseController {
   async findById(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const courseId = req.params.id;
-      const course = await this.courseService.findOne({
-        filter: { id: courseId },
-        relations: ['category', 'lecturer', 'lessonParts', 'discount']
-        //select: CourseDetailSelectRes
-      });
+      const course = await this.courseService.getCourseDetail(courseId);
       res.send_ok('Get course successfully', course);
     } catch (error) {
       next(error);
