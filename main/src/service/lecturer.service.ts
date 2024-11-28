@@ -24,6 +24,7 @@ import { LecturerRegisterAfterOtpDto } from '@/dto/lecturer/lecturer-register-af
 import { LecturerDetailRes } from '@/dto/lecturer/lecturer-detail.res';
 import { ICourseRepository } from '@/repository/interface/i.course.repository';
 import { Course } from '@/models/course.model';
+import { LecturerGetCourseRes } from '@/dto/lecturer/lecturer-get-course.res';
 
 @injectable()
 export class LecturerService extends BaseCrudService<Lecturer> implements ILecturerService<Lecturer> {
@@ -175,5 +176,11 @@ export class LecturerService extends BaseCrudService<Lecturer> implements ILectu
     // Mã hóa mật khẩu mới và cập nhật vào cơ sở dữ liệu
     lecturer.password = bcrypt.hashSync(newPassword, 10);
     await this.lecturerRepository.findOneAndUpdate({ filter: { id: lecturerId }, updateData: lecturer });
+  }
+  async findCoursesByLecturer(lecturerId: string): Promise<LecturerGetCourseRes> {
+    const courses = this.courseRepository.findMany({
+      filter: { lecturerId },
+    });
+    return convertToDto(LecturerGetCourseRes,courses);
   }
 }

@@ -182,4 +182,15 @@ export class LecturerController {
       next(error);
     }
   }
+async getCourses(req: Request, res: Response, next: NextFunction){
+  try {
+    const lecturerId = req.params.id;
+
+    const courses = await this.lecturerService.findCoursesByLecturer(lecturerId);
+
+    res.send_ok('Get all course successfully',courses)
+  } catch (error) {
+    next(error);
+  }
+}
 }

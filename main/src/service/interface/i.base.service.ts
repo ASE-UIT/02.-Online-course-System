@@ -80,13 +80,13 @@ export interface IBaseCrudService<MODEL> {
    * @param filter
    * @returns The records with given filter
    */
-  findWithPaging(options: {
-    filter?: Partial<MODEL>;
-    paging?: PagingDto;
-    order?: RecordOrderType[];
-    relations?: string[];
-    select?: FindOptionsSelect<MODEL>;
-  }): Promise<PagingResponseDto<MODEL>>;
+    findWithPaging(options: {
+      filter?: Partial<MODEL>;
+      paging?: PagingDto;
+      order?: RecordOrderType[];
+      relations?: string[];
+      select?: FindOptionsSelect<MODEL>;
+    }): Promise<PagingResponseDto<MODEL>>;
 
   /**
    * Count records by the given filter

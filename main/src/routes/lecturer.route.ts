@@ -51,6 +51,10 @@ lecturerRouter.patch(
   classValidate(ChangePasswordReqDto),
   authenticateJWT, // Middleware xác thực người dùng đã đăng nhập
   lecturerController.changePassword.bind(lecturerController)
-);
-
+)
+.get(
+  '/courses',
+  authenticateJWT,
+  lecturerController.getCourses.bind(lecturerController)
+)
 export default lecturerRouter;
