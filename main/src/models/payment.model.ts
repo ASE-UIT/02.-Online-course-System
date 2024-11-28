@@ -11,4 +11,10 @@ export class Payment extends BaseModel {
 
   @Column({ type: 'boolean', name: 'payment_status', default: false })
   paymentStatus!: boolean;
+
+  @Column()
+  amount!: number;
+
+  @Column({ type: 'jsonb', name: 'pay_info', nullable: true })
+  payInfo?: any;
 }

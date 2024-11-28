@@ -69,7 +69,6 @@ export class CourseRepository extends BaseRepository<Course> implements ICourseR
       .createQueryBuilder('course')
       .leftJoinAndSelect('course.category', 'category')
       .leftJoinAndSelect('course.lecturer', 'lecturer')
-      .leftJoinAndSelect('course.discount', 'discount')
       .leftJoinAndSelect('course.lessonParts', 'lessonParts')
       .leftJoinAndSelect('lessonParts.lessons', 'lessons')
       .leftJoinAndSelect('lessonParts.quizzes', 'quizzes')
