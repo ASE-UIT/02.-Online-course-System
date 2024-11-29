@@ -1,4 +1,4 @@
-import 'lesson.dart';
+import 'lesson_model.dart';
 
 class Section {
   String title;
