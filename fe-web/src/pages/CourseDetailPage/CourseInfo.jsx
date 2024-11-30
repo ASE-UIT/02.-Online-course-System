@@ -1,6 +1,7 @@
+import { calculateDiscountPercentage, convertToHoursAndMinutes, formatCurrency } from "@/utils/converter";
 import { Award, BookCopy, Clock, Heart, Video } from "lucide-react";
 
-export default function CourseInfo() {
+export default function CourseInfo({ course }) {
   return (
     <div
       className="rounded-[4px] mt-[35%] mx-auto w-[450px] h-fit overflow-hidden "
@@ -9,18 +10,18 @@ export default function CourseInfo() {
       <div
         className="w-full bg-no-repeat bg-center bg-cover h-[276px]"
         style={{
-          backgroundImage: `url(https://s3-alpha-sig.figma.com/img/577c/6528/ddf41450ca653083d12880f4c574cebb?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=TFyXXQfrC-gneKCaqPkM0BWPsStYenJpNHMkgtJu4pEPTuBQnqmSYh448Nquf~1Up7GikOp3BSWl6QZ5gXiWjb8Ul4bzyHkwoMFjZgL-VbPQnftuk3zRslugUPa6uIngBspYEhQypdrvJKX9wT3Q98MqR7glV1anccoGYRcZ7nIi1p6dWmy0tRT4TTcez0udY6pVO23VMzt57HroncUfcVwEzenl0ed1iQzZMqOXWAxsPM9OkDEdacD~knmp141N1XwiDnQucGuS6o62T9t~PA5dBKP1HRqpxu2vS0SWSs3ltvOZMj~TOtLRk73u60yVhyrHl0ESjO5HspLer21R0g__)`,
+          backgroundImage: `url(https://d1csarkz8obe9u.cloudfront.net/posterpreviews/online-course-banner-template-design-119d86c3b79b2aca2c9241e064c7908d_screen.jpg?ts=1644080238)`,
         }}
       ></div>
       <div className="p-[20px] bg-white">
         <div className="flex justify-between items-center gap-4">
           <div className="flex items-end gap-2">
-            <p className="text-display/md/bold text-primary-500">đ000,000</p>
-            <p className="text-text/xl/semibold text-gray-600 line-through">
-              đ000,000
-            </p>
+            <p className="text-display/md/bold text-primary-500">đ{formatCurrency(course?.sellPrice)}</p>
+            <p className="text-text/xl/semibold text-gray-600 line-through">đ{formatCurrency(course?.originalPrice)}</p>
           </div>
-          <p className="text-text/xl/regular mt-1">Giảm xx%</p>
+          <p className="text-text/xl/regular mt-1">
+            Giảm {calculateDiscountPercentage(course?.originalPrice, course?.sellPrice)}%
+          </p>
         </div>
         <div className="flex mt-6 gap-2 justify-between">
           <div
@@ -40,15 +41,13 @@ export default function CourseInfo() {
           <div className="flex items-center gap-2">
             <Video className="w-[20px] h-[20px]" />
             <p className="text-text/md/regular">
-              Thời lượng:{" "}
-              <span className="text-text/md/semibold">05 giờ 30 phút</span>
+              Thời lượng: <span className="text-text/md/semibold">{convertToHoursAndMinutes(course?.duration)}</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
             <BookCopy className="w-[20px] h-[20px]" />
             <p className="text-text/md/regular">
-              Giáo trình:{" "}
-              <span className="text-text/md/semibold">41 bài giảng</span>
+              Giáo trình: <span className="text-text/md/semibold">{course?.lessonParts?.length} bài giảng</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
