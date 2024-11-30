@@ -5,7 +5,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { useUpdateCourseMutation } from "@/store/rtk/course.services";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -57,7 +56,6 @@ const formSchema = z.object({
 });
 
 export default function CourseInfo({ course }) {
-  const { toast } = useToast();
   const [isFreeCourse, setIsFreeCourse] = useState(false);
   const [updateCourse, { isLoading }] = useUpdateCourseMutation();
   const form = useForm({
@@ -91,22 +89,7 @@ export default function CourseInfo({ course }) {
       introduction: values.description,
       tags: values.tags.split(","),
     };
-    try {
-      await updateCourse({ courseId: course.id, payload }).unwrap();
-      toast({
-        title: <p className=" text-green-700">Cập nhật khóa học thành công</p>,
-        description: "Khóa học đã được cập nhật",
-        status: "success",
-        duration: 2000,
-      });
-    } catch (error) {
-      console.log(error);
-      toast({
-        title: <p className=" text-red-700">Cập nhật khóa học thất bại</p>,
-        description: "Lỗi không xác định",
-        duration: 2000,
-      });
-    }
+    await updateCourse({ courseId: course.id, payload });
   }
   useEffect(() => {
     if (course) {

@@ -19,15 +19,15 @@ export default function LecturerCourseDetail() {
 
   return (
     <div className="px-16 flex gap-8">
-      <div className="">
+      <div className="w-[30%]">
         <SideBar />
       </div>
       {course && (
-        <div className=" flex-1">
+        <div className="w-[66%] ">
           {hash === "" && <CourseInfo course={course} />}
           {hash === "#price" && <PriceInfo course={course} />}
-          {hash === "#target" && <TargetInfo />}
-          {hash === "#lesson" && <ModuleLesson />}
+          {hash === "#target" && <TargetInfo course={course} />}
+          {hash === "#lesson" && <ModuleLesson course={course} />}
           {hash === "#img&video" && <Introduction />}
           {hash === "#doc&gift" && <Addition />}
         </div>

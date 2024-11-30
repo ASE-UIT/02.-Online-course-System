@@ -16,7 +16,7 @@ const formSchema = z.object({
     message: "Vui lòng nhập giải thích đáp án",
   }),
 });
-export default function AddSelectionForm({ setShowAddSelectionForm }) {
+export default function AddSelectionForm({ onClose }) {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -31,7 +31,7 @@ export default function AddSelectionForm({ setShowAddSelectionForm }) {
     <div>
       <div className="flex items-center gap-2">
         <div
-          onClick={() => setShowAddSelectionForm(false)}
+          onClick={() => onClose()}
           className="px-2 py-2 rounded-full hover:bg-gray-500 transition-all cursor-pointer"
         >
           <ChevronLeft />
