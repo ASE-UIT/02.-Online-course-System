@@ -1,19 +1,6 @@
-import config from "@/config";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseApi } from "./base.services";
 
-export const courseRTKApi = createApi({
-  reducerPath: "courseRTKApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: config.BASE_URL,
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
-  tagTypes: ["course"],
+export const courseRTKApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getCourses: build.query({
       query: (body) => ({

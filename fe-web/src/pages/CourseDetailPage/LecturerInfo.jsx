@@ -1,6 +1,8 @@
 import { BookOpenCheck, Smile, Star, UsersRound } from "lucide-react";
 
-export default function LecturerInfo() {
+export default function LecturerInfo({ course }) {
+  const lecturer = course?.lecturer || null;
+  if (!lecturer) return <></>;
   return (
     <div
       style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
@@ -14,11 +16,8 @@ export default function LecturerInfo() {
           }}
         ></div>
         <div className="flex-1">
-          <p className="text-text/lg/semibold">Nguyễn Văn A</p>
-          <p className="text-text/md/regular line-clamp-2 mt-1">
-            Người sáng lập ra trung tâm Đào tạo Mỹ thuật đa phương tiện Digital
-            Art Pigworkshop
-          </p>
+          <p className="text-text/lg/semibold">{lecturer?.name}</p>
+          <p className="text-text/md/regular line-clamp-2 mt-1">{lecturer?.bio}</p>
         </div>
       </div>
       <div className="grid grid-cols-2 mt-4 gap-3">
