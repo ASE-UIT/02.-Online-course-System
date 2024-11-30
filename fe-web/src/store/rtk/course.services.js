@@ -36,7 +36,24 @@ export const courseRTKApi = baseApi.injectEndpoints({
         url: `/course-category/`,
       }),
     }),
+    getCoursesByCategoryId: build.query({
+      query: ({ categoryId, limit, page }) => ({
+        url: `/course/paging?rpp=${limit}&page=${page}`, // Same query, no change to the backend
+      }),
+    }),
+    getCoursesByLecturerId: build.query({
+      query: ({ lecturerId, limit, page }) => ({
+        url: `/course/paging?lecturerId=${lecturerId}&rpp=${limit}&page=${page}`, // Modify URL to fetch by lecturerId
+      }),
+    }),
+    createCourse: build.mutation({
+      query: (payload) => ({
+        url: `/course`,
+        body: payload,
+        method: "POST",
+      }),
+    }),
   }),
 });
-export const { useGetCoursesQuery, useGetCourseByIdQuery, useGetCategoriesQuery, useUpdateCourseMutation } =
+export const { useGetCoursesQuery, useGetCourseByIdQuery, useGetCategoriesQuery, useUpdateCourseMutation, useGetCoursesByCategoryIdQuery, useGetCoursesByLecturerIdQuery, useCreateCourseMutation  } =
   courseRTKApi;

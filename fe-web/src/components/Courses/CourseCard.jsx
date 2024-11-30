@@ -5,7 +5,7 @@ import { formatCurrency } from "@/utils/converter";
 export const CourseCard = ({ course }) => {
   return (
     <Link
-      to={course?.id ? `./course/${course.id}` : "#"}
+      to={course?.id ? `../course/${course.id}` : "#"}
       className="border-[1px] border-black-50 transition-all duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white cursor-pointer overflow-hidden rounded-[12px] h-full"
     >
       <div className="overflow-hidden">

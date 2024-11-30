@@ -130,7 +130,7 @@ export default function CourseDetail() {
           <CourseRating />
           <p className="border-b border-black-100 w-full my-5"></p>
           {/* Related */}
-          <RelatedCourse />
+          <RelatedCourse categoryId={course?.categoryId} courseId={course?.id} />
         </div>
 
         <div className="basis-[40%]"></div>
