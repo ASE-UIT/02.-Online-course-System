@@ -2,8 +2,10 @@ import { useSortable } from "@dnd-kit/sortable";
 import { FileText, Pen, Trash2 } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
 
-export default function LessonCard({ lesson }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: lesson.id });
+export default function LessonCard({ lesson, handleShowEditLessonForm }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: lesson.id,
+  });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -22,16 +24,19 @@ export default function LessonCard({ lesson }) {
     >
       <td className="text-start text-text/md/regular items-center border-gray-300 py-3 flex gap-2">
         <FileText className="w-[16px] h-[16px]" />
-        <p>{lesson.name}</p>
+        <p>{lesson.title}</p>
       </td>
       <td className="text-start text-text/md/regular border-gray-300 py-3" />
       <td className="text-start text-text/md/regular border-gray-300 py-3" />
       <td className="text-start text-text/md/regular border-gray-300 py-3" />
       <td className="text-start text-text/md/regular border-gray-300 py-3" />
       <td className="text-start text-text/md/regular border-gray-300 py-3">
-        <div className="flex gap-2">
-          <Pen className="w-[16px] cursor-pointer h-[16px] text-primary-400" />
-          <Trash2 className="w-[16px] cursor-pointer h-[16px] text-error-500" />
+        <div data-no-dnd="true" className="flex gap-2 ">
+          <Pen
+            onClick={() => handleShowEditLessonForm()}
+            className=" w-[16px] cursor-pointer h-[16px] text-primary-400"
+          />
+          <Trash2 className=" w-[16px] cursor-pointer h-[16px] text-error-500" />
         </div>
       </td>
     </tr>

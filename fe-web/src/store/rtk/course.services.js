@@ -1,4 +1,5 @@
 import { baseApi } from "./base.services";
+import { showToast } from "./toast";
 
 export const courseRTKApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -20,6 +21,15 @@ export const courseRTKApi = baseApi.injectEndpoints({
         method: "PUT",
       }),
       invalidatesTags: (result, error, { courseId }) => [{ type: "Course", id: courseId }],
+      async onQueryStarted(payload, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          showToast({ type: "success", msg: "Cập nhật khóa học thành công", desc: "Khóa học đã được cập nhật" });
+        } catch (error) {
+          console.log(error);
+          showToast({ type: "error", msg: "Cập nhật khóa học thất bại", desc: "Lỗi không xác định" });
+        }
+      },
     }),
     getCategories: build.query({
       query: () => ({

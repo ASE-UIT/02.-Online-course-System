@@ -1,5 +1,4 @@
 import { ArrowDown, ArrowUp, Check } from "lucide-react";
-import "react-quill/dist/quill.snow.css";
 import CourseInfo from "./CourseInfo";
 import LecturerInfo from "./LecturerInfo";
 import CourseContent from "./CourseContent";
@@ -18,6 +17,7 @@ export default function CourseDetail() {
   const { data: courseResponse } = useGetCourseByIdQuery(params?.id);
   const course = courseResponse?.data || null;
   const courseIntroduction = course?.introduction;
+
   if (!course) return <></>;
   return (
     <div className="">

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
+
 import { useUpdateCourseMutation } from "@/store/rtk/course.services";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -31,7 +31,6 @@ const formSchema = z.object({
     }),
 });
 export default function PriceInfo({ course }) {
-  const { toast } = useToast();
   const [updateCourse, { isLoading }] = useUpdateCourseMutation();
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -47,22 +46,7 @@ export default function PriceInfo({ course }) {
       sellPrice: values.sellPrice,
       lowestPrice: values.lowestPrice,
     };
-    try {
-      await updateCourse({ courseId: course.id, payload }).unwrap();
-      toast({
-        title: <p className=" text-green-700">Cập nhật khóa học thành công</p>,
-        description: "Khóa học đã được cập nhật",
-        status: "success",
-        duration: 2000,
-      });
-    } catch (error) {
-      console.log(error);
-      toast({
-        title: <p className=" text-red-700">Cập nhật khóa học thất bại</p>,
-        description: "Lỗi không xác định",
-        duration: 2000,
-      });
-    }
+    await updateCourse({ courseId: course.id, payload });
   }
   return (
     <div className="p-[20px]">

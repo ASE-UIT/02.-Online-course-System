@@ -1,84 +1,27 @@
 // ModuleLesson.jsx
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import AddLessonForm from "./AddLessonForm";
 import AddSelectionForm from "./AddSelectionForm";
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { DndContext, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
+import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { ModuleCard } from "./ModuleCard";
-const modules = [
-  {
-    id: "1",
-    part: "Phần I: MỞ ĐẦU",
-    lesson: [
-      {
-        id: "I1",
-        name: "Bài 1: Giới thiệu",
-      },
-      { id: "I2", name: "Bài 2: Giới thiệu" },
-      {
-        id: "I3",
-        name: "Bài 3: Giới thiệu",
-      },
-      {
-        id: "I4",
-        name: "Bài 4: Giới thiệu",
-      },
-    ],
-  },
-  {
-    id: "2",
-    part: "Phần II : GIỚI THIỆU",
-    lesson: [
-      { id: "II1", name: "Bài 1: Giới thiệu" },
-      { id: "II2", name: "Bài 2: Giới thiệu" },
-      { id: "II3", name: "Bài 3: Giới thiệu" },
-      { id: "II4", name: "Bài 4: Giới thiệu" },
-    ],
-  },
-  {
-    id: "3",
-    part: "Phần III : KẾT THÚC",
-    lesson: [
-      { id: "III1", name: "Bài 1: Giới thiệu" },
-      { id: "III2", name: "Bài 2: Giới thiệu" },
+import { MouseSensor2 } from "./MouseSensorCustom";
+import { Button } from "@/components/ui/button";
+import { useUpdateCourseMutation } from "@/store/rtk/course.services";
+import AddLessonForm from "./AddLessonForm";
 
-      { id: "III3", name: "Bài 3: Giới thiệu" },
-      { id: "III4", name: "Bài 4: Giới thiệu" },
-    ],
-  },
-];
-
-// CustomPointerSensor.js
-
-export class CustomPointerSensor extends PointerSensor {
-  static activators = [
-    {
-      eventName: "onPointerDown",
-      handler: ({ nativeEvent: event }) => {
-        // Chỉ cho phép drag khi click vào phần tử có class 'drag-handle'
-        if (!event.target.closest(".drag-handle")) {
-          return false;
-        }
-        return true;
-      },
-    },
-  ];
-}
-export default function ModuleLesson() {
-  const [items, setItems] = useState(modules);
+export default function ModuleLesson({ course }) {
+  const [items, setItems] = useState([]);
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
   const [showAddSelectionForm, setShowAddSelectionForm] = useState(false);
-
+  const [updateCourse, { isLoading }] = useUpdateCourseMutation();
+  const [moduleSlt, setModuleSlt] = useState(null);
+  const [isEditForm, setIsEditForm] = useState(-1);
   const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
+    useSensor(MouseSensor2, {
+      activationConstraint: {
+        distance: 10,
+      },
     })
   );
 
@@ -88,13 +31,37 @@ export default function ModuleLesson() {
       setItems((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
-        return arrayMove(items, oldIndex, newIndex);
+        const oldArr = arrayMove(items, oldIndex, newIndex);
+        const newArr = oldArr.map((item, idx) => {
+          return { ...item, partNo: idx + 1 };
+        });
+        return newArr;
       });
     }
   };
+  const handleUpdateModule = async () => {
+    await updateCourse({
+      courseId: course.id,
+      payload: {
+        lessonParts: items,
+      },
+    });
+  };
+  const handleShowAddLessonForm = (module, lessonIdx) => {
+    setShowAddLessonForm(true);
+    setModuleSlt(module);
+    setIsEditForm(lessonIdx);
+  };
+  const handleShowAddSelectionForm = (module, lessonIdx) => {
+    setShowAddSelectionForm(true);
+    setModuleSlt(module);
+    setIsEditForm(lessonIdx);
+  };
   useEffect(() => {
-    console.log(items);
-  }, [items]);
+    if (course?.lessonParts?.length > 0) {
+      setItems(course.lessonParts);
+    }
+  }, [course?.lessonParts]);
   return (
     <div className="p-[20px]">
       {!showAddLessonForm && !showAddSelectionForm && (
@@ -112,14 +79,50 @@ export default function ModuleLesson() {
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
               {items.map((module) => (
-                <ModuleCard key={module.id} module={module} setItems={setItems} />
+                <ModuleCard
+                  key={module.id}
+                  module={module}
+                  setItems={setItems}
+                  handleShowAddSelectionForm={handleShowAddSelectionForm}
+                  handleShowAddLessonForm={handleShowAddLessonForm}
+                />
               ))}
             </SortableContext>
           </DndContext>
+
+          <Button
+            disabled={isLoading}
+            onClick={handleUpdateModule}
+            type="submit"
+            className=" inline-block mt-5 px-8 rounded-xl"
+          >
+            {isLoading ? (
+              <div className="w-4 h-4 border-[3px] border-t-transparent border-white rounded-full animate-spin"></div>
+            ) : (
+              "Lưu thay đổi"
+            )}
+          </Button>
         </div>
       )}
-      {showAddLessonForm && <AddLessonForm setShowAddLessonForm={setShowAddLessonForm} />}
-      {showAddSelectionForm && <AddSelectionForm setShowAddSelectionForm={setShowAddSelectionForm} />}
+      {showAddLessonForm && (
+        <AddLessonForm
+          onClose={() => {
+            setIsEditForm(-1);
+            setShowAddLessonForm(false);
+          }}
+          course={course}
+          moduleSlt={moduleSlt}
+          isEditForm={isEditForm}
+        />
+      )}
+      {showAddSelectionForm && (
+        <AddSelectionForm
+          onClose={() => {
+            setIsEditForm(false);
+            setShowAddSelectionForm(false);
+          }}
+        />
+      )}
     </div>
   );
 }
