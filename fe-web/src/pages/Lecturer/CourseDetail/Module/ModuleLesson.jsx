@@ -1,7 +1,6 @@
 // ModuleLesson.jsx
 import { PlusIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import AddSelectionForm from "./AddSelectionForm";
 import { DndContext, closestCenter, useSensor, useSensors } from "@dnd-kit/core";
 import { arrayMove, SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { ModuleCard } from "./ModuleCard";
@@ -9,11 +8,14 @@ import { MouseSensor2 } from "./MouseSensorCustom";
 import { Button } from "@/components/ui/button";
 import { useUpdateCourseMutation } from "@/store/rtk/course.services";
 import AddLessonForm from "./AddLessonForm";
+import DeleteLessonModal from "./DeleteLessonModal";
+import QuizzList from "./QuizzList";
 
 export default function ModuleLesson({ course }) {
   const [items, setItems] = useState([]);
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
   const [showAddSelectionForm, setShowAddSelectionForm] = useState(false);
+  const [showDeleteLessonForm, setShowDeleteLessonForm] = useState(false);
   const [updateCourse, { isLoading }] = useUpdateCourseMutation();
   const [moduleSlt, setModuleSlt] = useState(null);
   const [isEditForm, setIsEditForm] = useState(-1);
@@ -57,11 +59,16 @@ export default function ModuleLesson({ course }) {
     setModuleSlt(module);
     setIsEditForm(lessonIdx);
   };
+  const handleShowDeleteLessonForm = (module, lessonIdx) => {
+    setShowDeleteLessonForm(true);
+    setModuleSlt(module);
+    setIsEditForm(lessonIdx);
+  };
   useEffect(() => {
     if (course?.lessonParts?.length > 0) {
       setItems(course.lessonParts);
     }
-  }, [course?.lessonParts]);
+  }, [course]);
   return (
     <div className="p-[20px]">
       {!showAddLessonForm && !showAddSelectionForm && (
@@ -85,6 +92,7 @@ export default function ModuleLesson({ course }) {
                   setItems={setItems}
                   handleShowAddSelectionForm={handleShowAddSelectionForm}
                   handleShowAddLessonForm={handleShowAddLessonForm}
+                  handleShowDeleteLessonForm={handleShowDeleteLessonForm}
                 />
               ))}
             </SortableContext>
@@ -115,12 +123,25 @@ export default function ModuleLesson({ course }) {
           isEditForm={isEditForm}
         />
       )}
-      {showAddSelectionForm && (
-        <AddSelectionForm
+      {showDeleteLessonForm && (
+        <DeleteLessonModal
+          course={course}
+          moduleSlt={moduleSlt}
+          isEditForm={isEditForm}
           onClose={() => {
-            setIsEditForm(false);
+            setIsEditForm(-1);
+            setShowDeleteLessonForm(false);
+          }}
+        />
+      )}
+      {showAddSelectionForm && (
+        <QuizzList
+          onClose={() => {
+            setIsEditForm(-1);
             setShowAddSelectionForm(false);
           }}
+          course={course}
+          moduleSlt={moduleSlt}
         />
       )}
     </div>
