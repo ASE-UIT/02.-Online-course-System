@@ -170,7 +170,7 @@ export default function AddLessonForm({ onClose, moduleSlt, course, isEditForm }
       form.setValue("intro", lesson.introduction);
       setIsFreeTrial(lesson?.isFreeTrial);
     }
-  }, [isEditForm, form.setValue, moduleSlt]);
+  }, [isEditForm, form, moduleSlt]);
   const showVideoTitle =
     !fileSlt && isEditForm !== -1 && Boolean(moduleSlt?.lessons[isEditForm]?.videoUrl) !== false ? true : false;
 

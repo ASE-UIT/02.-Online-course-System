@@ -5,7 +5,13 @@ import LessonCard from "./LessonCard";
 import { closestCenter, DndContext, useSensor, useSensors } from "@dnd-kit/core";
 import { MouseSensor2 } from "./MouseSensorCustom";
 
-export function ModuleCard({ module, setItems, handleShowAddSelectionForm, handleShowAddLessonForm }) {
+export function ModuleCard({
+  module,
+  setItems,
+  handleShowAddSelectionForm,
+  handleShowAddLessonForm,
+  handleShowDeleteLessonForm,
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: module.id });
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -112,6 +118,9 @@ export function ModuleCard({ module, setItems, handleShowAddSelectionForm, handl
                     handleShowEditLessonForm={() => {
                       handleShowAddLessonForm(module, idx);
                     }}
+                    handleShowDeleteLessonForm={() => {
+                      handleShowDeleteLessonForm(module, idx);
+                    }}
                   />
                 ))}
               </tbody>
@@ -131,8 +140,7 @@ export function ModuleCard({ module, setItems, handleShowAddSelectionForm, handl
           onClick={() => handleShowAddSelectionForm(module, -1)}
           className="flex items-center py-[10px] px-[16px] bg-warning-700 rounded-[8px] gap-2 text-white cursor-pointer hover:bg-warning-800 transition-all"
         >
-          <PlusIcon />
-          <p className="text-text/md/medium">Bài trắc nghiệm</p>
+          <p className="text-text/md/medium">Câu hỏi trắc nghiệm</p>
         </div>
         <p className="text-text/md/regular">Một phần học nên có một bài trắc nghiệm</p>
       </div>

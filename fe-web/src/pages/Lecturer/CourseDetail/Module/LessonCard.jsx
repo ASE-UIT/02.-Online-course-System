@@ -2,7 +2,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { FileText, Pen, Trash2 } from "lucide-react";
 import { CSS } from "@dnd-kit/utilities";
 
-export default function LessonCard({ lesson, handleShowEditLessonForm }) {
+export default function LessonCard({ lesson, handleShowEditLessonForm, handleShowDeleteLessonForm }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: lesson.id,
   });
@@ -13,6 +13,7 @@ export default function LessonCard({ lesson, handleShowEditLessonForm }) {
     position: isDragging ? "relative" : "static",
     opacity: isDragging ? 0.9 : 1,
   };
+
   return (
     <tr
       ref={setNodeRef}
@@ -36,7 +37,10 @@ export default function LessonCard({ lesson, handleShowEditLessonForm }) {
             onClick={() => handleShowEditLessonForm()}
             className=" w-[16px] cursor-pointer h-[16px] text-primary-400"
           />
-          <Trash2 className=" w-[16px] cursor-pointer h-[16px] text-error-500" />
+          <Trash2
+            onClick={() => handleShowDeleteLessonForm()}
+            className=" w-[16px] cursor-pointer h-[16px] text-error-500"
+          />
         </div>
       </td>
     </tr>
