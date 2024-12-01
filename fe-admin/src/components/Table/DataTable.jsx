@@ -140,8 +140,9 @@ export default function DataTable() {
   });
 
   const addButton = (
-    <Button variant="primary" className="bg-primary-500 text-white px-10 py-2">
-      Thêm
+    <Button variant="primary" className="bg-primary-500 text-white px-4 py-2">
+      <span className="text-text/xl/medium pr-[6px]">+</span>
+      Thêm danh mục
     </Button>
   );
 
@@ -159,18 +160,10 @@ export default function DataTable() {
 
   return (
     <div className="h-full min-w-[calc(100vh-320px-40px)] space-y-5">
-      <div className="w-full flex gap-[10px]">
-        <Searchbar
-          placeholder="Tìm kiếm gì đó"
-          value={table.getColumn("name")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-        />
-
+      <div className="w-full flex justify-end gap-[10px]">
         <DialogComponent
           triggerButton={addButton}
-          title="Thêm"
+          title="Thêm danh mục"
           description={null}
           content={null}
         />

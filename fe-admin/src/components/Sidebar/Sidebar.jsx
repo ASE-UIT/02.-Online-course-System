@@ -5,7 +5,7 @@ export default function Sidebar() {
   const { activeItem, setActiveItem } = useNavigation();
 
   return (
-    <div className="z-50 w-full bg-white shadow-md ">
+    <div className="z-50 w-full max-h-[86px] bg-white shadow-md ">
       <nav className="flex-1 px-5 py-[10px]">
         <ul className="space-x-1 flex flex-row items-start">
           {menuItems.map((item) => (
