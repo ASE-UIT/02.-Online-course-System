@@ -32,7 +32,7 @@ export default function DeleteLessonModal({ onClose, course, moduleSlt, isEditFo
     >
       <div className="bg-white p-[20px] rounded-lg w-[500px]">
         <header className="text-[24px] font-semibold">Bạn có chắc muốn xóa bài học này</header>
-        <p>Bạn học này sẽ bị xóa vĩnh viễn, bạn có chắc muốn tiếp tục</p>
+        <p>Bài học này sẽ bị xóa vĩnh viễn, bạn có chắc muốn tiếp tục</p>
         <div className="flex items-center gap-4 mt-4">
           <div
             onClick={() => onClose()}
