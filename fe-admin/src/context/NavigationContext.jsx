@@ -1,11 +1,11 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from "react";
 import {
   LayoutDashboard,
   Layers,
   UserRoundCog,
   Users,
-  Building2,
-  Settings
+  Building2
 } from "lucide-react";
 
 export const menuItems = [
@@ -38,9 +38,7 @@ export const menuItems = [
     text: "Quản lý người dùng",
     id: "users",
     path: "users"
-  },
-
-  { icon: Settings, text: "Cài đặt", id: "settings", path: "setting" }
+  }
 ];
 
 const NavigationContext = createContext();
