@@ -1,4 +1,3 @@
-import { mediaApi } from "@/api/media";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -27,7 +26,7 @@ const mapChoice = {
 export default function AddSelectionForm({ onClose, quizz, quizzes, quizzSlt, moduleSlt, course }) {
   const fileInputRef = useRef(null);
   const [fileSlt, setFileSlt] = useState(null);
-  const [updateCourse] = useUpdateCourseMutation();
+  const [updateCourse, { isLoading }] = useUpdateCourseMutation();
 
   const [corChoices, setCorChoices] = useState([]);
   const [choices, setChoices] = useState({
@@ -100,7 +99,7 @@ export default function AddSelectionForm({ onClose, quizz, quizzes, quizzSlt, mo
         >
           <ChevronLeft />
         </div>
-        <header className="text-display/md/medium">THÊM BÀI TRẮC NGHIỆM</header>
+        <header className="text-display/md/medium">CHỈNH SỬA BÀI TRẮC NGHIỆM</header>
       </div>
       <div className="py-[20px] border-[1px] border-black-300 border-dashed mt-3 flex flex-col gap-2 items-center justify-center">
         <p className="text-text/md/regular">Hình ảnh</p>
@@ -213,8 +212,12 @@ export default function AddSelectionForm({ onClose, quizz, quizzes, quizzSlt, mo
               })}
             </div>
           </div>
-          <Button type="submit" className=" inline-block mt-5 px-8 rounded-xl">
-            Lưu
+          <Button disabled={isLoading} type="submit" className=" inline-block mt-5 px-8 rounded-xl">
+            {isLoading ? (
+              <div className="w-4 h-4 border-[3px] border-t-transparent border-white rounded-full animate-spin"></div>
+            ) : (
+              "Lưu"
+            )}
           </Button>
         </form>
       </Form>
