@@ -35,7 +35,8 @@ const router = createBrowserRouter(
     <Route>
       <Route path="admin" element={<DefaultLayout />}>
         <Route path="/admin/" element={<UserLayout />}>
-          <Route index element={<Dashboard />} />
+          <Route index element={<Navigate to="dashboard" />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="business" element={<ManageBusiness />} />
           <Route path="categories" element={<ManageCategories />} />
           <Route path="employees" element={<ManageEmployee />} />
@@ -43,7 +44,7 @@ const router = createBrowserRouter(
           <Route path="setting" element={<Setting />} />
         </Route>
         <Route path="sign-in" element={<SignIn />} />
-        <Route path="*" element={<Navigate to={"./admin/"} />} />
+        <Route path="*" element={<Navigate to={"./admin/dashboard"} />} />
       </Route>
     </Route>
   ),
