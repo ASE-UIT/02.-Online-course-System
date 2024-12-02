@@ -6,6 +6,7 @@ export const fetchBaseQueryWithAuth = () =>
     baseUrl: config.BASE_URL,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("token");
+      // console.log('token',token)
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
