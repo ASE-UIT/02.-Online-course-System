@@ -1,5 +1,5 @@
 import PurpleLine from "@/assets/PurpleLine";
-import DashboardCard from "./DashboardCard";
+import DashboardCard from "../DashboardCard";
 import NumberChange from "./NumberChange";
 import TurquoiseLine from "@/assets/TurquoiseLine";
 import YellowLine from "@/assets/YellowLine";
@@ -35,7 +35,7 @@ const StatsGrid = () => {
           <BlueLine />
         </div>
       </div>
-      <div className="mt-[36px] grid grid-cols-2 gap-3">
+      <div className="mt-[72px] grid grid-cols-2 gap-6">
         {statsData.map((stat, index) => (
           <div key={index}>
             <DashboardCard

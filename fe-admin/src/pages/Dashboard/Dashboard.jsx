@@ -1,5 +1,7 @@
-import RevenueChart from "@/components/Dashboard/RevenueChart";
-import StatsGrid from "@/components/Dashboard/StatsGrid";
+import DashboardGrid from "@/components/Dashboard/Below/BelowGrid";
+import RevenueChart from "@/components/Dashboard/Top/RevenueChart";
+import RevenueGrid from "@/components/Dashboard/Top/RevenueGrid";
+import StatsGrid from "@/components/Dashboard/Top/StatsGrid";
 
 const Dashboard = () => {
   return (
@@ -11,7 +13,13 @@ const Dashboard = () => {
       </div>
       <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
         <StatsGrid />
-        <RevenueChart />
+        <div className="space-y-2">
+          <RevenueGrid />
+          <RevenueChart />
+        </div>
+        <div className="col-span-2">
+          <DashboardGrid />
+        </div>
       </div>
     </section>
   );
