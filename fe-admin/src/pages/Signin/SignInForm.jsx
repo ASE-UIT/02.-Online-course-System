@@ -42,34 +42,43 @@ function SignInForm() {
 
   async function onSubmit(values) {
     setIsLoading(true);
-    const { email, password } = values;
-    const respone = await employeeLogin(email, password);
+    try {
+      const { email, password } = values;
+      const respone = await employeeLogin(email, password);
 
-    if (respone.status === 200 || respone.data.code === 200) {
-      console.log("respone.data", respone.data.data.token);
-      const token = respone.data.data.token;
+      if (respone.status === 200 || respone.data.code === 200) {
+        console.log("respone.data", respone.data.data.token);
+        const token = respone.data.data.token;
 
-      login({
-        token: token
-      });
+        login({
+          token: token
+        });
 
-      navigate("/admin/");
-      toast({
-        title: <p className=" text-green-700">Đăng nhập thành công</p>,
-        description: "Chào mừng bạn trở lại",
-        status: "success",
-        duration: 2000
-      });
-    } else if (respone.errors?.code === "NF_01") {
-      form.setError("password", {
-        message: respone.errors.msg
-      });
-    } else {
-      toast({
-        title: <p className=" text-red-700">Đăng nhập thất bại</p>,
-        description: "Lỗi không xác định",
-        duration: 2000
-      });
+        navigate("/admin/");
+        toast({
+          title: <p className=" text-green-700">Đăng nhập thành công</p>,
+          description: "Chào mừng bạn trở lại",
+          status: "success",
+          duration: 2000
+        });
+      }
+    } catch (error) {
+      console.log("error", error);
+      if (error.status === 401 || error.response.data.code === 401) {
+        form.setError("email", {
+          message: "Email hoặc mật khẩu không đúng"
+        });
+      } else if (error.response.data?.code === 500) {
+        form.setError("email", {
+          message: "Không tìm thấy tài khoản"
+        });
+      } else {
+        toast({
+          title: <p className=" text-red-700">Đăng nhập thất bại</p>,
+          description: "Lỗi không xác định",
+          duration: 2000
+        });
+      }
     }
     setIsLoading(false);
   }
