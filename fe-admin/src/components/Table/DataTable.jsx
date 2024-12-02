@@ -19,7 +19,6 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import Searchbar from "../Searchbar/Searchbar";
 import PenLineIcon from "@/assets/PenLineIcon";
 import DialogComponent from "../Dialog/DialogComponent";
 import { Label } from "../ui/label";

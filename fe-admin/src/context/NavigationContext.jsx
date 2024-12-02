@@ -13,7 +13,7 @@ export const menuItems = [
     icon: LayoutDashboard,
     text: "Bảng điều khiển",
     id: "dashboard",
-    path: "/admin/"
+    path: "dashboard"
   },
   {
     icon: Layers,
