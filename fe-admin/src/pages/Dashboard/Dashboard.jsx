@@ -17,7 +17,7 @@ const Dashboard = () => {
           <RevenueGrid />
           <RevenueChart />
         </div>
-        <div className="col-span-2">
+        <div className="lg:col-span-2">
           <DashboardGrid />
         </div>
       </div>
