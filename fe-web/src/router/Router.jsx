@@ -101,7 +101,7 @@ const router = createBrowserRouter(
               element={<ResetPassword />}
             />
           </Route>
-          <Route path="search/" element={<SearchPage />} />
+          <Route path="search" element={<SearchPage />} />
           <Route path="callback" element={<InfoInput />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="result/:content" element={<ResultPage />} />
