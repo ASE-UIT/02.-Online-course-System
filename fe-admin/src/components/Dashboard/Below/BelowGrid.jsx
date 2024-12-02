@@ -1,18 +1,22 @@
 import DashboardCard from "../DashboardCard";
 
 const sampleData = [
-  { label: "SỐ LƯỢT TRUY CẬP", value: "2,3K", change: "+3.4%" },
-  { label: "TGTB Ở TRANG WEB", value: "2,3K", change: "+3.4%" },
-  { label: "SỐ LƯỢT TƯƠNG TÁC VỚI KHOÁ HỌC", value: "1,1K", change: "-3.4%" },
-  { label: "SỐ LƯỢT ĐÁNH GIÁ KHOÁ HỌC", value: "2,3K", change: "+3.4%" },
-  { label: "TGTB HỌC KHOÁ HỌC", value: "2,3K", change: "+3.4%" },
+  { label: "SỐ LƯỢT TRUY CẬP", value: "100K", change: "+3.4%" },
+  { label: "TGTB Ở TRANG WEB", value: "1h30p", change: "+3.4%" },
+  { label: "SỐ LƯỢT TƯƠNG TÁC VỚI KHOÁ HỌC", value: "203K", change: "-3.4%" },
+  { label: "SỐ LƯỢT ĐÁNH GIÁ KHOÁ HỌC", value: "500K", change: "+3.4%" },
+  { label: "TGTB HỌC KHOÁ HỌC", value: "10h20p", change: "+3.4%" },
   {
     label: "SỐ LƯỢNG TÀI LIỆU TRUNG BÌNH TRONG KHOÁ HỌC",
-    value: "2,3K",
+    value: "8",
     change: "+3.4%"
   },
-  { label: "ĐÁNH GIÁ TRUNG BÌNH CỦA KHOÁ HỌC", value: "1,1K", change: "-3.4%" },
-  { label: "SỐ LƯỢNG XEM TRUNG BÌNH", value: "2,3K", change: "+3.4%" }
+  {
+    label: "ĐÁNH GIÁ TRUNG BÌNH CỦA KHOÁ HỌC",
+    value: "3 sao",
+    change: "-3.4%"
+  },
+  { label: "SỐ LƯỢNG XEM TRUNG BÌNH", value: "100K", change: "+3.4%" }
 ];
 
 const DashboardGrid = () => {
