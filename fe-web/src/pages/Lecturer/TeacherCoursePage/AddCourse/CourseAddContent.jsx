@@ -76,8 +76,6 @@ export const AddCourseContent = () => {
 
       if (isSuccess) {
         console.log('Course created successfully', response);
-        // Optionally redirect to another page or show success notification
-        // window.location.href = 'http://example.com';
       }
 
     } catch (err) {

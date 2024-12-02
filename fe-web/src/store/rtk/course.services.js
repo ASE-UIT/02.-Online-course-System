@@ -38,12 +38,12 @@ export const courseRTKApi = baseApi.injectEndpoints({
     }),
     getCoursesByCategoryId: build.query({
       query: ({ categoryId, limit, page }) => ({
-        url: `/course/paging?rpp=${limit}&page=${page}`, // Same query, no change to the backend
+        url: `/course/paging?rpp=${limit}&page=${page}`, 
       }),
     }),
     getCoursesByLecturerId: build.query({
       query: ({ lecturerId, limit, page }) => ({
-        url: `/course/paging?lecturerId=${lecturerId}&rpp=${limit}&page=${page}`, // Modify URL to fetch by lecturerId
+        url: `/course/paging?lecturerId=${lecturerId}&rpp=${limit}&page=${page}`, 
       }),
     }),
     createCourse: build.mutation({
@@ -53,7 +53,26 @@ export const courseRTKApi = baseApi.injectEndpoints({
         method: "POST",
       }),
     }),
+    searchCourses: build.query({
+      query: ({ filter, sort, rpp, page }) => {
+        // Constructing the parameters
+        const params = {
+          filter: JSON.stringify(filter),
+          sort: JSON.stringify(sort),
+          rpp,
+          page,
+        };
+        
+        // Constructing the full URL with parameters
+        const fullUrl = `course/search?${new URLSearchParams(params).toString()}`;
+        
+        return { url: fullUrl, method: 'GET' };
+      },
+      providesTags: (result, error, { filter, sort, rpp, page }) => [
+        { type: "SearchResults", id: `${JSON.stringify(filter)}-${JSON.stringify(sort)}-${rpp}-${page}` },
+      ],
+    }),
   }),
 });
-export const { useGetCoursesQuery, useGetCourseByIdQuery, useGetCategoriesQuery, useUpdateCourseMutation, useGetCoursesByCategoryIdQuery, useGetCoursesByLecturerIdQuery, useCreateCourseMutation  } =
+export const { useGetCoursesQuery, useGetCourseByIdQuery, useGetCategoriesQuery, useUpdateCourseMutation, useGetCoursesByCategoryIdQuery, useGetCoursesByLecturerIdQuery, useCreateCourseMutation, useSearchCoursesQuery  } =
   courseRTKApi;
