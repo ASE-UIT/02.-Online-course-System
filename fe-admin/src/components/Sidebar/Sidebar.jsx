@@ -1,33 +1,21 @@
 import { useNavigation, menuItems } from "@/context/NavigationContext";
-import LogoIcon from "@/assets/LogoIcon";
 import { Link } from "react-router-dom";
 
 export default function Sidebar() {
   const { activeItem, setActiveItem } = useNavigation();
 
   return (
-    <div className=" z-50 w-80 bg-white shadow-md h-screen flex flex-col">
-      <div className="pt-10 ">
-        <div className="w-full flex justify-center items-center gap-1">
-          <LogoIcon className=" text-blue-600 w-[143px] h-[33px]" />
-          <div className="flex items-end h-full">
-            <p className="text/md/regular text-black ml-1 mb-[-10px]">
-              Admin Portal
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <nav className="flex-1 px-5 py-[60px]">
-        <ul className="space-y-1">
+    <div className="z-50 w-full max-h-[86px] bg-white shadow-md ">
+      <nav className="flex-1 px-5 py-[10px]">
+        <ul className="space-x-1 flex flex-row items-start">
           {menuItems.map((item) => (
             <li key={item.id}>
               <Link to={`${item.path}`}>
                 <button
                   onClick={() => setActiveItem(item.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 text-sm ${
                     activeItem === item.id
-                      ? "bg-primary-500 text-white"
+                      ? "border-b-2 border-primary-500 text-primary-500"
                       : "text-black hover:bg-gray-400"
                   }`}
                 >

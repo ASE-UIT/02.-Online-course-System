@@ -1,19 +1,34 @@
+/* eslint-disable react-refresh/only-export-components */
+import { lazy } from "react";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   Navigate
 } from "react-router-dom";
+import withSuspense from "./WithSuspense";
 
-import UserLayout from "../layouts/UserLayout";
-import Dashboard from "@/pages/Dashboard/Dashboard";
-import ManageBusiness from "@/pages/ManageBusiness/ManageBusiness";
-import ManageEmployee from "@/pages/ManageEmployee/ManageEmployee";
-import ManageUser from "@/pages/ManageUser/ManageUser";
-import Setting from "@/pages/Setting/Setting";
-import ManageCategories from "@/pages/ManageCategories/ManageCategories";
-import SignIn from "@/pages/Signin/Signin";
-import DefaultLayout from "@/layouts/DefaultLayout";
+const UserLayout = withSuspense(lazy(() => import("../layouts/UserLayout")));
+const Dashboard = withSuspense(
+  lazy(() => import("@/pages/Dashboard/Dashboard"))
+);
+const ManageBusiness = withSuspense(
+  lazy(() => import("@/pages/ManageBusiness/ManageBusiness"))
+);
+const ManageEmployee = withSuspense(
+  lazy(() => import("@/pages/ManageEmployee/ManageEmployee"))
+);
+const ManageUser = withSuspense(
+  lazy(() => import("@/pages/ManageUser/ManageUser"))
+);
+const Setting = withSuspense(lazy(() => import("@/pages/Setting/Setting")));
+const ManageCategories = withSuspense(
+  lazy(() => import("@/pages/ManageCategories/ManageCategories"))
+);
+const SignIn = withSuspense(lazy(() => import("@/pages/Signin/Signin")));
+const DefaultLayout = withSuspense(
+  lazy(() => import("@/layouts/DefaultLayout"))
+);
 
 const router = createBrowserRouter(
   createRoutesFromElements(

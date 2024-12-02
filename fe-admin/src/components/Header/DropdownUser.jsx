@@ -1,4 +1,4 @@
-import { UserCircle } from "lucide-react"; // Adjust the import based on your icon library
+import { User } from "lucide-react"; // Adjust the import based on your icon library
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -17,7 +17,7 @@ const DropdownUser = () => {
     <div className="relative">
       <DropdownMenu>
         <DropdownMenuTrigger className="flex justify-center items-center">
-          <UserCircle className="w-10 h-10 text-gray-600 cursor-pointer" />
+          <User className="p-2 w-10 h-10 text-white cursor-pointer" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem onSelect={handleLogout}>Đăng xuất</DropdownMenuItem>
