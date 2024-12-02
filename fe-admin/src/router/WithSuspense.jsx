@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 const withSuspense = (Component) => {
   const WrappedComponent = (props) => (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Đang tải trang...</div>}>
       <Component {...props} />
     </Suspense>
   );

@@ -1,19 +1,7 @@
-import config from "@/config";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseApi } from "./base.services";
+import { showToast } from "./toast";
 
-export const courseRTKApi = createApi({
-  reducerPath: "courseRTKApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: config.BASE_URL,
-    prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
-  }),
-  tagTypes: ["course"],
+export const courseRTKApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     getCourses: build.query({
       query: (body) => ({
@@ -33,13 +21,58 @@ export const courseRTKApi = createApi({
         method: "PUT",
       }),
       invalidatesTags: (result, error, { courseId }) => [{ type: "Course", id: courseId }],
+      async onQueryStarted(payload, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          showToast({ type: "success", msg: "Cập nhật khóa học thành công", desc: "Khóa học đã được cập nhật" });
+        } catch (error) {
+          console.log(error);
+          showToast({ type: "error", msg: "Cập nhật khóa học thất bại", desc: "Lỗi không xác định" });
+        }
+      },
     }),
     getCategories: build.query({
       query: () => ({
         url: `/course-category/`,
       }),
     }),
+    getCoursesByCategoryId: build.query({
+      query: ({ categoryId, limit, page }) => ({
+        url: `/course/paging?rpp=${limit}&page=${page}`, 
+      }),
+    }),
+    getCoursesByLecturerId: build.query({
+      query: ({ lecturerId, limit, page }) => ({
+        url: `/course/paging?lecturerId=${lecturerId}&rpp=${limit}&page=${page}`, 
+      }),
+    }),
+    createCourse: build.mutation({
+      query: (payload) => ({
+        url: `/course`,
+        body: payload,
+        method: "POST",
+      }),
+    }),
+    searchCourses: build.query({
+      query: ({ filter, sort, rpp, page }) => {
+        // Constructing the parameters
+        const params = {
+          filter: JSON.stringify(filter),
+          sort: JSON.stringify(sort),
+          rpp,
+          page,
+        };
+        
+        // Constructing the full URL with parameters
+        const fullUrl = `course/search?${new URLSearchParams(params).toString()}`;
+        
+        return { url: fullUrl, method: 'GET' };
+      },
+      providesTags: (result, error, { filter, sort, rpp, page }) => [
+        { type: "SearchResults", id: `${JSON.stringify(filter)}-${JSON.stringify(sort)}-${rpp}-${page}` },
+      ],
+    }),
   }),
 });
-export const { useGetCoursesQuery, useGetCourseByIdQuery, useGetCategoriesQuery, useUpdateCourseMutation } =
+export const { useGetCoursesQuery, useGetCourseByIdQuery, useGetCategoriesQuery, useUpdateCourseMutation, useGetCoursesByCategoryIdQuery, useGetCoursesByLecturerIdQuery, useCreateCourseMutation, useSearchCoursesQuery  } =
   courseRTKApi;

@@ -12,6 +12,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useCreateCourseMutation } from '@/store/rtk/course.services';
 
 const formSchema = z.object({
   name_course: z.string().min(6, {
@@ -55,9 +56,32 @@ export const AddCourseContent = () => {
     },
   });
 
-  async function onSubmit(values) {
-    console.log(values);
-  }
+  const [createCourse, { isLoading, isSuccess, isError, error }] = useCreateCourseMutation();
+
+  const onSubmit = async (values) => {
+    try {
+      const formData = {
+        name: values.name_course,
+        shortDescription: values.summary,
+        categoryId: values.category,
+        thumbnail: values.picture,
+        description: values.description,
+        benefits: values.benefits,
+        participants: values.participant,
+        requirement: values.requirement,
+      };
+
+      // Trigger the mutation to create a new course
+      const response = await createCourse(formData).unwrap();
+
+      if (isSuccess) {
+        console.log('Course created successfully', response);
+      }
+
+    } catch (err) {
+      console.error('Error creating course:', err);
+    }
+  };
 
   return (
     <div className="mx-[80px] rounded-t-[12px] flex flex-col gap-[10px] border border-gray-500">
@@ -111,7 +135,7 @@ export const AddCourseContent = () => {
                       Chuyên mục<span className="text-error-500">*</span>
                     </FormLabel>
                     <FormControl>
-                    <FormSelect 
+                      <FormSelect 
                         value={field.value}
                         onChange={field.onChange}
                         options={[
@@ -142,30 +166,33 @@ export const AddCourseContent = () => {
                 )}
               />
             </div>
+
             <div className="flex gap-[10px] items-center">
-              <Checkbox/>
+              <Checkbox />
               <p className='text-text/md/regular'>Cho trải nghiệm thử khi có coupon (<span className='text-text/md/medium text-error-500'>?</span>)</p>
             </div>  
+
             <FormField
-                control={form.control}
-                name="picture"
-                render={({ field }) => (
-                  <FormItem className="w-full ">
-                    <FormLabel className="text-text/md/medium">
+              control={form.control}
+              name="summary"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel className="text-text/md/medium">
                     Mô tả ngắn (100-200 ký tự)<span className="text-error-500">*</span>
-                    </FormLabel>
-                    <FormControl>
-                      <Input className="border-gray-600" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+                  </FormLabel>
+                  <FormControl>
+                    <Input className="border-gray-600" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             /> 
+
             <FormField
               control={form.control}
               name="description"
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem>
                   <FormLabel className="text-text/md/medium">
                     Giới thiệu<span className="text-error-500">*</span>
                   </FormLabel>
@@ -176,11 +203,12 @@ export const AddCourseContent = () => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="benefits"
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem>
                   <FormLabel className="text-text/md/medium">
                     Lợi ích (mỗi lợi ích một dòng)<span className="text-error-500">*</span>
                   </FormLabel>
@@ -191,44 +219,45 @@ export const AddCourseContent = () => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="participant"
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem>
                   <FormLabel className="text-text/md/medium">
-                    Đối tượng đầu vào<span className="text-error-500">*</span>
+                    Đối tượng tham gia<span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className="border-gray-600 h-[189px]" placeholder={field.value} {...field} />
+                    <Textarea className="border-gray-600 h-[245px]" placeholder={field.value} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="requirement"
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem>
                   <FormLabel className="text-text/md/medium">
                     Yêu cầu đầu vào<span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className="border-gray-600 h-[189px]" placeholder={field.value} {...field} />
+                    <Textarea className="border-gray-600 h-[245px]" placeholder={field.value} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* Submit Button */}
-            <Button type="submit" className="py-3 px-4 w-[94px] text-white bg-primary-500">
-              Lưu
+            <Button type="submit" className="py-3 px-4 w-[94px] text-white bg-primary-500" disabled={isLoading}>
+            {isLoading ? 'Đang tạo...' : 'Lưu'}
             </Button>
           </form>
         </FormProvider>
-
       </div>
     </div>
   );
 };
+
