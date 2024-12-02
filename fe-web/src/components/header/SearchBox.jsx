@@ -56,12 +56,20 @@ useEffect(() => {
     document.removeEventListener("mousedown", handleClickOutside);
   };
 }, []);
+useEffect(() => {
+  if (searchResults && searchResults.data) {
+    console.log("Search results:", searchResults.data);
+    setSearchedCourse(searchResults.data);
+  } else {
+    setSearchedCourse([]);
+  }
+}, [searchResults]);
 
 // Navigate to search results page
 const handleSearchSubmit = () => {
   if (searchQuery.trim()) {
     navigate(
-      `/search?query=${encodeURIComponent(searchQuery)}`
+      `../web/search?query=${encodeURIComponent(searchQuery)}`
     );
   }
 };

@@ -1,135 +1,153 @@
-import { ChevronDown } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
-import Filter from './Filter'
-import { CourseCard } from '@/components/Courses/CourseCard';
-import { courseApi } from '@/api/courseApi';
-const mockCourseData = [
-    {
-      id: 1,
-      name: "React for Beginners",
-      price: 150000,
-      rating: 4,
-      numRatings: 100,
-      author: "John Doe",
-      image: "/picture/CourseCardIcon.svg"
-    },
-    {
-      id: 2,
-      name: "Advanced JavaScript",
-      price: 200000,
-      rating: 5,
-      numRatings: 250,
-      author: "Jane Smith",
-      image: "/picture/CourseCardIcon.svg"
-    },
-    {
-      id: 3,
-      name: "Node.js and Express",
-      price: 180000,
-      rating: 4.5,
-      numRatings: 150,
-      author: "Mark Johnson",
-      image: "/picture/CourseCardIcon.svg"
-    },
-    {
-      id: 4,
-      name: "CSS Mastery",
-      price: 120000,
-      rating: 4.8,
-      numRatings: 90,
-      author: "Emily Davis",
-      image: "/picture/CourseCardIcon.svg"
-    },
-    {
-      id: 5,
-      name: "HTML and CSS Fundamentals",
-      price: 100000,
-      rating: 4.2,
-      numRatings: 80,
-      author: "Sarah Brown",
-      image: "/picture/CourseCardIcon.svg"
-    },
-    {
-      id: 6,
-      name: "Full Stack Web Development",
-      price: 250000,
-      rating: 4.9,
-      numRatings: 320,
-      author: "Michael Lee",
-      image: "/picture/CourseCardIcon.svg"
-    },
-    {
-      id: 7,
-      name: "Intro to Python Programming",
-      price: 130000,
-      rating: 4.4,
-      numRatings: 110,
-      author: "Olivia Taylor",
-      image: "/picture/CourseCardIcon.svg"
-    },
-    {
-      id: 8,
-      name: "Java for Beginners",
-      price: 170000,
-      rating: 4.7,
-      numRatings: 210,
-      author: "Daniel Harris",
-      image: "/picture/CourseCardIcon.svg"
-    },
-    {
-      id: 9,
-      name: "Web Design Principles",
-      price: 140000,
-      rating: 4.3,
-      numRatings: 95,
-      author: "Sophia Clark",
-      image: "/picture/CourseCardIcon.svg"
-    }
-  ];
-  
-const SearchPage = () => {
-const [liveCourses, setLiveCourses] = useState([]);
-const getLiveCourses = async () => {
-    const response = await courseApi.getLiveCourses();
-    if (response?.success) {
-      setLiveCourses(response.data);
-    }
-  };
-  useEffect(() => {
-    getLiveCourses();
-  }, []);
-  return (
-    <div className="flex justify-center">
-        <div className='py-5 px-20 '>
-            <div className="header flex justify-between items-center">
-                <label className='text-display/md/semibold'>12 kết quả cho từ khoá “x"</label>
-                <div className="sort border rounded-[8px] w-[230px] ">
-                    <div className="sort flex gap-[20px] justify-center py-[10px] px-[20px] items-center">
-                        <div className="text flex flex-col gap-2 w-[150px]">
-                            <p className='text-text/xs/semibold'>Sắp xếp theo</p>
-                            <p className='text-text/md/regular'>Liên quan nhất</p>
-                        </div>
-                        <div className="icon">
-                            <ChevronDown/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="body flex gap-[20px] justify-between ">
-                <div className="filter w-[376px] ">
-                <Filter/>
-                </div>
-                <div className="content">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-4 gap-x-[36px] gap-y-[16px]">
-                        {mockCourseData.map((course, idx) => {
-                        return <CourseCard key={idx} course={course} />;
-                        })}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-  )
-}
+import { useLocation } from "react-router-dom";
+import { useSearchCoursesQuery } from "@/store/rtk/course.services";
+import { useState, useCallback, useEffect } from "react";
+import Filter from "./Filter"; 
+import { CourseCard } from "@/components/Courses/CourseCard";
+import { ChevronDown } from "lucide-react";
 
-export default SearchPage
+const SearchPage = () => {
+  const [filters, setFilters] = useState({});
+  const location = useLocation();
+  const [sortOrder, setSortOrder] = useState("DESC"); 
+  const queryParams = new URLSearchParams(location.search);
+  const searchQuery = queryParams.get("query");
+  const levelMapping = {
+    1: "easy",
+    2: "medium",
+    3: "hard",
+  };
+  // Build the filter query dynamically based on selected filters
+  const buildFilterQuery = useCallback((filters) => {
+    const filterQuery = [];
+
+    // if (filters.ratings && filters.ratings.length > 0) {
+    //   filters.ratings.forEach((rating) => {
+    //     filterQuery.push({
+    //       operator: "gte",
+    //       key: "averageRating",
+    //       value: rating,
+    //     });
+    //   });
+    // }
+
+    if (filters.levels && filters.levels.length > 0) {
+      filters.levels.forEach((level) => {
+        const levelString = levelMapping[level]; // Map the level number to its string value
+        if (levelString) {
+          filterQuery.push({
+            operator: "equal",
+            key: "difficultyLevel",
+            value: levelString, // Use the string value (easy, medium, hard)
+          });
+        }
+      });
+    }
+
+    if (filters.lengths && filters.lengths.length > 0) {
+      filters.lengths.forEach(({ min, max }) => {
+        filterQuery.push({
+          operator: "range",
+          key: "duration",
+          value: `${min}-${max}`,
+        });
+      });
+    }
+
+    if (filters.price && filters.price.length === 2) {
+      const [minPrice, maxPrice] = filters.price;
+      filterQuery.push({
+        operator: "range",
+        key: "originalPrice",
+        value: `${minPrice}-${maxPrice}`, // Ensure the range is in the format "minPrice-maxPrice"
+      });
+    }
+    if (filters.category?.id) {
+      filterQuery.push({
+        operator: "equal",
+        key: "categoryId",
+        value: filters.category.id,
+      });
+    }
+    return filterQuery;
+  }, []);
+ 
+
+  // Search query with filters
+ const { data: searchResults, isFetching, error } = useSearchCoursesQuery({
+  filter: [
+    { operator: "like", key: "name", value: searchQuery },
+    ...buildFilterQuery(filters), 
+  ],
+  sort: { key: "originalPrice", type: "DESC" },
+  rpp: 10, 
+  page: 1,
+});
+
+  const courses = Array.isArray(searchResults?.data) ? searchResults.data : [];
+
+  const handleFilterChange = (selectedFilters) => {
+    setFilters(selectedFilters);
+  };
+
+  const handleSortChange = (e) => {
+    setSortOrder(e.target.value); 
+  };
+
+  console.log('filter',filters);
+ 
+  return (
+    <div className="flex ">
+      <div className='py-5 px-20 w-full'>
+        <div className="header flex justify-between items-center">
+          <label className='sm:text-display/sm/semibold md:text-display/md/semibold '>
+            {courses.length} kết quả cho từ khoá "{searchQuery}"
+          </label>
+          <div className="sort border rounded-[8px] w-[230px]">
+            <div
+              className="flex gap-[20px] justify-between py-[10px] px-[20px] items-center cursor-pointer w-full"
+              onClick={handleSortChange} // Toggle sort order when clicked
+            >
+              <div className="text flex flex-col gap-2 w-full">
+                <p className="text-text/xs/semibold">Sắp xếp theo</p>
+                <select
+                  value={sortOrder}
+                  onChange={handleSortChange} // Update sort order on change
+                  className="text-text/md/regular w-full bg-transparent"
+                >
+                  <option value="DESC">Giá cao đến thấp</option>
+                  <option value="ASC">Giá thấp đến cao</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div className="body flex flex-col sm:flex-row gap-[20px] sm:justify-between">
+          <div className="filter sm:w-full md:w-[300px] lg:w-[376px]">
+            <Filter onFilterChange={handleFilterChange} />
+          </div>
+          <div className="content flex-1 sm:w-full">
+            {isFetching ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p>Error fetching courses</p>
+            ) : courses.length === 0 ? (
+              <p className="text-center text-text/lg/semibold mt-8">No courses available</p>
+            ) : (
+              <div className="grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 mt-4 gap-x-[36px] gap-y-[16px]">
+                {courses.map((course, idx) => (
+                  <CourseCard key={idx} course={course} />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  );
+};
+
+export default SearchPage;
