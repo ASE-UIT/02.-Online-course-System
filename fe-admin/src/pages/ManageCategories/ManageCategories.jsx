@@ -1,4 +1,5 @@
 import DialogComponent from "@/components/Dialog/DialogComponent";
+import Filter from "@/components/Filter/Filter";
 import { columns } from "@/components/Table/columns";
 import DataTable from "@/components/Table/data-table";
 import { Button } from "@/components/ui/button";
@@ -39,19 +40,25 @@ const addButton = (
 
 const ManageCategories = () => {
   return (
-    <div>
-      <DataTable
-        columns={columns}
-        data={data}
-        dialogButton={
-          <DialogComponent
-            triggerButton={addButton}
-            title="Thêm danh mục"
-            description={null}
-            content={null}
-          />
-        }
-      />
+    <div className="flex px-10 gap-10">
+      <div className="filter basis-1/4">
+        <Filter manage={"category"} />
+      </div>
+      <div className="filter basis-3/4">
+        <DataTable
+          columns={columns}
+          data={data}
+          dialogButton={
+            <DialogComponent
+              triggerButton={addButton}
+              title="Thêm danh mục"
+              description={null}
+              content={null}
+            />
+          }
+        />
+        /
+      </div>
     </div>
   );
 };
