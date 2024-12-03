@@ -13,4 +13,17 @@ export class StudentCompleteLessonRepository
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(StudentCompleteLesson));
   }
+
+  async findManyByCourseIdAndStudentId(courseId: string, studentId: string): Promise<StudentCompleteLesson[]> {
+    return this.ormRepository.find({
+      where: {
+        studentId: studentId,
+        lesson: {
+          lessonPart: {
+            courseId: courseId
+          }
+        }
+      }
+    });
+  }
 }

@@ -35,4 +35,26 @@ export class OrderController {
       next(error);
     }
   };
+
+  /**
+   * * GET /get-order
+   */
+  async getOrder(req: Request, res: Response, next: NextFunction) {
+    try {
+      const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+
+      const studentId = student.id;
+
+      const order = await this.orderService.findMany({
+        relations: ['items'],
+        filter: {
+          studentId: studentId
+        }
+      });
+
+      res.send_ok('Lấy thông tin đơn hàng thành công', order);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
