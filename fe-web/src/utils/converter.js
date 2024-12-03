@@ -41,7 +41,9 @@ export function convertMinutesToTime(input) {
 
   // Format the result as hh:mm:ss or mm:ss
   if (hours > 0) {
-    return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    return `${hours}:${String(minutes).padStart(2, "0")}:${String(
+      seconds
+    ).padStart(2, "0")}`;
   } else {
     return `${minutes}:${String(seconds).padStart(2, "0")}`;
   }

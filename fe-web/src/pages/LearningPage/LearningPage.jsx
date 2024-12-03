@@ -2,23 +2,46 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import TrackList from "./components/TrackList";
 import VideoViewer from "./components/VideoViewer";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useGetCourseByIdQuery } from "@/store/rtk/course.services";
 import { useDispatch, useSelector } from "react-redux";
 import { setLearning } from "@/store/slices/learningSlice";
 import LessonInfo from "./LessonInfo/LessonInfo";
+import { isValidNumber } from "@/utils/getLengthVideo";
 
 export default function LearningPage() {
   const { moduleSlt, lessonSlt } = useSelector((state) => state.learning);
   const dispatch = useDispatch();
   const [showTrackList, setShowTrackList] = useState(true);
   const { courseId } = useParams();
+  const [searchParams] = useSearchParams();
+  const moduleIdx = searchParams.get("moduleIdx");
+  const lessonIdx = searchParams.get("lessonIdx");
   const { data: courseResponse } = useGetCourseByIdQuery(courseId, {
     skip: !courseId,
   });
   const course = courseResponse?.data ? courseResponse.data : null;
 
   useEffect(() => {
+    if (isValidNumber(moduleIdx) && isValidNumber(lessonIdx)) {
+      const mdIdx = Number(moduleIdx);
+      const lsIdx = Number(lessonIdx);
+      if (
+        course?.lessonParts &&
+        course?.lessonParts[mdIdx]?.lessons &&
+        course?.lessonParts[mdIdx]?.lessons[lsIdx]
+      ) {
+        dispatch(
+          setLearning({
+            moduleSlt: mdIdx,
+            lessonSlt: lsIdx,
+            lesson: course?.lessonParts[mdIdx]?.lessons[lsIdx],
+            course: course,
+          })
+        );
+        return;
+      }
+    }
     if (
       course?.lessonParts &&
       course?.lessonParts.length > 0 &&
@@ -30,10 +53,11 @@ export default function LearningPage() {
           moduleSlt: 0,
           lessonSlt: 0,
           lesson: course?.lessonParts[0]?.lessons[0],
+          course: course,
         })
       );
     }
-  }, [course]);
+  }, [course, moduleIdx, lessonIdx]);
 
   return (
     <div>

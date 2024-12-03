@@ -3,6 +3,7 @@ const initialState = {
   moduleSlt: -1,
   lessonSlt: -1,
   lesson: null,
+  course: null,
 };
 const learningSlice = createSlice({
   name: "learning",
