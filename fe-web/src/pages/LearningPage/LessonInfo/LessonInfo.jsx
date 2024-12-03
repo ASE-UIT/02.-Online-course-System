@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import General from "./General";
+import Discuss from "./Discuss";
+import RatingSection from "./Rating";
 const tabOpts = [
   {
     label: "Tổng quan",
@@ -32,9 +34,7 @@ export default function LessonInfo() {
             key={idx}
             onClick={() => setTabSlt(idx)}
             className={`${
-              idx === tabSlt
-                ? "border-black text-black"
-                : "border-black-300 text-black-300"
+              idx === tabSlt ? "border-black text-black" : "border-black-300 text-black-300"
             } border-b-[2px]  text-text/lg/semibold cursor-pointer px-[8px] py-[10px] `}
           >
             <p>{tab.label}</p>
@@ -43,6 +43,8 @@ export default function LessonInfo() {
       </div>
       <div className="h-[2px] mt-[-2px] bg-black-300"></div>
       {tabOpts[tabSlt].value === "general" && <General />}
+      {tabOpts[tabSlt].value === "discuss" && <Discuss />}
+      {tabOpts[tabSlt].value === "rating" && <RatingSection />}
     </div>
   );
 }
