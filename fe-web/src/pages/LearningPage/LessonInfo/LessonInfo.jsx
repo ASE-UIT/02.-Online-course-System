@@ -22,7 +22,7 @@ const tabOpts = [
 export default function LessonInfo() {
   const [tabSlt, setTabSlt] = useState(0);
   const { lesson } = useSelector((state) => state.learning);
-
+  if (!lesson) return <></>;
   return (
     <div className="bg-gray-100 px-[20px] pt-[15px] h-[1000px]">
       <p className="text-text/xl/semibold">{lesson.title}</p>
@@ -32,7 +32,9 @@ export default function LessonInfo() {
             key={idx}
             onClick={() => setTabSlt(idx)}
             className={`${
-              idx === tabSlt ? "border-black text-black" : "border-black-300 text-black-300"
+              idx === tabSlt
+                ? "border-black text-black"
+                : "border-black-300 text-black-300"
             } border-b-[2px]  text-text/lg/semibold cursor-pointer px-[8px] py-[10px] `}
           >
             <p>{tab.label}</p>

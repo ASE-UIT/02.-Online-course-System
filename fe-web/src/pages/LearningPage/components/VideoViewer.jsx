@@ -1,10 +1,24 @@
+import { getNextLesson } from "@/utils/getLengthVideo";
 import { AlertCircleIcon, ChevronRight } from "lucide-react";
+
 import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function VideoViewer() {
-  const { videoUrl } = useSelector((state) => state.learning);
-
+  const { lesson, course, moduleSlt, lessonSlt } = useSelector(
+    (state) => state.learning
+  );
+  const navigate = useNavigate();
+  const handleNextVideo = () => {
+    const nextVideo = getNextLesson(course, moduleSlt, lessonSlt);
+    if (nextVideo) {
+      navigate(
+        `?moduleIdx=${nextVideo.moduleIdx}&lessonIdx=${nextVideo.lessonIdx}`
+      );
+    }
+  };
+  if (!lesson) return <></>;
   return (
     <div className="bg-gray-100">
       <div className="w-full h-[500px]">
@@ -13,7 +27,10 @@ export default function VideoViewer() {
           height="100%"
           style={{ backgroundColor: "#000" }}
           controls={true}
-          url={videoUrl || "https://files.vidstack.io/sprite-fight/720p.mp4"}
+          url={
+            lesson?.videoUrl ||
+            "https://files.vidstack.io/sprite-fight/720p.mp4"
+          }
         />
       </div>
       <div className="mt-[20px] flex justify-end gap-[10px] px-[20px]">
@@ -28,7 +45,10 @@ export default function VideoViewer() {
             <div className="w-[4px] h-[4px] ml-[4px] bg-white rounded-full"></div>
           </div>
         </div>
-        <div className="cursor-pointer hover:bg-primary-600 transition-all flex items-center gap-[8px] px-[8px] py-[6px] bg-primary-500 text-white rounded-[4px]">
+        <div
+          onClick={() => handleNextVideo()}
+          className="cursor-pointer hover:bg-primary-600 transition-all flex items-center gap-[8px] px-[8px] py-[6px] bg-primary-500 text-white rounded-[4px]"
+        >
           <p className="text-text/lg/regular">Bài sau</p>
           <ChevronRight className="w-[24px] h-[24px]" />
         </div>
