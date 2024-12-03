@@ -18,7 +18,7 @@ export class OrderItem {
   @Column({ name: 'course_id' })
   courseId!: string;
 
-  @ManyToOne(() => Course, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Course, { onDelete: 'SET NULL', eager: true })
   @JoinColumn({ name: 'course_id' })
   course!: Course;
 
