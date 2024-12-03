@@ -39,10 +39,7 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
    * @param courseId
    */
   async getCourseDetail(courseId: string): Promise<Course> {
-    const course = await this.courseRepository.findOne({
-      filter: { id: courseId },
-      relations: ['category', 'lecturer', 'lessonParts', 'discount']
-    });
+    const course = await this.courseRepository.getCourseDetail(courseId);
 
     if (!course) {
       throw new BaseError('COURSE_NOT_FOUND', 'Không tìm thấy khóa học');
