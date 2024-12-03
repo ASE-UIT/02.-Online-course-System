@@ -14,6 +14,7 @@ import roleRouter from '@/routes/role.route';
 import studentRouter from '@/routes/student.route';
 import BaseError from '@/utils/error/base.error';
 import courseRatingRouter from '@/routes/course_rating.route';
+import studentCompleteLessonRouter from '@/routes/student_complete_lesson.route';
 
 export function route(app: any, root_api: string) {
   app.use(`${root_api}/student`, studentRouter);
@@ -30,6 +31,7 @@ export function route(app: any, root_api: string) {
   app.use(`${root_api}/role`, roleRouter);
   app.use(`${root_api}/media`, mediaRouter);
   app.use(`${root_api}/rating`, courseRatingRouter);
+  app.use(`${root_api}/student-complete-lesson`, studentCompleteLessonRouter);
 
   //Check health
   app.get(`${root_api}/health`, (req: any, res: any) => {

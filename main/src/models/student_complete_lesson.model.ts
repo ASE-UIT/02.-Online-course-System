@@ -21,4 +21,13 @@ export class StudentCompleteLesson {
   @CreateDateColumn()
   @Column({ name: 'create_at' })
   createAt!: Date;
+
+  @Column({ name: 'complete_at', nullable: true })
+  completeAt!: Date;
+
+  @Column({ name: 'progress', default: 0 })
+  progress!: number;
+
+  @Column({ name: 'is_complete', default: false })
+  isComplete!: boolean;
 }
