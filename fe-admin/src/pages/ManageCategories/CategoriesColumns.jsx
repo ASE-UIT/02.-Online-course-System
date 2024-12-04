@@ -1,10 +1,10 @@
 import { Checkbox } from "@/components/ui/checkbox";
 
-import { DataTableColumnHeader } from "./data-table-column-header";
-import { DataTableRowActions } from "./data-table-row-actions";
+import { DataTableColumnHeader } from "@/components/Table/DTColumnHeader";
+import { DataTableRowActions } from "@/components/Table/DTRowActions";
 import BlankImg from "/blank.png";
 
-export const columns = [
+export const categoriesColumns = [
   {
     id: "select",
     header: ({ table }) => (
@@ -46,6 +46,7 @@ export const columns = [
   },
   {
     accessorKey: "avatar",
+    name: "Ảnh đại diện",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ẢNH ĐẠI DIỆN" />
     ),
@@ -72,7 +73,8 @@ export const columns = [
     enableSorting: false
   },
   {
-    accessorKey: "title",
+    accessorKey: "name",
+    name: "Tên",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="TÊN" />
     ),
@@ -80,7 +82,7 @@ export const columns = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("title")}
+            {row.getValue("name")}
           </span>
         </div>
       );
@@ -88,6 +90,7 @@ export const columns = [
   },
   {
     accessorKey: "course",
+    name: "Số khóa học",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="SÔ KHOÁ HỌC" />
     ),

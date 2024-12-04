@@ -10,7 +10,12 @@ import {
   DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
 
-export function DataTableViewOptions({ table }) {
+export function DataTableViewOptions({ table, headerList }) {
+  const headerTranslator = (id) => {
+    const header = headerList.find((header) => header.id === id);
+    return header ? header.title : "";
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -40,7 +45,7 @@ export function DataTableViewOptions({ table }) {
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                {column.id}
+                {headerTranslator(column.id)}
               </DropdownMenuCheckboxItem>
             );
           })}
