@@ -47,12 +47,16 @@ export const courseRTKApi = baseApi.injectEndpoints({
       }),
     }),
     createCourse: build.mutation({
-      query: (payload) => ({
+      query: (payload) => {
+        console.log("Payload being sent:", payload);
+        return{
         url: `/course`,
-        body: payload,
         method: "POST",
-      }),
+        body: payload,
+        };
+      },
     }),
+    
     searchCourses: build.query({
       query: ({ filter, sort, rpp, page }) => {
         // Constructing the parameters

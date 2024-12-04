@@ -3,7 +3,7 @@ import GroupIcon from '@/assets/GroupIcon';
 import StarIcon from '@/assets/StarIcon';
 import { Button } from '@/components/ui/button';
 import { Plus, Upload } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import CourseCardIcon from "/picture/CourseCardIcon.svg";
 import { FormProvider, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
@@ -12,35 +12,19 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useCreateCourseMutation } from '@/store/rtk/course.services';
+import { courseApi } from '@/api/courseApi';
+import { useGetCategoriesQuery } from '@/store/rtk/course.services';
 
 const formSchema = z.object({
-  name_course: z.string().min(6, {
-    message: "Vui lòng nhập tên khóa học",
-  }),
-  summary: z.string().min(1, {
-    message: "Vui lòng nhập mô tả khóa học",
-  }),
-  category: z.string().min(1, {
-    message: "Vui lòng chọn chuyên mục của khóa học",
-  }),
-  picture: z.any().refine((file) => file instanceof File, {
-    message: "Vui lòng tải lên một tệp",
-  }),
-  description: z.string().min(1, {
-    message: "Vui lòng nhập description",
-  }),
-  benefits: z.string().min(1, {
-    message: "Vui lòng nhập các lợi ích",
-  }),
-  participant: z.string().min(1, {
-    message: "Vui lòng nhập các đối tượng tham gia",
-  }),
-  requirement: z.string().min(1, {
-    message: "Vui lòng nhập các yêu cầu đầu vào",
-  }),
+  name_course: z.string().min(6, { message: "Vui lòng nhập tên khóa học" }),
+  summary: z.string().min(1, { message: "Vui lòng nhập mô tả khóa học" }),
+  category: z.string().min(1, { message: "Vui lòng chọn chuyên mục của khóa học" }),
+  // picture: z.any().refine((file) => file instanceof File, { message: "Vui lòng tải lên một tệp" }),
+  description: z.string().min(1, { message: "Vui lòng nhập description" }),
+  benefits: z.string().min(1, { message: "Vui lòng nhập các lợi ích" }),
+  participant: z.string().min(1, { message: "Vui lòng nhập các đối tượng tham gia" }),
+  requirement: z.string().min(1, { message: "Vui lòng nhập các yêu cầu đầu vào" }),
 });
-
 export const AddCourseContent = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -56,31 +40,44 @@ export const AddCourseContent = () => {
     },
   });
 
-  const [createCourse, { isLoading, isSuccess, isError, error }] = useCreateCourseMutation();
-
+  const [error, setError] = useState(null); 
+  const [successMessage, setSuccessMessage] = useState(null);
+  const { data, isLoading, isError } = useGetCategoriesQuery();
+  console.log('data',data)
+  const categories = Array.isArray(data?.data) ? data.data : [];
+  console.log('category',categories)
   const onSubmit = async (values) => {
     try {
-      const formData = {
-        name: values.name_course,
-        shortDescription: values.summary,
-        categoryId: values.category,
-        thumbnail: values.picture,
-        description: values.description,
-        benefits: values.benefits,
-        participants: values.participant,
-        requirement: values.requirement,
-      };
-
-      // Trigger the mutation to create a new course
-      const response = await createCourse(formData).unwrap();
-
-      if (isSuccess) {
-        console.log('Course created successfully', response);
+      setError(null); // Reset previous errors
+      setSuccessMessage(null); // Reset success message
+  
+      // Prepare FormData to send
+      const formData = new FormData();
+      formData.append("name", values.name_course);
+      formData.append("shortDescription", values.summary);
+      formData.append("categoryId", values.category);
+      formData.append("thumbnail", values.picture); // Ensure this is a File object
+      formData.append("description", values.description);
+      formData.append("benefits", values.benefits);
+      formData.append("participants", values.participant);
+      formData.append("requirement", values.requirement);
+  
+      // Log formData fields
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value instanceof File ? value.name : value}`);
       }
 
+      // Make the API call and await the response
+      const response = await courseApi.createCourse(formData);
+  
+      // Handle success response
+      setSuccessMessage('Course created successfully!');
+      console.log("Response from backend:", response); // Optionally log the response
+  
     } catch (err) {
-      console.error('Error creating course:', err);
-    }
+      setError('Failed to create course. Please try again.'); // Handle error response
+      console.error("Error creating course:", err); // Log error for debugging
+    } 
   };
 
   return (
@@ -138,11 +135,14 @@ export const AddCourseContent = () => {
                       <FormSelect 
                         value={field.value}
                         onChange={field.onChange}
-                        options={[
-                          { value: 'technology', label: 'Công nghệ' },
-                          { value: 'business', label: 'Kinh doanh' },
-                          { value: 'design', label: 'Thiết kế' },
-                        ]}
+                        options={
+                          categories
+                            ? categories.map((category) => ({
+                                value: category.id, // Assuming category has 'id' and 'name'
+                                label: category.name,
+                              }))
+                            : []
+                        }
                       />
                     </FormControl>
                     <FormMessage />
@@ -167,10 +167,10 @@ export const AddCourseContent = () => {
               />
             </div>
 
-            <div className="flex gap-[10px] items-center">
+            {/* <div className="flex gap-[10px] items-center">
               <Checkbox />
               <p className='text-text/md/regular'>Cho trải nghiệm thử khi có coupon (<span className='text-text/md/medium text-error-500'>?</span>)</p>
-            </div>  
+            </div>   */}
 
             <FormField
               control={form.control}
@@ -251,9 +251,14 @@ export const AddCourseContent = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="py-3 px-4 w-[94px] text-white bg-primary-500" disabled={isLoading}>
-            {isLoading ? 'Đang tạo...' : 'Lưu'}
+             {/* Submit Button */}
+             <Button type="submit" className="py-3 px-4 w-[94px] text-white bg-primary-500" disabled={isLoading}>
+              {isLoading ? 'Đang tạo...' : 'Lưu'}
             </Button>
+
+            {/* Error and Success Messages */}
+            {error && <p className="text-red-500 mt-2">{error}</p>}
+            {successMessage && <p className="text-green-500 mt-2">{successMessage}</p>}
           </form>
         </FormProvider>
       </div>
