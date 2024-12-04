@@ -5,7 +5,7 @@ import { z } from "zod";
 export const taskSchema = z.object({
   id: z.string(),
   avatar: z.string(),
-  title: z.string(),
+  name: z.string(),
   course: z.number(),
   createdBy: z.string()
 });

@@ -1,15 +1,16 @@
 import DialogComponent from "@/components/Dialog/DialogComponent";
 import Filter from "@/components/Filter/Filter";
-import { columns } from "@/components/Table/columns";
-import DataTable from "@/components/Table/data-table";
+import DataTable from "@/components/Table/DataTable";
 import { Button } from "@/components/ui/button";
+import { categoriesColumns } from "./CategoriesColumns";
+import { categoriesList } from "./CategoriesList";
 
 const data = [
   {
     id: "TASK-8782",
     avatar:
       "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
-    title: "Danh mục 1",
+    name: "Danh mục 1",
     course: 100,
     createdBy: "ADMIN"
   },
@@ -17,7 +18,7 @@ const data = [
     id: "TASK-7878",
     avatar:
       "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
-    title: "Danh mục 1",
+    name: "Danh mục 1",
     course: 100,
     createdBy: "ADMIN"
   },
@@ -25,7 +26,7 @@ const data = [
     id: "TASK-7839",
     avatar:
       "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
-    title: "Danh mục 1",
+    name: "Danh mục 1",
     course: 100,
     createdBy: "ADMIN"
   }
@@ -46,8 +47,9 @@ const ManageCategories = () => {
       </div>
       <div className="filter basis-3/4">
         <DataTable
-          columns={columns}
           data={data}
+          columns={categoriesColumns}
+          headerList={categoriesList}
           dialogButton={
             <DialogComponent
               triggerButton={addButton}
