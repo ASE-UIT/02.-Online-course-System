@@ -4,6 +4,7 @@ const initialState = {
   lessonSlt: -1,
   lesson: null,
   course: null,
+  learnProgress: [],
 };
 const learningSlice = createSlice({
   name: "learning",

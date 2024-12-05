@@ -25,14 +25,25 @@ const PlayIcon = ({ className }) => {
     </svg>
   );
 };
-export default function LessonParts({ module, moduleIdx }) {
-  const { moduleSlt, lessonSlt } = useSelector((state) => state.learning);
+export default function LessonParts({
+  module,
+  moduleIdx,
+  showQuiz,
+  setShowQuiz,
+}) {
+  const { moduleSlt, lessonSlt, course } = useSelector(
+    (state) => state.learning
+  );
   const [showLessons, setShowLessons] = useState(false);
   const isRightModule = moduleIdx === moduleSlt ? true : false;
   const navigate = useNavigate();
   useEffect(() => {
     if (moduleSlt === moduleIdx) setShowLessons(true);
   }, [moduleIdx, moduleSlt]);
+  const tmp =
+    course?.lessonParts && (course?.lessonParts[moduleIdx]?.quizzes || []);
+  const quizzes = tmp || [];
+
   return (
     <div>
       <div
@@ -55,10 +66,11 @@ export default function LessonParts({ module, moduleIdx }) {
             <div
               key={idx}
               onClick={() => {
+                setShowQuiz(false);
                 navigate(`?moduleIdx=${moduleIdx}&lessonIdx=${idx}`);
               }}
               className={`${
-                isRightModule && idx === lessonSlt
+                !showQuiz && isRightModule && idx === lessonSlt
                   ? "bg-black-100"
                   : "hover:bg-gray-300"
               } px-[20px] py-[12px] flex items-center gap-[10px] cursor-pointer `}
@@ -75,6 +87,22 @@ export default function LessonParts({ module, moduleIdx }) {
               <CircularProgress size={25} strokeWidth={2} percentage={40} />
             </div>
           ))}
+          {quizzes.length > 0 && (
+            <div
+              onClick={() => setShowQuiz(true)}
+              className={`${
+                showQuiz ? "bg-black-100" : "hover:bg-gray-300"
+              } px-[20px] py-[12px] flex items-center gap-[10px] cursor-pointer `}
+            >
+              <div className="min-w-[20px] h-[20px] flex items-center justify-center bg-black-300 rounded-full">
+                <PlayIcon className={"ml-[2px]"} />
+              </div>
+              <div className="text-text/md/medium line-clamp-2 break-words flex-1">
+                Câu hỏi trắc nghiệm
+              </div>
+              <div className="min-w-[50px] text-text/md/regular text-center"></div>
+            </div>
+          )}
         </div>
       )}
     </div>
