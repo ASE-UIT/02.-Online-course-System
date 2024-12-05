@@ -8,6 +8,7 @@ const quizRouter = express.Router();
 quizRouter
   // .get('/:lessonId', quizController.findByLessonId.bind(quizController))
   .post('/answer', classValidate(AnswerQuizzReq), authenticateJWT, quizController.answerQuiz.bind(quizController))
+  .get('/done-by-course/:courseId', authenticateJWT, quizController.doneQuizByCourse.bind(quizController))
   .get('/done', authenticateJWT, quizController.doneQuiz.bind(quizController));
 
 export default quizRouter;
