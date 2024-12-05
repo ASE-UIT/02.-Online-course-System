@@ -1,8 +1,10 @@
 import { GetLearningProgressRes } from '@/dto/student_complete_lesson/get-learning-progress.res';
 import { UpdateStudentCompleteLessonReq } from '@/dto/student_complete_lesson/update-student-complete-lesson.req';
 import { Course } from '@/models/course.model';
+import { Lesson } from '@/models/lesson.model';
 import { StudentCompleteLesson } from '@/models/student_complete_lesson.model';
 import { ICourseRepository } from '@/repository/interface/i.course.repository';
+import { ILessonRepository } from '@/repository/interface/i.lesson.repository';
 import { IStudentCompleteLessonRepository } from '@/repository/interface/i.student_complete_lesson.repository';
 import { BaseCrudService } from '@/service/base/base.service';
 import { IStudentCompleteLessonService } from '@/service/interface/i.student_complete_lesson.service';
@@ -14,16 +16,16 @@ export class StudentCompleteLessonService
   implements IStudentCompleteLessonService<StudentCompleteLesson>
 {
   private studentCompleteLessonRepository: IStudentCompleteLessonRepository<StudentCompleteLesson>;
-  private courseRepository: ICourseRepository<Course>;
+  private lessonRepository: ILessonRepository<Lesson>;
 
   constructor(
     @inject('StudentCompleteLessonRepository')
     studentCompleteLessonRepository: IStudentCompleteLessonRepository<StudentCompleteLesson>,
-    @inject('CourseRepository') courseRepository: ICourseRepository<Course>
+    @inject('LessonRepository') lessonRepository: ILessonRepository<Lesson>
   ) {
     super(studentCompleteLessonRepository);
     this.studentCompleteLessonRepository = studentCompleteLessonRepository;
-    this.courseRepository = courseRepository;
+    this.lessonRepository = lessonRepository;
   }
 
   async getLearningProgress(studentId: string, courseId: string): Promise<GetLearningProgressRes> {
@@ -33,11 +35,7 @@ export class StudentCompleteLessonService
     );
 
     const totalCompleteLesson = learningProgress.filter((x) => x.isComplete).length;
-    const totalLesson = await this.courseRepository.count({
-      filter: {
-        id: courseId
-      }
-    });
+    const totalLesson = await this.lessonRepository.countByCourseId(courseId);
     const courseProgress = Math.round((totalCompleteLesson / totalLesson) * 100);
 
     const lessonLearnProgresses = learningProgress.map((lessonProgress) => {
