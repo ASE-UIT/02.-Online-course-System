@@ -69,6 +69,8 @@ studentRouter
 
   .get('/getwithpaging', studentController.getStudentsWithPaging.bind(studentController))
 
+  .get('/me', authenticateJWT, studentController.getMe.bind(studentController))
+
   .get('/:id', studentController.getStudentById.bind(studentController))
 
   .delete('/:id', studentController.softDeleteStudent.bind(studentController));
