@@ -17,10 +17,11 @@ class LessonContainer extends BaseContainer {
   export() {
     const lessonController = this.container.get<LessonController>(LessonController);
     const lessonService = this.container.get<ILessonService<any>>('LessonService');
-    return { lessonController, lessonService };
+    const lessonRepository = this.container.get<ILessonRepository<any>>('LessonRepository');
+    return { lessonController, lessonService, lessonRepository };
   }
 }
 
 const lessonContainer = new LessonContainer();
-const { lessonController, lessonService } = lessonContainer.export();
-export { lessonController, lessonService };
+const { lessonController, lessonService, lessonRepository } = lessonContainer.export();
+export { lessonController, lessonService, lessonRepository };

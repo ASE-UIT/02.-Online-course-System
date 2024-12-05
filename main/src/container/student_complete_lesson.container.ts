@@ -7,6 +7,8 @@ import { IStudentCompleteLessonRepository } from '@/repository/interface/i.stude
 import { BaseContainer } from '@/container/base.container';
 import { ICourseRepository } from '@/repository/interface/i.course.repository';
 import { courseRepository } from '@/container/course.container';
+import { ILessonRepository } from '@/repository/interface/i.lesson.repository';
+import { lessonRepository } from '@/container/lesson.container';
 
 class StudentCompleteLessonContainer extends BaseContainer {
   constructor() {
@@ -20,7 +22,7 @@ class StudentCompleteLessonContainer extends BaseContainer {
     this.container.bind<StudentCompleteLessonController>(StudentCompleteLessonController).toSelf();
 
     //Import
-    this.container.bind<ICourseRepository<any>>('CourseRepository').toConstantValue(courseRepository);
+    this.container.bind<ILessonRepository<any>>('LessonRepository').toConstantValue(lessonRepository);
   }
 
   export() {

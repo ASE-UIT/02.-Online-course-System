@@ -10,4 +10,14 @@ export class LessonRepository extends BaseRepository<Lesson> implements ILessonR
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(Lesson));
   }
+
+  async countByCourseId(courseId: string): Promise<number> {
+    return await this.ormRepository.count({
+      where: {
+        lessonPart: {
+          courseId: courseId
+        }
+      }
+    });
+  }
 }
