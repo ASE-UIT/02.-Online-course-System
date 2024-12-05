@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, FilePenLine } from "lucide-react";
 import { useEffect, useState } from "react";
 import CircularProgress from "./CircularProgress";
 import { convertMinutesToTime } from "@/utils/converter";
@@ -77,8 +77,8 @@ export default function LessonParts({ module, moduleIdx }) {
                 showQuiz ? "bg-black-100" : "hover:bg-gray-300"
               } px-[20px] py-[12px] flex items-center gap-[10px] cursor-pointer `}
             >
-              <div className="min-w-[20px] h-[20px] flex items-center justify-center bg-black-300 rounded-full">
-                <PlayIcon className={"ml-[2px]"} />
+              <div className="min-w-[20px] h-[19px] flex items-center justify-center  rounded-full">
+                <FilePenLine className="w-[19px]"/>
               </div>
               <div className="text-text/md/medium line-clamp-2 break-words flex-1">Câu hỏi trắc nghiệm</div>
               <div className="min-w-[50px] text-text/md/regular text-center"></div>
