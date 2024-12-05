@@ -1,6 +1,7 @@
 import { LoginTypeEnum } from '@/enums/login-type.enum';
 import { BaseModel } from '@/models/base.model';
 import { Course } from '@/models/course.model';
+import { Enrollment } from '@/models/enrollment.model';
 import { Role } from '@/models/role.model';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, ManyToOne, Unique } from 'typeorm';
 
