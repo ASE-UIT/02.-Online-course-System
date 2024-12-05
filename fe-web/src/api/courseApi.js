@@ -44,6 +44,21 @@ export const courseCartApi ={
       console.log(error);
       return {error: error.message};
     }
+  },
+  removeFromCart: async (id) => {
+    try{
+      const token = JSON.parse(localStorage.getItem("auth"));
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+      const response = await api.delete(`/cart/remove/${id}`, config);
+      return response.data;
+    }catch(error){
+      console.log(error);
+      return {error: error.message};
+    }
   }
 }
 

@@ -8,6 +8,8 @@ import { Checkbox } from '@/components/ui/checkbox'
 import {CheckIcon} from "lucide-react";
 import {Separator} from "@/components/ui/separator.jsx";
 import {Button} from "@/components/ui/button.jsx";
+import { formatCurrency } from "@/utils/converter";
+
 const mockCourseData = [
     {
         id: 1,
@@ -95,19 +97,34 @@ const mockCourseData = [
 const CartPage = () => {
     const [myCart, setMyCart] = useState([]);
     const [cartResponse, setCartResponse] = useState(null);
-    const [totalPrice, setTotalPrice] = useState("");
+    const [removeResponse, setRemoveResponse] = useState(null);
+
+    const [totalPrice, setTotalPrice] = useState(0);
     const getMyCart = async () => {
         try {
             const response = await courseCartApi.getMyCart();
             if (response?.success) {
                 setMyCart(response.data.items);
                 setCartResponse(response.data);
-                console.log(response.data.items);
+                //console.log(response.data.items);
             }
         } catch (error) {
             console.log(error.response?.errors.msg);
         }
         
+    };
+    const removeFromCart = async(courseId)=>{
+        try{
+            const response = await courseCartApi.removeFromCart(courseId);
+            if (response?.success) {
+                setRemoveResponse(response.data)
+            }
+        }catch(error){
+            console.log(error.response?.errors.msg);
+        }
+    }
+    const handleRemoveCourse = (courseId) => {
+
     };
     const [selectedCourses, setSelectedCourses] = useState([]);
 
@@ -124,7 +141,16 @@ const CartPage = () => {
             isChecked ? [...prev, courseId] : prev.filter((id) => id !== courseId)
         );
     };
-
+    useEffect(() => {
+        const newTotalPrice = selectedCourses.reduce((sum, courseId) => {
+            const selectedCourse = myCart.find((course) => course.courseId === courseId);
+            console.log(courseId)
+            console.log(selectedCourse)
+            console.log(selectedCourse.course.sellPrice)
+            return sum + (selectedCourse ? Number(selectedCourse.course.sellPrice) : 0);
+        }, 0);
+        setTotalPrice(newTotalPrice);
+    }, [selectedCourses, myCart]);
     useEffect(() => {
         getMyCart();
     }, []);
@@ -162,6 +188,7 @@ const CartPage = () => {
                                     course={course.course}
                                     checked={selectedCourses.includes(course.courseId)}
                                     onChange={(checked) => handleSelectCourse(course.courseId, checked)}
+                                    onRemove={removeFromCart(course.courseId)}
                                 />
                             ))}
                         </div>
@@ -175,7 +202,7 @@ const CartPage = () => {
                                 Tạm tính ({myCart.length} sản phẩm)
                             </p>
                             <p className="text-text/md/medium text-black font-worksans">
-                                đ000,000
+                                đ{formatCurrency(totalPrice)}
                             </p>
                         </div>
                         <Separator className="bg-gray-500 h-[1px]"/>
@@ -184,7 +211,7 @@ const CartPage = () => {
                                 Tổng cộng
                             </p>
                             <p className="text-display/sm/semibold text-primary-500 font-worksans">
-                                đ000,000
+                                đ{formatCurrency(totalPrice)}
                             </p>
                         </div>
                         <Button className="py-3 px-4 rounded-[8px] h-[48]">Thanh toán</Button>

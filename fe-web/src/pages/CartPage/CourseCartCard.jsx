@@ -6,12 +6,9 @@ import {CheckIcon} from "lucide-react";
 import {Checkbox} from "@/components/ui/checkbox";
 import * as React from "react";
 import Rating from "@/components/Rating/Rating.jsx";
+import { formatCurrency } from "@/utils/converter";
 
-export const CourseCartCard = ({course, checked, onChange}) => {
-    function formatCurrency(amount) {
-        return amount.toLocaleString().replace(/\./g, ",");
-    }
-
+export const CourseCartCard = ({course, checked, onChange, onRemove}) => {
     return (
         <div className="flex gap-5 w-full">
             <Checkbox
@@ -33,17 +30,17 @@ export const CourseCartCard = ({course, checked, onChange}) => {
                 <div className=" py-3 px-4 flex flex-col justify-between ">
                     <h1 className="line-clamp-2 text-text/md/bold">{course.name}</h1>
                     <h1 className="line-clamp-1 py-1 text-text/sm/medium text-black-300">
-                        {"Tác giả"}
+                        {course?.lecturer.name}
                     </h1>
                     <div className="flex items-center gap-2 opacity-70">
                         <div className="rating flex justify-center items-center gap-3">
-                            <h1 className="text-text/xs/semibold text-black-500">{course?.averageRating}</h1>
+                            <h1 className="text-text/xs/semibold text-black-500">{course?.averageRating ? course.averageRating : 0}</h1>
                             <span className="mb-[2px]">
-                                <Rating rating={course?.averageRating}/>
+                                <Rating rating={course?.averageRating ? course.averageRating : 0}/>
                             </span>
                             <h1 className="text-text/xs/regular text-black-300">
                                 {" "}
-                                ( {course?.totalReviews} đánh giá){" "}
+                                ( {course?.totalReviews ? course?.totalReviews : 0}  đánh giá)
                             </h1>
                         </div>
                     </div>
@@ -59,7 +56,7 @@ export const CourseCartCard = ({course, checked, onChange}) => {
         )} */}
                 </div>
             </div>
-            <p className="text-text/lg/medium text-black-300 cursor-pointer font-worksans h-fit">Xóa</p>
+            <p onClick={onRemove} className="text-text/lg/medium text-black-300 cursor-pointer font-worksans h-fit">Xóa</p>
         </div>
     );
 };

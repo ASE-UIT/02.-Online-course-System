@@ -29,6 +29,10 @@ const LecturerSignIn = withSuspense(lazy(() => import("@/pages/Lecturer/SignIn/L
 const CartPage = withSuspense(lazy(() => import("@/pages/CartPage/CartPage.jsx")));
 const CourseList = withSuspense(lazy(() => import("@/pages/CourseList/CourseList.jsx")));
 const LearningPage = withSuspense(lazy(() => import("@/pages/LearningPage/LearningPage.jsx")));
+const CheckoutPage = withSuspense(lazy(() => import ("@/pages/PaymentPage/PaymentPage.jsx")));
+const CheckoutStep2Page = withSuspense(lazy(() => import ("@/pages/PaymentPage/CheckoutStep2")));
+const CheckoutSuccessPage = withSuspense(lazy(() => import ("@/pages/PaymentPage/CheckoutSuccess.jsx")));
+const CheckoutFailPage = withSuspense(lazy(() => import ("@/pages/PaymentPage/CheckoutFail.jsx")));
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -53,6 +57,10 @@ const router = createBrowserRouter(
           <Route path="cart" element={<CartPage />} />
           <Route path="result/:content" element={<ResultPage />} />
           <Route path="course-list" element={<CourseList />} />
+          <Route path="checkout/step1" element={<CheckoutPage />} />
+          <Route path="checkout/step2" element={<CheckoutStep2Page/>}/>
+          <Route path="checkout/success" element={<CheckoutSuccessPage/>}/>
+          <Route path="checkout/fail" element={<CheckoutFailPage/>}/>
           {/* Lecturer layout */}
           <Route path="lecturer" element={<LecturerLayout />}>
             <Route path="sign-in" element={<LecturerSignIn />} />
