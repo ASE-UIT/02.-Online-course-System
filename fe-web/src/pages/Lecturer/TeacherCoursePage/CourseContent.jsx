@@ -7,25 +7,27 @@ import { Button } from '@/components/ui/button';
 import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import CourseCardIcon from "/picture/CourseCardIcon.svg";
 import { useGetCoursesByLecturerIdQuery } from '@/store/rtk/course.services';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const CourseContent = () => {
     // Pagination state
     const [page, setPage] = useState(1);
-    const pageSize = 6;  // Set the number of items per page
+    const pageSize = 6;  
+    const navigate = useNavigate();
 
-    // Fetch courses with pagination
     const { data: courseData, isLoading, error } = useGetCoursesByLecturerIdQuery({ limit: pageSize, page });
 
-    // Fallback for when data is loading or there's an error
     if (isLoading) return <p>Loading courses...</p>;
     if (error) return <p>Error fetching courses.</p>;
 
     const courses = courseData?.data?.items || [];
-    const totalCourses = courseData?.data?.totalCount || 0;  // Assuming `totalCount` gives the total number of courses
+    const totalCourses = courseData?.data?.totalCount || 0;  
     const totalPages = Math.ceil(totalCourses / pageSize);
+    console.log('cou',courses)
 
-    // Pagination handlers
+    const handleSendToApprove = (courseId) => {
+        navigate(`${courseId}`);
+      };
     const goToNextPage = () => {
         if (page < totalPages) {
             setPage(page + 1);
@@ -98,8 +100,11 @@ export const CourseContent = () => {
                                     </div>
                                 </td>
                                 <td className="border-t w-[210px] flex gap-[8px] py-[7px] px-[8px]">
-                                    <Button className="py-[8px] px-[12px] w-[93px]">Vào học</Button>
-                                    <Button variant="loginOutline" className="text-text/md/semibold text-primary-500 border-primary-500 border-[1px] py-[8px] px-[12px] w-[93px]">Quản lý</Button>
+                                    <Button variant="loginOutline" className="text-text/md/semibold text-primary-500 border-primary-500 border-[1px] py-[8px] px-[12px] w-[93px]"
+                                      onClick={() => handleSendToApprove(item.id)}>Quản lý</Button>
+                                    {item.status === "WAITING_FOR_APPROVAL" && (
+                                        <Button className="py-[8px] px-[12px] w-[93px]">Gửi duyệt</Button>
+                                    )}
                                 </td>
                             </tr>
                         ))}

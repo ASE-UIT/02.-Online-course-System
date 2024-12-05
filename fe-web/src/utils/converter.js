@@ -6,7 +6,10 @@ export function formatCurrency(amount) {
 
 // return percent discount
 export function calculateDiscountPercentage(originalPrice, discountedPrice) {
-  if (originalPrice <= 0 || discountedPrice < 0) {
+  if (originalPrice === 0) {
+    return 0; 
+  }
+  if (originalPrice < 0 || discountedPrice < 0) {
     throw new Error("Invalid price values");
   }
   const discount = originalPrice - discountedPrice;

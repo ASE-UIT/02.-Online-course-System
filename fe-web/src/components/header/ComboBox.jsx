@@ -19,6 +19,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover";
+import { useGetCategoriesQuery } from "@/store/rtk/course.services";
 
 const frameworks = [
   {
@@ -46,7 +47,9 @@ const frameworks = [
 export function Combobox() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
-
+  const { data, isLoading, isError } = useGetCategoriesQuery();
+  console.log('data',data)
+  const categories = Array.isArray(data?.data) ? data.data : [];
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -58,7 +61,7 @@ export function Combobox() {
           onClick={() => setOpen(!open)}
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+            ? categories.find((categories) => categories.id === value)?.name
             : "Danh mục"}
           {open ? <FaAngleUp /> : <FaAngleDown />}
         </Button>
@@ -68,10 +71,10 @@ export function Combobox() {
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {categories.map((category) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={category.id}
+                  value={category.id}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
@@ -80,10 +83,10 @@ export function Combobox() {
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      value === category.id ? "opacity-100" : "opacity-0"
                     )}
                   />
-                  {framework.label}
+                  {category.name}
                 </CommandItem>
               ))}
             </CommandGroup>

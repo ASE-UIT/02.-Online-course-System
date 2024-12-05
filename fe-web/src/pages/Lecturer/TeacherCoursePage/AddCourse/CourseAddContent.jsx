@@ -45,13 +45,11 @@ export const AddCourseContent = () => {
   const { data, isLoading, isError } = useGetCategoriesQuery();
   console.log('data',data)
   const categories = Array.isArray(data?.data) ? data.data : [];
-  console.log('category',categories)
   const onSubmit = async (values) => {
     try {
       setError(null); // Reset previous errors
       setSuccessMessage(null); // Reset success message
   
-      // Prepare FormData to send
       const formData = new FormData();
       formData.append("name", values.name_course);
       formData.append("shortDescription", values.summary);
@@ -67,16 +65,14 @@ export const AddCourseContent = () => {
         console.log(`${key}: ${value instanceof File ? value.name : value}`);
       }
 
-      // Make the API call and await the response
       const response = await courseApi.createCourse(formData);
   
-      // Handle success response
       setSuccessMessage('Course created successfully!');
-      console.log("Response from backend:", response); // Optionally log the response
+      console.log("Response from backend:", response); 
   
     } catch (err) {
-      setError('Failed to create course. Please try again.'); // Handle error response
-      console.error("Error creating course:", err); // Log error for debugging
+      setError('Failed to create course. Please try again.');
+      console.error("Error creating course:", err); 
     } 
   };
 

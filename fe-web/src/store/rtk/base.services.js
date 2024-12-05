@@ -6,11 +6,10 @@ export const fetchBaseQueryWithAuth = () =>
     baseUrl: config.BASE_URL,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem("auth");
-      console.log("Token in fetchBaseQueryWithAuth:", token); // Log token
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
-      console.log("Headers after preparation:", [...headers.entries()]); // Log headers
+      // console.log("Headers after preparation:", [...headers.entries()]); // Log headers
       return headers;
     },
   });
