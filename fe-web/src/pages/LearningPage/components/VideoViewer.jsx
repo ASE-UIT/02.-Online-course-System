@@ -4,8 +4,9 @@ import { AlertCircleIcon, ChevronRight } from "lucide-react";
 import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import QuizView from "./QuizView";
 
-export default function VideoViewer() {
+export default function VideoViewer({ showQuiz }) {
   const { lesson, course, moduleSlt, lessonSlt } = useSelector(
     (state) => state.learning
   );
@@ -22,16 +23,21 @@ export default function VideoViewer() {
   return (
     <div className="bg-gray-100">
       <div className="w-full h-[500px]">
-        <ReactPlayer
-          width="100%"
-          height="100%"
-          style={{ backgroundColor: "#000" }}
-          controls={true}
-          url={
-            lesson?.videoUrl ||
-            "https://files.vidstack.io/sprite-fight/720p.mp4"
-          }
-        />
+        {!showQuiz && (
+          <ReactPlayer
+            width="100%"
+            height="100%"
+            muted={true}
+            playing={true}
+            style={{ backgroundColor: "#000" }}
+            controls={true}
+            url={
+              lesson?.videoUrl ||
+              "https://files.vidstack.io/sprite-fight/720p.mp4"
+            }
+          />
+        )}
+        {showQuiz && <QuizView />}
       </div>
       <div className="mt-[20px] flex justify-end gap-[10px] px-[20px]">
         <div className="cursor-pointer hover:bg-gray-600 transition-all flex items-center gap-[8px] px-[8px] py-[6px] bg-gray-500 rounded-[4px]">
