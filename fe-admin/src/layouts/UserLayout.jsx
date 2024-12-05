@@ -17,10 +17,10 @@ const UserLayout = () => {
     <div className="-z-10 font-worksans">
       <NavigationProvider>
         <div className="flex h-screen bg-gray-50">
-          <div className="z-10 flex-1">
+          <div className="z-10 flex-1 bg-gray-50">
             <Header />
             <Sidebar />
-            <main className="z-30 p-5 bg-gray-300">
+            <main className="z-30 p-5 bg-gray-50">
               <Outlet />
             </main>
           </div>
