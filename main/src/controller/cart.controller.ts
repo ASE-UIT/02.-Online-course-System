@@ -32,11 +32,7 @@ export class CartController {
 
       const studentId = student.id;
 
-      const result = await this.cartService.findOne({
-        filter: {
-          studentId: studentId
-        }
-      });
+      const result = await this.cartService.getMyCart(studentId);
 
       res.send_ok('Lấy giỏ hàng thành công', result);
     } catch (error) {
