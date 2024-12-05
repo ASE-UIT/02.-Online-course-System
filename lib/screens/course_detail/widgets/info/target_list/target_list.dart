@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'target_item.dart';
 
 class TargetList extends StatelessWidget {
-  final List<String> targets = [
-    'Nắm vững được công cụ thiết kế của phần mềm Adobe Illustrator.',
-    'Thực hành theo các dự án thực tế để nhanh chóng áp dụng vào công việc.',
-    'Tự tin và chủ động trong thiết kế để nâng cao tay nghề cũng như tiếp xúc làm việc nhiều hơn với công việc thiết kế của bạn.',
-    'Biết cách dựng hình 2D các vật thể đơn giản đến phức tạp theo thiết kế.',
-    'Nền tảng kiến thức cơ bản để tạo ra các sản phẩm nâng cao bằng công cụ Adobe Illustrator.',
-    'Học mọi lúc mọi nơi, hỗ trợ trực tuyến 24/7 cho học viên.'
-  ];
+  final List<String> targets;
+
+  const TargetList({Key? key, required this.targets}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

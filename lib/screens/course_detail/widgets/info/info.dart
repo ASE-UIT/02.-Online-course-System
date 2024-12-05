@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/models/course_detail.dart';
 import 'star_bar.dart';
 import 'favourite_button.dart';
 import 'property_item.dart';
@@ -6,6 +7,10 @@ import 'target_list/target_list.dart';
 import '../add_to_cart_button.dart';
 
 class CourseInfo extends StatelessWidget {
+   final CourseDetailData courseDetail;
+
+  const CourseInfo({super.key, required this.courseDetail});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,16 +19,16 @@ class CourseInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Cẩm nang A-Z Illustrator cho Designer',
-            style: TextStyle(
-              fontSize: 30, 
+            courseDetail.name ?? "Tên khóa học",
+            style: const TextStyle(
+              fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Giúp bạn nhanh chóng làm chủ phần mềm Adobe Illustrator, cung cấp nền tảng kiến thức cơ bản để tạo ra các sản phẩm thiết kế nâng cao và chủ động trong thiết kế',
-            style: TextStyle(
+            courseDetail.shortDescription ?? "",
+            style: const TextStyle(
               fontSize: 16, 
               color: Colors.black87,
             ),
@@ -32,26 +37,26 @@ class CourseInfo extends StatelessWidget {
           Row(
             children: [
               Text(
-                '4.5',
+                courseDetail.averageRating.toString(),
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(width: 8),
-              StarBar(rating: 4.25),
+              StarBar(rating: courseDetail.averageRating!.toDouble()),
               const SizedBox(width: 8),
-              Text('(n đánh giá)', style: TextStyle(fontSize: 16)),
+              Text('(${courseDetail.averageRating} đánh giá)', style: TextStyle(fontSize: 16)),
             ],
           ),
           const SizedBox(height: 8),
           Row(
             children: [
-              Text(
+              const Text(
                 'Giảng viên:',
                 style: TextStyle(fontSize: 16),
               ),
               const SizedBox(width: 8),
               Text(
-                'Nguyễn Văn A',
-                style: TextStyle(
+               courseDetail.lecturer?.name ?? '',
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.blue,
@@ -65,23 +70,23 @@ class CourseInfo extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                '000,000đ',
-                style: TextStyle(
+                "${courseDetail.sellPrice.toString()}đ",
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.blue,
                 ),
               ),
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Text(
-                '000,000đ',
-                style: TextStyle(
+                "${courseDetail.originalPrice.toString()}đ",
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.grey,
                   decoration: TextDecoration.lineThrough,
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Text(
                 'Giảm xx%',
                 style: TextStyle(
@@ -103,7 +108,7 @@ class CourseInfo extends StatelessWidget {
           const SizedBox(height: 20),
           PropertyItem(Icons.videocam_outlined, "Thời lượng: ", "05 giờ 30 phút"),
           const SizedBox(height: 8),
-          PropertyItem(Icons.menu_book_outlined, "Giáo trình: ", "41 bài giảng"),
+          PropertyItem(Icons.menu_book_outlined, "Giáo trình: ", "${courseDetail.lessonParts?[0].lessons?.length} bài giảng"),
           const SizedBox(height: 8),
           PropertyItem(Icons.access_time_outlined, "Sở hữu khóa học trọn đời", ""),
           const SizedBox(height: 8),
@@ -118,7 +123,7 @@ class CourseInfo extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Bạn sẽ học được',
                   style: TextStyle(
                     fontSize: 18,
@@ -127,7 +132,7 @@ class CourseInfo extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                TargetList(),
+                TargetList(targets: courseDetail.courseTargets ?? []),
               ],
             ),
           ),

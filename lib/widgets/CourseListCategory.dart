@@ -66,6 +66,7 @@ class CourseListCategory extends StatelessWidget {
                 return SizedBox(
                   width: 280, // Điều chỉnh chiều rộng phù hợp với CourseCard
                   child: CourseCard(
+                    id: course.id,
                     title: course.name,
                     author: course.lecturer?.name,
                     reviewCount: course.totalReviews,

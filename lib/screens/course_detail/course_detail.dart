@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../ViewModels/course_view_model.dart';
 import 'widgets/content/content.dart';
 import 'widgets/header.dart';
 import 'widgets/info/info.dart';
@@ -8,7 +10,8 @@ import 'widgets/lecturer_info.dart';
 import 'widgets/add_to_cart_button.dart';
 
 class CourseDetailPage extends StatefulWidget {
-  CourseDetailPage({Key? key}) : super(key: key);
+  final String courseId;
+  const CourseDetailPage({Key? key, required this.courseId}) : super(key: key);
 
   @override
   _CourseDetailPageState createState() => _CourseDetailPageState();
@@ -17,6 +20,19 @@ class CourseDetailPage extends StatefulWidget {
 class _CourseDetailPageState extends State<CourseDetailPage> {
   final ScrollController _scrollController = ScrollController();
   bool _isButtonVisible = true;
+
+  late CourseViewModel _courseDetailVM;
+
+  Future<void> _loadData() async {
+    try {
+      debugPrint('CourseId: ${widget.courseId}');
+      await _courseDetailVM.getCourseDetail(widget.courseId);
+    } catch (e) {
+      debugPrint('Error loading courses 2: $e');
+    }
+  }
+
+
 
   @override
   void initState() {
@@ -27,6 +43,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         _isButtonVisible = _scrollController.offset < 500;  // 500 là giá trị ngưỡng
       });
     });
+    // Fetch courses asynchronously when the screen initializes
+    _courseDetailVM = Provider.of<CourseViewModel>(context, listen: false);
+    _loadData();
   }
 
   @override
@@ -55,13 +74,13 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                     width: double.infinity,
                   ),
                   const SizedBox(height: 20),
-                  CourseInfo(),
+                  CourseInfo(courseDetail: _courseDetailVM.courseDetail),
                   const SizedBox(height: 16),
-                  CourseIntro(text: courseIntroText),
+                  CourseIntro(text: _courseDetailVM.courseDetail.introduction ?? courseIntroText),
                   const SizedBox(height: 16),
                   CourseContent(),
                   const SizedBox(height: 16),
-                  CourseLecturerInfo(),
+                  CourseLecturerInfo(courseDetail: _courseDetailVM.courseDetail),
                   const SizedBox(height: 16),
                   CourseReviews(),
                   const SizedBox(height: 16),

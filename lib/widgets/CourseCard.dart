@@ -3,6 +3,7 @@ import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/screens/course_detail/course_detail.dart';
 
 class CourseCard extends StatelessWidget {
+  final String? id;
   final String? title;
   final String? author;
   final int? rating;
@@ -17,6 +18,7 @@ class CourseCard extends StatelessWidget {
     required this.rating,
     required this.reviewCount,
     required this.price,
+    required this.id,
     this.imageUrl = 'assets/coursecard.png',
   });
 
@@ -28,7 +30,7 @@ class CourseCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CourseDetailPage(),
+            builder: (context) => CourseDetailPage( courseId: id!),
           ),
         );
       },

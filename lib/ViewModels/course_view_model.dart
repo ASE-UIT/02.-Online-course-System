@@ -1,4 +1,6 @@
 import 'dart:developer' as developer;
+import 'package:online_course_system/models/course_detail.dart';
+
 import '../models/course_model.dart';
 import '../services/HttpConfig.dart';
 import 'package:flutter/foundation.dart';
@@ -10,12 +12,15 @@ class CourseViewModel extends ChangeNotifier {
   bool _isLoading = false;
   CourseModel? _courseResponse;
   List<Data> _courses = [];
+  CourseDetail _courseDetailRespose = CourseDetail();
+  CourseDetailData _courseDetail = CourseDetailData();
+
 
   // Getters for state
   bool get isLoading => _isLoading;
   List<Data> get courses => _courses;
   CourseModel? get courseResponse => _courseResponse;
-
+  CourseDetailData get courseDetail => _courseDetail;
   // Private method to update loading state
   void _setLoading(bool loading) {
     if (_isLoading != loading) {
@@ -24,58 +29,48 @@ class CourseViewModel extends ChangeNotifier {
     }
   }
 
-  Future<Data?> getCourseDetail(String courseId) async {
-    if (_isLoading) return null;
+  Future<void> getCourseDetail(String courseId) async {
 
     try {
       _setLoading(true);
+      developer.log('courseID: ${courseId.toString()}');
 
       final response = await HttpService.get('$_courseEndpoint/$courseId');
-      final courseModel = CourseModel.fromJson(response);
+      _courseDetailRespose = CourseDetail.fromJson(response);
 
-      if (courseModel.success == true && courseModel.data != null && courseModel.data!.isNotEmpty) {
-        return courseModel.data!.first;
+      if (_courseDetailRespose.success == true && _courseDetailRespose.data != null) {
+        _courseDetail = _courseDetailRespose.data!;
       }
-      return null;
+      developer.log('courseID: ${courseId.toString()}');
+
+      developer.log('ok get course detail: ${_courseDetail.toString()}');
 
     } catch (e) {
       developer.log('Error getting course detail: $e');
       rethrow;
     } finally {
+      developer.log('final');
       _setLoading(false);
     }
   }
 
   Future<void> getAllCourses() async {
-    if (_isLoading) return;
 
     try {
-      developer.log('Loading courses...');
       _setLoading(true);
-
       final response = await HttpService.get(_courseEndpoint);
-      developer.log(response.toString());
-
       _courseResponse = CourseModel.fromJson(response);
-      developer.log('Course response: $_courseResponse');
-
-
       if (_courseResponse?.success == true && _courseResponse?.data != null) {
         _courses = _courseResponse!.data!;
-        developer.log('Successfully loaded ${_courses.length} courses');
       } else {
-        developer.log('Failed to load courses: ${_courseResponse?.message}');
         _courses = [];
       }
 
     } catch (e) {
-      developer.log('Error loading courses 1: $e');
       _courses = [];
       rethrow;
     } finally {
-      developer.log('finally');
       _setLoading(false);
-      developer.log(isLoading.toString());
 
     }
   }

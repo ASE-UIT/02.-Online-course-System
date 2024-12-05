@@ -1,87 +1,78 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/models/course_detail.dart';
 
 class CourseLecturerInfo extends StatelessWidget {
-  const CourseLecturerInfo({Key? key}) : super(key: key);
+  final CourseDetailData courseDetail;
+
+  const CourseLecturerInfo({Key? key, required this.courseDetail})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Thông tin giảng viên',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 16),
+         Text(
+          courseDetail.lecturer?.name ?? "",
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const Text(
+          'Giảng viên',
+          style: TextStyle(
+            fontSize: 16,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Thông tin giảng viên',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Nguyễn Văn A',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Text(
-              'Giảng viên',
-              style: TextStyle(
-                fontSize: 16,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 142,
-                  height: 142,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/course_image.png'),
-                    ),
-                  ),
+            Container(
+              width: 142,
+              height: 142,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/course_image.png'),
                 ),
-                const SizedBox(width: 57),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow(Icons.sentiment_satisfied, '4.3 xếp hạng'),
-                      _buildInfoRow(Icons.star_outline, '300 đánh giá'),
-                      _buildInfoRow(Icons.people_outline, '2585 học viên'),
-                      _buildInfoRow(Icons.library_books_outlined, '7 khoá học'),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-            const SizedBox(height: 16),
-            Text.rich(
-              TextSpan(
+            const SizedBox(width: 57),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  TextSpan(
-                    text: 'Nguyễn Văn A',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  const TextSpan(
-                    text:
-                        ' là một giảng viên dày dặn kinh nghiệm trong lĩnh vực thiết kế đồ họa, đặc biệt với phần mềm Adobe Illustrator. Anh đã tham gia nhiều dự án thực tế về Graphic Design, Web Design, Game UI UX và Motion Graphics, mang đến khóa học những kiến thức thực tiễn và ứng dụng cao. Với niềm đam mê chia sẻ, ',
-                  ),
+                  _buildInfoRow(Icons.sentiment_satisfied, '4.3 xếp hạng'),
+                  _buildInfoRow(Icons.star_outline, '300 đánh giá'),
+                  _buildInfoRow(Icons.people_outline, '2585 học viên'),
+                  _buildInfoRow(Icons.library_books_outlined, '7 khoá học'),
                 ],
               ),
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.justify,
-            )
+            ),
           ],
-        
-      );
+        ),
+        const SizedBox(height: 16),
+        Text(
+          courseDetail.lecturer?.bio ?? "",
+          style: const TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildInfoRow(IconData icon, String text) {
