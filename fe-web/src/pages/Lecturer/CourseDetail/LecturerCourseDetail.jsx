@@ -28,7 +28,7 @@ export default function LecturerCourseDetail() {
           {hash === "#price" && <PriceInfo course={course} />}
           {hash === "#target" && <TargetInfo course={course} />}
           {hash === "#lesson" && <ModuleLesson course={course} />}
-          {hash === "#img&video" && <Introduction />}
+          {hash === "#img&video" && <Introduction course={course} />}
           {hash === "#doc&gift" && <Addition />}
         </div>
       )}

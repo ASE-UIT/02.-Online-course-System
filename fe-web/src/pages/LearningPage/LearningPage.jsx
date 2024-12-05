@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import TrackList from "./components/TrackList";
 import VideoViewer from "./components/VideoViewer";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useGetCourseByIdQuery } from "@/store/rtk/course.services";
+import { useGetCourseByIdQuery, useGetCourseProgressQuery } from "@/store/rtk/course.services";
 import { useDispatch, useSelector } from "react-redux";
 import { setLearning } from "@/store/slices/learningSlice";
 import LessonInfo from "./LessonInfo/LessonInfo";
@@ -20,17 +20,16 @@ export default function LearningPage() {
   const { data: courseResponse } = useGetCourseByIdQuery(courseId, {
     skip: !courseId,
   });
+  const { data: learningProgressResponse } = useGetCourseProgressQuery(courseId, {
+    skip: !courseId,
+  });
   const course = courseResponse?.data ? courseResponse.data : null;
 
   useEffect(() => {
     if (isValidNumber(moduleIdx) && isValidNumber(lessonIdx)) {
       const mdIdx = Number(moduleIdx);
       const lsIdx = Number(lessonIdx);
-      if (
-        course?.lessonParts &&
-        course?.lessonParts[mdIdx]?.lessons &&
-        course?.lessonParts[mdIdx]?.lessons[lsIdx]
-      ) {
+      if (course?.lessonParts && course?.lessonParts[mdIdx]?.lessons && course?.lessonParts[mdIdx]?.lessons[lsIdx]) {
         dispatch(
           setLearning({
             moduleSlt: mdIdx,
@@ -57,7 +56,14 @@ export default function LearningPage() {
         })
       );
     }
-  }, [course, moduleIdx, lessonIdx]);
+    if (learningProgressResponse?.data) {
+      dispatch(
+        setLearning({
+          learnProgress: learningProgressResponse?.data?.lessonLearnProgresses || [],
+        })
+      );
+    }
+  }, [course, moduleIdx, lessonIdx, learningProgressResponse]);
 
   return (
     <div>
