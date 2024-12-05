@@ -25,10 +25,11 @@ class OrderContainer extends BaseContainer {
   export() {
     const orderController = this.container.get<OrderController>(OrderController);
     const orderService = this.container.get<IOrderService<any>>('OrderService');
-    return { orderController, orderService };
+    const orderRepository = this.container.get<IOrderRepository<any>>('OrderRepository');
+    return { orderController, orderService, orderRepository };
   }
 }
 
 const orderContainer = new OrderContainer();
-const { orderController, orderService } = orderContainer.export();
-export { orderController, orderService };
+const { orderController, orderService, orderRepository } = orderContainer.export();
+export { orderController, orderService, orderRepository };
