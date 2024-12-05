@@ -7,7 +7,7 @@ import {OrderSummary} from "@/pages/PaymentPage/OrderSummary.jsx";
 import {Stepper} from "@/pages/PaymentPage/Stepper.jsx";
 import {useNavigate} from "react-router-dom";
 
-export default function CheckoutPage() {
+export default function CheckoutStep1Page() {
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault()

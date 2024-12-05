@@ -118,14 +118,14 @@ const CartPage = () => {
             const response = await courseCartApi.removeFromCart(courseId);
             if (response?.success) {
                 setRemoveResponse(response.data)
+                setMyCart((prev) => prev.filter((course) => course.courseId !== courseId));
+                setSelectedCourses((prev) => prev.filter((id) => id !== courseId));
             }
         }catch(error){
             console.log(error.response?.errors.msg);
         }
     }
-    const handleRemoveCourse = (courseId) => {
 
-    };
     const [selectedCourses, setSelectedCourses] = useState([]);
 
     const handleSelectAll = (isChecked) => {
@@ -188,7 +188,7 @@ const CartPage = () => {
                                     course={course.course}
                                     checked={selectedCourses.includes(course.courseId)}
                                     onChange={(checked) => handleSelectCourse(course.courseId, checked)}
-                                    onRemove={removeFromCart(course.courseId)}
+                                    onRemove={()=>removeFromCart(course.courseId)}
                                 />
                             ))}
                         </div>

@@ -29,7 +29,7 @@ const LecturerSignIn = withSuspense(lazy(() => import("@/pages/Lecturer/SignIn/L
 const CartPage = withSuspense(lazy(() => import("@/pages/CartPage/CartPage.jsx")));
 const CourseList = withSuspense(lazy(() => import("@/pages/CourseList/CourseList.jsx")));
 const LearningPage = withSuspense(lazy(() => import("@/pages/LearningPage/LearningPage.jsx")));
-const CheckoutPage = withSuspense(lazy(() => import ("@/pages/PaymentPage/PaymentPage.jsx")));
+const CheckoutPage = withSuspense(lazy(() => import ("@/pages/PaymentPage/CheckoutStep1.jsx")));
 const CheckoutStep2Page = withSuspense(lazy(() => import ("@/pages/PaymentPage/CheckoutStep2")));
 const CheckoutSuccessPage = withSuspense(lazy(() => import ("@/pages/PaymentPage/CheckoutSuccess.jsx")));
 const CheckoutFailPage = withSuspense(lazy(() => import ("@/pages/PaymentPage/CheckoutFail.jsx")));
