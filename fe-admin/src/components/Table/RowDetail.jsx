@@ -12,11 +12,11 @@ const RowDetail = ({ row, headerList }) => {
       <img src={BlankImg} alt="cate detail" className="ml-20" />
       <div className="px-8 flex flex-col md:gap-8 justify-center items-stretch">
         <ul>
-          {Object.entries(row).map(([key, value]) =>
+          {Object.entries(row).map(([key, value], index) =>
             key === "avatar" || key === "id" ? (
               <></>
             ) : (
-              <li key={key}>
+              <li key={index}>
                 <strong>{headerTranslator(key)}:</strong> {value}
               </li>
             )

@@ -25,9 +25,15 @@ import { DataTablePagination } from "./DTPagination";
 import { DataTableViewOptions } from "./DTViewOptions";
 import RowDetail from "./RowDetail";
 
-export default function DataTable({ columns, data, dialogButton, headerList }) {
+export default function DataTable({
+  columns,
+  columnVisibility,
+  setColumnVisibility,
+  data,
+  dialogButton,
+  headerList
+}) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState({});
   const [sorting, setSorting] = React.useState([]);
   const [expandedRows, setExpandedRows] = React.useState({});
@@ -100,7 +106,6 @@ export default function DataTable({ columns, data, dialogButton, headerList }) {
               table.getRowModel().rows.map((row) => (
                 <React.Fragment key={row.id}>
                   <TableRow
-                    key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => handleRowClick(row.id)}
                   >

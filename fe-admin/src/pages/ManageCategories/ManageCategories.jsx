@@ -4,6 +4,7 @@ import DataTable from "@/components/Table/DataTable";
 import { Button } from "@/components/ui/button";
 import { categoriesColumns } from "./CategoriesColumns";
 import { categoriesList } from "./CategoriesList";
+import { useState } from "react";
 
 const data = [
   {
@@ -40,6 +41,8 @@ const addButton = (
 );
 
 const ManageCategories = () => {
+  const [columnVisibility, setColumnVisibility] = useState({});
+
   return (
     <div className="flex px-10 gap-10">
       <div className="filter basis-1/4">
@@ -49,6 +52,8 @@ const ManageCategories = () => {
         <DataTable
           data={data}
           columns={categoriesColumns}
+          columnVisibility={columnVisibility}
+          setColumnVisibility={setColumnVisibility}
           headerList={categoriesList}
           dialogButton={
             <DialogComponent
