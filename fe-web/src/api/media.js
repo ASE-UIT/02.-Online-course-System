@@ -17,21 +17,47 @@ export const mediaApi = {
   },
   uploadVideo: async (fileName, payload) => {
     try {
-      const response = await api.post(
-        `/media/upload-video/${fileName}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await api.post(`/media/upload-video/${fileName}`, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       return response.data;
     } catch (error) {
       console.log(error);
       showToast({
         type: "error",
         msg: "Tải video thất bại",
+        desc: "Lỗi không xác định",
+      });
+    }
+  },
+  getImageUrl: async () => {
+    try {
+      const response = await api.get(`/media/image-url`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      showToast({
+        type: "error",
+        msg: "Lấy image url thất bại",
+        desc: "Lỗi không xác định",
+      });
+    }
+  },
+  uploadImage: async (fileName, payload) => {
+    try {
+      const response = await api.post(`/media/upload-image/${fileName}`, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      showToast({
+        type: "error",
+        msg: "Tải image thất bại",
         desc: "Lỗi không xác định",
       });
     }

@@ -13,7 +13,6 @@ export default function LearningPage() {
   const { moduleSlt, lessonSlt } = useSelector((state) => state.learning);
   const dispatch = useDispatch();
   const [showTrackList, setShowTrackList] = useState(true);
-  const [showQuiz, setShowQuiz] = useState(false);
   const { courseId } = useParams();
   const [searchParams] = useSearchParams();
   const moduleIdx = searchParams.get("moduleIdx");
