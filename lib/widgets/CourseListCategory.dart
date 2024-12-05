@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
+import 'package:online_course_system/models/course_model.dart';
 import 'package:online_course_system/widgets/CourseCard.dart';
 
 class CourseListCategory extends StatelessWidget {
   final String categoryTitle;
-  final List<Map<String, dynamic>> courses;
+  final List<Data> courses;
+
 
   const CourseListCategory({
     Key? key,
@@ -64,11 +66,11 @@ class CourseListCategory extends StatelessWidget {
                 return SizedBox(
                   width: 280, // Điều chỉnh chiều rộng phù hợp với CourseCard
                   child: CourseCard(
-                    title: course['title'],
-                    author: course['author'],
-                    rating: course['rating'],
-                    reviewCount: course['reviewCount'],
-                    price: course['price'],
+                    title: course.name,
+                    author: course.lecturer?.name,
+                    reviewCount: course.totalReviews,
+                    rating: course.averageRating,
+                    price: course.originalPrice,
                   ),
                 );
               },

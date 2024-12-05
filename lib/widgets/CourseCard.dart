@@ -3,12 +3,12 @@ import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/screens/course_detail/course_detail.dart';
 
 class CourseCard extends StatelessWidget {
-  final String title;
-  final String author;
-  final double rating;
-  final int reviewCount;
-  final double price;
-  final String imageUrl;
+  final String? title;
+  final String? author;
+  final int? rating;
+  final int? reviewCount;
+  final String? price;
+  final String? imageUrl;
 
   const CourseCard({
     super.key,
@@ -49,7 +49,7 @@ class CourseCard extends StatelessWidget {
                 top: Radius.circular(4),
               ),
               child: Image.asset(
-                imageUrl,
+                imageUrl!,
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -58,7 +58,7 @@ class CourseCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
+                  Text(title!,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -68,7 +68,7 @@ class CourseCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 8),
                   Text(
-                    author,
+                    author!,
                     style: const TextStyle(
                       fontSize: 14,
                       color: Color(0xFF747474),
@@ -78,7 +78,7 @@ class CourseCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        rating.toStringAsFixed(1),
+                        rating!.toStringAsFixed(1),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Color(0xFF1A1A1A),
@@ -102,7 +102,7 @@ class CourseCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'đ${price.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                    'đ${price!.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,

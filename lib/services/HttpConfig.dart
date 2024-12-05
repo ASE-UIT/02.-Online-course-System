@@ -10,6 +10,10 @@ class HttpService {
 
   // API Key nếu cần
   static const String apiKey = 'YOUR_API_KEY';
+  static String getUrl(){
+    return baseUrl;
+  }
+
 
   // Headers mặc định
   static Map<String, String> get headers => {

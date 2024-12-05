@@ -4,14 +4,42 @@ import 'package:online_course_system/constants/mockdata/courses.dart';
 import 'package:online_course_system/screens/SignInScreen.dart';
 import 'package:online_course_system/widgets/CourseListCategory.dart';
 import 'package:online_course_system/widgets/HomeExploreCategory.dart';
+import 'package:provider/provider.dart';
 
-class CourseListScreen extends StatelessWidget {
+import '../ViewModels/course_view_model.dart';
+
+class CourseListScreen extends StatefulWidget {
   const CourseListScreen({super.key});
 
   @override
+  State<CourseListScreen> createState() => _CourseListScreenState();
+}
+
+class _CourseListScreenState extends State<CourseListScreen> {
+  late CourseViewModel _courseVM;
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch courses asynchronously when the screen initializes
+    _courseVM = Provider.of<CourseViewModel>(context, listen: false);
+    _loadData();
+
+  }
+  Future<void> _loadData() async {
+    try {
+      await _courseVM.getAllCourses();
+    } catch (e) {
+      debugPrint('Error loading courses 2: $e');
+    }
+  }
+  @override
   Widget build(BuildContext context) {
+
+
     return SafeArea(
-      child: Scaffold(
+      child:
+      Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
           elevation: 0,
@@ -62,16 +90,20 @@ class CourseListScreen extends StatelessWidget {
                   children: [
                     CourseListCategory(
                       categoryTitle: 'Lịch học trực tiếp',
-                      courses: homeCourses,
+                      courses: _courseVM.courses,
                     ),
                     CourseListCategory(
+                      categoryTitle: 'Lịch học trực tiếp',
+                      courses: _courseVM.courses,
+                    ),
+                    /*CourseListCategory(
                       categoryTitle: 'Top bán chạy',
                       courses: homeCourses,
                     ),
                     CourseListCategory(
                       categoryTitle: 'Khóa học mới ra mắt',
                       courses: homeCourses,
-                    ),
+                    ),*/
                     const HomeExploreCategory(),
                   ],
                 ),
