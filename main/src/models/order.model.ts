@@ -3,7 +3,7 @@ import { BaseModel } from '@/models/base.model';
 import { OrderItem } from '@/models/order_item.model';
 import { Payment } from '@/models/payment.model';
 import { Student } from '@/models/student.model';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 
 @Entity('orders')
 export class Order extends BaseModel {
@@ -13,7 +13,10 @@ export class Order extends BaseModel {
   @Column({ type: 'decimal', name: 'total_price' })
   totalPrice!: number;
 
-  @ManyToOne(() => Payment, { nullable: true, onDelete: 'SET NULL', cascade: true })
+  @Column({ name: 'payment_id', nullable: true })
+  paymentId?: string;
+
+  @OneToOne(() => Payment, { nullable: true, onDelete: 'SET NULL', cascade: true })
   @JoinColumn({ name: 'payment_id' })
   payment!: Payment;
 
