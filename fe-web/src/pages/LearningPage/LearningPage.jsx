@@ -3,10 +3,7 @@ import Header from "./components/Header";
 import TrackList from "./components/TrackList";
 import VideoViewer from "./components/VideoViewer";
 import { useParams, useSearchParams } from "react-router-dom";
-import {
-  useGetCourseByIdQuery,
-  useGetCourseProgressQuery,
-} from "@/store/rtk/course.services";
+import { useGetCourseByIdQuery, useGetCourseProgressQuery } from "@/store/rtk/course.services";
 import { useDispatch, useSelector } from "react-redux";
 import { setLearning } from "@/store/slices/learningSlice";
 import LessonInfo from "./LessonInfo/LessonInfo";
@@ -24,23 +21,16 @@ export default function LearningPage() {
   const { data: courseResponse } = useGetCourseByIdQuery(courseId, {
     skip: !courseId,
   });
-  const { data: learningProgressResponse } = useGetCourseProgressQuery(
-    courseId,
-    {
-      skip: !courseId,
-    }
-  );
+  const { data: learningProgressResponse } = useGetCourseProgressQuery(courseId, {
+    skip: !courseId,
+  });
   const course = courseResponse?.data ? courseResponse.data : null;
 
   useEffect(() => {
     if (isValidNumber(moduleIdx) && isValidNumber(lessonIdx)) {
       const mdIdx = Number(moduleIdx);
       const lsIdx = Number(lessonIdx);
-      if (
-        course?.lessonParts &&
-        course?.lessonParts[mdIdx]?.lessons &&
-        course?.lessonParts[mdIdx]?.lessons[lsIdx]
-      ) {
+      if (course?.lessonParts && course?.lessonParts[mdIdx]?.lessons && course?.lessonParts[mdIdx]?.lessons[lsIdx]) {
         dispatch(
           setLearning({
             moduleSlt: mdIdx,
@@ -70,8 +60,7 @@ export default function LearningPage() {
     if (learningProgressResponse?.data) {
       dispatch(
         setLearning({
-          learnProgress:
-            learningProgressResponse?.data?.lessonLearnProgresses || [],
+          learnProgress: learningProgressResponse?.data?.lessonLearnProgresses || [],
         })
       );
     }
@@ -82,15 +71,13 @@ export default function LearningPage() {
       <Header />
       <div className="flex mt-[60px] ">
         <div className="flex-1">
-          <VideoViewer showQuiz={showQuiz} />
+          <VideoViewer />
           <LessonInfo />
         </div>
         {showTrackList && (
           <div className="w-[376px]">
             <TrackList
               course={course}
-              setShowQuiz={setShowQuiz}
-              showQuiz={showQuiz}
               onClose={() => setShowTrackList(false)}
               moduleSlt={moduleSlt}
               lessonSlt={lessonSlt}
