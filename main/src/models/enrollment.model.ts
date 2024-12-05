@@ -1,4 +1,5 @@
 import { Course } from '@/models/course.model';
+import { Lecturer } from '@/models/lecturer.model';
 import { Student } from '@/models/student.model';
 import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 

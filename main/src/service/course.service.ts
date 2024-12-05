@@ -18,19 +18,25 @@ import { courseRepository } from '@/container/course.container';
 import { CourseSearchFilterReq } from '@/dto/course/course-search-filter.req';
 import { CourseSearchSortReq } from '@/dto/course/course-search-sort.req';
 import { LessonPart } from '@/models/lesson_part.model';
+import { ILecturerRepository } from '@/repository/interface/i.lecturer.repository';
+import { Lecturer } from '@/models/lecturer.model';
+import { LecturerStatsDto } from '@/dto/lecturer/lecturer-stats.dto';
 
 @injectable()
 export class CourseService extends BaseCrudService<Course> implements ICourseService<Course> {
   private courseRepository: ICourseRepository<Course>;
   private courseCategoryRepository: ICourseCategoryRepository<CourseCategory>;
+  private lecturerRepository: ILecturerRepository<Lecturer>;
 
   constructor(
     @inject('CourseRepository') courseRepository: ICourseRepository<Course>,
+    @inject('LecturerRepository') lecturerRepository: ILecturerRepository<Lecturer>,
     @inject('CourseCategoryRepository') courseCategoryRepository: ICourseCategoryRepository<CourseCategory>
   ) {
     super(courseRepository);
     this.courseRepository = courseRepository;
     this.courseCategoryRepository = courseCategoryRepository;
+    this.lecturerRepository = lecturerRepository;
   }
 
   /**
@@ -44,6 +50,9 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
     if (!course) {
       throw new BaseError('COURSE_NOT_FOUND', 'Không tìm thấy khóa học');
     }
+
+    //Calculate lecturer stat: average rating, total rating, total student, total course
+    //const lecturerStats: LecturerStatsDto = await this.lecturerRepository.getLecturerStats(course.lecturerId);
 
     return course;
   }

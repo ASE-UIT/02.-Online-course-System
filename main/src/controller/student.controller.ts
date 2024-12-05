@@ -33,6 +33,30 @@ export class StudentController {
     this.studentService = studentService;
     this.common = common;
   }
+
+  /**
+   * * GET /student/me
+   */
+  async getMe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const studentId = req.user!.id;
+      const result = await this.studentService.findOne({ filter: { id: studentId } });
+
+      if (!result) {
+        throw new BaseError(ErrorCode.AUTH_01, 'Học viên chưa đăng nhập');
+      }
+
+      //Delete sensitive data
+      delete (result as any).password;
+      delete (result as any).googleId;
+      delete (result as any).facebookId;
+
+      res.send_ok('Thông tin học viên', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   /**
    * * POST /student/login
    */

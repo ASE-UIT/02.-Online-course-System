@@ -22,10 +22,11 @@ class LecturerContainer extends BaseContainer {
   export() {
     const lecturerController = this.container.get<LecturerController>(LecturerController);
     const lecturerService = this.container.get<ILecturerService<any>>('LecturerService');
-    return { lecturerController, lecturerService };
+    const lecturerRepository = this.container.get<ILecturerRepository<any>>('LecturerRepository');
+    return { lecturerController, lecturerService, lecturerRepository };
   }
 }
 
 const lecturerContainer = new LecturerContainer();
-const { lecturerController, lecturerService } = lecturerContainer.export();
-export { lecturerController, lecturerService };
+const { lecturerController, lecturerService, lecturerRepository } = lecturerContainer.export();
+export { lecturerController, lecturerService, lecturerRepository };
