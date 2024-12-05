@@ -6,6 +6,9 @@ import { BaseCrudService } from '@/service/base/base.service';
 import { IQuizService } from '@/service/interface/i.quiz.service';
 import { inject, injectable } from 'inversify';
 import { studentCompleteQuizRepository } from '@/container/student_complete_quiz.container';
+import BaseError from '@/utils/error/base.error';
+import { ErrorCode } from '@/enums/error-code.enums';
+import { AnswerQuizRes } from '@/dto/quizz/answer-quizz.res';
 
 @injectable()
 export class QuizService extends BaseCrudService<Quiz> implements IQuizService<Quiz> {
@@ -26,16 +29,37 @@ export class QuizService extends BaseCrudService<Quiz> implements IQuizService<Q
   //   return await this.quizRepository.findByLessonId(lessonId);
   // }
 
-  async answerQuiz(
-    quizId: string | undefined,
-    studentId: string | undefined,
-    choice: string | undefined
-  ): Promise<boolean> {
+  async answerQuiz(quizId: string, studentId: string, choices: string[]): Promise<AnswerQuizRes> {
     const quiz = await this.quizRepository.findOne({ filter: { id: quizId } });
-    if (quiz?.correctChoices!.includes(choice!)) {
-      await this.studentCompleteQuizRepository.create({ data: { quizId, studentId } });
-      return true;
+
+    if (!quiz) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Quiz not found');
     }
-    return false;
+
+    const correctChoices = quiz.correctChoices;
+
+    console.log('correctChoices', correctChoices);
+    console.log('choices', choices);
+
+    //All of the choices must be the same as the correct choices
+    if (correctChoices!.length !== choices.length) {
+      return {
+        answerResult: false
+      };
+    }
+
+    for (const choice of choices) {
+      if (!correctChoices!.includes(choice)) {
+        return {
+          answerResult: false
+        };
+      }
+    }
+
+    await this.studentCompleteQuizRepository.create({ data: { quizId, studentId } });
+
+    return {
+      answerResult: true
+    };
   }
 }
