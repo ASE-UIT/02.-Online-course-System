@@ -3,7 +3,7 @@ import GroupIcon from '@/assets/GroupIcon';
 import StarIcon from '@/assets/StarIcon';
 import { Button } from '@/components/ui/button';
 import { Plus, Upload } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import CourseCardIcon from "/picture/CourseCardIcon.svg";
 import { FormProvider, useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
@@ -14,6 +14,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { courseApi } from '@/api/courseApi';
 import { useGetCategoriesQuery } from '@/store/rtk/course.services';
+import { mediaApi } from '@/api/media';
 
 const formSchema = z.object({
   name_course: z.string().min(6, { message: "Vui lòng nhập tên khóa học" }),
@@ -43,18 +44,50 @@ export const AddCourseContent = () => {
   const [error, setError] = useState(null); 
   const [successMessage, setSuccessMessage] = useState(null);
   const { data, isLoading, isError } = useGetCategoriesQuery();
-  console.log('data',data)
+  const [errorEmptyFile, setErrorEmptyFile] = useState('');
+  // console.log('data',data)
   const categories = Array.isArray(data?.data) ? data.data : [];
+
+
+  const fileInputRef = useRef(null);
+  const [fileSlt, setFileSlt] = useState(null);
+
+  const handleUploadClick = () => {
+   
+    if (fileInputRef.current) {
+      console.log('click');
+      fileInputRef.current.click();
+    }
+  };
+
+  const uploadImageLesson = async () => {
+    //Get random url video
+    const fileUrlResponse = await mediaApi.getImageUrl();
+    if (!fileUrlResponse?.data) return;
+
+    //Upload video to backend
+    const formData = new FormData();
+    formData.append("file", fileSlt);
+    await mediaApi.uploadImage(fileUrlResponse.data.fileName, formData);
+    return fileUrlResponse.data.mediaUrl;
+  };
+
+
   const onSubmit = async (values) => {
+    if(!fileSlt )
+      {
+        setErrorEmptyFile('Vui lòng tải lên một tệp');
+        return;
+      }
     try {
       setError(null); // Reset previous errors
       setSuccessMessage(null); // Reset success message
-  
+      const url = await uploadImageLesson();
       const formData = new FormData();
       formData.append("name", values.name_course);
       formData.append("shortDescription", values.summary);
       formData.append("categoryId", values.category);
-      formData.append("thumbnail", values.picture); // Ensure this is a File object
+      formData.append("thumbnail", url); // Ensure this is a File object
       formData.append("description", values.description);
       formData.append("benefits", values.benefits);
       formData.append("participants", values.participant);
@@ -155,14 +188,29 @@ export const AddCourseContent = () => {
                       Ảnh (theo tỉ lệ 2:1)<span className="text-error-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <FormUpload onChange={(e) => field.onChange(e.target.files[0])} />
+                      <div className="">
+                        <div className="flex h-10 w-full rounded-md border border-gray-600 bg-background px-3 py-2 text-text/md/normal ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground text-gray-900 focus-visible:outline-none 
+                        hover-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"  onClick={() => handleUploadClick()}>
+                          {fileSlt? fileSlt?.name : 'Tải lên một ảnh'}
+                        </div>
+                        {errorEmptyFile && <p className="text-text/sm/medium py-2 text-red-500">{errorEmptyFile}</p>}
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={(e) => {
+                setFileSlt(e.target.files?.[0]);
+                setErrorEmptyFile('');
+              }}
+              style={{ display: "none" }}
+            />
             {/* <div className="flex gap-[10px] items-center">
               <Checkbox />
               <p className='text-text/md/regular'>Cho trải nghiệm thử khi có coupon (<span className='text-text/md/medium text-error-500'>?</span>)</p>
@@ -248,7 +296,13 @@ export const AddCourseContent = () => {
               )}
             />
              {/* Submit Button */}
-             <Button type="submit" className="py-3 px-4 w-[94px] text-white bg-primary-500" disabled={isLoading}>
+             <Button type="submit" className="py-3 px-4 w-[94px] text-white bg-primary-500" disabled={isLoading} onClick={() => {
+              if(!fileSlt )
+                {
+                  setErrorEmptyFile('Vui lòng tải lên một tệp');
+                  return;
+                }
+             }}>
               {isLoading ? 'Đang tạo...' : 'Lưu'}
             </Button>
 

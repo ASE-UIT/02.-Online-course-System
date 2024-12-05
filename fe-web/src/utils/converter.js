@@ -10,7 +10,7 @@ export function calculateDiscountPercentage(originalPrice, discountedPrice) {
     return 0; 
   }
   if (originalPrice < 0 || discountedPrice < 0) {
-    throw new Error("Invalid price values");
+    return 0;
   }
   const discount = originalPrice - discountedPrice;
   const discountPercentage = (discount / originalPrice) * 100;
