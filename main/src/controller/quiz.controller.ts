@@ -75,4 +75,19 @@ export class QuizController {
       next(error);
     }
   }
+
+  /**
+   * * GET /quiz/done-by-course/:courseId
+   */
+  async doneQuizByCourse(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const studentId = req.user?.id;
+      const courseId = req.query.courseId?.toString();
+      const result = await this.studentCompleteQuizRepository.findQuizDoneByCourse(studentId!, courseId!);
+
+      res.send_ok('Get done quiz by course successfully', result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -13,4 +13,21 @@ export class StudentCompleteQuizRepository
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(StudentCompleteQuiz));
   }
+
+  async findQuizDoneByCourse(studentId: string, courseId: string): Promise<StudentCompleteQuiz[]> {
+    return await this.ormRepository.find({
+      where: {
+        studentId: studentId,
+        quiz: {
+          lessonPart: {
+            courseId: courseId
+          }
+        }
+      },
+      select: {
+        quizId: true,
+        createAt: true
+      }
+    });
+  }
 }
