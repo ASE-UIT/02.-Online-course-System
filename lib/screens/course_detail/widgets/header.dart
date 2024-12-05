@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../SignInScreen.dart';
+
 class CourseHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -14,7 +16,12 @@ class CourseHeader extends StatelessWidget {
           ),
           const Spacer(),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SignInScreen()),
+              );
+            },
             child: const Text(
               'Đăng nhập',
               style: TextStyle(color: Colors.black, fontSize: 16),

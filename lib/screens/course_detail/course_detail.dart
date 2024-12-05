@@ -27,6 +27,8 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     try {
       debugPrint('CourseId: ${widget.courseId}');
       await _courseDetailVM.getCourseDetail(widget.courseId);
+      debugPrint('length: ${_courseDetailVM.courseDetail.courseTargets?.length}');
+
     } catch (e) {
       debugPrint('Error loading courses 2: $e');
     }

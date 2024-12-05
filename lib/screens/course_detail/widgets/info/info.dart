@@ -7,7 +7,7 @@ import 'target_list/target_list.dart';
 import '../add_to_cart_button.dart';
 
 class CourseInfo extends StatelessWidget {
-   final CourseDetailData courseDetail;
+  final CourseDetailData courseDetail;
 
   const CourseInfo({super.key, required this.courseDetail});
 
@@ -29,7 +29,7 @@ class CourseInfo extends StatelessWidget {
           Text(
             courseDetail.shortDescription ?? "",
             style: const TextStyle(
-              fontSize: 16, 
+              fontSize: 16,
               color: Colors.black87,
             ),
           ),
@@ -43,7 +43,8 @@ class CourseInfo extends StatelessWidget {
               const SizedBox(width: 8),
               StarBar(rating: courseDetail.averageRating!.toDouble()),
               const SizedBox(width: 8),
-              Text('(${courseDetail.averageRating} đánh giá)', style: TextStyle(fontSize: 16)),
+              Text('(${courseDetail.averageRating} đánh giá)',
+                  style: TextStyle(fontSize: 16)),
             ],
           ),
           const SizedBox(height: 8),
@@ -55,7 +56,7 @@ class CourseInfo extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-               courseDetail.lecturer?.name ?? '',
+                courseDetail.lecturer?.name ?? '',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -98,21 +99,22 @@ class CourseInfo extends StatelessWidget {
           const SizedBox(height: 20),
           Row(
             children: [
-              const Expanded(
-                child: AddToCartButton()
-              ),
+              const Expanded(child: AddToCartButton()),
               const SizedBox(width: 16),
               FavouriteButton(isFavourite: false),
             ],
           ),
           const SizedBox(height: 20),
-          PropertyItem(Icons.videocam_outlined, "Thời lượng: ", "05 giờ 30 phút"),
+          PropertyItem(
+              Icons.videocam_outlined, "Thời lượng: ", "05 giờ 30 phút"),
           const SizedBox(height: 8),
-          PropertyItem(Icons.menu_book_outlined, "Giáo trình: ", "${courseDetail.lessonParts?[0].lessons?.length} bài giảng"),
+          PropertyItem(Icons.menu_book_outlined, "Giáo trình: ", "1 bài giảng"),
           const SizedBox(height: 8),
-          PropertyItem(Icons.access_time_outlined, "Sở hữu khóa học trọn đời", ""),
+          PropertyItem(
+              Icons.access_time_outlined, "Sở hữu khóa học trọn đời", ""),
           const SizedBox(height: 8),
-          PropertyItem(Icons.assignment_turned_in_outlined, "Cấp chứng nhận hoàn thành", ""),
+          PropertyItem(Icons.assignment_turned_in_outlined,
+              "Cấp chứng nhận hoàn thành", ""),
           const SizedBox(height: 16),
           Container(
             padding: EdgeInsets.all(16),
@@ -132,7 +134,7 @@ class CourseInfo extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                TargetList(targets: courseDetail.courseTargets ?? []),
+                TargetList(targets: courseDetail.courseTargets ?? [""]),
               ],
             ),
           ),

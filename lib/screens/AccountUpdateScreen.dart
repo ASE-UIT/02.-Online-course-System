@@ -30,6 +30,7 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
+          color: Colors.black,
           onPressed: () {
             Navigator.pop(context);
           },
