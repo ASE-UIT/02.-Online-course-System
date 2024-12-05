@@ -59,7 +59,6 @@ const ManageCategories = () => {
             />
           }
         />
-        /
       </div>
     </div>
   );

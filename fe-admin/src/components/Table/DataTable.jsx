@@ -19,14 +19,31 @@ import {
   TableRow
 } from "@/components/ui/table";
 
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
+
 import { DataTablePagination } from "./DTPagination";
 import { DataTableViewOptions } from "./DTViewOptions";
+import RowDetail from "./RowDetail";
 
 export default function DataTable({ columns, data, dialogButton, headerList }) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState({});
   const [sorting, setSorting] = React.useState([]);
+  const [expandedRows, setExpandedRows] = React.useState({});
+
+  const handleRowClick = (rowId) => {
+    setExpandedRows((prev) => ({
+      ...prev,
+      [rowId]: !prev[rowId]
+    }));
+  };
+
+  var CollapsibleRowContent = ({ row, headerList }) => (
+    <td colSpan={6}>
+      <RowDetail row={row} headerList={headerList} />
+    </td>
+  );
 
   const table = useReactTable({
     data,
@@ -57,7 +74,6 @@ export default function DataTable({ columns, data, dialogButton, headerList }) {
         <div className="flex items-center justify-between">
           <DataTableViewOptions table={table} headerList={headerList} />
         </div>
-        {/* <DataTableToolbar table={table} /> */}
       </div>
       <div className="bg-white">
         <Table>
@@ -82,19 +98,36 @@ export default function DataTable({ columns, data, dialogButton, headerList }) {
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                <React.Fragment key={row.id}>
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                    onClick={() => handleRowClick(row.id)}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                  <Collapsible
+                    open={expandedRows[row.id]}
+                    className="w-full"
+                    asChild
+                  >
+                    <tr>
+                      <CollapsibleContent className="bg-white" asChild>
+                        <CollapsibleRowContent
+                          row={row.original}
+                          headerList={headerList}
+                        />
+                      </CollapsibleContent>
+                    </tr>
+                  </Collapsible>
+                </React.Fragment>
               ))
             ) : (
               <TableRow>
