@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import testRedux from "./slices/testRedux";
+import modal from "./slices/modal";
 
 export default configureStore({
   reducer: {
-    testRedux: testRedux
+    modal: modal
   }
 });

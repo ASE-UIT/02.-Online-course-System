@@ -1,9 +1,8 @@
 import DataTable from "@/components/Table/DataTable";
 import { lecturerColumns } from "./LecturerColumns";
 import { lecturerList } from "./LecturerList";
-import DialogComponent from "@/components/Dialog/DialogComponent";
-import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { CURRENT_PAGES } from "@/utils/globalUtils";
 
 const data = [
   {
@@ -47,13 +46,6 @@ const ManageLecturer = () => {
     course: false
   });
 
-  const addButton = (
-    <Button variant="primary" className="bg-primary-500 text-white px-4 py-2">
-      <span className="text-text/xl/medium pr-6">+</span>
-      Thêm
-    </Button>
-  );
-
   return (
     <div>
       <DataTable
@@ -62,14 +54,7 @@ const ManageLecturer = () => {
         columnVisibility={columnVisibility}
         setColumnVisibility={setColumnVisibility}
         headerList={lecturerList}
-        dialogButton={
-          <DialogComponent
-            triggerButton={addButton}
-            title="Thêm giảng viên mới"
-            description={null}
-            content={null}
-          />
-        }
+        pageName={CURRENT_PAGES.LECTURER_PAGE}
       />
     </div>
   );

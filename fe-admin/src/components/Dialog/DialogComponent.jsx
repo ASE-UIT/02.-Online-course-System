@@ -1,43 +1,100 @@
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from "@/components/ui/dialog";
+import { MODAL_BODY_TYPES, CURRENT_PAGES } from "@/utils/globalUtils";
+import CategoriesModalBody from "./Category/CategoriesModalBody";
+import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Button } from "../ui/button";
+import RemoveCategories from "./Category/RemoveCategories";
+import LecturerModalBody from "./Lecturer/LecturerModalBody";
+import RemoveLecturer from "./Lecturer/RemoveLecturer";
 
-const DialogComponent = ({ triggerButton, title, description, content }) => {
+const DialogComponent = ({ bodyType, currentPage, id }) => {
+  const vietnameseText = () => {
+    // CATEGORY_PAGE
+    if (currentPage === CURRENT_PAGES.CATEGORY_PAGE) {
+      return "danh mục";
+    } else if (currentPage === CURRENT_PAGES.LECTURER_PAGE) {
+      return "giảng viên";
+    }
+  };
+
   return (
     <Dialog>
-      <DialogTrigger asChild>{triggerButton}</DialogTrigger>
+      <DialogTrigger asChild>
+        {
+          {
+            [MODAL_BODY_TYPES.ADD]: (
+              <Button
+                variant="primary"
+                className="bg-primary-500 text-white px-4 py-2"
+              >
+                <span className="text-text/xl/medium pr-6">+</span>
+                Thêm
+              </Button>
+            ),
+            [MODAL_BODY_TYPES.EDIT]: <Button className="">Cập nhật</Button>,
+            [MODAL_BODY_TYPES.REMOVE]: (
+              <Button className=" bg-error-500 px-8">Xoá</Button>
+            )
+          }[bodyType]
+        }
+      </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+          <DialogTitle>
+            {
+              {
+                [MODAL_BODY_TYPES.ADD]: `Thêm ${vietnameseText()} mới`,
+                [MODAL_BODY_TYPES.EDIT]: `Chỉnh sửa ${vietnameseText()}`,
+                [MODAL_BODY_TYPES.REMOVE]: `Xoá ${vietnameseText()}`
+              }[bodyType]
+            }
+          </DialogTitle>
+          <DialogDescription>
+            {
+              {
+                [MODAL_BODY_TYPES.REMOVE]: `Bạn chắc chắn muồn xoá ${vietnameseText()} này?`
+              }[bodyType]
+            }
+          </DialogDescription>
         </DialogHeader>
-        <div className="w-full">{content}</div>
-        <DialogFooter className="sm:justify-end">
-          <Button
-            type="submit"
-            variant="primary"
-            className="bg-primary-500 text-white sm:px-10"
-          >
-            Lưu
-          </Button>
-          <DialogClose asChild>
-            <Button
-              type="button"
-              variant="secondary"
-              className="bg-gray-400 sm:px-10"
-            >
-              Huỷ
-            </Button>
-          </DialogClose>
-        </DialogFooter>
+        {
+          // ADD
+          bodyType === MODAL_BODY_TYPES.ADD &&
+            {
+              [CURRENT_PAGES.CATEGORY_PAGE]: (
+                <CategoriesModalBody id={id} isAddOrChange={true} />
+              ),
+              [CURRENT_PAGES.LECTURER_PAGE]: (
+                <LecturerModalBody id={id} isAddOrChange={true} />
+              )
+            }[currentPage]
+        }
+        {
+          // EDIT
+          bodyType === MODAL_BODY_TYPES.EDIT &&
+            {
+              [CURRENT_PAGES.CATEGORY_PAGE]: (
+                <CategoriesModalBody id={id} isAddOrChange={false} />
+              ),
+              [CURRENT_PAGES.LECTURER_PAGE]: (
+                <LecturerModalBody id={id} isAddOrChange={false} />
+              )
+            }[currentPage]
+        }
+        {
+          // REMOVE
+          bodyType === MODAL_BODY_TYPES.REMOVE &&
+            {
+              [CURRENT_PAGES.CATEGORY_PAGE]: <RemoveCategories id={id} />,
+              [CURRENT_PAGES.LECTURER_PAGE]: <RemoveLecturer id={id} />
+            }[currentPage]
+        }
       </DialogContent>
     </Dialog>
   );

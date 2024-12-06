@@ -1,10 +1,9 @@
-import DialogComponent from "@/components/Dialog/DialogComponent";
 import Filter from "@/components/Filter/Filter";
 import DataTable from "@/components/Table/DataTable";
-import { Button } from "@/components/ui/button";
 import { categoriesColumns } from "./CategoriesColumns";
 import { categoriesList } from "./CategoriesList";
 import { useState } from "react";
+import { CURRENT_PAGES } from "@/utils/globalUtils";
 
 const data = [
   {
@@ -33,12 +32,11 @@ const data = [
   }
 ];
 
-const addButton = (
-  <Button variant="primary" className="bg-primary-500 text-white px-4 py-2">
-    <span className="text-text/xl/medium pr-6">+</span>
-    Thêm
-  </Button>
-);
+// const changeButton = (
+//   <Button variant="primary" className="bg-primary-500 text-white px-4 py-2">
+//     Cập nhật
+//   </Button>
+// );
 
 const ManageCategories = () => {
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -55,14 +53,7 @@ const ManageCategories = () => {
           columnVisibility={columnVisibility}
           setColumnVisibility={setColumnVisibility}
           headerList={categoriesList}
-          dialogButton={
-            <DialogComponent
-              triggerButton={addButton}
-              title="Thêm danh mục"
-              description={null}
-              content={null}
-            />
-          }
+          pageName={CURRENT_PAGES.CATEGORY_PAGE}
         />
       </div>
     </div>
