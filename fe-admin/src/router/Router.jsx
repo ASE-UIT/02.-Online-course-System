@@ -7,6 +7,7 @@ import {
   Navigate
 } from "react-router-dom";
 import withSuspense from "./WithSuspense";
+import ManageLecturer from "@/pages/ManageLecturer/ManageLecturer";
 
 const UserLayout = withSuspense(lazy(() => import("../layouts/UserLayout")));
 const Dashboard = withSuspense(
@@ -39,12 +40,13 @@ const router = createBrowserRouter(
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="business" element={<ManageBusiness />} />
           <Route path="categories" element={<ManageCategories />} />
+          <Route path="leturers" element={<ManageLecturer />} />
           <Route path="employees" element={<ManageEmployee />} />
           <Route path="users" element={<ManageUser />} />
           <Route path="setting" element={<Setting />} />
         </Route>
         <Route path="sign-in" element={<SignIn />} />
-        <Route path="*" element={<Navigate to={"./admin/dashboard"} />} />
+        <Route path="*" element={<Navigate to={"/admin/dashboard"} />} />
       </Route>
     </Route>
   ),

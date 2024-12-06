@@ -24,10 +24,18 @@ import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import { DataTablePagination } from "./DTPagination";
 import { DataTableViewOptions } from "./DTViewOptions";
 import RowDetail from "./RowDetail";
+import DialogComponent from "../Dialog/DialogComponent";
+import { MODAL_BODY_TYPES } from "@/utils/globalUtils";
 
-export default function DataTable({ columns, data, dialogButton, headerList }) {
+export default function DataTable({
+  columns,
+  columnVisibility,
+  setColumnVisibility,
+  data,
+  pageName,
+  headerList
+}) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState({});
   const [sorting, setSorting] = React.useState([]);
   const [expandedRows, setExpandedRows] = React.useState({});
@@ -39,9 +47,9 @@ export default function DataTable({ columns, data, dialogButton, headerList }) {
     }));
   };
 
-  var CollapsibleRowContent = ({ row, headerList }) => (
+  var CollapsibleRowContent = ({ row, headerList, pageName }) => (
     <td colSpan={6}>
-      <RowDetail row={row} headerList={headerList} />
+      <RowDetail row={row} headerList={headerList} pageName={pageName} />
     </td>
   );
 
@@ -70,7 +78,10 @@ export default function DataTable({ columns, data, dialogButton, headerList }) {
   return (
     <div className="py-4 rounded-md border space-y-4 bg-[rgba(244,247,252,0.75)] shadow-md">
       <div className="w-full flex justify-end items-center gap-4 px-4">
-        {dialogButton}
+        <DialogComponent
+          bodyType={MODAL_BODY_TYPES.ADD}
+          currentPage={pageName}
+        />
         <div className="flex items-center justify-between">
           <DataTableViewOptions table={table} headerList={headerList} />
         </div>
@@ -100,7 +111,6 @@ export default function DataTable({ columns, data, dialogButton, headerList }) {
               table.getRowModel().rows.map((row) => (
                 <React.Fragment key={row.id}>
                   <TableRow
-                    key={row.id}
                     data-state={row.getIsSelected() && "selected"}
                     onClick={() => handleRowClick(row.id)}
                   >
@@ -123,6 +133,7 @@ export default function DataTable({ columns, data, dialogButton, headerList }) {
                         <CollapsibleRowContent
                           row={row.original}
                           headerList={headerList}
+                          pageName={pageName}
                         />
                       </CollapsibleContent>
                     </tr>
