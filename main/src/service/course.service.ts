@@ -21,6 +21,10 @@ import { LessonPart } from '@/models/lesson_part.model';
 import { ILecturerRepository } from '@/repository/interface/i.lecturer.repository';
 import { Lecturer } from '@/models/lecturer.model';
 import { LecturerStatsDto } from '@/dto/lecturer/lecturer-stats.dto';
+import { CourseDetailRes } from '@/dto/course/course-detail.res';
+import redis from '@/utils/redis/redis.util';
+import { RedisSchemaEnum } from '@/enums/redis-schema.enum';
+import { TIME_CONSTANTS } from '@/constants/time.constants';
 
 @injectable()
 export class CourseService extends BaseCrudService<Course> implements ICourseService<Course> {
@@ -44,7 +48,13 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
    * @mhhung0811 do this task
    * @param courseId
    */
-  async getCourseDetail(courseId: string): Promise<Course> {
+  async getCourseDetail(courseId: string): Promise<CourseDetailRes> {
+    //Check in cache
+    const courseDetailCache = await redis.get(`${RedisSchemaEnum.courseDetail}:${courseId}`);
+    if (courseDetailCache) {
+      return JSON.parse(courseDetailCache) as CourseDetailRes;
+    }
+
     const course = await this.courseRepository.getCourseDetail(courseId);
 
     if (!course) {
@@ -52,9 +62,31 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
     }
 
     //Calculate lecturer stat: average rating, total rating, total student, total course
-    //const lecturerStats: LecturerStatsDto = await this.lecturerRepository.getLecturerStats(course.lecturerId);
+    const lecturerStats: LecturerStatsDto = await this.lecturerRepository.getLecturerStats(course.lecturerId);
 
-    return course;
+    (course as CourseDetailRes).lecturerStats = lecturerStats;
+
+    /**
+     * ! Tạm thời comment lại để fe test cho dễ
+     */
+    //Just show videoUrl to free trial lesson
+    // for (const lessonPart of course.lessonParts) {
+    //   for (const lesson of lessonPart.lessons) {
+    //     if (!lesson.isFreeTrial) {
+    //       lesson.videoUrl = undefined;
+    //     }
+    //   }
+    // }
+
+    //Caching course detail
+    redis.set(
+      `${RedisSchemaEnum.courseDetail}:${courseId}`,
+      JSON.stringify(course),
+      'EX',
+      (TIME_CONSTANTS.MINUTE / 1000) * 30 //30 minutes
+    );
+
+    return course as CourseDetailRes;
   }
 
   /**
@@ -102,6 +134,9 @@ export class CourseService extends BaseCrudService<Course> implements ICourseSer
 
     // Gọi hàm findOneAndUpdate từ IBaseRepository để cập nhật khóa học
     const updatedResult = await this.courseRepository.save(updatedData as Course);
+
+    //Xóa course detail trong cache
+    redis.del(`${RedisSchemaEnum.courseDetail}:${id}`);
 
     // Trả về thông tin khóa học đã cập nhật dưới dạng DTO
     return updatedResult;
