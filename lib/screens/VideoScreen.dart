@@ -28,6 +28,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       videoPlayerController: _videoPlayerController,
       autoPlay: true,
       looping: true,
+      startAt: Duration(seconds: 0),
     );
   }
 

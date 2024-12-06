@@ -4,6 +4,7 @@ import 'package:online_course_system/screens/AccountScreen.dart';
 import 'package:online_course_system/screens/CourseListScreen.dart';
 import 'package:online_course_system/screens/FavoriteScreen.dart';
 import 'package:online_course_system/screens/SearchScreen.dart';
+import 'package:online_course_system/screens/StudyCourseListScreen.dart';
 import 'package:online_course_system/screens/VideoScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const Center(child: CourseListScreen()),
     const Center(child: SearchScreen()),
-    Center(child: VideoPlayerScreen()),
+    Center(child: StudyCourseListScreen()),
     const Center(child: FavoriteScreen()),
     const Center(child: AccountScreen()),
   ];
