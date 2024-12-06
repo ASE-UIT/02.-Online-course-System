@@ -8,6 +8,7 @@ import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
 import { SessionUtil } from '@/utils/session.util';
 import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
+import { CreateOrderRes } from '@/dto/order/create-order.res';
 
 @injectable()
 export class OrderController {
@@ -30,9 +31,11 @@ export class OrderController {
 
       const createOrderReq: CreateOrderReq = req.body;
 
-      await this.orderService.createOrder(createOrderReq, student.id);
+      const order = await this.orderService.createOrder(createOrderReq, student.id);
 
-      res.send_ok('Tạo đơn mua khóa học thành công, vui lòng thanh toán');
+      const resultDto = convertToDto(CreateOrderRes, order);
+
+      res.send_ok('Tạo đơn mua khóa học thành công, vui lòng thanh toán', resultDto);
     } catch (error) {
       next(error);
     }
