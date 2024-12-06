@@ -125,7 +125,7 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
     };
   }
 
-  async createOrder(createOrderReq: CreateOrderReq, studentId: string): Promise<void> {
+  async createOrder(createOrderReq: CreateOrderReq, studentId: string): Promise<Order> {
     //Lấy khóa học từ cart
     const cart = await this.cartRepository.findOne({
       filter: {
@@ -155,7 +155,7 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
 
     cartItems.forEach((item) => {
       const orderItem = new OrderItem();
-      orderItem.courseId = item.course.id;
+      orderItem.course = item.course;
       orderItem.price = priceEachCourse.get(item.course.id) || item.course.sellPrice;
 
       orderItems.push(orderItem);
@@ -172,5 +172,6 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
     order.payment = payment;
 
     await this.orderRepository.save(order);
+    return order;
   }
 }
