@@ -14,4 +14,6 @@ export class DiscountRes extends BaseRes {
   startDate!: Date;
   @Expose()
   endDate!: Date;
+  @Expose()
+  courseId!: string;
 }
