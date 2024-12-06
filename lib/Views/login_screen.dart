@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/screens/HomeScreen.dart';
 import 'package:provider/provider.dart';
 
 import '../ViewModels/login_view_model.dart';
@@ -42,6 +43,10 @@ class LoginScreen extends StatelessWidget {
                         password: passwordController.text,
                       );
                       viewModel.login(loginRequest);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
                     },
                     child: Text('Login'),
                   ),

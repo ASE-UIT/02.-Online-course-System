@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/constants/mockdata/courses.dart';
 import 'package:online_course_system/screens/SignInScreen.dart';
@@ -17,6 +18,8 @@ class CourseListScreen extends StatefulWidget {
 
 class _CourseListScreenState extends State<CourseListScreen> {
   late CourseViewModel _courseVM;
+  final storage = new FlutterSecureStorage();
+  String? token;
 
   @override
   void initState() {
@@ -24,6 +27,17 @@ class _CourseListScreenState extends State<CourseListScreen> {
     // Fetch courses asynchronously when the screen initializes
     _courseVM = Provider.of<CourseViewModel>(context, listen: false);
     _loadData();
+    _loadToken();
+  }
+  Future<void> _loadToken() async{
+    try {
+      token = await storage.read(key: 'token');
+      debugPrint('Token: $token');
+
+
+    } catch (e) {
+      debugPrint('Error loading token: $e');
+    }
 
   }
   Future<void> _loadData() async {

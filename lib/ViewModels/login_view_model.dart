@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/login_model.dart';
@@ -23,9 +24,15 @@ class LoginViewModel extends ChangeNotifier {
       // Assuming the response is a Map and contains the token
       String token = response['data']['token'];
       log(token);
-      // Save the token to SharedPreferences
+      /*// Save the token to SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
+      await prefs.setString('token', token);*/
+      final _storage = FlutterSecureStorage();
+// to write on storage
+       await _storage.write(
+        key: 'token',
+        value: token,
+      );
 
       log('Token saved: $token');  // Optional: Log the saved token
     } catch (e) {
