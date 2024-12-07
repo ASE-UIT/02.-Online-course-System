@@ -1,7 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/ViewModels/learning_view_model.dart';
 import 'package:online_course_system/constants/colors.dart';
+import 'package:provider/provider.dart';
 
-class CourseScreen extends StatelessWidget {
+class CourseScreen extends StatefulWidget {
+  @override
+  State<CourseScreen> createState() => _CourseScreenState();
+}
+
+class _CourseScreenState extends State<CourseScreen> {
+  late LearningViewModel _learningVM;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _learningVM = Provider.of<LearningViewModel>(context, listen: false);
+    _loadData();
+  }
+  Future<void> _loadData() async {
+    try {
+      await _learningVM.getLearning("95eabf10-5a9a-45db-ab13-9c37c390b4c2");
+    } catch (e) {
+      debugPrint('Error loading courses 2: $e');
+    }
+  }
+
+
   final List<Section> sections = [
     Section(
       title: "Phần 1: MỞ ĐẦU",
@@ -41,7 +65,9 @@ class CourseScreen extends StatelessWidget {
         title: Text("Tên khóa học"),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       body: Column(

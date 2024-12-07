@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/ViewModels/learning_view_model.dart';
 import 'package:online_course_system/ViewModels/login_view_model.dart';
 import 'package:online_course_system/screens/AccountUpdateScreen.dart';
 import 'package:online_course_system/screens/EmailVerificationScreen.dart';
@@ -20,6 +21,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(
           create: (_) => CourseViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => LearningViewModel(),
         ),
       ],
       child: MyApp(),
