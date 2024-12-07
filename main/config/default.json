@@ -31,7 +31,7 @@
     "sync": false
   },
   "media_service": {
-    "url": "http://159.223.56.195/media",
+    "url": "https://csairs.website/media",
     "video_bucket": {
       "path": "eduhub-video"
     },
