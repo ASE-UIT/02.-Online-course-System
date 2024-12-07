@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../ViewModels/course_view_model.dart';
@@ -28,7 +30,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       debugPrint('CourseId: ${widget.courseId}');
       await _courseDetailVM.getCourseDetail(widget.courseId);
       debugPrint('length: ${_courseDetailVM.courseDetail.courseTargets?.length}');
-
+      debugPrint("model"+_courseDetailVM.courseDetail.toString());
     } catch (e) {
       debugPrint('Error loading courses 2: $e');
     }

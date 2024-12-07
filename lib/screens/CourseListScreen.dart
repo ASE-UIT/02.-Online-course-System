@@ -29,16 +29,12 @@ class _CourseListScreenState extends State<CourseListScreen> {
     _loadData();
     _loadToken();
   }
-  Future<void> _loadToken() async{
+  Future<void> _loadToken() async {
     try {
       token = await storage.read(key: 'token');
-      debugPrint('Token: $token');
-
-
     } catch (e) {
       debugPrint('Error loading token: $e');
     }
-
   }
   Future<void> _loadData() async {
     try {
@@ -67,7 +63,8 @@ class _CourseListScreenState extends State<CourseListScreen> {
               const Spacer(), // Thêm khoảng trống giữa logo và nút đăng nhập
               Container(
                 height: 40,
-                child: TextButton(
+                child:
+                TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,

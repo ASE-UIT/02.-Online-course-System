@@ -29,6 +29,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       autoPlay: true,
       looping: true,
       startAt: Duration(seconds: 0),
+
     );
   }
 

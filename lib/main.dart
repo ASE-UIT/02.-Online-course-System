@@ -25,6 +25,9 @@ void main() {
         ChangeNotifierProvider(
           create: (_) => LearningViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => LoginViewModel(),
+        ),
       ],
       child: MyApp(),
     ),

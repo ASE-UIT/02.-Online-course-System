@@ -41,7 +41,7 @@ class CourseInfo extends StatelessWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(width: 8),
-              StarBar(rating: courseDetail.averageRating!.toDouble()),
+              StarBar(rating: courseDetail.averageRating?.toDouble()??0.0),
               const SizedBox(width: 8),
               Text('(${courseDetail.averageRating} đánh giá)',
                   style: TextStyle(fontSize: 16)),
@@ -71,7 +71,7 @@ class CourseInfo extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Text(
-                "${courseDetail.sellPrice.toString()}đ",
+                "${courseDetail.sellPrice}đ",
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class CourseInfo extends StatelessWidget {
               ),
               const SizedBox(width: 20),
               Text(
-                "${courseDetail.originalPrice.toString()}đ",
+                "${courseDetail.originalPrice}đ",
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.grey,

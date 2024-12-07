@@ -47,7 +47,7 @@ class _CourseScreenState extends State<CourseScreen> {
   Future<void> _loadData() async {
     try {
       final r =
-          await _learningVM.getLearning("95eabf10-5a9a-45db-ab13-9c37c390b4c2");
+          await _learningVM.getLearning("30d2b059-716e-445e-ad20-bd7341d7adda");
       _learningModel = r?.data ?? LearningData();
       lessonParts = r?.data?.lessonParts;
     } catch (e) {

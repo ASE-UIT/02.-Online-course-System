@@ -21,18 +21,11 @@ class CourseViewModel extends ChangeNotifier {
   List<Data> get courses => _courses;
   CourseModel? get courseResponse => _courseResponse;
   CourseDetailData get courseDetail => _courseDetail;
-  // Private method to update loading state
-  void _setLoading(bool loading) {
-    if (_isLoading != loading) {
-      _isLoading = loading;
-      notifyListeners();
-    }
-  }
+
 
   Future<void> getCourseDetail(String courseId) async {
 
     try {
-      _setLoading(true);
       developer.log('courseID: ${courseId.toString()}');
 
       final response = await HttpService.get('$_courseEndpoint/$courseId');
@@ -50,14 +43,13 @@ class CourseViewModel extends ChangeNotifier {
       rethrow;
     } finally {
       developer.log('final');
-      _setLoading(false);
+      notifyListeners();
     }
   }
 
   Future<void> getAllCourses() async {
 
     try {
-      _setLoading(true);
       final response = await HttpService.get(_courseEndpoint);
       _courseResponse = CourseModel.fromJson(response);
       if (_courseResponse?.success == true && _courseResponse?.data != null) {
@@ -70,26 +62,9 @@ class CourseViewModel extends ChangeNotifier {
       _courses = [];
       rethrow;
     } finally {
-      _setLoading(false);
+      notifyListeners();
 
     }
   }
 
-  // Helper method to get course status
-  String getCourseStatus(Data course) {
-    return course.status ?? 'UNKNOWN';
-  }
-
-  // Helper method to get formatted price
- /* String getFormattedPrice(Data course) {
-    final sellPrice = course.sellPrice ?? '0';
-    final originalPrice = course.originalPrice ?? '0';
-    return double.parse(sellPrice) > 0 ? sellPrice : originalPrice;
-  }*/
-
-  // Helper method to check if course is free
-  /*bool isFree(Data course) {
-    final price = getFormattedPrice(course);
-    return double.parse(price) <= 0;
-  }*/
 }

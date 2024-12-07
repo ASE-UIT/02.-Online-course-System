@@ -1,15 +1,63 @@
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:online_course_system/ViewModels/login_view_model.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/screens/HomeScreen.dart';
 import 'package:online_course_system/screens/SignUpScreen.dart';
 import 'package:online_course_system/widgets/customtextfield.dart';
 import 'package:online_course_system/widgets/socialloginbutton.dart';
+import 'package:provider/provider.dart';
 
-class SignInScreen extends StatelessWidget {
+import '../models/login_model.dart';
+
+class SignInScreen extends StatefulWidget {
   SignInScreen({super.key});
 
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  final storage = new FlutterSecureStorage();
+
+  late LoginViewModel viewModel;
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+  void _showSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Người dùng không thể tắt bằng tap bên ngoài dialog
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Đăng nhập thành công"),
+          content: Text("Chào mừng bạn đến với EduHub!"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Đóng dialog
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              },
+              child: Text("Tiến hành"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  initState() {
+    super.initState();
+    viewModel = Provider.of<LoginViewModel>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +117,27 @@ class SignInScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 18),
                         ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomeScreen(),
-                              ),
+                          onPressed: () async {
+                            final loginRequest = LoginRequest(
+                              phoneNumberOrEmail: emailController.text,
+                              password: passwordController.text,
                             );
+                            await viewModel.login(loginRequest);
+                            var token = await storage.read(key: 'token');
+                            log(token.toString());
+                            if (token != null) { // Kiểm tra token nếu đăng nhập thành công
+                              _showSuccessDialog(context);
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Đăng nhập thất bại, vui lòng thử lại."),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+
                           },
+
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary500,
                             minimumSize: const Size(double.infinity, 60),
@@ -87,7 +148,28 @@ class SignInScreen extends StatelessWidget {
                           child: const Text(
                             "ĐĂNG NHẬP",
                             style: TextStyle(
-                                fontSize: 16, 
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await storage.delete(key: 'token');
+                          },
+
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary500,
+                            minimumSize: const Size(double.infinity, 60),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            "Xoa token",
+                            style: TextStyle(
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white
                             ),
@@ -124,12 +206,6 @@ class SignInScreen extends StatelessWidget {
                         SocialLoginButton(
                           title: 'Facebook',
                           imagePath: 'assets/facebook_logo.png',
-                          onPressed: () {},
-                        ),
-                        const SizedBox(height: 16),
-                        SocialLoginButton(
-                          title: 'Số điện thoại',
-                          imagePath: 'assets/phone_logo.png',
                           onPressed: () {},
                         ),
                         const SizedBox(height: 24),
