@@ -20,17 +20,24 @@ import { SessionUtil } from '@/utils/session.util';
 import { CourseDetailSelectRes } from '@/dto/course/course-detail-select.res';
 import { CourseSearchFilterReq } from '@/dto/course/course-search-filter.req';
 import { CourseSearchSortReq } from '@/dto/course/course-search-sort.req';
+import { IStudentCompleteLessonService } from '@/service/interface/i.student_complete_lesson.service';
+import { StudentCompleteLesson } from '@/models/student_complete_lesson.model';
+import { GetLearningProgressRes } from '@/dto/student_complete_lesson/get-learning-progress.res';
 
 @injectable()
 export class CourseController {
   public common: IBaseCrudController<Course>;
   private courseService: ICourseService<Course>;
+  private studentCompleteLessonService: IStudentCompleteLessonService<StudentCompleteLesson>;
   constructor(
     @inject('CourseService') courseService: ICourseService<Course>,
-    @inject(ITYPES.Controller) common: IBaseCrudController<Course>
+    @inject(ITYPES.Controller) common: IBaseCrudController<Course>,
+    @inject('StudentCompleteLessonService')
+    studentCompleteLessonService: IStudentCompleteLessonService<StudentCompleteLesson>
   ) {
     this.courseService = courseService;
     this.common = common;
+    this.studentCompleteLessonService = studentCompleteLessonService;
   }
 
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -241,6 +248,30 @@ export class CourseController {
       const result = await this.courseService.search(filters, sort, rpp, page);
 
       res.send_ok(`Get search courses successfully`, result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * GET /course/learning/:couseId
+   * @param req
+   * @param res
+   * @param next
+   */
+  async getCourseLearning(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const courseId = req.params.courseId;
+      const studentId = req.user!.id;
+
+      const learningProgress: GetLearningProgressRes = await this.studentCompleteLessonService.getLearningProgress(
+        studentId,
+        courseId
+      );
+
+      const result = await this.courseService.getCourseLearning(courseId, studentId, learningProgress);
+
+      res.send_ok('Get course learning successfully', result);
     } catch (error) {
       next(error);
     }

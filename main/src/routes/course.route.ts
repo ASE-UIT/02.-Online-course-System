@@ -38,6 +38,8 @@ courseRouter
 
   .get('/search', courseController.search.bind(courseController))
 
+  .get('/learning/:courseId', authenticateJWT, courseController.getCourseLearning.bind(courseController))
+
   .get('/:id', courseController.findById.bind(courseController))
 
   .get('/', courseController.findAll.bind(courseController));
