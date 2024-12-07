@@ -1,7 +1,6 @@
 
-import { Button } from "@/components/ui/button"
 
-export function OrderSummary({ numItems, total, onCheckout }) {
+export function OrderSummary({ numItems, total }) {
     const formatCurrency = (amount) => {
         return amount.toLocaleString("vi-VN")
     }

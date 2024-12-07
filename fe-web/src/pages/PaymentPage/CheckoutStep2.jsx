@@ -1,15 +1,16 @@
 
-import { useState } from "react"
+import {useEffect, useState} from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import {OrderSummary} from "@/pages/PaymentPage/OrderSummary.jsx";
 import {Stepper} from "@/pages/PaymentPage/Stepper.jsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.jsx"
+import {useNavigate, useOutletContext} from "react-router-dom";
 
 export default function CheckoutStep2Page() {
     const [paymentMethod, setPaymentMethod] = useState("vnpay")
-
+    const navigate = useNavigate();
     const paymentMethods = [
         {
             id: "vnpay",
@@ -36,15 +37,17 @@ export default function CheckoutStep2Page() {
             name: "Thẻ quốc tế Visa/Master",
         },
     ]
+    const {setCurrentStep} = useOutletContext();
 
     const handleSubmit = async (e) => {
-
+        setCurrentStep(3);
+        navigate("/web/checkout/success")
     }
-
+    useEffect(() => {
+        setCurrentStep(2);
+    }, []);
     return (
-        <div className="min-h-screen px-20 py-6 space-y-5 ">
-            <Stepper currentStep={2}/>
-            <div className="flex gap-5">
+            <div className="flex gap-5 px-[80px] py-[20px]">
                 {/* Customer Information Form */}
                 <div className="flex flex-col gap-3 bg-white grow">
                     <h2 className="text-text/xl/semibold font-worksans">Hình thức thanh toán</h2>
@@ -89,11 +92,9 @@ export default function CheckoutStep2Page() {
                     <OrderSummary
                         numItems={2}
                         total={2000000}
-                        onCheckout={() => setCurrentStep2(2)}
                     />
                 </div>
             </div>
-        </div>
     )
 }
 

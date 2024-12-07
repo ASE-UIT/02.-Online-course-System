@@ -9,7 +9,7 @@ export function Stepper({ currentStep, className, result }) {
         { number: 3, label: "Vào học" }
     ]
     return (
-        <div className={cn("w-full max-w-4xl mx-auto px-8", className)}>
+        <div className={cn("w-full max-w-4xl mx-auto px-8 pt-[25px] pb-[20px]", className)}>
             <div className="relative flex justify-between">
                 {/* Progress Line */}
                 <div className="absolute top-8 left-3 h-[6px] w-11/12 bg-gray-500">
@@ -45,7 +45,7 @@ export function Stepper({ currentStep, className, result }) {
                         </div>
                         <span
                             className={
-                                "mt-2 text-text/md/medium font-worksans text-black"
+                                "mt-[5px] text-text/md/medium font-worksans text-black"
                             }
                         >
               {step.label}

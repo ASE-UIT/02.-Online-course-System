@@ -9,6 +9,7 @@ import {CheckIcon} from "lucide-react";
 import {Separator} from "@/components/ui/separator.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import { formatCurrency } from "@/utils/converter";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const mockCourseData = [
     {
@@ -98,7 +99,7 @@ const CartPage = () => {
     const [myCart, setMyCart] = useState([]);
     const [cartResponse, setCartResponse] = useState(null);
     const [removeResponse, setRemoveResponse] = useState(null);
-
+    const navigate = useNavigate();
     const [totalPrice, setTotalPrice] = useState(0);
     const getMyCart = async () => {
         try {
@@ -140,6 +141,18 @@ const CartPage = () => {
         setSelectedCourses((prev) =>
             isChecked ? [...prev, courseId] : prev.filter((id) => id !== courseId)
         );
+    };
+    const handleClickPayment = async () => {
+        /*try{
+            const response = await courseCartApi.createOrder();
+            if (response?.success) {
+                console.log(response.data);
+            }
+        }catch(error){
+            console.log(error.response?.errors.msg);
+        }*/
+
+        navigate("/web/checkout")
     };
     useEffect(() => {
         const newTotalPrice = selectedCourses.reduce((sum, courseId) => {
@@ -199,7 +212,7 @@ const CartPage = () => {
                         </p>
                         <div className="flex justify-between">
                             <p className="text-text/md/medium text-black font-worksans">
-                                Tạm tính ({myCart.length} sản phẩm)
+                                Tạm tính ({selectedCourses.length} sản phẩm)
                             </p>
                             <p className="text-text/md/medium text-black font-worksans">
                                 đ{formatCurrency(totalPrice)}
@@ -214,7 +227,7 @@ const CartPage = () => {
                                 đ{formatCurrency(totalPrice)}
                             </p>
                         </div>
-                        <Button className="py-3 px-4 rounded-[8px] h-[48]">Thanh toán</Button>
+                            <Button onClick={()=>handleClickPayment()} className="py-3 px-4 rounded-[8px] w-full h-[48]">Thanh toán</Button>
 
                     </div>
                 </div>

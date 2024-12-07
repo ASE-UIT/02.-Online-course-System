@@ -1,4 +1,5 @@
 import api from "./apiConfig";
+import error from "eslint-plugin-react/lib/util/error.js";
 
 export const courseApi = {
   getLiveCourses: async () => {
@@ -42,7 +43,6 @@ export const courseCartApi ={
       return response.data;
     }catch(error){
       console.log(error);
-      return {error: error.message};
     }
   },
   removeFromCart: async (id) => {
@@ -57,7 +57,34 @@ export const courseCartApi ={
       return response.data;
     }catch(error){
       console.log(error);
-      return {error: error.message};
+    }
+  },
+  createOrder: async () => {
+    try{
+      const token = JSON.parse(localStorage.getItem("auth"));
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+      const response = await api.post(`/order/create-order`, config);
+      return response.data;
+    }catch{
+      console.log(error);
+    }
+  },
+  getOrder: async()=>{
+    try{
+      const token = JSON.parse(localStorage.getItem("auth"));
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }
+      const response = await api.get(`/order/get-order`, config);
+      return response.data;
+    }catch{
+      console.log(error);
     }
   }
 }
