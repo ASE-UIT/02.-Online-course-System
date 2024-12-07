@@ -18,7 +18,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     // Khởi tạo VideoPlayerController
     _videoPlayerController = VideoPlayerController.networkUrl(
       Uri.parse(
-          'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'), // Link video của bạn
+          "https://csairs.website/media/eduhub-video/efefbba7-a081-4ab2-9903-dafe420aee46"), // Link video của bạn
     )..initialize().then((_) {
         setState(() {}); // Cập nhật trạng thái sau khi video được khởi tạo
       });

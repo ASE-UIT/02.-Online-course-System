@@ -30,7 +30,7 @@ class CourseCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CourseDetailPage( courseId: id!),
+            builder: (context) => CourseDetailPage( courseId: id ?? ""),
           ),
         );
       },
