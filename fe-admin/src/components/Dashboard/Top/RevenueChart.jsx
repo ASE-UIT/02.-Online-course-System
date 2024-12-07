@@ -113,14 +113,8 @@ const RevenueChart = () => {
   };
 
   return (
-    <div className="w-full h-full bg-gradient-to-r from-[#EBEAFC85] to-white border-transparent rounded-2xl">
-      <Line
-        ref={chartRef}
-        data={data}
-        options={options}
-        height={90}
-        width={200}
-      />
+    <div className="overflow-hidden w-full h-full max-w-[800px] max-h-[320px] bg-gradient-to-r from-[#EBEAFC85] to-white border-transparent rounded-2xl flex justify-center items-center">
+      <Line ref={chartRef} data={data} options={options} height={180} />
     </div>
   );
 };

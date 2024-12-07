@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import * as Slider from "@radix-ui/react-slider";
 
-const RangeSlider = () => {
-  const [range, setRange] = useState([500000, 3500000]);
+const RangeSlider = ({onPriceChange}) => {
+  const [range, setRange] = useState([0, 3500000]);
 
   const handleValueChange = (value) => {
     setRange(value);
+    onPriceChange(value);
   };
 
   return (

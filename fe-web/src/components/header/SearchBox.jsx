@@ -56,22 +56,30 @@ useEffect(() => {
     document.removeEventListener("mousedown", handleClickOutside);
   };
 }, []);
+useEffect(() => {
+  if (searchResults && searchResults.data) {
+    console.log("Search results:", searchResults.data);
+    setSearchedCourse(searchResults.data);
+  } else {
+    setSearchedCourse([]);
+  }
+}, [searchResults]);
 
 // Navigate to search results page
 const handleSearchSubmit = () => {
   if (searchQuery.trim()) {
     navigate(
-      `/search?query=${encodeURIComponent(searchQuery)}`
+      `../web/search?query=${encodeURIComponent(searchQuery)}`
     );
   }
 };
   return (
-    <div ref={searchBoxRef} className="w-[400px] relative">
-      <div className="w-full md:w-[500px] bg-gray-50 rounded-full h-[45px] flex items-center relative border ">
+    <div ref={searchBoxRef} className="relative w-full max-w-[600px]">
+      <div className="bg-gray-50 rounded-full h-[45px] flex items-center relative border px-4">
         <input
             type="text"
             placeholder="Tìm kiếm khóa học, giảng viên..."
-            className="w-full bg-transparent outline-none px-6 py-3"
+            className="w-full bg-transparent outline-none px-6 py-3 placeholder:text-gray-600"
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);

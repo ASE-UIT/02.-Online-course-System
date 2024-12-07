@@ -5,8 +5,8 @@ export const fetchBaseQueryWithAuth = () =>
   fetchBaseQuery({
     baseUrl: config.BASE_URL,
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem("token");
-      // console.log('token',token)
+      const auth = localStorage.getItem("auth");
+      const token = JSON.parse(auth) || "";
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
@@ -16,6 +16,6 @@ export const fetchBaseQueryWithAuth = () =>
 export const baseApi = createApi({
   reducerPath: "baseRTKApi",
   baseQuery: fetchBaseQueryWithAuth(),
-  tagTypes: ["Course"],
+  tagTypes: ["Course", "Quizzes"],
   endpoints: () => ({}),
 });

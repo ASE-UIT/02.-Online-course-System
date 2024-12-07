@@ -4,11 +4,15 @@ import api from "./apiConfig";
 export const mediaApi = {
   getVideoUrl: async () => {
     try {
-      const response = await api.get(`/media/image-url`);
+      const response = await api.get(`/media/video-url`);
       return response.data;
     } catch (error) {
       console.log(error);
-      showToast({ type: "error", msg: "Lấy video url thất bại", desc: "Lỗi không xác định" });
+      showToast({
+        type: "error",
+        msg: "Lấy video url thất bại",
+        desc: "Lỗi không xác định",
+      });
     }
   },
   uploadVideo: async (fileName, payload) => {
@@ -21,7 +25,41 @@ export const mediaApi = {
       return response.data;
     } catch (error) {
       console.log(error);
-      showToast({ type: "error", msg: "Tải video thất bại", desc: "Lỗi không xác định" });
+      showToast({
+        type: "error",
+        msg: "Tải video thất bại",
+        desc: "Lỗi không xác định",
+      });
+    }
+  },
+  getImageUrl: async () => {
+    try {
+      const response = await api.get(`/media/image-url`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      showToast({
+        type: "error",
+        msg: "Lấy image url thất bại",
+        desc: "Lỗi không xác định",
+      });
+    }
+  },
+  uploadImage: async (fileName, payload) => {
+    try {
+      const response = await api.post(`/media/upload-image/${fileName}`, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      showToast({
+        type: "error",
+        msg: "Tải image thất bại",
+        desc: "Lỗi không xác định",
+      });
     }
   },
 };
