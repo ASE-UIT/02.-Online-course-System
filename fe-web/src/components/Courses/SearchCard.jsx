@@ -10,7 +10,7 @@ const SearchCard = ({searchedCourse}) => {
     navigate(`/web/course/${searchedCourse.id}`);
   };
     return (
-      <div onClick={handleCardClick} className="flex h-[80px] shadow-lg transition-all duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white cursor-pointer border border-gray-300 rounded-xl">
+      <div onClick={handleCardClick} className="flex h-[80px] shadow-sm transition-all duration-500 hover:shadow-md dark:bg-slate-950 dark:text-white cursor-pointer border border-gray-300 rounded-xl">
         <div className="flex-shrink-0 overflow-hidden w-[25%] rounded-l-xl">
           <img
             src={searchedCourse.thumbnail}

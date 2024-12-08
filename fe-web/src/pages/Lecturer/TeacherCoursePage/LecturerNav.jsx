@@ -9,7 +9,6 @@ const LecturerNav = () => {
     { label: 'Coupon', id: 'coupon' },
     { label: 'Đơn hàng', id: 'orders' },
     { label: 'Thu nhập', id: 'income' },
-    { label: 'Thảo luận', id: 'discussion' },
     { label: 'Hồ sơ', id: 'profile' },
   ];
 
