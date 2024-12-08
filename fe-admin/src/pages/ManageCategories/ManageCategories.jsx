@@ -44,7 +44,7 @@ const ManageCategories = () => {
   return (
     <div className="flex px-10 gap-10">
       <div className="filter basis-1/4">
-        <Filter manage={"application"} />
+        <Filter manage={"category"} />
       </div>
       <div className="filter basis-3/4">
         <DataTable
