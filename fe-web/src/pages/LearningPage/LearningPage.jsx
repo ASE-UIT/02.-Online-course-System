@@ -3,18 +3,23 @@ import Header from "./components/Header";
 import TrackList from "./components/TrackList";
 import VideoViewer from "./components/VideoViewer";
 import { useParams, useSearchParams } from "react-router-dom";
-import { useGetCourseByIdQuery, useGetCourseProgressQuery } from "@/store/rtk/course.services";
+import {
+  useGetCourseByIdQuery,
+  useGetCourseProgressQuery,
+  useGetCourseProgress2Query,
+} from "@/store/rtk/course.services";
 import { useDispatch, useSelector } from "react-redux";
 import { setLearning } from "@/store/slices/learningSlice";
 import LessonInfo from "./LessonInfo/LessonInfo";
 import { isValidNumber } from "@/utils/getLengthVideo";
 
 export default function LearningPage() {
-  const { moduleSlt, lessonSlt } = useSelector((state) => state.learning);
+  const { moduleSlt, lessonSlt, lesson } = useSelector((state) => state.learning);
   const dispatch = useDispatch();
   const [showTrackList, setShowTrackList] = useState(true);
   const { courseId } = useParams();
   const [searchParams] = useSearchParams();
+  const [progressBase, setProgressBase] = useState(0);
   const moduleIdx = searchParams.get("moduleIdx");
   const lessonIdx = searchParams.get("lessonIdx");
   const { data: courseResponse } = useGetCourseByIdQuery(courseId, {
@@ -22,9 +27,28 @@ export default function LearningPage() {
   });
   const { data: learningProgressResponse } = useGetCourseProgressQuery(courseId, {
     skip: !courseId,
+    // pollingInterval:10000
+  });
+  const { data: baseLearningProgressRes, refetch } = useGetCourseProgress2Query(courseId, {
+    skip: !courseId,
+    // pollingInterval:10000
   });
   const course = courseResponse?.data ? courseResponse.data : null;
+  const handleGetProgress = (learnProgress, lessonId) => {
+    if (!learnProgress || !learnProgress.lessonLearnProgresses) {
+      return 0; // Return 0 if data is invalid
+    }
 
+    // Find the specific lesson progress based on lessonId
+    const lesson = learnProgress.lessonLearnProgresses.find((item) => item.lessonId === lessonId);
+
+    if (!lesson) {
+      return 0; // Return 0 if lessonId is not found
+    }
+
+    // Return the progress percentage for the lesson
+    return lesson.progress || 0;
+  };
   useEffect(() => {
     if (isValidNumber(moduleIdx) && isValidNumber(lessonIdx)) {
       const mdIdx = Number(moduleIdx);
@@ -56,21 +80,33 @@ export default function LearningPage() {
         })
       );
     }
+  }, [course, moduleIdx, lessonIdx, dispatch]);
+  useEffect(() => {
     if (learningProgressResponse?.data) {
       dispatch(
         setLearning({
-          learnProgress: learningProgressResponse?.data?.lessonLearnProgresses || [],
+          learnProgress: learningProgressResponse?.data || [],
         })
       );
     }
-  }, [course, moduleIdx, lessonIdx, learningProgressResponse]);
-
+  }, [dispatch, learningProgressResponse]);
+  useEffect(() => {
+    if (baseLearningProgressRes?.data && lesson) {
+      const res = handleGetProgress(baseLearningProgressRes.data, lesson.id);
+      setProgressBase(res / 100);
+    }
+  }, [baseLearningProgressRes, lesson]);
+  useEffect(() => {
+    if (moduleIdx !== -1 && lessonIdx !== -1) {
+      refetch();
+    }
+  }, [moduleIdx, lessonIdx, refetch]);
   return (
     <div>
       <Header />
       <div className="flex mt-[60px] ">
         <div className="flex-1">
-          <VideoViewer />
+          <VideoViewer progressBase={progressBase} />
           <LessonInfo />
         </div>
         {showTrackList && (

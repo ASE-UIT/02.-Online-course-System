@@ -19,7 +19,7 @@ const PlayIcon = ({ className }) => {
   );
 };
 export default function LessonParts({ module, moduleIdx }) {
-  const { moduleSlt, lessonSlt, course } = useSelector((state) => state.learning);
+  const { moduleSlt, lessonSlt, course, learnProgress } = useSelector((state) => state.learning);
   const [showLessons, setShowLessons] = useState(false);
   const [searchParams] = useSearchParams();
   const showQuiz = searchParams.get("showQuiz") === "1" ? true : false;
@@ -29,6 +29,23 @@ export default function LessonParts({ module, moduleIdx }) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set("showQuiz", "1");
     navigate(`?${searchParams.toString()}`);
+  };
+  const handleGetProgress = (learnProgress, lessonId) => {
+    if (!learnProgress || !learnProgress.lessonLearnProgresses) {
+      return 0; // Return 0 if data is invalid
+    }
+  
+    // Find the specific lesson progress based on lessonId
+    const lesson = learnProgress.lessonLearnProgresses.find(
+      (item) => item.lessonId === lessonId
+    );
+  
+    if (!lesson) {
+      return 0; // Return 0 if lessonId is not found
+    }
+  
+    // Return the progress percentage for the lesson
+    return lesson.progress || 0;
   };
   useEffect(() => {
     if (moduleSlt === moduleIdx) setShowLessons(true);
@@ -65,7 +82,7 @@ export default function LessonParts({ module, moduleIdx }) {
               <div className="min-w-[50px] text-text/md/regular text-center">
                 {convertMinutesToTime(lesson.duration)}
               </div>
-              <CircularProgress size={25} strokeWidth={2} percentage={40} />
+              <CircularProgress size={25} strokeWidth={2} percentage={handleGetProgress(learnProgress,lesson.id)} />
             </div>
           ))}
           {quizzes.length > 0 && (
