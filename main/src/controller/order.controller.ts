@@ -9,6 +9,7 @@ import { SessionUtil } from '@/utils/session.util';
 import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { CreateOrderRes } from '@/dto/order/create-order.res';
+import { getSearchData } from '@/utils/get-search-data.util';
 
 @injectable()
 export class OrderController {
@@ -42,20 +43,17 @@ export class OrderController {
   };
 
   /**
-   * * GET /get-order
+   * * GET /get-my-order
    */
 
-  public getOrder = async (req: Request, res: Response, next: NextFunction) => {
+  public getMyOrder = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+      const searchData = getSearchData(req);
 
-      const order = await this.orderService.findMany({
-        filter: {
-          studentId: student.id
-        },
-        relations: ['items', 'items.course'],
-        select: OrderSelectRes
-      });
+      console.log('searchData', searchData);
+
+      const order = await this.orderService.getMyOrders(student.id, searchData);
 
       res.send_ok('Lấy thông tin đơn hàng thành công', order);
     } catch (error) {

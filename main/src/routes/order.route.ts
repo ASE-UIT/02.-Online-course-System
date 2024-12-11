@@ -14,6 +14,6 @@ orderRouter
     orderController.createOrder.bind(orderController)
   )
 
-  .get('/get-order', authenticateJWT, orderController.getOrder.bind(orderController));
+  .get('/get-my-order', authenticateJWT, orderController.getMyOrder.bind(orderController));
 
 export default orderRouter;
