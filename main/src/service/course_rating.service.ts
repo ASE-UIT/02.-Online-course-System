@@ -3,6 +3,7 @@ import { CourseRatingSortReq } from '@/dto/course_rating/course_rating-sort.req'
 import { CreateCourseRatingReq } from '@/dto/course_rating/create-course_rating.req';
 import { UpdateCourseRatingReq } from '@/dto/course_rating/update-course_rating.req';
 import { UpdateCourseRatingRes } from '@/dto/course_rating/update-course_rating.res';
+import { ErrorCode } from '@/enums/error-code.enums';
 import { Course } from '@/models/course.model';
 import { CourseRating } from '@/models/course_rating.model';
 import { Student } from '@/models/student.model';
@@ -60,5 +61,35 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
   }
   search(sort: CourseRatingSortReq, rpp: number, page: number): Promise<CourseRating[]> {
     return this.courseRatingRepository.search(sort, rpp, page);
+  }
+
+
+  async getRatingStatistics(courseId: string) {
+    const ratings = await this.courseRatingRepository.findMany({
+      filter: { courseId },
+    });
+
+    if (!ratings || ratings.length === 0) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Khóa học chưa có đánh giá');
+    }
+
+    // Tính điểm trung bình
+    const totalPoints = ratings.reduce((sum, rating) => sum + (rating.ratingPoint || 0), 0);
+    const averageRating = totalPoints / ratings.length;
+
+    // Tính phần trăm các mức sao
+    const ratingCounts = [0, 0, 0, 0, 0]; // Tương ứng với các sao từ 1 đến 5
+    ratings.forEach(rating => {
+      if (rating.ratingPoint) {
+        ratingCounts[rating.ratingPoint - 1]++;
+      }
+    });
+
+    const percentageRating = ratingCounts.map(count => (count / ratings.length) * 100);
+
+    return {
+      averageRating,
+      ratingDistribution: percentageRating,
+    };
   }
 }

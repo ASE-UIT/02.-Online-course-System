@@ -63,4 +63,18 @@ export class CourseRatingController {
       next(error);
     }
   }
+
+  async getStatistics(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const courseId = req.params.courseId; // Lấy courseId từ tham số URL
+      if (!courseId) {
+        throw new BaseError(ErrorCode.NOT_FOUND, 'Course ID is required');
+      }
+
+      const statistics = await this.courseRatingService.getRatingStatistics(courseId);
+      res.send_ok('Get rating statistics successfully', statistics);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
