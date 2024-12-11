@@ -24,4 +24,24 @@ export class LecturerRegisterReq {
   @MaxLength(150)
   @Expose()
   password!: string;
+
+  @IsOptional()
+  @IsString()
+  @Expose()
+  exampleVideo?: string;
+
+  @IsOptional()
+  @IsString()
+  @Expose()
+  socialLink?: string;
+
+  @IsOptional()
+  @IsString()
+  @Expose()
+  teachingTopic?: string;
+
+  @IsOptional()
+  @IsString()
+  @Expose()
+  teachingExperience?: string;
 }
