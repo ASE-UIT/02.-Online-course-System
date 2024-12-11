@@ -1,18 +1,24 @@
 import { CreateOrderReq } from '@/dto/order/create-order.req';
+import { OrderSelectRes } from '@/dto/order/order-select.res';
+import { PagingResponseDto } from '@/dto/paging-response.dto';
+import { SearchDataDto } from '@/dto/search-data.dto';
 import { ErrorCode } from '@/enums/error-code.enums';
 import { Cart } from '@/models/cart.model';
 import { CartItem } from '@/models/cart_item.model';
 import { Course } from '@/models/course.model';
 import { Discount } from '@/models/discount.model';
+import { Enrollment } from '@/models/enrollment.model';
 import { Order } from '@/models/order.model';
 import { OrderItem } from '@/models/order_item.model';
 import { Payment } from '@/models/payment.model';
 import { ICartRepository } from '@/repository/interface/i.cart.repository';
 import { IDiscountRepository } from '@/repository/interface/i.discount.repository';
+import { IEnrollmentRepository } from '@/repository/interface/i.enrollment.repository';
 import { IOrderRepository } from '@/repository/interface/i.order.repository';
 import { BaseCrudService } from '@/service/base/base.service';
 import { IOrderService } from '@/service/interface/i.order.service';
 import BaseError from '@/utils/error/base.error';
+import { SearchUtil } from '@/utils/search.util';
 import { inject, injectable } from 'inversify';
 
 @injectable()
@@ -20,16 +26,40 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
   private orderRepository: IOrderRepository<Order>;
   private cartRepository: ICartRepository<Cart>;
   private discountRepository: IDiscountRepository<Discount>;
+  private enrollRepository: IEnrollmentRepository<Enrollment>;
 
   constructor(
     @inject('OrderRepository') orderRepository: IOrderRepository<Order>,
     @inject('CartRepository') cartRepository: ICartRepository<Cart>,
+    @inject('EnrollmentRepository') enrollRepository: IEnrollmentRepository<Enrollment>,
     @inject('DiscountRepository') discountRepository: IDiscountRepository<Discount>
   ) {
     super(orderRepository);
     this.orderRepository = orderRepository;
     this.cartRepository = cartRepository;
     this.discountRepository = discountRepository;
+    this.enrollRepository = enrollRepository;
+  }
+
+  async getMyOrders(studentId: string, searchData: SearchDataDto): Promise<PagingResponseDto<Order>> {
+    const { where, order, paging } = SearchUtil.getWhereCondition(searchData);
+
+    where.studentId = studentId;
+
+    const orders = await this.orderRepository.findMany({
+      filter: where,
+      relations: ['items', 'items.course'],
+      select: OrderSelectRes,
+      order: order,
+      paging: paging
+    });
+
+    const total = await this.orderRepository.count({ filter: where });
+
+    return {
+      items: orders,
+      total: total
+    };
   }
 
   /**
@@ -172,6 +202,19 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
     order.payment = payment;
 
     await this.orderRepository.save(order);
+
+    //Create enrollment
+    for (const item of orderItems) {
+      const enrollment = new Enrollment();
+      enrollment.courseId = item.course.id;
+      enrollment.studentId = studentId;
+      enrollment.enrolledDate = new Date();
+      enrollment.status = 'active';
+      enrollment.completionPercentage = 0;
+
+      await this.enrollRepository.save(enrollment);
+    }
+
     return order;
   }
 }
