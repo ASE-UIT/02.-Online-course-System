@@ -39,6 +39,24 @@ export class Lecturer extends BaseModel {
   @Column({ nullable: false, default: false, name: 'is_approved' })
   isApproved!: boolean;
 
+  @Column({ type: 'text', nullable: true })
+  avatar?: string;
+
+  @Column({ length: 100, nullable: true, name: 'short_description' })
+  shortDescription?: string;
+
+  @Column({ type: 'text', nullable: true, name: 'example_video' })
+  exampleVideo?: string;
+
+  @Column({ name: 'social_link', type: 'text', nullable: true })
+  socialLink?: string;
+
+  @Column({ name: 'teaching_topic', type: 'varchar', length: 50, nullable: true })
+  teachingTopic?: string;
+
+  @Column({ name: 'teaching_experience', type: 'text', nullable: true })
+  teachingExperience?: string;
+
   @OneToMany(() => Course, (course) => course.lecturer)
   courses!: Promise<Course[]>;
 
