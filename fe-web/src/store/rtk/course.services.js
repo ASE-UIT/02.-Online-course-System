@@ -7,11 +7,27 @@ export const courseRTKApi = baseApi.injectEndpoints({
       query: (courseId) => ({
         url: `/student-complete-lesson/${courseId}`,
       }),
+      providesTags: ["Progress"],
+    }),
+    getCourseProgress2: build.query({
+      query: (courseId) => ({
+        url: `/student-complete-lesson/${courseId}`,
+      }),
     }),
     getCourses: build.query({
       query: (body) => ({
         url: `/course/paging?rpp=${body.limit}&page${body.page}`,
       }),
+    }),
+    updateLessonProgress: build.mutation({
+      query: (payload) => {
+        return {
+          url: `/student-complete-lesson/update-progress`,
+          method: "PUT",
+          body: payload,
+        };
+      },
+      invalidatesTags: ["Progress"],
     }),
     getCourseById: build.query({
       query: (courseId) => ({
@@ -108,6 +124,7 @@ export const courseRTKApi = baseApi.injectEndpoints({
 export const {
   useGetCoursesQuery,
   useGetCourseProgressQuery,
+  useGetCourseProgress2Query,
   useGetCourseByIdQuery,
   useGetCategoriesQuery,
   useGetCoursesByCategoryIdQuery,
@@ -118,4 +135,5 @@ export const {
   useUpdateCourseMutation,
   useCreateCourseMutation,
   useAnswerQuizMutation,
+  useUpdateLessonProgressMutation,
 } = courseRTKApi;

@@ -5,14 +5,21 @@ import ReactPlayer from "react-player";
 import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import QuizView from "./QuizView";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useUpdateLessonProgressMutation } from "@/store/rtk/course.services";
 
-export default function VideoViewer() {
+export default function VideoViewer({ progressBase }) {
   const { lesson, course, moduleSlt, lessonSlt } = useSelector((state) => state.learning);
   const navigate = useNavigate();
+  const [videoDuration, setVideoDuration] = useState(null);
+  const [progressTracking, setProgressTracking] = useState(0);
+  const [updateLessonProgress] = useUpdateLessonProgressMutation();
   const [searchParams] = useSearchParams();
   const showQuiz = searchParams.get("showQuiz") === "1" ? true : false;
   const [autoPlay, setAutoPlay] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const timerRef = useRef(null);
+  const playerRef = useRef(null);
   const handleNextVideo = () => {
     const nextVideo = getNextLesson(course, moduleSlt, lessonSlt);
     if (nextVideo) {
@@ -25,20 +32,69 @@ export default function VideoViewer() {
       }
     }
   };
+  const handleDuration = (duration) => {
+    setVideoDuration(duration);
+  };
+  const handleReady = () => {
+    setIsReady(true);
+  };
+  const onEndVideo = async () => {
+    await updateLessonProgress({
+      lessonId: lesson?.id,
+      progress: 100,
+    });
+    if (autoPlay) handleNextVideo();
+  };
+  const handleProgressUpdate = ({ played }) => {
+    const percentage = Math.floor(played * 100);
+    if (percentage / 100 <= progressTracking || (percentage >= 90 && percentage <= 100)) return;
+    setProgressTracking(percentage / 100);
+    // Send progress updates every 10 seconds
+    if (!timerRef.current) {
+      timerRef.current = setTimeout(() => {
+        timerRef.current = null;
+        updateLessonProgress({
+          lessonId: lesson?.id,
+          progress: percentage,
+        });
+      }, 15000); // 10 seconds debounce
+    }
+  };
+  useEffect(() => {
+    // Clear the timeout when the component unmounts
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
+  useEffect(() => {
+    if (playerRef?.current && isReady && videoDuration) {
+      const seekPosition = progressBase * videoDuration;
+      playerRef.current.seekTo(seekPosition, "seconds");
+    }
+  }, [progressBase, playerRef, isReady, videoDuration, showQuiz]);
+  useEffect(() => {
+    setProgressTracking(progressBase);
+  }, [progressBase]);
   if (!lesson) return <></>;
   return (
     <div className="bg-gray-100">
       <div className="w-full h-[500px]">
         {!showQuiz && (
           <ReactPlayer
+            ref={playerRef}
             width="100%"
             height="100%"
             muted={true}
             playing={true}
             style={{ backgroundColor: "#000" }}
             controls={true}
+            onDuration={handleDuration}
+            onReady={handleReady}
+            onProgress={handleProgressUpdate}
             onEnded={() => {
-              if (autoPlay) handleNextVideo();
+              onEndVideo();
             }}
             url={lesson?.videoUrl || "https://files.vidstack.io/sprite-fight/720p.mp4"}
           />

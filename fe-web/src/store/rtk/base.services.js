@@ -16,6 +16,6 @@ export const fetchBaseQueryWithAuth = () =>
 export const baseApi = createApi({
   reducerPath: "baseRTKApi",
   baseQuery: fetchBaseQueryWithAuth(),
-  tagTypes: ["Course", "Quizzes"],
+  tagTypes: ["Course", "Quizzes","Progress"],
   endpoints: () => ({}),
 });
