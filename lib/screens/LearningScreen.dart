@@ -9,11 +9,6 @@ import 'package:online_course_system/models/learning_model.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-class CourseScreen extends StatefulWidget {
-  @override
-  State<CourseScreen> createState() => _CourseScreenState();
-}
-
 enum ContentType { video, quiz } // Loại nội dung (Video hoặc Quiz)
 
 class SelectedContent {
@@ -21,6 +16,15 @@ class SelectedContent {
   final dynamic data;
 
   SelectedContent({required this.type, this.data});
+}
+
+class CourseScreen extends StatefulWidget {
+  late final String courseId;
+
+  CourseScreen({Key? key, required this.courseId}) : super(key: key);
+
+  @override
+  State<CourseScreen> createState() => _CourseScreenState();
 }
 
 class _CourseScreenState extends State<CourseScreen> {
@@ -64,7 +68,7 @@ class _CourseScreenState extends State<CourseScreen> {
       });
 
       final r =
-          await _learningVM.getLearning("30d2b059-716e-445e-ad20-bd7341d7adda");
+          await _learningVM.getLearning(widget.courseId); // Fetch course data
       _learningModel = r?.data ?? LearningData();
       lessonParts = r?.data?.lessonParts;
     } catch (e) {

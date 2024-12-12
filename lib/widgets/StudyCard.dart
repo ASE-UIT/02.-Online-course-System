@@ -1,31 +1,30 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:online_course_system/screens/LearningScreen.dart';
 
 import '../constants/colors.dart';
+import '../models/MyCourses.dart';
 
 class StudyCard extends StatelessWidget {
-  final String courseName;
-  final String authorName;
-  final double progress;
-  String imageUrl = 'https://example.com/course-image.jpg';
+  final MyCoursesData course;
 
   StudyCard({
     Key? key,
-    required this.courseName,
-    required this.authorName,
-    required this.imageUrl,
-    required this.progress,
+    required this.course,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        log("courseId log: "+course.courseId.toString());
         // Navigate to course details screen
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CourseScreen()),
-        );      },
+          MaterialPageRoute(builder: (context) => CourseScreen(courseId: course.courseId??"",)),
+        );
+      },
       child: Card(
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -38,10 +37,13 @@ class StudyCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              "assets/coursecard.png",
-              width: 80,
-              fit: BoxFit.fitWidth,
+            SizedBox(
+              width: 80, // Set the width of the image
+              height: 80, // Ensure height is set to prevent overflow
+              child: Image.network(
+                course.course?.thumbnail ?? 'assets/coursecard.png',
+                fit: BoxFit.fitWidth, // Ensure image covers the available space
+              ),
             ),
             Expanded(
               child: Padding(
@@ -50,7 +52,7 @@ class StudyCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      courseName,
+                      course.course?.name ?? 'Unknown Course',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -61,44 +63,44 @@ class StudyCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      authorName,
+                      course.course?.lecturer?.name ?? 'Unknown Author',
                       style: const TextStyle(
                         fontSize: 14,
                         color: Color(0xFF747474),
                       ),
                     ),
                     const SizedBox(height: 4),
-                    progress == 0 ?
-                    const Text(
-                      'Bắt đầu khóa học',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.primary500,
-                      ),
-                    ) :
-                    LinearProgressIndicator(
-                      value: progress,
-                      backgroundColor: AppColors.gray400,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(AppColors.primary900),
-                    ),
+                    course.completionPercentage?.toDouble()  == 0
+                        ? const Text(
+                            'Bắt đầu khóa học',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.primary500,
+                            ),
+                          )
+                        : LinearProgressIndicator(
+                            value: course.completionPercentage?.toDouble() ?? 0,
+                            backgroundColor: AppColors.gray400,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                AppColors.primary900),
+                          ),
                     const SizedBox(height: 4),
-                    if (progress == 1)
+                    if (course.completionPercentage?.toDouble()  == 1)
                       const Text(
                         'Đã hoàn thành',
                         style: TextStyle(
                           fontSize: 12,
                           color: AppColors.primary500,
                         ),
-                      ),
-                    if (progress < 1 && progress > 0)
+                      ),/*
+                    if (course.completionPercentage?.toDouble() < 1.0 && course.completionPercentage?.toDouble() > 0)
                       Text(
-                        'Hoàn thành ${progress * 100}%',
+                        'Hoàn thành ${course.completionPercentage?.toDouble() * 100}%',
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.primary500,
                         ),
-                      ),
+                      ),*/
                   ],
                 ),
               ),

@@ -1,15 +1,17 @@
 import 'dart:developer' as developer;
+import 'dart:developer';
 import 'package:online_course_system/models/course_detail.dart';
 
+import '../models/MyCourses.dart';
 import '../models/course_model.dart';
 import '../services/HttpConfig.dart';
 import 'package:flutter/foundation.dart';
 
 class CourseViewModel extends ChangeNotifier {
   final String _courseEndpoint = '/course';
+  String? errorMessage;
 
   // Private fields for state management
-  bool _isLoading = false;
   CourseModel? _courseResponse;
   List<Data> _courses = [];
   CourseDetail _courseDetailRespose = CourseDetail();
@@ -17,7 +19,6 @@ class CourseViewModel extends ChangeNotifier {
 
 
   // Getters for state
-  bool get isLoading => _isLoading;
   List<Data> get courses => _courses;
   CourseModel? get courseResponse => _courseResponse;
   CourseDetailData get courseDetail => _courseDetail;
@@ -66,5 +67,21 @@ class CourseViewModel extends ChangeNotifier {
 
     }
   }
-
+  Future<List<MyCoursesData?>?> getMyCourses() async {
+    errorMessage = null;
+    notifyListeners();
+    try {
+      // Call API to get learning data
+      final response = await HttpService.get("/enrollment/me");
+      // Assuming the response is a Map and contains the learning data
+      log('MyCourses data: $response');
+      MyCourses _myCoursesResponse = MyCourses.fromJson(response);
+      return _myCoursesResponse.data;
+    } catch (e) {
+      errorMessage = 'An error occurred getMyCourses: $e';
+      log(errorMessage!);
+    } finally {
+      notifyListeners();
+    }
+  }
 }
