@@ -68,3 +68,20 @@
     font-family: "Work Sans";
   }
 }
+
+/* menu */
+.sub-menu {
+  @apply z-99999 absolute left-0 right-0 top-full bg-white shadow-md px-4 py-2 opacity-0 transition-opacity duration-300 transform -translate-y-4;
+}
+
+.group:hover .sub-menu {
+  @apply opacity-100 translate-y-0 duration-500;
+}
+
+.arrow {
+  @apply transition-transform duration-500;
+}
+
+.group:hover .arrow {
+  @apply rotate-0;
+}

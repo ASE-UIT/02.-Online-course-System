@@ -1,9 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { DataTableColumnHeader } from "@/components/Table/DTColumnHeader";
-import BlankImg from "/blank.png";
 
-export const categoriesColumns = [
+export const lecturerColumns = [
   {
     id: "select",
     header: ({ table }) => (
@@ -44,25 +43,29 @@ export const categoriesColumns = [
     enableHiding: false
   },
   {
-    accessorKey: "thumbnail",
-    name: "Ảnh đại diện",
+    accessorKey: "name",
+    name: "Tên",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ẢNH ĐẠI DIỆN" />
+      <DataTableColumnHeader column={column} title="TÊN" />
     ),
     cell: ({ row }) => {
-      const avatar = row.getValue("thumbnail");
-
-      if (!avatar) {
-        return null;
-      }
-
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate">{row.getValue("name")}</span>
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: "email",
+    name: "Email",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="EMAIL" />
+    ),
+    cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center">
-          <img
-            src={avatar.value || BlankImg}
-            alt="thumbnail"
-            className="w-16 h-16"
-          />
+          <span>{row.getValue("email")}</span>
         </div>
       );
     },
@@ -72,37 +75,38 @@ export const categoriesColumns = [
     enableSorting: false
   },
   {
-    accessorKey: "name",
-    name: "Tên",
+    accessorKey: "phoneNumber",
+    name: "Số điện thoại",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="TÊN" />
+      <DataTableColumnHeader column={column} title="SỐ ĐIỆN THOẠI" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("name")}
+          <span className="max-w-[500px] truncate">
+            {row.getValue("phoneNumber")}
           </span>
         </div>
       );
-    }
+    },
+    enableSorting: false
   },
   {
-    accessorKey: "totalCourse",
-    name: "Số khóa học",
+    accessorKey: "roleId",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="SÔ KHOÁ HỌC" />
+      <DataTableColumnHeader column={column} title="VỊ TRÍ" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center">
-          <span>{row.getValue("totalCourse")}</span>
+          <span>{row.getValue("roleId")}</span>
         </div>
       );
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
-    }
+    },
+    enableSorting: false
   },
   {
     accessorKey: "createdBy",
@@ -124,12 +128,29 @@ export const categoriesColumns = [
   {
     accessorKey: "updateAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="LẦN SỬA CUỐI" />
+      <DataTableColumnHeader column={column} title="NGÀY TẠO" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex items-center">
           <span>{row.getValue("updateAt")}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    enableSorting: false
+  },
+  {
+    accessorKey: "createAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="NGÀY SỬA" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center">
+          <span>{row.getValue("createAt")}</span>
         </div>
       );
     },

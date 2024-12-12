@@ -16,7 +16,7 @@ const RowDetail = ({ row, headerList, pageName }) => {
       <div className="px-8 flex flex-col md:gap-8 justify-center items-stretch">
         <ul>
           {Object.entries(row).map(([key, value], index) =>
-            key === "avatar" || key === "id" ? (
+            key === "thumbnail" || key === "id" ? (
               <></>
             ) : (
               <li key={index}>
@@ -26,30 +26,31 @@ const RowDetail = ({ row, headerList, pageName }) => {
           )}
         </ul>
         <div className="flex gap-4">
-          {pageName === CURRENT_PAGES.LECTURER_PAGE && (
-            <Button
-              variant="secondary"
-              className=" text-white px-4 py-2"
-              onClick={() => {
-                window.open(
-                  "https://eduhub.io.vn/web/lecturer/course",
-                  "_blank"
-                );
-              }}
-            >
-              Xem trên web
-              <ExternalLink size={16} className="ml-1" />
-            </Button>
-          )}
+          {pageName === CURRENT_PAGES.LECTURER_PAGE ||
+            (pageName === CURRENT_PAGES.LECTURER_PAGE && (
+              <Button
+                variant="secondary"
+                className=" text-white px-4 py-2"
+                onClick={() => {
+                  window.open(
+                    "https://eduhub.io.vn/web/lecturer/course",
+                    "_blank"
+                  );
+                }}
+              >
+                Xem trên web
+                <ExternalLink size={16} className="ml-1" />
+              </Button>
+            ))}
           <DialogComponent
             bodyType={MODAL_BODY_TYPES.EDIT}
             currentPage={pageName}
-            id={row.id}
+            row={row}
           />
           <DialogComponent
             bodyType={MODAL_BODY_TYPES.REMOVE}
             currentPage={pageName}
-            id={row.id}
+            row={row}
           />
         </div>
       </div>
