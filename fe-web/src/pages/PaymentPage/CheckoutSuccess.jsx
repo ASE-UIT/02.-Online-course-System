@@ -3,13 +3,17 @@ import {Stepper} from "@/pages/PaymentPage/Stepper.jsx";
 import {useNavigate, useOutletContext} from "react-router-dom";
 import {ResultIcon} from "@/assets";
 import {useEffect} from "react";
+import {useSelector} from "react-redux";
+import {formatCurrency} from "@/utils/converter";
 
 export default function CheckoutSuccessPage() {
     const navigate = useNavigate();
     const {setCurrentStep, setResult} = useOutletContext();
+    const {totalPrice} = useSelector((state) => state.payment);
     useEffect(() => {
         setCurrentStep(3);
         setResult(true);
+        console.log(totalPrice);
     }, []);
     return (
         <div className="py-20 flex justify-center items-center" >
@@ -23,7 +27,7 @@ export default function CheckoutSuccessPage() {
                         Thanh toán thành công
                     </h1>
                     <p className="text-text/md/regular text-black-500">
-                        Bạn đã thanh toán thành công số tiền đ000,000 cho đơn hàng
+                        Bạn đã thanh toán thành công số tiền đ{formatCurrency(totalPrice)} cho đơn hàng
                     </p>
                 </div>
                 <Button

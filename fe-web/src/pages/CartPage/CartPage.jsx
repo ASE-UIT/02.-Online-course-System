@@ -10,6 +10,8 @@ import {Separator} from "@/components/ui/separator.jsx";
 import {Button} from "@/components/ui/button.jsx";
 import { formatCurrency } from "@/utils/converter";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {setPayment} from "@/store/slices/paymentSlice.js";
 
 const mockCourseData = [
     {
@@ -101,6 +103,7 @@ const CartPage = () => {
     const [removeResponse, setRemoveResponse] = useState(null);
     const navigate = useNavigate();
     const [totalPrice, setTotalPrice] = useState(0);
+    const dispatch = useDispatch();
     const getMyCart = async () => {
         try {
             const response = await courseCartApi.getMyCart();
@@ -151,7 +154,7 @@ const CartPage = () => {
             if (response?.success) {
                 console.log(response.data);
                 const newOrder = response.data;
-                console.log("cart page")
+                dispatch(setPayment({totalPrice: response.data.totalPrice}));
                 navigate("/web/checkout", {state:{newOrder: newOrder}})
             }
         }catch(error){
