@@ -44,13 +44,13 @@ export const categoriesColumns = [
     enableHiding: false
   },
   {
-    accessorKey: "avatar",
+    accessorKey: "thumbnail",
     name: "Ảnh đại diện",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ẢNH ĐẠI DIỆN" />
     ),
     cell: ({ row }) => {
-      const avatar = row.getValue("avatar");
+      const avatar = row.getValue("thumbnail");
 
       if (!avatar) {
         return null;
@@ -60,7 +60,7 @@ export const categoriesColumns = [
         <div className="flex w-[100px] items-center">
           <img
             src={avatar.value || BlankImg}
-            alt="avatar"
+            alt="thumbnail"
             className="w-16 h-16"
           />
         </div>
@@ -88,7 +88,7 @@ export const categoriesColumns = [
     }
   },
   {
-    accessorKey: "course",
+    accessorKey: "totalCourse",
     name: "Số khóa học",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="SÔ KHOÁ HỌC" />
@@ -96,7 +96,7 @@ export const categoriesColumns = [
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center">
-          <span>{row.getValue("course")}</span>
+          <span>{row.getValue("totalCourse")}</span>
         </div>
       );
     },
@@ -113,6 +113,23 @@ export const categoriesColumns = [
       return (
         <div className="flex items-center">
           <span>{row.getValue("createdBy")}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    enableSorting: false
+  },
+  {
+    accessorKey: "updateAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="LẦN SỬA CUỐI" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex items-center">
+          <span>{row.getValue("updateAt")}</span>
         </div>
       );
     },

@@ -39,8 +39,8 @@ const router = createBrowserRouter(
           <Route index element={<Navigate to="dashboard" />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="business" element={<ManageBusiness />} />
-          <Route path="categories" element={<ManageCategories />} />
-          <Route path="leturers" element={<ManageLecturer />} />
+          <Route path="courses/category-list" element={<ManageCategories />} />
+          <Route path="teacher/list" element={<ManageLecturer />} />
           <Route path="employees" element={<ManageEmployee />} />
           <Route path="users" element={<ManageUser />} />
           <Route path="setting" element={<Setting />} />

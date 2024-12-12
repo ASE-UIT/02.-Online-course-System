@@ -14,13 +14,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import { registerLecturer } from "@/api";
+import { useToast } from "@/hooks/use-toast";
+import { useDispatch } from "react-redux";
+import { addSignUpData } from "@/store/slices/signUpSlice";
 
 const formSchema = z
   .object({
     fullName: z.string().min(2, {
       message: "Họ phải có ít nhất 2 ký tự."
     }),
-    title: z.string(),
+    bio: z.string().min(0),
     email: z.string().email({
       message: "Email không hợp lệ."
     }),
@@ -33,8 +37,19 @@ const formSchema = z
     socialMediaLink: z.string().url({
       message: "Link mạng xã hội không hợp lệ."
     }),
-    teachingTopic: z.string(),
-    teachingExperience: z.string()
+    teachingTopic: z.string().min(1, {
+      message: "Chủ đề giảng dạy không được để trống."
+    }),
+    teachingExperience: z.string().min(1, {
+      message: "Kinh nghiệm giảng dạy không được để trống."
+    }),
+    password: z.string().min(6, {
+      message: "Mật khẩu phải có ít nhất 6 ký tự."
+    }),
+    confirmPassword: z.string(),
+    address: z.string().min(1, {
+      message: "Địa chỉ không được để trống."
+    })
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Mật khẩu không khớp.",
@@ -42,24 +57,86 @@ const formSchema = z
   });
 
 const SignUpForm = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      fullName: " ",
+      bio: "",
+      address: "",
       email: "",
       password: "",
-      confirmPassword: ""
+      confirmPassword: "",
+      phone: "",
+      sampleVideoLink: "",
+      socialMediaLink: "",
+      teachingTopic: "",
+      teachingExperience: ""
     }
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  function onSubmit(values) {
+  const formatPhoneNumber = (phone) => {
+    if (phone.startsWith("0")) {
+      return `+84${phone.slice(1)}`;
+    }
+    return phone;
+  };
+
+  async function onSubmit(values) {
     setIsLoading(true);
-    console.log("sign up lec values", values);
+    const phoneNumber = formatPhoneNumber(values.phone);
+
+    try {
+      const reponse = await registerLecturer(
+        values.fullName,
+        values.email,
+        phoneNumber,
+        values.address,
+        values.bio,
+        values.password,
+        values.sampleVideoLink,
+        values.socialMediaLink,
+        values.teachingTopic,
+        values.teachingExperience
+      );
+
+      if (reponse.code === 200) {
+        toast({
+          title: <p className="text-green-700">Thành công</p>,
+          description: "Đăng ký thành công, hãy xác thực số điện thoại của bạn",
+          status: "success",
+          duration: 2000
+        });
+        dispatch(addSignUpData(values));
+      }
+      navigate(`step2/phone/${phoneNumber}`);
+    } catch (error) {
+      console.log("error", error);
+      if (
+        error.response.data?.errors.code === "BAD_REQUEST" ||
+        error.status === 400
+      ) {
+        toast({
+          title: <p className="text-red-700">Có lỗi xảy ra</p>,
+          description: error.response.data.errors.msg,
+          duration: 2000
+        });
+        dispatch(addSignUpData(values));
+
+        navigate(`step2/phone/${phoneNumber}`);
+      } else {
+        console.log("else error");
+        toast({
+          title: <p className="text-red-700">Có lỗi xảy ra</p>,
+          description: "Lỗi không xác định",
+          duration: 2000
+        });
+      }
+    }
     setIsLoading(false);
-    navigate(`/web/lecturer/result`);
   }
 
   return (
@@ -97,7 +174,7 @@ const SignUpForm = () => {
               />
               <FormField
                 control={form.control}
-                name="title"
+                name="bio"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-text/md/medium">
@@ -142,7 +219,7 @@ const SignUpForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-text/md/medium">
-                      Số điện thoại
+                      Số điện thoại<span className="text-error-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -163,7 +240,7 @@ const SignUpForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
-                    Link video mẫu
+                    Link video mẫu<span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -185,6 +262,27 @@ const SignUpForm = () => {
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
                     Liên kết mạng xã hội
+                    <span className="text-error-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className="border-gray-600"
+                      type="text"
+                      placeholder={field.value}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-text/md/medium">
+                    Địa chỉ<span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -204,7 +302,7 @@ const SignUpForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
-                    Chủ đề giảng dạy
+                    Chủ đề giảng dạy<span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -220,11 +318,52 @@ const SignUpForm = () => {
             />
             <FormField
               control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-text/md/medium">
+                    Mật khẩu<span className="text-error-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className="border-gray-600"
+                      type="password"
+                      placeholder={field.value}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-text/md/medium">
+                    Nhập lại mật khẩu<span className="text-error-500">*</span>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className="border-gray-600"
+                      type="password"
+                      placeholder={field.value}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="teachingExperience"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
                     Kinh nghiệm giảng dạy
+                    <span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Textarea

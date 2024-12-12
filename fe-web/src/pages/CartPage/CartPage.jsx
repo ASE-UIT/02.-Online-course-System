@@ -6,6 +6,14 @@ import { courseApi, courseCartApi } from "@/api/courseApi";
 import * as React from 'react';
 import { Checkbox } from '@/components/ui/checkbox'
 import {CheckIcon} from "lucide-react";
+import {Separator} from "@/components/ui/separator.jsx";
+import {Button} from "@/components/ui/button.jsx";
+import { formatCurrency } from "@/utils/converter";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {addTotalPrice,addInfoPayment} from "@/store/slices/paymentSlice.js";
+import { useToast } from "@/hooks/use-toast";
+
 const mockCourseData = [
     {
         id: 1,
@@ -93,24 +101,48 @@ const mockCourseData = [
 const CartPage = () => {
     const [myCart, setMyCart] = useState([]);
     const [cartResponse, setCartResponse] = useState(null);
+    const [removeResponse, setRemoveResponse] = useState(null);
+    const navigate = useNavigate();
+    const [totalPrice, setTotalPrice] = useState(0);
+    const dispatch = useDispatch();
+    const { toast } = useToast();
+
     const getMyCart = async () => {
         try {
             const response = await courseCartApi.getMyCart();
             if (response?.success) {
                 setMyCart(response.data.items);
                 setCartResponse(response.data);
-                console.log(response.data);
+                //console.log(response.data.items);
             }
         } catch (error) {
             console.log(error.response?.errors.msg);
         }
         
     };
+    const removeFromCart = async(courseId)=>{
+        try{
+            const response = await courseCartApi.removeFromCart(courseId);
+            if (response?.success) {
+                setRemoveResponse(response.data)
+                setMyCart((prev) => prev.filter((course) => course.courseId !== courseId));
+                setSelectedCourses((prev) => prev.filter((id) => id !== courseId));
+                toast({
+                    title: <p className=" text-green-700">Xóa khóa học khỏi giỏ hàng thành công</p>,
+                    status: "success",
+                    duration: 2000
+                });
+            }
+        }catch(error){
+            console.log(error.response?.errors.msg);
+        }
+    }
+
     const [selectedCourses, setSelectedCourses] = useState([]);
 
     const handleSelectAll = (isChecked) => {
         if (isChecked) {
-            setSelectedCourses(mockCourseData.map((course) => course.id));
+            setSelectedCourses(myCart.map((course) => course.courseId));
         } else {
             setSelectedCourses([]);
         }
@@ -121,58 +153,114 @@ const CartPage = () => {
             isChecked ? [...prev, courseId] : prev.filter((id) => id !== courseId)
         );
     };
+    const handleClickPayment = async () => {
 
+        if(myCart.length > 0) {
+            dispatch(addTotalPrice({totalPrice:totalPrice}));
+            navigate("/web/checkout")
+        }else{
+            toast({
+                title: <p className=" text-error-500">Giỏ hàng không có khóa học</p>,
+                status: "success",
+                duration: 2000
+            });
+        }
+    };
+    const handleRemoveSelectedCourses = async ()=>{
+        try {
+            const promises = selectedCourses.map(courseId => courseCartApi.removeFromCart(courseId));
+            await Promise.all(promises);
+            setMyCart((prev) => prev.filter((course) => !selectedCourses.includes(course.courseId)));
+            setSelectedCourses([]);
+            toast({
+                title: <p className=" text-green-700">Xóa khóa học khỏi giỏ hàng thành công</p>,
+                status: "success",
+                duration: 2000
+            });
+        } catch (error) {
+            console.log(error.response?.errors.msg);
+        }
+    }
+    useEffect(() => {
+        const newTotalPrice = myCart.reduce((sum, course) => {
+            return sum + (course.course ? Number(course.course.sellPrice) : 0);
+        }, 0);
+        setTotalPrice(newTotalPrice);
+    }, [myCart]);
     useEffect(() => {
         getMyCart();
     }, []);
     return (
         <div className="w-full flex flex-col space-y-5">
-            <div className="w-full flex px-24 mt-5">
+            <div className="w-full px-24 mt-5">
                 <p className="text-display/md/bold text-black font-worksans">Giỏ hàng của bạn</p>
             </div>
-            <div className="w-full flex px-24">
-                <p className="text-text/lg/bold text-black font-worksans">Các Khóa học đã thêm</p>
-            </div>
+            <section>
+                <div className="flex px-24 gap-x-10">
+                    <div className="flex flex-col space-y-5 w-2/3">
+                        <div className="flex justify-between">
+                            <div className="flex items-center gap-5">
+                                <Checkbox
+                                    id="checkAll"
+                                    checked={selectedCourses.length === myCart.length}
+                                    onCheckedChange={(checked) => handleSelectAll(checked)}
+                                    className="h-6 w-6 rounded-[2px]"
+                                >
+                                    <CheckIcon/>
+                                </Checkbox>
+                                <label htmlFor={`checkAll`}
+                                       className="cursor-pointer text-text/lg/medium font-worksans">
+                                    Chọn tất cả ({myCart.length} sản phẩm)
+                                </label>
+                            </div>
+                            <p onClick={handleRemoveSelectedCourses} className="text-text/lg/medium text-error-500 font-worksans cursor-pointer">Xóa
+                                 mục đã chọn</p>
+                        </div>
 
-            <section className="flex flex-col px-24 space-y-5 ">
-                <div className="flex items-center gap-5">
-                    <Checkbox
-                        checked={selectedCourses.length === mockCourseData.length}
-                        onCheckedChange={(checked) => handleSelectAll(checked)}
-                        className="h-6 w-6 rounded-[2px]"
-                    >
-                        <CheckIcon/>
-                    </Checkbox>
-                    <label className="cursor-pointer text-text/lg/medium font-worksans">
-                        Chọn tất cả ({mockCourseData.length} sản phẩm)
-                    </label>
+                        <div className="space-y-5 grid grid-cols-1">
+                                {myCart.map((course) => (
+                                <CourseCartCard
+                                    key={course.cartId}
+                                    course={course.course}
+                                    checked={selectedCourses.includes(course.courseId)}
+                                    onChange={(checked) => handleSelectCourse(course.courseId, checked)}
+                                    onRemove={()=>removeFromCart(course.courseId)}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex flex-col space-y-4 w-1/3">
+                        <p className="text-text/lg/semibold text-black font-worksans">
+                            Thông tin đơn hàng
+                        </p>
+                        <div className="flex justify-between">
+                            <p className="text-text/md/medium text-black font-worksans">
+                                Tạm tính ({myCart.length} sản phẩm)
+                            </p>
+                            <p className="text-text/md/medium text-black font-worksans">
+                                đ{formatCurrency(totalPrice)}
+                            </p>
+                        </div>
+                        <Separator className="bg-gray-500 h-[1px]"/>
+                        <div className="flex justify-between">
+                            <p className="text-text/md/medium text-black font-worksans">
+                                Tổng cộng
+                            </p>
+                            <p className="text-display/sm/semibold text-primary-500 font-worksans">
+                                đ{formatCurrency(totalPrice)}
+                            </p>
+                        </div>
+                            <Button onClick={()=>handleClickPayment()} className="py-3 px-4 rounded-[8px] w-full h-[48]">Thanh toán</Button>
+
+                    </div>
                 </div>
-                <div className="space-y-5 grid grid-cols-1">
-                    {mockCourseData.map((course) => (
-                        <CourseCartCard
-                            key={course.id}
-                            course={course}
-                            checked={selectedCourses.includes(course.id)}
-                            onChange={(checked) => handleSelectCourse(course.id, checked)}
-                        />
-                    ))}
-                </div>
+
+
             </section>
 
             <section className="flex flex-col px-24 space-y-4">
                 <div className="flex justify-between py-2.5">
-                    <p className=" text-text/lg/bold font-worksans">Các Khóa học đã mua</p>
-                    <p className="text-text/md/semibold text-primary-500 cursor-pointer font-worksans">Xem tất cả</p>
-                </div>
-                <div className="grid grid-cols-4 gap-[1rem]">
-                    {mockCourseData.slice(0, 8).map((course, idx) => {
-                        return <CourseCard key={idx} course={course}></CourseCard>;
-                    })}
-                </div>
-            </section>
-            <section className="flex flex-col px-24 space-y-4">
-                <div className="flex justify-between py-2.5">
-                    <p className=" text-text/lg/bold font-worksans">Khóa học đề xuất</p>
+                    <p className=" text-display/md/bold text-black-500 font-worksans">Có thể bạn quan tâm</p>
                     <p className="text-text/md/semibold text-primary-500 cursor-pointer font-worksans">Xem tất cả</p>
                 </div>
                 <div className="grid grid-cols-4 gap-[1rem]">

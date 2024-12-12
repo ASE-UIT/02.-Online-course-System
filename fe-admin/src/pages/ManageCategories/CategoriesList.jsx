@@ -1,6 +1,7 @@
 export const categoriesList = [
-  { id: "avatar", title: "Ảnh đại diện" },
+  { id: "thumbnail", title: "Ảnh đại diện" },
   { id: "name", title: "Tên" },
-  { id: "course", title: "Số khoá học" },
-  { id: "createdBy", title: "Tạo bởi" }
+  { id: "totalCourse", title: "Số khoá học" },
+  { id: "createdBy", title: "Tạo bởi" },
+  { id: "updateAt", title: "Lần sửa cuối" }
 ];

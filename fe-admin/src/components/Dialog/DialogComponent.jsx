@@ -13,7 +13,7 @@ import RemoveCategories from "./Category/RemoveCategories";
 import LecturerModalBody from "./Lecturer/LecturerModalBody";
 import RemoveLecturer from "./Lecturer/RemoveLecturer";
 
-const DialogComponent = ({ bodyType, currentPage, id }) => {
+const DialogComponent = ({ bodyType, currentPage, row }) => {
   const vietnameseText = () => {
     // CATEGORY_PAGE
     if (currentPage === CURRENT_PAGES.CATEGORY_PAGE) {
@@ -68,10 +68,10 @@ const DialogComponent = ({ bodyType, currentPage, id }) => {
           bodyType === MODAL_BODY_TYPES.ADD &&
             {
               [CURRENT_PAGES.CATEGORY_PAGE]: (
-                <CategoriesModalBody id={id} isAddOrChange={true} />
+                <CategoriesModalBody row={row} isAddOrChange={true} />
               ),
               [CURRENT_PAGES.LECTURER_PAGE]: (
-                <LecturerModalBody id={id} isAddOrChange={true} />
+                <LecturerModalBody row={row} isAddOrChange={true} />
               )
             }[currentPage]
         }
@@ -80,10 +80,10 @@ const DialogComponent = ({ bodyType, currentPage, id }) => {
           bodyType === MODAL_BODY_TYPES.EDIT &&
             {
               [CURRENT_PAGES.CATEGORY_PAGE]: (
-                <CategoriesModalBody id={id} isAddOrChange={false} />
+                <CategoriesModalBody row={row} isAddOrChange={false} />
               ),
               [CURRENT_PAGES.LECTURER_PAGE]: (
-                <LecturerModalBody id={id} isAddOrChange={false} />
+                <LecturerModalBody row={row} isAddOrChange={false} />
               )
             }[currentPage]
         }
@@ -91,8 +91,8 @@ const DialogComponent = ({ bodyType, currentPage, id }) => {
           // REMOVE
           bodyType === MODAL_BODY_TYPES.REMOVE &&
             {
-              [CURRENT_PAGES.CATEGORY_PAGE]: <RemoveCategories id={id} />,
-              [CURRENT_PAGES.LECTURER_PAGE]: <RemoveLecturer id={id} />
+              [CURRENT_PAGES.CATEGORY_PAGE]: <RemoveCategories row={row} />,
+              [CURRENT_PAGES.LECTURER_PAGE]: <RemoveLecturer row={row} />
             }[currentPage]
         }
       </DialogContent>

@@ -6,7 +6,11 @@ export const registerLecturer = async (
   phoneNumber,
   address,
   bio,
-  password
+  password,
+  exampleVideo,
+  socialLink,
+  teachingTopic,
+  teachingExperience
 ) => {
   const res = await api.post("/lecturer/register", {
     name,
@@ -14,9 +18,20 @@ export const registerLecturer = async (
     phoneNumber,
     address,
     bio,
-    password
+    password,
+    exampleVideo,
+    socialLink,
+    teachingTopic,
+    teachingExperience
   });
   return res.data;
+};
+
+export const verifyLecturer = async (phoneNumber, code) => {
+  const res = await api.post(
+    `/lecturer/activation/phone?phoneNumber=${phoneNumber}&code=${code}`
+  );
+  return res;
 };
 
 export const loginLecturer = async (phoneNumberOrEmail, password) => {
