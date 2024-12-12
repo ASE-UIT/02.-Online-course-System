@@ -12,7 +12,14 @@ class CourseScreen extends StatefulWidget {
   @override
   State<CourseScreen> createState() => _CourseScreenState();
 }
+enum ContentType { video, quiz } // Loại nội dung (Video hoặc Quiz)
 
+class SelectedContent {
+  final ContentType type;
+  final dynamic data;
+
+  SelectedContent({required this.type, this.data});
+}
 class _CourseScreenState extends State<CourseScreen> {
   late LearningViewModel _learningVM;
   late VideoPlayerController _videoPlayerController;
@@ -20,6 +27,7 @@ class _CourseScreenState extends State<CourseScreen> {
   LearningData? _learningModel;
   List<LessonParts>? lessonParts;
   Lessons? currentSelect; // Add this variable to track the selected lesson
+  SelectedContent? currentItem; // Biến chung để lưu trạng thái
 
   @override
   void initState() {
@@ -61,6 +69,7 @@ class _CourseScreenState extends State<CourseScreen> {
     _chewieController.dispose();
     super.dispose();
   }
+  bool isQuestionSelected = false; // Thêm biến trạng thái để kiểm tra
 
   @override
   Widget build(BuildContext context) {
@@ -78,12 +87,32 @@ class _CourseScreenState extends State<CourseScreen> {
       body: Center(
         child: Column(
           children: [
-            _videoPlayerController.value.isInitialized
-                ? AspectRatio(
-                    aspectRatio: _videoPlayerController.value.aspectRatio,
-                    child: Chewie(controller: _chewieController),
-                  )
-                : CircularProgressIndicator(),
+            // Hiển thị nội dung động (Video hoặc Quiz)
+            if (currentItem?.type == ContentType.video)
+              _videoPlayerController.value.isInitialized
+                  ? AspectRatio(
+                aspectRatio: _videoPlayerController.value.aspectRatio,
+                child: Chewie(controller: _chewieController),
+              )
+                  : CircularProgressIndicator()
+            else if (currentItem?.type == ContentType.quiz)
+              Expanded(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text(
+                        "Câu hỏi:",
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    // Giao diện câu hỏi
+                    Text("Giao diện câu hỏi sẽ hiển thị ở đây."),
+                  ],
+                ),
+              )
+            else
+              Text("Chọn một nội dung để bắt đầu."),
             Expanded(
               child: ListView.builder(
                 itemCount: lessonParts?.length,
@@ -103,68 +132,96 @@ class _CourseScreenState extends State<CourseScreen> {
                         ),
                       ),
                       ...lessonPart?.lessons?.map((lesson) {
-                            return InkWell(
-                              child: ListTile(
-                                leading: Icon(
-                                  Icons.play_circle_fill,
-                                  color: currentSelect == lesson
-                                      ? Colors.blue
-                                      : Colors.grey.shade700,
-                                ),
-                                title: Text(
-                                  lesson.title ?? "",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    color: currentSelect == lesson
-                                        ? Colors.blue // Highlight selected
-                                        : Colors.grey.shade700,
-                                  ),
-                                ),
-                                subtitle: Text(lesson.duration ?? ""),
-                                trailing: SizedBox(
-                                  height: 20.0,
-                                  width: 20.0,
-                                  child: CircularProgressIndicator(
-                                    value: lesson.progress != null ? (lesson.progress!.toDouble()/100.0) : 0.0, // Convert 'int' or 'num' to 'double'
-                                    color: AppColors.success400,
-                                  ),
-                                ),
-                                tileColor: currentSelect == lesson
-                                    ? AppColors.primary100
-                                    : Colors.white,
-                                onTap: () {
-                                  setState(() {
-                                    currentSelect =
-                                        lesson; // Update current selection
-                                  });
-                                  log(lesson.videoUrl ?? "");
-                                },
+                        return InkWell(
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.play_circle_fill,
+                              color: currentItem?.data == lesson
+                                  ? Colors.blue
+                                  : Colors.grey.shade700,
+                            ),
+                            title: Text(
+                              lesson.title ?? "",
+                              style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: currentItem?.data == lesson
+                                    ? Colors.blue
+                                    : Colors.grey.shade700,
                               ),
-                            );
-                          }).toList() ??
+                            ),
+                            subtitle: Text(lesson.duration ?? ""),
+                            trailing: SizedBox(
+                              height: 20.0,
+                              width: 20.0,
+                              child: CircularProgressIndicator(
+                                value: lesson.progress != null
+                                    ? (lesson.progress!.toDouble() / 100.0)
+                                    : 0.0,
+                                color: AppColors.success400,
+                              ),
+                            ),
+                            tileColor: currentItem?.data == lesson
+                                ? AppColors.primary100
+                                : Colors.white,
+                            onTap: () {
+                              setState(() {
+                                currentItem = SelectedContent(
+                                  type: ContentType.video,
+                                  data: lesson,
+                                );
+
+                                // Cập nhật VideoPlayerController với URL mới
+                                _videoPlayerController.pause(); // Dừng video hiện tại (nếu có)
+                                _videoPlayerController.dispose(); // Giải phóng bộ nhớ cho controller cũ
+                                _videoPlayerController = VideoPlayerController.networkUrl(
+                                  Uri.parse(lesson.videoUrl ?? ""), // URL mới
+                                )..initialize().then((_) {
+                                  // Tự động phát video mới sau khi khởi tạo xong
+                                  setState(() {
+                                    _chewieController = ChewieController(
+                                      videoPlayerController: _videoPlayerController,
+                                      autoPlay: true,
+                                      looping: true,
+                                    );
+                                  });
+                                });
+                              });
+
+                              log(lesson.videoUrl ?? "");
+                            },
+                          ),
+                        );
+                      }).toList() ??
                           [],
                       lessonPart?.lessons?.isNotEmpty ?? false
                           ? ListTile(
-                              leading: Icon(
-                                Icons.question_mark_outlined,
-                                color: Colors.grey.shade700,
-                              ),
-                              title: Text(
-                                "Câu hỏi",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.grey.shade700,
-                                ),
-                              ),
-                              subtitle: Text(
-                                  "${lessonPart?.lessons?.length} câu hỏi"),
-                              trailing: Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                              ),
-                              tileColor: Colors.white,
-                              onTap: () {},
-                            )
+                        leading: Icon(
+                          Icons.question_mark_outlined,
+                          color: Colors.grey.shade700,
+                        ),
+                        title: Text(
+                          "Câu hỏi",
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            color: Colors.grey.shade700,
+                          ),
+                        ),
+                        subtitle: Text(
+                            "${lessonPart?.lessons?.length} câu hỏi"),
+                        trailing: Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                        ),
+                        tileColor: Colors.white,
+                        onTap: () {
+                          setState(() {
+                            currentItem = SelectedContent(
+                              type: ContentType.quiz,
+                              data: lessonPart?.lessons, // Dữ liệu quiz
+                            );
+                          });
+                        },
+                      )
                           : Container(),
                     ],
                   );
