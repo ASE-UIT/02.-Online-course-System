@@ -8,6 +8,8 @@ import {Stepper} from "@/pages/PaymentPage/Stepper.jsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.jsx"
 import {useNavigate, useOutletContext} from "react-router-dom";
 import {OrderInformation} from "@/pages/PaymentPage/OrderInformation.jsx";
+import {courseCartApi} from "@/api/courseApi.js";
+import {paymentApi} from "@/api/paymentApi.js";
 
 export default function CheckoutStep2Page() {
     const [paymentMethod, setPaymentMethod] = useState("vnpay")
@@ -39,17 +41,27 @@ export default function CheckoutStep2Page() {
         },
     ]
     const {setCurrentStep, order} = useOutletContext();
+    const getPaymentURL = async () => {
+        try {
+            const response = await paymentApi.getPaymentURL(order.payment.id);
+            if (response?.success) {
+                console.log(response.data);
+                    window.location.href = response.data.payUrl; // Navigate to the payment URL
+            }
 
+        } catch (error) {
+            console.log(error.response?.errors.msg);
+        }
+    }
     const handleSubmit = async (e) => {
-        setCurrentStep(3);
-        navigate("/web/checkout/success")
+        e.preventDefault();
+        await getPaymentURL();
     }
     useEffect(() => {
         setCurrentStep(2);
     }, []);
     return (
             <div className="flex gap-5 px-[80px] py-[20px]">
-                {/* Customer Information Form */}
                 <div className="flex flex-col gap-3 bg-white grow">
                     <h2 className="text-text/xl/semibold font-worksans">Hình thức thanh toán</h2>
                     <div
@@ -87,8 +99,6 @@ export default function CheckoutStep2Page() {
                     </div>
 
                 </div>
-
-                {/* Order Summary */}
                 <div className="w-[454px] ">
                     <OrderInformation
                         numItems={order?.items.length}

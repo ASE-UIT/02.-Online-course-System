@@ -63,11 +63,8 @@ export default function CheckoutStep1Page() {
         resolver: zodResolver(formSchema),
     });
     function onSubmit(values) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
         setCurrentStep(2);
         navigate("/web/checkout/step2");
-        console.log(values)
     }
     useEffect(() => {
         setCurrentStep(1)
@@ -78,53 +75,6 @@ export default function CheckoutStep1Page() {
                     {/* Customer Information Form */}
                     <div className="bg-white rounded-[8px] p-6 grow space-y-2.5 shadow-[0px_8px_16px_0px_rgba(0,0,0,0.07)]">
                         <h2 className="text-text/xl/semibold font-worksans">Thông tin người mua</h2>
-{/*
-                        <form onSubmit={handleSubmit} className="space-y-2.5">
-                            <div className="space-y-2">
-                                <Label htmlFor="name" className="text-text/md/medium font-worksans">
-                                    Họ tên<span className="text-red-500">*</span>
-                                </Label>
-                                <Input
-                                    id="name"
-                                    name="name"
-                                    required
-                                    placeholder="Nhập họ tên của bạn"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="email" className="text-text/md/medium font-worksans">
-                                    Email<span className="text-red-500">*</span>
-                                </Label>
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    required
-                                    placeholder="Nhập email của bạn"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="phone" className="text-text/md/medium font-worksans">
-                                    Điện thoại<span className="text-red-500">*</span>
-                                </Label>
-                                <Input
-                                    id="phone"
-                                    name="phone"
-                                    type="tel"
-                                    required
-                                    placeholder="Nhập số điện thoại của bạn"
-                                />
-                            </div>
-
-                            <Button type="submit" className="w-full bg-primary-500 hover:bg-primary/90
-                            text-text/md/medium font-worksans text-white
-                            ">
-                                Tiếp tục
-                            </Button>
-                        </form>
-*/}
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                                 <FormField

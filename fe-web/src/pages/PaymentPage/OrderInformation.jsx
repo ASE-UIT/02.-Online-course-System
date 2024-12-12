@@ -16,7 +16,7 @@ export function OrderInformation({numItems, total, order}) {
                         đ{formatCurrency(total)}
                     </span>
                 </div>*/}
-                {order.map((course) => (
+                {order?.map((course) => (
                     <div key={course?.id} className="flex items-center justify-between">
                     <span className="text-text/md/medium font-worksans text-black">
                         {course?.course?.name}
@@ -39,17 +39,4 @@ export function OrderInformation({numItems, total, order}) {
             </div>
         </div>
     )
-}
-
-const CartCourse = (course)=>{
-    return (
-        <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">
-                        {course?.course?.name}
-                    </span>
-            <span className="font-medium">
-                        hehe
-                    </span>
-        </div>
-    );
 }
