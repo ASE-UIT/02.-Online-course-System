@@ -10,11 +10,16 @@ import { useUpdateCourseMutation } from "@/store/rtk/course.services";
 import AddLessonForm from "./AddLessonForm";
 import DeleteLessonModal from "./DeleteLessonModal";
 import QuizzList from "./QuizzList";
+import AddModuleModal from "./AddModuleModal";
+import DeleteModal from "./DeleteModal";
 
 export default function ModuleLesson({ course }) {
   const [items, setItems] = useState([]);
   const [showAddLessonForm, setShowAddLessonForm] = useState(false);
   const [showAddSelectionForm, setShowAddSelectionForm] = useState(false);
+  const [showAddModuleForm, setShowAddModuleForm] = useState(false);
+  const [deleteModuleIdx, setDeleteModuleIdx] = useState(-1);
+  const [editModuleIdx, setEditModuleIdx] = useState(-1);
   const [showDeleteLessonForm, setShowDeleteLessonForm] = useState(false);
   const [updateCourse, { isLoading }] = useUpdateCourseMutation();
   const [moduleSlt, setModuleSlt] = useState(null);
@@ -64,6 +69,15 @@ export default function ModuleLesson({ course }) {
     setModuleSlt(module);
     setIsEditForm(lessonIdx);
   };
+  const handleDeleteModule = async () => {
+    const oldModules = course?.lessonParts || [];
+    const newModules = oldModules.filter((mod, idx) => idx !== deleteModuleIdx);
+    const newParts = newModules.map((module, idx) => ({ ...module, partNo: idx + 1 }));
+    const payload = {
+      lessonParts: newParts,
+    };
+    await updateCourse({ courseId: course.id, payload });
+  };
   useEffect(() => {
     if (course?.lessonParts?.length > 0) {
       setItems(course.lessonParts);
@@ -78,17 +92,27 @@ export default function ModuleLesson({ course }) {
               <p className="text-display/md/medium">DANH SÁCH BÀI HỌC</p>
               <p className="text-text/md/medium">(Giữ và kéo thả để sắp xếp vị trí phần học và bài học)</p>
             </div>
-            <div className="flex items-center py-[10px] px-[16px] bg-primary-500 rounded-[8px] gap-2 text-white cursor-pointer hover:bg-primary-600 transition-all">
+            <div
+              onClick={() => setShowAddModuleForm(true)}
+              className="flex items-center py-[10px] px-[16px] bg-primary-500 rounded-[8px] gap-2 text-white cursor-pointer hover:bg-primary-600 transition-all"
+            >
               <PlusIcon />
               <p className="text-text/md/medium">Phần học mới</p>
             </div>
           </div>
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={items.map((item) => item.id)} strategy={verticalListSortingStrategy}>
-              {items.map((module) => (
+              {items.map((module, idx) => (
                 <ModuleCard
                   key={module.id}
                   module={module}
+                  setEditModuleIdx={() => {
+                    setShowAddModuleForm(true);
+                    setEditModuleIdx(idx);
+                  }}
+                  setDeleteModule={() => {
+                    setDeleteModuleIdx(idx);
+                  }}
                   setItems={setItems}
                   handleShowAddSelectionForm={handleShowAddSelectionForm}
                   handleShowAddLessonForm={handleShowAddLessonForm}
@@ -131,6 +155,26 @@ export default function ModuleLesson({ course }) {
           onClose={() => {
             setIsEditForm(-1);
             setShowDeleteLessonForm(false);
+          }}
+        />
+      )}
+      {showAddModuleForm && (
+        <AddModuleModal
+          course={course}
+          editModuleIdx={editModuleIdx}
+          onClose={() => {
+            setShowAddModuleForm(false);
+            setEditModuleIdx(-1);
+          }}
+        />
+      )}
+      {deleteModuleIdx !== -1 && (
+        <DeleteModal
+          onClose={() => setDeleteModuleIdx(-1)}
+          title={"Bạn có chắc muốn xóa phần học này"}
+          msg={"Phần học sẽ bị xóa vĩnh viễn, bạn có chắc muốn tiếp tục"}
+          handleDelete={() => {
+            handleDeleteModule();
           }}
         />
       )}

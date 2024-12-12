@@ -4,7 +4,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useUpdateCourseMutation } from "@/store/rtk/course.services";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +11,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import ReactQuill from "react-quill-new";
 import { z } from "zod";
 const formSchema = z.object({
   name_course: z.string().min(6, {
@@ -50,13 +50,14 @@ const formSchema = z.object({
   tags: z.string().min(1, {
     message: "Vui lòng nhập tags",
   }),
-  description: z.string().min(1, {
-    message: "Vui lòng nhập description",
-  }),
+  // description: z.string().min(1, {
+  //   message: "Vui lòng nhập description",
+  // }),
 });
 
 export default function CourseInfo({ course }) {
   const [isFreeCourse, setIsFreeCourse] = useState(false);
+  const [description, setDescription] = useState("");
   const [updateCourse, { isLoading }] = useUpdateCourseMutation();
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -73,7 +74,7 @@ export default function CourseInfo({ course }) {
       lecturer_profile: course.lecturer.name,
       lecturer_account: course.lecturer.name,
       tags: course.tags.join(),
-      description: course.introduction,
+      // description: course.introduction,
     },
   });
   const dateClose = form.watch("date_close");
@@ -86,13 +87,14 @@ export default function CourseInfo({ course }) {
       originalPrice: values.original_price,
       socialGroupLink: values.link_ref,
       courseLink: values.link,
-      introduction: values.description,
+      introduction: description,
       tags: values.tags.split(","),
     };
     await updateCourse({ courseId: course.id, payload });
   }
   useEffect(() => {
     if (course) {
+      setDescription(course?.introduction || "");
       setIsFreeCourse(course.isFreeCourse);
     }
   }, [course]);
@@ -359,7 +361,9 @@ export default function CourseInfo({ course }) {
               Khóa học miễn phí
             </label>
           </div>
-          <FormField
+          <p className="text-text/md/medium">Giới thiệu khoá học</p>
+          <ReactQuill theme="snow" value={description} className="h-[200px] pb-[40px]" onChange={setDescription} />
+          {/* <FormField
             control={form.control}
             name="description"
             render={({ field }) => (
@@ -373,7 +377,7 @@ export default function CourseInfo({ course }) {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
           <Button disabled={isLoading} type="submit" className=" inline-block mt-5 px-8 rounded-xl">
             {isLoading ? (
               <div className="w-4 h-4 border-[3px] border-t-transparent border-white rounded-full animate-spin"></div>
