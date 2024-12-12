@@ -41,7 +41,8 @@ export default function CourseInfo({ course }) {
           <div className="flex items-center gap-2">
             <Video className="w-[20px] h-[20px]" />
             <p className="text-text/md/regular">
-              Thời lượng: <span className="text-text/md/semibold">{convertToHoursAndMinutes(course?.duration)}</span>
+              Thời lượng:{" "}
+              <span className="text-text/md/semibold">{convertToHoursAndMinutes(course?.duration / 60)}</span>
             </p>
           </div>
           <div className="flex items-center gap-2">
