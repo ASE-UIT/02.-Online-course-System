@@ -5,16 +5,13 @@ import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity('enrollments')
 export class Enrollment {
-  @PrimaryColumn()
-  @JoinColumn({ name: 'student_id' })
+  @PrimaryColumn({ name: 'student_id' })
   studentId!: string;
 
-  @PrimaryColumn()
-  @JoinColumn({ name: 'course_id' })
+  @PrimaryColumn({ name: 'course_id' })
   courseId!: string;
 
-  @Column({ type: 'date' })
-  @JoinColumn({ name: 'enrolled_date' })
+  @Column({ type: 'date', name: 'enrolled_date' })
   enrolledDate!: Date;
 
   @Column({ type: 'enum', enum: ['active', 'completed', 'cancelled'] })
