@@ -143,18 +143,23 @@ const CartPage = () => {
         );
     };
     const handleClickPayment = async () => {
-        /*try{
-            const response = await courseCartApi.createOrder();
+        try{
+            const formData = new FormData();
+            formData.append("payType", "VNPAY");
+
+            const response = await courseCartApi.createOrder(formData);
             if (response?.success) {
                 console.log(response.data);
+                const newOrder = response.data;
+                console.log("cart page")
+                navigate("/web/checkout", {state:{newOrder: newOrder}})
             }
         }catch(error){
             console.log(error.response?.errors.msg);
-        }*/
+        }
 
-        navigate("/web/checkout")
     };
-    useEffect(() => {
+    /*useEffect(() => {
         const newTotalPrice = selectedCourses.reduce((sum, courseId) => {
             const selectedCourse = myCart.find((course) => course.courseId === courseId);
             console.log(courseId)
@@ -163,7 +168,13 @@ const CartPage = () => {
             return sum + (selectedCourse ? Number(selectedCourse.course.sellPrice) : 0);
         }, 0);
         setTotalPrice(newTotalPrice);
-    }, [selectedCourses, myCart]);
+    }, [selectedCourses, myCart]);*/
+    useEffect(() => {
+        const newTotalPrice = myCart.reduce((sum, course) => {
+            return sum + (course.course ? Number(course.course.sellPrice) : 0);
+        }, 0);
+        setTotalPrice(newTotalPrice);
+    }, [myCart]);
     useEffect(() => {
         getMyCart();
     }, []);
@@ -212,7 +223,7 @@ const CartPage = () => {
                         </p>
                         <div className="flex justify-between">
                             <p className="text-text/md/medium text-black font-worksans">
-                                Tạm tính ({selectedCourses.length} sản phẩm)
+                                Tạm tính ({myCart.length} sản phẩm)
                             </p>
                             <p className="text-text/md/medium text-black font-worksans">
                                 đ{formatCurrency(totalPrice)}

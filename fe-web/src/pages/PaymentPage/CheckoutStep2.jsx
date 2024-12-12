@@ -7,6 +7,7 @@ import {OrderSummary} from "@/pages/PaymentPage/OrderSummary.jsx";
 import {Stepper} from "@/pages/PaymentPage/Stepper.jsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.jsx"
 import {useNavigate, useOutletContext} from "react-router-dom";
+import {OrderInformation} from "@/pages/PaymentPage/OrderInformation.jsx";
 
 export default function CheckoutStep2Page() {
     const [paymentMethod, setPaymentMethod] = useState("vnpay")
@@ -37,7 +38,7 @@ export default function CheckoutStep2Page() {
             name: "Thẻ quốc tế Visa/Master",
         },
     ]
-    const {setCurrentStep} = useOutletContext();
+    const {setCurrentStep, order} = useOutletContext();
 
     const handleSubmit = async (e) => {
         setCurrentStep(3);
@@ -89,9 +90,10 @@ export default function CheckoutStep2Page() {
 
                 {/* Order Summary */}
                 <div className="w-[454px] ">
-                    <OrderSummary
-                        numItems={2}
-                        total={2000000}
+                    <OrderInformation
+                        numItems={order?.items.length}
+                        total={order?.totalPrice}
+                        order={order?.items}
                     />
                 </div>
             </div>
