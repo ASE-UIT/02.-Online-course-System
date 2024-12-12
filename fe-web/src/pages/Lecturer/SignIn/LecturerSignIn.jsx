@@ -11,7 +11,7 @@ const LecturerSignIn = () => {
             <h2 className="text-display/lg/semibold text-white">
               Bắt đầu giảng dạy cùng EduHub
             </h2>
-            <p className="absolute right-[91.834px] top-[268px] stroke-white stroke-width-3">
+            <p className="absolute right-[91.834px] top-[208px] stroke-white stroke-width-3">
               <SignUpLine />
             </p>
             <LecturerSignUpIcon />

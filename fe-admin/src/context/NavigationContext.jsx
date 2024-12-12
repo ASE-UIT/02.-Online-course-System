@@ -5,7 +5,8 @@ import {
   Layers,
   UserRoundCog,
   Users,
-  Building2
+  Building2,
+  School
 } from "lucide-react";
 
 export const menuItems = [
@@ -21,6 +22,13 @@ export const menuItems = [
     id: "categories",
     path: "categories"
   },
+  {
+    icon: School,
+    text: "Quản lý giảng viên",
+    id: "leturers",
+    path: "leturers"
+  },
+
   {
     icon: Users,
     text: "Quản lý nhân viên",

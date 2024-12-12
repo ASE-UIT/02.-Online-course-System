@@ -6,47 +6,38 @@ import { FaAngleDown } from "react-icons/fa6";
 import { FaAngleUp } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from "@/components/ui/popover";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useGetCategoriesQuery } from "@/store/rtk/course.services";
 
 const frameworks = [
   {
     value: "course",
-    label: "Trọn gói khóa học"
+    label: "Trọn gói khóa học",
   },
   {
     value: "lesson",
-    label: "Bài học"
+    label: "Bài học",
   },
   {
     value: "train",
-    label: "Ôn thi cấp tốc"
+    label: "Ôn thi cấp tốc",
   },
   {
     value: "English_Speaking",
-    label: "Speaking tiếng Anh cơ bản"
+    label: "Speaking tiếng Anh cơ bản",
   },
   {
     value: "English_Writing",
-    label: "Writing tiếng Anh cơ bản"
-  }
+    label: "Writing tiếng Anh cơ bản",
+  },
 ];
 
 export function Combobox() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
-
+  const { data, isLoading, isError } = useGetCategoriesQuery();
+  const categories = Array.isArray(data?.data) ? data.data : [];
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -57,9 +48,7 @@ export function Combobox() {
           className="w-full sm:w-[150px] md:w-[200px] justify-between"
           onClick={() => setOpen(!open)}
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Danh mục"}
+          {value ? categories.find((categories) => categories.id === value)?.name : "Danh mục"}
           {open ? <FaAngleUp /> : <FaAngleDown />}
         </Button>
       </PopoverTrigger>
@@ -68,22 +57,17 @@ export function Combobox() {
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {categories.map((category) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={category.id}
+                  value={category.id}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {framework.label}
+                  <Check className={cn("mr-2 h-4 w-4", value === category.id ? "opacity-100" : "opacity-0")} />
+                  {category.name}
                 </CommandItem>
               ))}
             </CommandGroup>

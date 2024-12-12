@@ -183,7 +183,9 @@ export default function AddLessonForm({ onClose, moduleSlt, course, isEditForm }
         >
           <ChevronLeft />
         </div>
-        <header className="text-display/md/medium">{isEditForm ? "CHỈNH SỬA BÀI HỌC" : "THÊM BÀI HỌC MỚI"}</header>
+        <header className="text-display/md/medium">
+          {isEditForm !== -1 ? "CHỈNH SỬA BÀI HỌC" : "THÊM BÀI HỌC MỚI"}
+        </header>
       </div>
       <div
         className={`${

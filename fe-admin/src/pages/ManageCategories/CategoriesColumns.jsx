@@ -1,7 +1,6 @@
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { DataTableColumnHeader } from "@/components/Table/DTColumnHeader";
-import { DataTableRowActions } from "@/components/Table/DTRowActions";
 import BlankImg from "/blank.png";
 
 export const categoriesColumns = [
@@ -121,9 +120,5 @@ export const categoriesColumns = [
       return value.includes(row.getValue(id));
     },
     enableSorting: false
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />
   }
 ];

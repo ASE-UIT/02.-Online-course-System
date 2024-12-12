@@ -11,6 +11,8 @@ export function ModuleCard({
   handleShowAddSelectionForm,
   handleShowAddLessonForm,
   handleShowDeleteLessonForm,
+  setEditModuleIdx,
+  setDeleteModule,
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: module.id });
   const style = {
@@ -79,8 +81,8 @@ export function ModuleCard({
     {
       label: (
         <div data-no-dnd="true" className="flex gap-2">
-          <Pen className="w-[16px] h-[16px] text-primary-400" />
-          <Trash2 className="w-[16px] h-[16px] text-error-500" />
+          <Pen onClick={() => setEditModuleIdx()} className="w-[16px] h-[16px] text-primary-400" />
+          <Trash2 onClick={() => setDeleteModule()} className="w-[16px] h-[16px] text-error-500" />
         </div>
       ),
       width: "8%",
@@ -95,23 +97,29 @@ export function ModuleCard({
       className={`w-full bg-white p-[10px] border-[1px] border-gray-500 rounded-[4px] mt-4`}
     >
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEndLesson}>
-        {module?.lessons && module?.lessons?.length > 0 && (
-          <SortableContext items={module.lessons.map((lesson) => lesson.id)} strategy={verticalListSortingStrategy}>
-            <table className="w-full">
-              <thead>
-                <tr
-                  className={`border-b-[1px] ${isDragging ? "cursor-grabbing" : "cursor-grab hover:cursor-grab"}`}
-                  {...headerProps}
-                >
-                  {LESSONS_TABLE_HEADER.map((header, id) => (
-                    <th key={id} className="text-start py-2 text-base-black" style={{ width: header.width }}>
-                      <span className="text-text/md/regular">{id === 0 ? module.partName : header.label}</span>
-                    </th>
-                  ))}
+        <SortableContext items={module.lessons.map((lesson) => lesson.id)} strategy={verticalListSortingStrategy}>
+          <table className="w-full">
+            <thead>
+              <tr
+                className={`border-b-[1px] ${isDragging ? "cursor-grabbing" : "cursor-grab hover:cursor-grab"}`}
+                {...headerProps}
+              >
+                {LESSONS_TABLE_HEADER.map((header, id) => (
+                  <th key={id} className="text-start py-2 text-base-black" style={{ width: header.width }}>
+                    <span className="text-text/md/regular">{id === 0 ? module.partName : header.label}</span>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {module?.lessons?.length === 0 && (
+                <tr className="text-black-300">
+                  <td>Chưa có bài học nào.</td>
                 </tr>
-              </thead>
-              <tbody>
-                {module.lessons.map((lesson, idx) => (
+              )}
+              {module?.lessons &&
+                module?.lessons?.length > 0 &&
+                module.lessons.map((lesson, idx) => (
                   <LessonCard
                     lesson={lesson}
                     key={lesson.id}
@@ -123,10 +131,9 @@ export function ModuleCard({
                     }}
                   />
                 ))}
-              </tbody>
-            </table>
-          </SortableContext>
-        )}
+            </tbody>
+          </table>
+        </SortableContext>
       </DndContext>
       <div className="flex gap-3 mt-2 items-center">
         <div

@@ -5,18 +5,17 @@ export const fetchBaseQueryWithAuth = () =>
   fetchBaseQuery({
     baseUrl: config.BASE_URL,
     prepareHeaders: (headers) => {
-      const token = localStorage.getItem("auth");
-      console.log("Token in fetchBaseQueryWithAuth:", token); // Log token
+      const auth = localStorage.getItem("auth");
+      const token = JSON.parse(auth) || "";
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
-      console.log("Headers after preparation:", [...headers.entries()]); // Log headers
       return headers;
     },
   });
 export const baseApi = createApi({
   reducerPath: "baseRTKApi",
   baseQuery: fetchBaseQueryWithAuth(),
-  tagTypes: ["Course"],
+  tagTypes: ["Course", "Quizzes","Progress"],
   endpoints: () => ({}),
 });
