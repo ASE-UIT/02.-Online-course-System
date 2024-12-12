@@ -16,7 +16,7 @@ const RowDetail = ({ row, headerList, pageName }) => {
       <div className="px-8 flex flex-col md:gap-8 justify-center items-stretch">
         <ul>
           {Object.entries(row).map(([key, value], index) =>
-            key === "avatar" || key === "id" ? (
+            key === "thumbnail" || key === "id" ? (
               <></>
             ) : (
               <li key={index}>

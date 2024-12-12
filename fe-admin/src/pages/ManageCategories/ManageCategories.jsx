@@ -8,27 +8,30 @@ import { CURRENT_PAGES } from "@/utils/globalUtils";
 const data = [
   {
     id: "TASK-8782",
-    avatar:
+    thumbnail:
       "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
     name: "Danh mục 1",
-    course: 100,
-    createdBy: "ADMIN"
+    totalCourse: 100,
+    createdBy: "ADMIN",
+    updateAt: "2021-10-10"
   },
   {
     id: "TASK-7878",
-    avatar:
+    thumbnail:
       "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
     name: "Danh mục 1",
-    course: 100,
-    createdBy: "ADMIN"
+    totalCourse: 100,
+    createdBy: "ADMIN",
+    updateAt: "2021-10-10"
   },
   {
     id: "TASK-7839",
-    avatar:
+    thumbnail:
       "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
     name: "Danh mục 1",
-    course: 100,
-    createdBy: "ADMIN"
+    totalCourse: 100,
+    createdBy: "ADMIN",
+    updateAt: "2021-10-10"
   }
 ];
 
