@@ -17,6 +17,7 @@ import { IEnrollmentRepository } from '@/repository/interface/i.enrollment.repos
 import { IOrderRepository } from '@/repository/interface/i.order.repository';
 import { BaseCrudService } from '@/service/base/base.service';
 import { IOrderService } from '@/service/interface/i.order.service';
+import { sendEmail } from '@/utils/email/email-sender.util';
 import BaseError from '@/utils/error/base.error';
 import { SearchUtil } from '@/utils/search.util';
 import { inject, injectable } from 'inversify';
@@ -213,6 +214,25 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
       enrollment.completionPercentage = 0;
 
       await this.enrollRepository.save(enrollment);
+    }
+
+    //Send success email
+
+    if (createOrderReq.customerEmail) {
+      let content = `Đơn hàng của bạn đã được tạo thành công với tổng giá trị là ${order.totalPrice}`;
+
+      for (const item of orderItems) {
+        content += `\nKhóa học: ${item.course.name} - Giá: ${item.price}`;
+      }
+
+      sendEmail({
+        from: {
+          name: 'Eduhub'
+        },
+        to: { emailAddress: [createOrderReq.customerEmail] },
+        subject: 'Tạo đơn mua khóa học thành công',
+        text: content
+      });
     }
 
     return order;

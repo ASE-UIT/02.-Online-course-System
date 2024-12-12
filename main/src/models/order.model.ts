@@ -32,4 +32,13 @@ export class Order extends BaseModel {
 
   @Column({ name: 'status', type: 'enum', enum: OrderStatus, default: OrderStatus.WAITING_FOR_PAYMENT })
   status!: string;
+
+  @Column({ name: 'customer_fullname', nullable: true })
+  customerFullname?: string;
+
+  @Column({ name: 'customer_email', nullable: true })
+  customerEmail?: string;
+
+  @Column({ name: 'customer_phone', nullable: true })
+  customerPhone?: string;
 }
