@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 import tailwindcssAnimate from "tailwindcss-animate";
+import { z } from "zod";
 
 export default {
   darkMode: ["class"],
@@ -136,6 +137,12 @@ export default {
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))"
         }
+      },
+      zIndex: {
+        0: 0,
+        10: 10,
+        99999: "99999",
+        999999: "999999"
       },
       fontFamily: {
         worksans: ["Work Sans"]
