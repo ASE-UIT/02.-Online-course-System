@@ -1,20 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { useCreateCategoryMutation } from "@/store/rtk/category.service";
 import { UploadCloud } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { z } from "zod";
 
 // Define the Zod schema
 const categorySchema = z.object({
   name: z.string().min(1, "Tên danh mục không được để trống."),
   description: z.string().min(1, "Mô tả không được để trống."),
-  thumbnail: z
-  .custom((file) => file instanceof File && file.type.startsWith("image/"), {
-    message: "Vui lòng tải lên một tệp hình ảnh hợp lệ.",
-  }),
+  thumbnail: z.custom(
+    (file) => file instanceof File && file.type.startsWith("image/"),
+    {
+      message: "Vui lòng tải lên một tệp hình ảnh hợp lệ."
+    }
+  )
 });
 
-const CategoriesModalBody = ({ id, isAddOrChange }) => {
+const CategoriesModalBody = ({ row, isAddOrChange }) => {
   const fileInputRef = useRef(null);
   const [fileSlt, setFileSlt] = useState(null);
   const [categoryName, setCategoryName] = useState("");
@@ -22,11 +24,15 @@ const CategoriesModalBody = ({ id, isAddOrChange }) => {
   const [categoryThumbnail, setCategoryThumbnail] = useState(null);
   const [formErrors, setFormErrors] = useState({});
 
+  useEffect(() => {
+    console.log("CategoriesModalBody: rowData", row);
+  }, [row]);
+
   const fetchCategoryDetails = async () => {
     const categoryData = await Promise.resolve({
       name: "Danh mục mẫu",
       description: "Mô tả danh mục mẫu",
-      thumbnail: 'https://m.media-amazon.com/images/I/21kRx-CJsUL.png', // Replace with actual image URL from API
+      thumbnail: "https://m.media-amazon.com/images/I/21kRx-CJsUL.png" // Replace with actual image URL from API
     });
     setCategoryName(categoryData.name);
     setCategoryDescription(categoryData.description);
@@ -49,7 +55,7 @@ const CategoriesModalBody = ({ id, isAddOrChange }) => {
     const payload = {
       name: categoryName,
       description: categoryDescription,
-      thumbnail: fileSlt,
+      thumbnail: fileSlt
     };
 
     const result = categorySchema.safeParse(payload);
@@ -65,7 +71,11 @@ const CategoriesModalBody = ({ id, isAddOrChange }) => {
 
     try {
       await createCategory(payload).unwrap();
-      alert(isAddOrChange ? "Category created successfully!" : "Category updated successfully!");
+      alert(
+        isAddOrChange
+          ? "Category created successfully!"
+          : "Category updated successfully!"
+      );
     } catch (error) {
       alert("Failed to submit category!");
     }
@@ -118,7 +128,9 @@ const CategoriesModalBody = ({ id, isAddOrChange }) => {
               onChange={(e) => setCategoryDescription(e.target.value)}
             ></textarea>
             {formErrors.description && (
-              <p className="text-sm text-red-500 mt-1">{formErrors.description}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {formErrors.description}
+              </p>
             )}
           </div>
         )}
@@ -126,13 +138,18 @@ const CategoriesModalBody = ({ id, isAddOrChange }) => {
         {/* Ảnh đại diện */}
         <div
           className={`${
-            formErrors.thumbnail ? "border-red-500 bg-red-50" : "border-gray-600"
+            formErrors.thumbnail
+              ? "border-red-500 bg-red-50"
+              : "border-gray-600"
           } py-4 border-2 border-dashed mt-3 flex flex-col gap-2 items-center justify-center`}
         >
           <label className="block text-md font-medium mt-4">Ảnh đại diện</label>
           {categoryThumbnail && !fileSlt ? (
             <img
-              src={categoryThumbnail || "https://m.media-amazon.com/images/I/21kRx-CJsUL.png"}
+              src={
+                categoryThumbnail ||
+                "https://m.media-amazon.com/images/I/21kRx-CJsUL.png"
+              }
               alt="Thumbnail"
               className="w-24 h-24 object-cover rounded-md"
             />
@@ -169,7 +186,9 @@ const CategoriesModalBody = ({ id, isAddOrChange }) => {
 
         {/* Error/Success messages */}
         {isError && (
-          <p className="text-sm text-red-500 mt-2">Failed to submit category.</p>
+          <p className="text-sm text-red-500 mt-2">
+            Failed to submit category.
+          </p>
         )}
         {isSuccess && (
           <p className="text-sm text-green-500 mt-2">
@@ -184,4 +203,3 @@ const CategoriesModalBody = ({ id, isAddOrChange }) => {
 };
 
 export default CategoriesModalBody;
-

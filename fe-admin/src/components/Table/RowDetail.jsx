@@ -44,12 +44,12 @@ const RowDetail = ({ row, headerList, pageName }) => {
           <DialogComponent
             bodyType={MODAL_BODY_TYPES.EDIT}
             currentPage={pageName}
-            id={row.id}
+            row={row}
           />
           <DialogComponent
             bodyType={MODAL_BODY_TYPES.REMOVE}
             currentPage={pageName}
-            id={row.id}
+            row={row}
           />
         </div>
       </div>
