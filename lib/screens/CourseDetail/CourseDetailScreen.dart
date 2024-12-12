@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../ViewModels/course_view_model.dart';
-import 'widgets/content/content.dart';
-import 'widgets/header.dart';
-import 'widgets/info/info.dart';
-import 'widgets/review/review.dart';
-import 'widgets/intro.dart';
-import 'widgets/lecturer_info.dart';
-import 'widgets/add_to_cart_button.dart';
+import 'part/content.dart';
+import 'part/header.dart';
+import 'part/info.dart';
+import 'part/review.dart';
+import 'part/intro.dart';
+import 'part/lecturer_info.dart';
+import '../../widgets/BuyNowButton.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final String courseId;
@@ -41,7 +41,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     super.initState();
     _scrollController.addListener(() {
       setState(() {
-        // Khi vị trí cuộn vượt qua một ngưỡng nhất định, ẩn nút "Thêm vào giỏ hàng" ở dưới cùng
+        // Khi vị trí cuộn vượt qua một ngưỡng nhất định, ẩn nút "Mua ngay" ở dưới cùng
         _isButtonVisible = _scrollController.offset < 500;  // 500 là giá trị ngưỡng
       });
     });
@@ -85,7 +85,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                   CourseLecturerInfo(courseDetail: _courseDetailVM.courseDetail),
                   const SizedBox(height: 16),
                   CourseReviews(),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 100),
                   // Các widget khác
                 ],
               ),
@@ -94,12 +94,11 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               bottom: 0,
               left: 0,
               right: 0,
-
               child: Visibility(
                 visible: !_isButtonVisible,
                 child: Padding( 
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                  child: AddToCartButton(),                                         
+                  child: BuyNowButton(),                                         
                 ),
               ),
             ),

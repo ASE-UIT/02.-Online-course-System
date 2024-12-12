@@ -6,7 +6,7 @@ import 'package:online_course_system/screens/PhoneVerificationScreen.dart';
 import 'package:online_course_system/screens/TestScreen.dart';
 import 'package:online_course_system/screens/UpdateEmailScreen.dart';
 import 'package:online_course_system/screens/UpdatePhoneScreen.dart';
-import 'package:online_course_system/screens/course_detail/course_detail.dart';
+import 'package:online_course_system/screens/CourseDetail/CourseDetailScreen.dart';
 import 'package:online_course_system/screens/SignInScreen.dart';
 import 'package:provider/provider.dart';
 

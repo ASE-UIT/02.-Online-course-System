@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/models/lesson_model.dart';
 import 'package:online_course_system/models/section.dart';
+import 'package:online_course_system/constants/colors.dart';
 
 class CourseContent extends StatefulWidget {
   @override
@@ -45,7 +46,7 @@ class _CourseContentState extends State<CourseContent> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: Colors.red,
+                  color: AppColors.error700,
                 ),
               ),
               const SizedBox(height: 8),
@@ -69,7 +70,7 @@ class _CourseContentState extends State<CourseContent> {
                         padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),                     
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
-                          color: Colors.grey[300],
+                          color: AppColors.gray300,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -80,7 +81,7 @@ class _CourseContentState extends State<CourseContent> {
                               iconSize: 24,
                               icon: Icon(
                                 sections[index].isExpanded ? Icons.remove : Icons.add,
-                                color: Colors.red,
+                                color: AppColors.error500,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -114,7 +115,7 @@ class _CourseContentState extends State<CourseContent> {
                                   iconSize: 24,
                                   icon: Icon(
                                     Icons.play_circle_outline,
-                                    color: Colors.red,
+                                    color: AppColors.error500,
                                   ),
                                   onPressed: () {},
                                 ),
@@ -126,7 +127,7 @@ class _CourseContentState extends State<CourseContent> {
                                   lesson.duration,
                                   style: TextStyle(
                                     fontSize: 16,
-                                    color: lesson.duration == "Học thử" ? Colors.blue : Colors.black,
+                                    color: lesson.duration == "Học thử" ? AppColors.primary500 : Colors.black,
                                   ),
                                 ),
                               ],
