@@ -2,7 +2,7 @@ import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {Stepper} from "@/pages/PaymentPage/Stepper.jsx";
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {setPayment} from "@/store/slices/paymentSlice.js";
+import {courseCartApi} from "@/api/courseApi.js";
 
 
 export default function CheckoutPage() {
@@ -11,10 +11,19 @@ export default function CheckoutPage() {
     const location = useLocation();
     const {newOrder} = location.state || {newOrder: null}
     const [order, setOrder] = React.useState(null);
+    const getMyCart = async () => {
+        try {
+            const response = await courseCartApi.getMyCart();
+            if (response?.success) {
+                setOrder(response.data.items);
+            }
+        } catch (error) {
+            console.log(error.response?.errors.msg);
+        }
+    };
     useEffect(() => {
-        setOrder(newOrder);
+        getMyCart();
     }, []);
-    console.log("page", order);
     return(
         <div className="h-full w-full">
             <Stepper currentStep={currentStep} result={result} />

@@ -22,7 +22,7 @@ export const CourseCartCard = ({course, checked, onChange, onRemove}) => {
         cursor-pointer overflow-hidden rounded-[12px] h-full flex w-full">
                 <div className="overflow-hidden">
                     <img
-                        src={course.thumbnail?course.thumbnail: CourseCardIcon}
+                        src={course.thumbnail ? course.thumbnail : CourseCardIcon}
                         alt="No image"
                         className="mx-auto h-[160px] w-full object-cover transition duration-700 hover:skew-x-2 "
                     />

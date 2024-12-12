@@ -10,52 +10,62 @@ import {useNavigate, useOutletContext} from "react-router-dom";
 import {OrderInformation} from "@/pages/PaymentPage/OrderInformation.jsx";
 import {courseCartApi} from "@/api/courseApi.js";
 import {paymentApi} from "@/api/paymentApi.js";
+import {useSelector} from "react-redux";
 
 export default function CheckoutStep2Page() {
-    const [paymentMethod, setPaymentMethod] = useState("vnpay")
+    const [paymentMethod, setPaymentMethod] = useState("VNPAY")
     const navigate = useNavigate();
+    const {name,email,phone,totalPrice} = useSelector(state => state.payment);
     const paymentMethods = [
         {
-            id: "vnpay",
+            id: "VNPAY",
             name: "Thẻ ATM/Internet Banking VNPay",
         },
         {
-            id: "momo",
+            id: "MOMO",
             name: "Ví điện tử Momo",
         },
         {
-            id: "shopee",
+            id: "SHOPEE",
             name: "Ví điện tử Shopee Pay",
         },
         {
-            id: "zalo",
+            id: "ZALO",
             name: "Ví điện tử Zalo Pay",
         },
         {
-            id: "bank",
+            id: "BANK",
             name: "Chuyển khoản ngân hàng",
         },
         {
-            id: "card",
+            id: "CARD",
             name: "Thẻ quốc tế Visa/Master",
         },
     ]
     const {setCurrentStep, order} = useOutletContext();
-    const getPaymentURL = async () => {
+    const createOrder = async () => {
         try {
-            const response = await paymentApi.getPaymentURL(order.payment.id);
+            const formData = new FormData();
+            formData.append("payType", paymentMethod)
+            formData.append("customFullname",name)
+            formData.append("customerEmail",email)
+            formData.append("customerPhone",phone)
+            const response = await courseCartApi.createOrder(formData);
             if (response?.success) {
                 console.log(response.data);
-                    window.location.href = response.data.payUrl; // Navigate to the payment URL
+                const responseGetPaymentUrl = await paymentApi.getPaymentURL(response.data.payment.id);
+            if (responseGetPaymentUrl?.success) {
+                console.log(responseGetPaymentUrl.data);
+                    window.location.href = responseGetPaymentUrl.data.payUrl;
             }
-
+            }
         } catch (error) {
             console.log(error.response?.errors.msg);
         }
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await getPaymentURL();
+        await createOrder();
     }
     useEffect(() => {
         setCurrentStep(2);
@@ -101,9 +111,8 @@ export default function CheckoutStep2Page() {
                 </div>
                 <div className="w-[454px] ">
                     <OrderInformation
-                        numItems={order?.items.length}
-                        total={order?.totalPrice}
-                        order={order?.items}
+                        numItems={order?.length}
+                        order={order}
                     />
                 </div>
             </div>

@@ -11,7 +11,8 @@ import {Button} from "@/components/ui/button.jsx";
 import { formatCurrency } from "@/utils/converter";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {setPayment} from "@/store/slices/paymentSlice.js";
+import {addTotalPrice,addInfoPayment} from "@/store/slices/paymentSlice.js";
+import { useToast } from "@/hooks/use-toast";
 
 const mockCourseData = [
     {
@@ -104,6 +105,8 @@ const CartPage = () => {
     const navigate = useNavigate();
     const [totalPrice, setTotalPrice] = useState(0);
     const dispatch = useDispatch();
+    const { toast } = useToast();
+
     const getMyCart = async () => {
         try {
             const response = await courseCartApi.getMyCart();
@@ -124,6 +127,11 @@ const CartPage = () => {
                 setRemoveResponse(response.data)
                 setMyCart((prev) => prev.filter((course) => course.courseId !== courseId));
                 setSelectedCourses((prev) => prev.filter((id) => id !== courseId));
+                toast({
+                    title: <p className=" text-green-700">Xóa khóa học khỏi giỏ hàng thành công</p>,
+                    status: "success",
+                    duration: 2000
+                });
             }
         }catch(error){
             console.log(error.response?.errors.msg);
@@ -146,32 +154,33 @@ const CartPage = () => {
         );
     };
     const handleClickPayment = async () => {
-        try{
-            const formData = new FormData();
-            formData.append("payType", "VNPAY");
 
-            const response = await courseCartApi.createOrder(formData);
-            if (response?.success) {
-                console.log(response.data);
-                const newOrder = response.data;
-                dispatch(setPayment({totalPrice: response.data.totalPrice}));
-                navigate("/web/checkout", {state:{newOrder: newOrder}})
-            }
-        }catch(error){
+        if(myCart.length > 0) {
+            dispatch(addTotalPrice({totalPrice:totalPrice}));
+            navigate("/web/checkout")
+        }else{
+            toast({
+                title: <p className=" text-error-500">Giỏ hàng không có khóa học</p>,
+                status: "success",
+                duration: 2000
+            });
+        }
+    };
+    const handleRemoveSelectedCourses = async ()=>{
+        try {
+            const promises = selectedCourses.map(courseId => courseCartApi.removeFromCart(courseId));
+            await Promise.all(promises);
+            setMyCart((prev) => prev.filter((course) => !selectedCourses.includes(course.courseId)));
+            setSelectedCourses([]);
+            toast({
+                title: <p className=" text-green-700">Xóa khóa học khỏi giỏ hàng thành công</p>,
+                status: "success",
+                duration: 2000
+            });
+        } catch (error) {
             console.log(error.response?.errors.msg);
         }
-
-    };
-    /*useEffect(() => {
-        const newTotalPrice = selectedCourses.reduce((sum, courseId) => {
-            const selectedCourse = myCart.find((course) => course.courseId === courseId);
-            console.log(courseId)
-            console.log(selectedCourse)
-            console.log(selectedCourse.course.sellPrice)
-            return sum + (selectedCourse ? Number(selectedCourse.course.sellPrice) : 0);
-        }, 0);
-        setTotalPrice(newTotalPrice);
-    }, [selectedCourses, myCart]);*/
+    }
     useEffect(() => {
         const newTotalPrice = myCart.reduce((sum, course) => {
             return sum + (course.course ? Number(course.course.sellPrice) : 0);
@@ -204,7 +213,7 @@ const CartPage = () => {
                                     Chọn tất cả ({myCart.length} sản phẩm)
                                 </label>
                             </div>
-                            <p className="text-text/lg/medium text-error-500 font-worksans cursor-pointer">Xóa
+                            <p onClick={handleRemoveSelectedCourses} className="text-text/lg/medium text-error-500 font-worksans cursor-pointer">Xóa
                                  mục đã chọn</p>
                         </div>
 

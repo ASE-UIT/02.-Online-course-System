@@ -1,7 +1,7 @@
 import {formatCurrency} from "@/utils/converter";
 
 
-export function OrderSummary({numItems, total, order}) {
+export function OrderSummary({numItems, total}) {
 
     return (
         <div className="w-full max-w-md space-y-6 rounded-lg bg-card p-6 shadow-[0px_8px_16px_0px_rgba(0,0,0,0.07)]">
@@ -25,31 +25,7 @@ export function OrderSummary({numItems, total, order}) {
                         đ{formatCurrency(total)}
                     </span>
                 </div>
-                {/*{order.map((course) => (
-                    <div key={course?.id} className="flex items-center justify-between">
-                    <span className="text-muted-foreground">
-                        {course?.course?.name}
-                    </span>
-                        <span className="font-medium">
-                        đ{formatCurrency(total)}
-                    </span>
-                    </div>
-
-                ))}*/}
             </div>
         </div>
     )
-}
-
-const CartCourse = (course)=>{
-    return (
-        <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">
-                        {course?.course?.name}
-                    </span>
-            <span className="font-medium">
-                        hehe
-                    </span>
-        </div>
-    );
 }
