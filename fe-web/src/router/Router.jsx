@@ -56,24 +56,29 @@ const ResetPassword = withSuspense(
   lazy(() => import("@/pages/SignIn/ResetPassword"))
 );
 const NotFound = withSuspense(lazy(() => import("@/pages/NotFound")));
+
 const SearchPage = withSuspense(
-  lazy(() => import("@/pages/searchPage/searchPage"))
-);
+    lazy(() => import("@/pages/searchPage/searchPage")));
 const DefaultLayout = withSuspense(
-  lazy(() => import("@/layouts/DefaultLayout"))
-);
+    lazy(() => import("@/layouts/DefaultLayout")));
 const LecturerSignIn = withSuspense(
-  lazy(() => import("@/pages/Lecturer/SignIn/LecturerSignIn"))
-);
+    lazy(() => import("@/pages/Lecturer/SignIn/LecturerSignIn")));
 const CartPage = withSuspense(
-  lazy(() => import("@/pages/CartPage/CartPage.jsx"))
-);
+    lazy(() => import("@/pages/CartPage/CartPage.jsx")));
 const CourseList = withSuspense(
-  lazy(() => import("@/pages/CourseList/CourseList.jsx"))
-);
+    lazy(() => import("@/pages/CourseList/CourseList.jsx")));
 const LearningPage = withSuspense(
-  lazy(() => import("@/pages/LearningPage/LearningPage.jsx"))
-);
+    lazy(() => import("@/pages/LearningPage/LearningPage.jsx")));
+const CheckoutPage = withSuspense(
+    lazy(() => import ("@/pages/PaymentPage/CheckoutPage.jsx")));
+const CheckoutStep1Page = withSuspense(
+    lazy(() => import ("@/pages/PaymentPage/CheckoutStep1.jsx")));
+const CheckoutStep2Page = withSuspense(
+    lazy(() => import ("@/pages/PaymentPage/CheckoutStep2")));
+const CheckoutSuccessPage = withSuspense(
+    lazy(() => import ("@/pages/PaymentPage/CheckoutSuccess.jsx")));
+const CheckoutFailPage = withSuspense(
+    lazy(() => import ("@/pages/PaymentPage/CheckoutFail.jsx")));
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -110,6 +115,13 @@ const router = createBrowserRouter(
           <Route path="cart" element={<CartPage />} />
           <Route path="result/:content" element={<ResultPage />} />
           <Route path="course-list" element={<CourseList />} />
+          <Route path="checkout" element={<CheckoutPage />} >
+            <Route path="*" element={<Navigate to={"/web/checkout/step1"} />} />
+            <Route path="step1" element={<CheckoutStep1Page/>}/>
+            <Route path="step2" element={<CheckoutStep2Page/>}/>
+            <Route path="success" element={<CheckoutSuccessPage/>}/>
+            <Route path="fail" element={<CheckoutFailPage/>}/>
+          </Route>
           {/* Lecturer layout */}
           <Route path="lecturer" element={<LecturerLayout />}>
             <Route path="sign-in" element={<LecturerSignIn />} />
