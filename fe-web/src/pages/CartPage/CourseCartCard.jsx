@@ -7,8 +7,10 @@ import {Checkbox} from "@/components/ui/checkbox";
 import * as React from "react";
 import Rating from "@/components/Rating/Rating.jsx";
 import { formatCurrency } from "@/utils/converter";
+import {useNavigate} from "react-router-dom";
 
 export const CourseCartCard = ({course, checked, onChange, onRemove}) => {
+    const navigate = useNavigate();
     return (
         <div className="flex gap-5 w-full">
             <Checkbox
@@ -17,7 +19,7 @@ export const CourseCartCard = ({course, checked, onChange, onRemove}) => {
                 className="h-6 w-6 rounded-[2px]">
                 <CheckIcon/>
             </Checkbox>
-            <div className="border-[1px] border-black-50 transition-all
+            <div onClick={()=>{navigate(`/web/course/${course.id}`)}} className="border-[1px] border-black-50 transition-all
         duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white
         cursor-pointer overflow-hidden rounded-[12px] h-full flex w-full">
                 <div className="overflow-hidden">
