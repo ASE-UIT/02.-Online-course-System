@@ -28,7 +28,7 @@ export const registerLecturer = async (
 };
 
 export const verifyLecturer = async (phoneNumber, code) => {
-  const res = await api.post(
+  const res = await api.get(
     `/lecturer/activation/phone?phoneNumber=${phoneNumber}&code=${code}`
   );
   return res;
