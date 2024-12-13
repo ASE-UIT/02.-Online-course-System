@@ -174,7 +174,10 @@ const VerifyCodeLecturer = () => {
     } else {
       try {
         const phoneNumber = emailOrPhone.slice(1);
-        const response = await verifyLecturer(phoneNumber, otpValue);
+        const response = await verifyLecturer(
+          phoneNumber,
+          otpFromInput ?? otpValue
+        );
 
         if (response.data.code === 200) {
           navigate(`/web/lecturer/result`);
