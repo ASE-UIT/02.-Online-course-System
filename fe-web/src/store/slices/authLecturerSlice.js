@@ -15,8 +15,8 @@ export const authLecturerSlice = createSlice({
   reducers: {
     addAuthLercturer: (state, action) => {
       console.log("action.payload", action.payload);
-      let { token } = action.payload;
-      state.authLecturer = token;
+      let authInfor = action.payload;
+      state.authLecturer = authInfor;
 
       localStorage.setItem("authLecturer", JSON.stringify(state.authLecturer));
     },
