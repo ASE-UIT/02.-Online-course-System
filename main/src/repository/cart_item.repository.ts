@@ -10,4 +10,12 @@ export class CartItemRepository extends BaseRepository<CartItem> implements ICar
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(CartItem));
   }
+
+  async cleanCart(studentId: string): Promise<void> {
+    await this.ormRepository.delete({
+      cart: {
+        studentId: studentId
+      }
+    });
+  }
 }

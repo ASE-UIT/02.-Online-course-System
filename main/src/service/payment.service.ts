@@ -7,6 +7,7 @@ import { IOrderRepository } from '@/repository/interface/i.order.repository';
 import { IPaymentRepository } from '@/repository/interface/i.payment.repository';
 import { BaseCrudService } from '@/service/base/base.service';
 import { IPaymentService } from '@/service/interface/i.payment.service';
+import { sendEmail } from '@/utils/email/email-sender.util';
 import BaseError from '@/utils/error/base.error';
 import { createVNPayUrl } from '@/utils/vnpay/create-pay-url.util';
 import { inject, injectable } from 'inversify';
@@ -81,6 +82,21 @@ export class PaymentService extends BaseCrudService<Payment> implements IPayment
     order.status = OrderStatus.PAID;
 
     await this.orderRepository.save(order);
+
+    //Send success email
+    const userEmail = order.customerEmail;
+    if (userEmail) {
+      const content = `Đơn hàng của bạn đã được thanh toán thành công với tổng giá trị là ${order.totalPrice}`;
+
+      sendEmail({
+        from: {
+          name: 'Eduhub'
+        },
+        to: { emailAddress: [userEmail] },
+        subject: 'Thanh toán khóa học thành công',
+        text: content
+      });
+    }
 
     return;
   }

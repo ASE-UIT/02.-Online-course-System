@@ -1,6 +1,7 @@
 import { TIME_CONSTANTS } from '@/constants/time.constants';
 import { LecturerStatsDto } from '@/dto/lecturer/lecturer-stats.dto';
 import { RedisSchemaEnum } from '@/enums/redis-schema.enum';
+import { Course } from '@/models/course.model';
 import { CourseRating } from '@/models/course_rating.model';
 import { Enrollment } from '@/models/enrollment.model';
 import { Lecturer } from '@/models/lecturer.model';
@@ -15,11 +16,21 @@ import { DataSource, Repository } from 'typeorm';
 export class LecturerRepository extends BaseRepository<Lecturer> implements ILecturerRepository<Lecturer> {
   private enrollmentRepository: Repository<Enrollment>;
   private courseRatingRepository: Repository<CourseRating>;
+  private courseRepository: Repository<Course>;
 
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(Lecturer));
     this.enrollmentRepository = dataSource.getRepository(Enrollment);
     this.courseRatingRepository = dataSource.getRepository(CourseRating);
+    this.courseRepository = dataSource.getRepository(Course);
+  }
+
+  async countTotalCourse(lecturerId: string): Promise<number> {
+    return await this.courseRepository.count({
+      where: {
+        lecturerId: lecturerId
+      }
+    });
   }
 
   async getLecturerStats(lecturerId: string): Promise<LecturerStatsDto> {
