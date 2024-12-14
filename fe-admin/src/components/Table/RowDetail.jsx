@@ -3,15 +3,24 @@ import DialogComponent from "../Dialog/DialogComponent";
 import BlankImg from "/blank.png";
 import { Button } from "../ui/button";
 import { ExternalLink } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 const RowDetail = ({ row, headerList, pageName }) => {
+  const url = useLocation();
   const headerTranslator = (id) => {
     const header = headerList.find((header) => header.id === id);
     return header ? header.title : "";
   };
 
+  const renderValue = (value) => {
+    if (typeof value === "object" && value !== null) {
+      return JSON.stringify(value);
+    }
+    return value;
+  };
+
   return (
-    <div className="h-[260px] py-4 px-8 flex justify-start items-center">
+    <div className="h-full py-4 px-8 flex justify-start items-center">
       <img src={BlankImg} alt="cate detail" className="ml-20" />
       <div className="px-8 flex flex-col md:gap-8 justify-center items-stretch">
         <ul>
@@ -20,7 +29,7 @@ const RowDetail = ({ row, headerList, pageName }) => {
               <></>
             ) : (
               <li key={index}>
-                <strong>{headerTranslator(key)}:</strong> {value}
+                <strong>{headerTranslator(key)}:</strong> {renderValue(value)}
               </li>
             )
           )}
@@ -39,6 +48,22 @@ const RowDetail = ({ row, headerList, pageName }) => {
                 }}
               >
                 Xem trên web
+                <ExternalLink size={16} className="ml-1" />
+              </Button>
+            ))}
+          {url === CURRENT_PAGES.WAITING_COURSE_PAGE ||
+            (pageName === CURRENT_PAGES.WAITING_COURSE_PAGE && (
+              <Button
+                variant="secondary"
+                className=" text-white px-4 py-2"
+                onClick={() => {
+                  window.open(
+                    `https://eduhub.io.vn/web/learning/${row.id}`,
+                    "_blank"
+                  );
+                }}
+              >
+                Chi tiết khoá học
                 <ExternalLink size={16} className="ml-1" />
               </Button>
             ))}
