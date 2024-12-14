@@ -149,8 +149,13 @@ export class EmployeeController {
   async addLecturer(req:Request, res:Response, next:NextFunction) {
     try {
       const lecturerData = req.body; // Dữ liệu giảng viên từ body request
-      const currentEmployee = req.user as Employee; // Gán Employee từ middleware
+      const user = req.user as unknown; 
   
+
+      if(!IsEmployee(user)){
+        throw new BaseError(ErrorCode.PERMISSION_01, 'Vui lòng đăng nhập');
+      }
+      const currentEmployee = user as Employee;
       const result = await this.employeeService.addLecturer(
         currentEmployee,
         lecturerData
@@ -160,14 +165,21 @@ export class EmployeeController {
     } catch (error) {
       next(error);
     }
+
   }
 
+  
   async updateLecturer(req:Request, res:Response, next:NextFunction) {
     try{
       const lecturerData = req.body; // Dữ liệu giảng viên từ body request
-    const currentEmployee = req.user as Employee; // Gán Employee từ middleware
     const lecturerId = req.params.id; // Lấy id giảng viên từ params
-    
+    const user = req.user as unknown; 
+  
+
+      if(!IsEmployee(user)){
+        throw new BaseError(ErrorCode.PERMISSION_01, 'Vui lòng đăng nhập');
+      }
+      const currentEmployee = user as Employee;
     const result= await this.employeeService.updateLecturer(
       currentEmployee,
       lecturerId,
@@ -183,8 +195,15 @@ export class EmployeeController {
 
   async rejectLecturerApplication(req: Request, res: Response, next: NextFunction) {
     try {
-      const currentEmployee = req.user as Employee; // Lấy thông tin Employee từ middleware
       const { lecturerId, reason } = req.body; // Lấy dữ liệu từ body request
+
+      const user = req.user as unknown; 
+  
+
+      if(!IsEmployee(user)){
+        throw new BaseError(ErrorCode.PERMISSION_01, 'Vui lòng đăng nhập');
+      }
+      const currentEmployee = user as Employee;
   
       await this.employeeService.rejectLecturerApplication(currentEmployee, lecturerId, reason);
   
@@ -193,4 +212,8 @@ export class EmployeeController {
       next(error);
     }
   }
+}
+
+function IsEmployee(user: unknown): user is Employee {
+  return (user as Employee).id !== undefined;
 }

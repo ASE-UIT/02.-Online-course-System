@@ -6,7 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test jest",
     "build": "rimraf ./dist && tsc && tsc-alias",
-    "start:dev": "NODE_ENV=development nodemon --exec npx ts-node -r tsconfig-paths/register ./src/server.ts",
+    "start:dev": "cross-env NODE_ENV=development nodemon --exec npx ts-node -r tsconfig-paths/register ./src/server.ts",
     "start:prod": "NODE_ENV=production node ./dist/server.js",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:create": "npm run typeorm migration:create ./src/database/migrations/$npm_config_name",
@@ -43,6 +43,7 @@
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",

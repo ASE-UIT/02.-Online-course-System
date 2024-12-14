@@ -1,4 +1,3 @@
-import { LecturerRepository } from '@/repository/lecturer.repository';
 import { EmployeeLoginReq } from '@/dto/employee/employee-login.req';
 import { LoginRes } from '@/dto/login.res';
 import { ErrorCode } from '@/enums/error-code.enums';
@@ -162,6 +161,5 @@ export class EmployeeService extends BaseCrudService<Employee> implements IEmplo
       subject: 'Đơn đăng ký giảng viên bị từ chối',
       text: emailContent
     });
-
   }
 }

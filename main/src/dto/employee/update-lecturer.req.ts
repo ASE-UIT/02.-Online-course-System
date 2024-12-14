@@ -1,8 +1,7 @@
 import { IsString, IsOptional, IsUUID} from 'class-validator';
 
 export class UpdateLecturerDto {
-  @IsUUID
-  id!: string; // ID giảng viên
+
 
   @IsString()
   @IsOptional()
