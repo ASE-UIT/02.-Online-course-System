@@ -42,9 +42,13 @@ function UserSection() {
   }, [location, navigate]);
 
   const handleLogout = () => {
-    setIsStudentLoggedIn(false);
-    setIsLecturerLogin(false);
-    localStorage.removeItem("auth");
+    if (isStudentLayout) {
+      setIsStudentLoggedIn(false);
+      localStorage.removeItem("auth");
+    } else {
+      setIsLecturerLogin(false);
+      localStorage.removeItem("authLecturer");
+    }
   };
 
   const handleLoginOnClick = () => {
