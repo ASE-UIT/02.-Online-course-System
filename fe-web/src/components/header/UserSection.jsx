@@ -1,33 +1,49 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { List, LogOut, ShoppingCart, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 function UserSection() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isStudentLoggedIn, setIsStudentLoggedIn] = useState(true);
+  const [isLecturerLogin, setIsLecturerLogin] = useState(true);
+  const [open, setOpen] = useState(false);
   const [isLecturerLayout, setIsLecturerLayout] = useState(false);
+  const [isStudentLayout, setIsStudentLayout] = useState(false);
 
   useEffect(() => {
-    if (location.pathname.startsWith("/web/lecturer"))
+    if (location.pathname.startsWith("/web/lecturer")) {
       setIsLecturerLayout(true);
-    else setIsLecturerLayout(false);
+      setIsStudentLayout(false);
+    } else {
+      setIsLecturerLayout(false);
+      setIsStudentLayout(true);
+    }
   }, [location]);
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth"));
     if (auth && auth.length > 0) {
-      setIsLoggedIn(true);
+      setIsStudentLoggedIn(true);
     } else {
-      setIsLoggedIn(false);
+      setIsStudentLoggedIn(false);
     }
-  }, []);
+  }, [location]);
 
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const authLecturer = JSON.parse(localStorage.getItem("authLecturer"));
+    if (authLecturer && authLecturer.length > 0) {
+      setIsLecturerLogin(true);
+    } else {
+      setIsLecturerLogin(false);
+    }
+  }, [location, navigate]);
+
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    setIsStudentLoggedIn(false);
+    setIsLecturerLogin(false);
     localStorage.removeItem("auth");
   };
 
@@ -43,10 +59,11 @@ function UserSection() {
 
   return (
     <div className="flex gap-2 md:gap-5 items-center">
-      <Link to={"./cart"}>
+      {/* <Link to={"./cart"}>
         <ShoppingCart className="text-xl md:text-2xl hover:cursor-pointer" />
-      </Link>{" "}
-      {isLoggedIn ? (
+      </Link>{" "} */}
+      {(isStudentLayout && isStudentLoggedIn) ||
+      (isLecturerLayout && isLecturerLogin) ? (
         <div
           className="relative"
           onMouseEnter={() => setOpen(true)}
@@ -59,22 +76,22 @@ function UserSection() {
           </div>
 
           {open && (
-            <div className="w-[220px] before:w-[120px] before:h-[20px] border  before:absolute before:top-[-20px] before:right-[50%] before:translate-x-[50%]  mt-[5px] bg-white shadow-md rounded-sm right-[50%] translate-x-[50%] top-[100%] absolute">
+            <div className="w-[240px] before:w-[120px] before:h-[20px] border  before:absolute before:top-[-20px] before:right-[50%] before:translate-x-[50%]  mt-[5px] bg-white shadow-md rounded-sm right-[50%] translate-x-[50%] top-[100%] absolute">
               <Link to={"./profile"}>
                 <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
                   <p className="text-text/md/normal">Hồ sơ tài khoản</p>
                   <User className="text-lg"></User>
                 </div>
               </Link>
-              <Link to={"/course"}>
+              <Link to={"/web/course-list"}>
                 <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
                   <p className="text-text/md/normal">Danh sách khóa học</p>
                   <List className="text-lg"></List>
                 </div>
               </Link>
-              <Link to={"/cart"}>
+              <Link to={"/web/cart"}>
                 <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
-                  <p className="text-text/md/normal">Giỏ hàng</p>
+                  <p className="text-text/md/normal">Giỏ hàng của bạn</p>
                   <ShoppingCart className="text-lg"></ShoppingCart>
                 </div>
               </Link>

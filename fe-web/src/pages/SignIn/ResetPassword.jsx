@@ -50,10 +50,9 @@ function ResetPassword() {
       return;
     }
     try {
-      const respone = await studentResetPassword(emailOrPhone, otp, password);
+      const response = await studentResetPassword(emailOrPhone, otp, password);
 
-      if (respone.code === 200 || respone.data.code === 200) {
-        console.log("respone.data", respone.data.data.token);
+      if (response.code === 200 || response.data?.code === 200) {
         navigate("/web/sign-in");
         toast({
           title: <p className=" text-green-700">Đổi mật khẩu thành công</p>,
@@ -63,7 +62,7 @@ function ResetPassword() {
         });
       }
     } catch (error) {
-      if (error.response.data.errors?.code === "INVALID_OTP") {
+      if (error.response.data?.errors?.code === "INVALID_OTP") {
         toast({
           title: <p className=" text-red-700">Lỗi OTP</p>,
           description: error.response.data.errors.msg,
