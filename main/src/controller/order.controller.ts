@@ -10,6 +10,7 @@ import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { CreateOrderRes } from '@/dto/order/create-order.res';
 import { getSearchData } from '@/utils/get-search-data.util';
+import { CreateOrderWithCourseIdsReq } from '@/dto/order/create-order-with-course-ids.req';
 
 @injectable()
 export class OrderController {
@@ -60,4 +61,23 @@ export class OrderController {
       next(error);
     }
   };
+
+  /**
+   * * POST /create-order/with-course-ids
+   */
+  async createOrderWithCourseIds(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+
+      const requestBody: CreateOrderWithCourseIdsReq = req.body;
+
+      const order = await this.orderService.createOrderWithCourseIds(requestBody, student.id);
+
+      const resultDto = convertToDto(CreateOrderRes, order);
+
+      res.send_ok('Tạo đơn mua khóa học thành công, vui lòng thanh toán', resultDto);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
