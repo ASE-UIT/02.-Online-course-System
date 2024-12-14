@@ -18,6 +18,7 @@ export class PaymentController {
 
   //Constants
   private FE_SUCCESS_PAYMENT_URL = 'https://eduhub.io.vn/web/checkout/success';
+  private FE_FAIL_PAYMENT_URL = 'https://eduhub.io.vn/web/checkout/fail';
 
   constructor(
     @inject('PaymentService') paymentService: IPaymentService<Payment>,
@@ -60,7 +61,9 @@ export class PaymentController {
 
       return res.redirect(this.FE_SUCCESS_PAYMENT_URL);
     } catch (error) {
-      next(error);
+      console.log('PAYMENT ERROR', error);
+
+      return res.redirect(this.FE_FAIL_PAYMENT_URL);
     }
   }
 }

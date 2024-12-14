@@ -32,6 +32,8 @@ export const CourseSelectRes = {
 
   endDate: true,
 
+  isApproved: true,
+
   category: {
     id: true,
     name: true
