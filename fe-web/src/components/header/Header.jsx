@@ -17,7 +17,10 @@ const Header = () => {
   const [open, setOpen] = useState(false);
   return (
     <div className="flex flex-col md:flex-row fixed bg-white/95  left-0 right-0 top-0 items-center px-6 py-4 md:px-24 md:py-2 justify-between gap-4  z-[999]">
-      <Link to={"./"} className="bg-no-repeat bg-contain bg-center">
+      <Link
+        to={isLecturerLayout ? "/web/lecturer/course" : "./"}
+        className="bg-no-repeat bg-contain bg-center"
+      >
         <img
           src="/web/picture/textLogo.png"
           alt="logo"
