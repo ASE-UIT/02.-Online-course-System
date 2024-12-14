@@ -1,5 +1,6 @@
+import checkAuth from "@/api/auth";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -42,6 +43,10 @@ export const AuthProvider = ({ children }) => {
     }
   }, [navigate]);
 
+  const token = checkAuth();
+  if (!token) {
+    <Navigate to="/admin/sign-in" />;
+  }
   return (
     <AuthContext.Provider
       value={{

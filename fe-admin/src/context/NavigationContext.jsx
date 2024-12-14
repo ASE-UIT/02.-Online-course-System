@@ -60,7 +60,7 @@ export const menuItems = [
       {
         text: "Khoá học chờ duyệt",
         id: "categoryList",
-        path: "courses/category-list"
+        path: "courses/waiting-course"
       },
       {
         text: "Thu nhập từ khoá học",
