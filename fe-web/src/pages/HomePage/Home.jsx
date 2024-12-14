@@ -4,7 +4,12 @@ import MostSellerCourse from "./MostSellerCourse";
 import NewestCourse from "./NewestCourse";
 import HomePageIntro from "./HomePageIntro";
 import CategoryCourse from "./CategoryCourse";
+import { useEffect } from "react";
 const Home = () => {
+  useEffect(() => {
+    document.title = "Eduhub | Student";
+  }, []);
+
   return (
     <div>
       <HomePageIntro />
@@ -14,7 +19,9 @@ const Home = () => {
         <NewestCourse />
         <CategoryCourse />
         <div className="mt-4 flex justify-center">
-          <Button className="text-text/md/semibold text-white">Xem tất cả</Button>
+          <Button className="text-text/md/semibold text-white">
+            Xem tất cả
+          </Button>
         </div>
       </div>
     </div>

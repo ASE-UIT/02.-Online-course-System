@@ -5,29 +5,45 @@ import { List, LogOut, ShoppingCart, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 function UserSection() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isStudentLoggedIn, setIsStudentLoggedIn] = useState(true);
+  const [isLecturerLogin, setIsLecturerLogin] = useState(true);
+  const [open, setOpen] = useState(false);
   const [isLecturerLayout, setIsLecturerLayout] = useState(false);
+  const [isStudentLayout, setIsStudentLayout] = useState(false);
 
   useEffect(() => {
-    if (location.pathname.startsWith("/web/lecturer"))
+    if (location.pathname.startsWith("/web/lecturer")) {
       setIsLecturerLayout(true);
-    else setIsLecturerLayout(false);
+      setIsStudentLayout(false);
+    } else {
+      setIsLecturerLayout(false);
+      setIsStudentLayout(true);
+    }
   }, [location]);
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth"));
     if (auth && auth.length > 0) {
-      setIsLoggedIn(true);
+      setIsStudentLoggedIn(true);
     } else {
-      setIsLoggedIn(false);
+      setIsStudentLoggedIn(false);
     }
   }, [location]);
 
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const authLecturer = JSON.parse(localStorage.getItem("authLecturer"));
+    if (authLecturer && authLecturer.length > 0) {
+      setIsLecturerLogin(true);
+    } else {
+      setIsLecturerLogin(false);
+    }
+  }, [location, navigate]);
+
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    setIsStudentLoggedIn(false);
+    setIsLecturerLogin(false);
     localStorage.removeItem("auth");
   };
 
@@ -46,7 +62,8 @@ function UserSection() {
       {/* <Link to={"./cart"}>
         <ShoppingCart className="text-xl md:text-2xl hover:cursor-pointer" />
       </Link>{" "} */}
-      {isLoggedIn ? (
+      {(isStudentLayout && isStudentLoggedIn) ||
+      (isLecturerLayout && isLecturerLogin) ? (
         <div
           className="relative"
           onMouseEnter={() => setOpen(true)}

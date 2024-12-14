@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { loginLecturer } from "@/api";
-import { addAuth } from "@/store/slices/authSlice";
+import { addAuthLercturer } from "@/store/slices/authLecturerSlice";
 
 const formSchema = z.object({
   email: z.string().min(6, {
@@ -54,33 +54,32 @@ function SignInForm() {
       const formatEmail = email.includes("@")
         ? email
         : formatPhoneNumber(email);
-      const respone = await loginLecturer(formatEmail, password);
+      const response = await loginLecturer(formatEmail, password);
 
-      if (respone.status === 200 || respone.data.code === 200) {
-        console.log("respone.data", respone.data.data.token);
-        const token = respone.data.data.token;
+      if (response.status === 200 || response.data?.code === 200) {
+        const token = response.data?.data?.token;
         dispatch(
-          addAuth({
+          addAuthLercturer({
             token
           })
         );
-        navigate("/web/lecturer/course");
         toast({
           title: <p className=" text-green-700">Đăng nhập thành công</p>,
           description: "Chào mừng bạn trở lại",
           status: "success",
           duration: 2000
         });
+        navigate("/web/lecturer/course");
       }
     } catch (error) {
-      if (error.response.data.errors?.code === "NF_01") {
+      if (error.response?.data?.errors?.code === "NF_01") {
         form.setError("email", {
           message: error.response.data.errors?.msg || "Tài khoản không tồn tại"
         });
         toast({
           title: <p className=" text-red-700">Đăng nhập thất bại</p>,
           description:
-            error.response.data.errors?.msg || "Tài khoản không tồn tại",
+            error.response.data?.errors?.msg || "Tài khoản không tồn tại",
           duration: 2000
         });
         setIsLoading(false);
