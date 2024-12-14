@@ -56,6 +56,25 @@ employeeRouter
     authenticateJWT,
     checkPermission([PERMISSIONS.MANAGE_EMPLOYEE]),
     employeeController.common.delete.bind(employeeController.common)
+  )
+
+  .post(
+    '/createlecturer',
+    authenticateJWT,
+    employeeController.common.addLecturer.bind(employeeController.common)
+  )
+
+  .put(
+    '/updateLecturer',
+    authenticateJWT,
+    employeeController.common.updateLecturer.bind(employeeController.common)
+  )
+
+  .post(
+    '/rejectLecturer',
+    authenticateJWT,
+    employeeController.common.rejectLecturerApplication.bind(employeeController.common)
   );
+
 
 export default employeeRouter;

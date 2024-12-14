@@ -13,6 +13,7 @@ import { inject, injectable } from 'inversify';
 import bcrypt from 'bcrypt';
 import { Course } from '@/models/course.model';
 import { getRepository } from 'typeorm';
+import { UpdateLecturerRes } from '@/dto/employee/update-lecturer.res';
 
 @injectable()
 export class EmployeeController {
@@ -142,6 +143,54 @@ export class EmployeeController {
     } catch (error) {
       console.error('Đã xảy ra lỗi:', error);
       return res.status(500).json({ message: 'Internal server error' });
+    }
+  }
+
+  async addLecturer(req:Request, res:Response, next:NextFunction) {
+    try {
+      const lecturerData = req.body; // Dữ liệu giảng viên từ body request
+      const currentEmployee = req.user as Employee; // Gán Employee từ middleware
+  
+      const result = await this.employeeService.addLecturer(
+        currentEmployee,
+        lecturerData
+      );
+  
+      res.send_ok('Thêm mới giảng viên thành công', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateLecturer(req:Request, res:Response, next:NextFunction) {
+    try{
+      const lecturerData = req.body; // Dữ liệu giảng viên từ body request
+    const currentEmployee = req.user as Employee; // Gán Employee từ middleware
+    const lecturerId = req.params.id; // Lấy id giảng viên từ params
+    
+    const result= await this.employeeService.updateLecturer(
+      currentEmployee,
+      lecturerId,
+      lecturerData
+    )
+    res.send_ok('Cập nhật giảng viên thành công', result);
+    }
+    catch(error){
+      next(error);
+    }
+  }
+
+
+  async rejectLecturerApplication(req: Request, res: Response, next: NextFunction) {
+    try {
+      const currentEmployee = req.user as Employee; // Lấy thông tin Employee từ middleware
+      const { lecturerId, reason } = req.body; // Lấy dữ liệu từ body request
+  
+      await this.employeeService.rejectLecturerApplication(currentEmployee, lecturerId, reason);
+  
+      res.send_ok('Đơn giảng viên đã được từ chối và email đã được gửi.');
+    } catch (error) {
+      next(error);
     }
   }
 }
