@@ -1,27 +1,47 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:online_course_system/screens/SignInScreen.dart';
+import 'package:online_course_system/ViewModels/signup_view_model.dart';
+import 'package:online_course_system/models/signup_model.dart';
 import 'package:online_course_system/widgets/customtextfield.dart';
-import 'package:online_course_system/widgets/socialloginbutton.dart';
-
+import 'package:provider/provider.dart';
 import '../constants/colors.dart';
 
-class SignUpScreen extends StatelessWidget {
-  SignUpScreen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  late SignupViewModel viewModel;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordConfirmationController =
+      TextEditingController();
+
+  // Key để kiểm soát form
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = Provider.of<SignupViewModel>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 0),
-              width: double.infinity,
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 0),
+            width: double.infinity,
+            child: Form(
+              key: _formKey,
               child: Column(
                 children: <Widget>[
                   IntrinsicHeight(
@@ -59,8 +79,13 @@ class SignUpScreen extends StatelessWidget {
                         CustomTextField(
                           hintText: "Họ và tên",
                           prefixIcon: Icons.person,
-                          keyboardType: TextInputType.name,
                           controller: nameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Vui lòng nhập họ và tên";
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 16),
                         CustomTextField(
@@ -68,24 +93,84 @@ class SignUpScreen extends StatelessWidget {
                           prefixIcon: Icons.email,
                           keyboardType: TextInputType.emailAddress,
                           controller: emailController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Vui lòng nhập email";
+                            }
+                            if (!RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$")
+                                .hasMatch(value)) {
+                              return "Email không hợp lệ";
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 16),
                         CustomTextField(
-                          hintText: "Nhập số điện thoại",
-                          prefixIcon: Icons.phone,
-                          keyboardType: TextInputType.phone,
-                          controller: phoneController,
-                        ),
-                        const SizedBox(height: 16),
-                        CustomTextField(
-                          hintText: 'Mật khẩu',
+                          hintText: "Mật khẩu",
                           prefixIcon: Icons.lock,
                           isPassword: true,
                           controller: passwordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Vui lòng nhập mật khẩu";
+                            }
+                            if (value.length < 6) {
+                              return "Mật khẩu phải có ít nhất 6 ký tự";
+                            }
+                            return null;
+                          },
                         ),
-                        const SizedBox(height: 18),
+                        const SizedBox(height: 16),
+                        CustomTextField(
+                          hintText: "Xác nhận mật khẩu",
+                          prefixIcon: Icons.lock_person,
+                          isPassword: true,
+                          controller: passwordConfirmationController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Vui lòng xác nhận mật khẩu";
+                            }
+                            if (value != passwordController.text) {
+                              return "Mật khẩu không khớp";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 20),
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              log('Form hợp lệ');
+                              final signupRequest = SignUpRequest(
+                                name: nameController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+
+                              var info = signupRequest.toJson().toString();
+                              debugPrint('Info: $info');
+                              await viewModel.signup(signupRequest);
+
+                              // Xử lý thành công hoặc lỗi
+                              if (viewModel.errorMessage != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(viewModel.errorMessage!)),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text('Tiến hành xác thực email!')),
+                                );
+                                Navigator.pushNamed(
+                                    context, 'EmailVerificationScreen',
+                                    arguments: emailController.text);
+                              }
+                            } else {
+                              log('Form không hợp lệ');
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary500,
                             minimumSize: const Size(double.infinity, 60),
@@ -96,10 +181,9 @@ class SignUpScreen extends StatelessWidget {
                           child: const Text(
                             "ĐĂNG KÝ",
                             style: TextStyle(
-                                fontSize: 16, 
+                                fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white
-                            ),
+                                color: Colors.white),
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -109,10 +193,7 @@ class SignUpScreen extends StatelessWidget {
                             const Text('Bạn đã có tài khoản? '),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) =>  SignInScreen()),
-                                );
+                                Navigator.pushNamed(context, 'SignInScreen');
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
@@ -135,7 +216,9 @@ class SignUpScreen extends StatelessWidget {
                 ],
               ),
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

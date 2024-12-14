@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/ViewModels/learning_view_model.dart';
 import 'package:online_course_system/ViewModels/login_view_model.dart';
+import 'package:online_course_system/ViewModels/signup_view_model.dart';
+import 'package:online_course_system/ViewModels/verifyemail_view_model.dart';
 import 'package:online_course_system/screens/AccountUpdateScreen.dart';
 import 'package:online_course_system/screens/EmailVerificationScreen.dart';
 import 'package:online_course_system/screens/HomeScreen.dart';
 import 'package:online_course_system/screens/PhoneVerificationScreen.dart';
-import 'package:online_course_system/screens/TestScreen.dart';
+import 'package:online_course_system/screens/SignUpScreen.dart';
 import 'package:online_course_system/screens/UpdateEmailScreen.dart';
 import 'package:online_course_system/screens/UpdatePhoneScreen.dart';
-import 'package:online_course_system/screens/course_detail/course_detail.dart';
 import 'package:online_course_system/screens/SignInScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'ViewModels/course_view_model.dart';
-import 'Views/login_screen.dart';
 
 void main() {
   runApp(
@@ -28,6 +28,12 @@ void main() {
         ChangeNotifierProvider(
           create: (_) => LoginViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => SignupViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => VerifyEmailViewModel(),
+        )
       ],
       child: MyApp(),
     ),
@@ -45,6 +51,8 @@ class MyApp extends StatelessWidget {
       home: HomeScreen(),
       routes: {
         'HomeScreen': (context) => const HomeScreen(),
+        'SignUpScreen': (context) => const SignUpScreen(),
+        'SignInScreen': (context) => const SignInScreen(),
         'AccountUpdateScreen': (context) => const AccountUpdateScreen(),
         'UpdateEmailScreen': (context) => const UpdateEmailScreen(),
         'UpdatePhoneScreen': (context) => const UpdatePhoneScreen(),

@@ -64,10 +64,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 height: 40,
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignInScreen()),
-                    );
+                    Navigator.pushNamed(context, 'SignInScreen');
                   },
                   style: TextButton.styleFrom(
                     padding: EdgeInsets.zero,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
-import 'package:online_course_system/screens/AccountUpdateScreen.dart';
 import 'package:online_course_system/widgets/CustomListTitle.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -49,14 +48,14 @@ class AccountScreen extends StatelessWidget {
                 'Nguyễn Hình Duy H',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 24),
-              const Text(
-                'Trở thành giảng viên',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.primary500),
-              ),
+              // const SizedBox(height: 24),
+              // const Text(
+              //   'Trở thành giảng viên',
+              //   style: TextStyle(
+              //       fontSize: 18,
+              //       fontWeight: FontWeight.w600,
+              //       color: AppColors.primary500),
+              // ),
               const SizedBox(height: 24),
               CustomListTile(
                 title: 'Cập nhật thông tin',
@@ -72,7 +71,7 @@ class AccountScreen extends StatelessWidget {
                 onTap: () {},
               ),
               CustomListTile(
-                title: 'Xóa mật khẩu',
+                title: 'Xóa tài khoản',
                 onTap: () {},
               ),
               const SizedBox(height: 12),

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
-import 'package:online_course_system/screens/AccountScreen.dart';
-import 'package:online_course_system/screens/HomeScreen.dart';
-import 'package:online_course_system/screens/UpdateEmailScreen.dart';
-import 'package:online_course_system/screens/UpdatePhoneScreen.dart';
 import 'package:intl/intl.dart';
 
 class AccountUpdateScreen extends StatefulWidget {
