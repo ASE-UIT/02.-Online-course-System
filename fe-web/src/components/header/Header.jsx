@@ -9,22 +9,23 @@ const Header = () => {
   const [isLecturerLayout, setIsLecturerLayout] = useState(false);
 
   useEffect(() => {
-    if (location.pathname.startsWith("/web/lecturer")) setIsLecturerLayout(true);
+    if (location.pathname.startsWith("/web/lecturer"))
+      setIsLecturerLayout(true);
     else setIsLecturerLayout(false);
   }, [location]);
 
   const [open, setOpen] = useState(false);
   return (
-    <div className="flex flex-col md:flex-row fixed bg-white/95  left-0 right-0 top-0 items-center px-6 md:px-24 justify-between gap-4 py-4 md:py-0  z-[999]">
-      <Link
-        to={"./"}
-        style={{
-          backgroundImage: `url('/web/picture/textLogo.png')`,
-        }}
-        className="h-[40px] w-[100px] md:h-[60px] md:w-[120px] bg-no-repeat bg-contain bg-center"
-      ></Link>
+    <div className="flex flex-col md:flex-row fixed bg-white/95  left-0 right-0 top-0 items-center px-6 py-4 md:px-24 md:py-2 justify-between gap-4  z-[999]">
+      <Link to={"./"} className="bg-no-repeat bg-contain bg-center">
+        <img
+          src="/web/picture/textLogo.png"
+          alt="logo"
+          className=" w-[108px] h-full"
+        />
+      </Link>
 
-      <Combobox />
+      {/* <Combobox /> */}
 
       <SearchBox />
 
