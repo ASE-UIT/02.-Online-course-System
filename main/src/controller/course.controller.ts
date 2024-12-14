@@ -23,6 +23,7 @@ import { CourseSearchSortReq } from '@/dto/course/course-search-sort.req';
 import { IStudentCompleteLessonService } from '@/service/interface/i.student_complete_lesson.service';
 import { StudentCompleteLesson } from '@/models/student_complete_lesson.model';
 import { GetLearningProgressRes } from '@/dto/student_complete_lesson/get-learning-progress.res';
+import { CourseStatus } from '@/enums/course-status.enum';
 
 @injectable()
 export class CourseController {
@@ -173,6 +174,18 @@ export class CourseController {
       const page = parseInt(req.query.page as string) || 1;
       const rpp = parseInt(req.query.rpp as string) || 10;
 
+      let isApproved = undefined;
+
+      let lecturerId = undefined;
+
+      if (req.query.isApproved) {
+        isApproved = req.query.isApproved.toString() === 'true';
+      }
+
+      if (req.query.lecturerId) {
+        lecturerId = req.query.lecturerId.toString();
+      }
+
       const paging = new PagingDto(page, rpp);
 
       const response: PagingResponseDto<Course> = await this.courseService.findWithPaging({
@@ -180,7 +193,8 @@ export class CourseController {
         select: CourseSelectRes,
         relations: ['category', 'lecturer'],
         filter: {
-          isApproved: true
+          isApproved: isApproved,
+          lecturerId: lecturerId
         }
       });
 
@@ -199,7 +213,8 @@ export class CourseController {
       const result = await this.courseService.findOneAndUpdate({
         filter: { id: courseId },
         updateData: {
-          isApproved: true
+          isApproved: true,
+          status: CourseStatus.PUBLISHED
         }
       });
       res.send_ok('Duyệt khóa học thành công', result);

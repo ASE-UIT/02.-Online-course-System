@@ -88,7 +88,7 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
         }
       })
     ) {
-      throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Số điện thoại đã tồn tại');
+      throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Email đã tồn tại');
     }
 
     data.password = bcrypt.hashSync(data.password, 10);

@@ -13,6 +13,7 @@ import { Order } from '@/models/order.model';
 import { OrderItem } from '@/models/order_item.model';
 import { Payment } from '@/models/payment.model';
 import { ICartRepository } from '@/repository/interface/i.cart.repository';
+import { ICartItemRepository } from '@/repository/interface/i.cart_item.repository';
 import { ICourseRepository } from '@/repository/interface/i.course.repository';
 import { IDiscountRepository } from '@/repository/interface/i.discount.repository';
 import { IEnrollmentRepository } from '@/repository/interface/i.enrollment.repository';
@@ -31,13 +32,15 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
   private discountRepository: IDiscountRepository<Discount>;
   private enrollRepository: IEnrollmentRepository<Enrollment>;
   private courseRepository: ICourseRepository<Course>;
+  private cartItemRepository: ICartItemRepository<CartItem>;
 
   constructor(
     @inject('OrderRepository') orderRepository: IOrderRepository<Order>,
     @inject('CartRepository') cartRepository: ICartRepository<Cart>,
     @inject('EnrollmentRepository') enrollRepository: IEnrollmentRepository<Enrollment>,
     @inject('DiscountRepository') discountRepository: IDiscountRepository<Discount>,
-    @inject('CourseRepository') courseRepository: ICourseRepository<Course>
+    @inject('CourseRepository') courseRepository: ICourseRepository<Course>,
+    @inject('CartItemRepository') cartItemRepository: ICartItemRepository<CartItem>
   ) {
     super(orderRepository);
     this.orderRepository = orderRepository;
@@ -45,6 +48,7 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
     this.discountRepository = discountRepository;
     this.enrollRepository = enrollRepository;
     this.courseRepository = courseRepository;
+    this.cartItemRepository = cartItemRepository;
   }
   async createOrderWithCourseIds(requestBody: CreateOrderWithCourseIdsReq, studentId: string): Promise<Order> {
     //Get course from courseIds
@@ -297,6 +301,9 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
 
       await this.enrollRepository.save(enrollment);
     }
+
+    //Clean cart
+    await this.cartItemRepository.cleanCart(studentId);
 
     //Send success email
 
