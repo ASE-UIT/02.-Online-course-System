@@ -9,6 +9,8 @@ import 'package:online_course_system/models/learning_model.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
+import '../models/QuizAnswerRequest.dart';
+
 enum ContentType { video, quiz } // Loại nội dung (Video hoặc Quiz)
 
 class SelectedContent {
@@ -232,15 +234,14 @@ class _CourseScreenState extends State<CourseScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              onPressed: () {
+                              onPressed: () async {
                                 final quizId = quizzes?[currentIndex].id ?? ""; // Lấy quizId từ dữ liệu
-                                final body = {
-                                  "quizId": quizId,
-                                  "choices": selectedAnswers, // Danh sách các đáp án đã chọn
-                                };
+                                final request = QuizAnswerRequest(
+                                  quizId: quizId,
+                                  choices: selectedAnswers,
+                                );
 
-                                // Gửi API (thêm logic gọi API của bạn ở đây)
-                                print("Gửi dữ liệu: $body");
+                                await _learningVM.answerQuiz(request);
                                 // Logic for viewing the answer
                                 /*showDialog(
                                   context: context,

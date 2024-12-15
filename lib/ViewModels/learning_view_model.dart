@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:online_course_system/models/QuizAnswerRequest.dart';
 import 'package:online_course_system/models/UpdateLearningProgress.dart';
 import 'package:online_course_system/models/learning_model.dart';
 
@@ -41,8 +42,7 @@ class LearningViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       // Call API to update learning progress
-      final response = await HttpService.put(
-          "$_updateLearningProgressEndpoint",
+      final response = await HttpService.put("$_updateLearningProgressEndpoint",
           body: request.toJson());
       // Assuming the response is a Map and contains the learning data
       log('Update learning data: $response');
@@ -52,6 +52,23 @@ class LearningViewModel extends ChangeNotifier {
       log(errorMessage!);
     } finally {
       isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> answerQuiz(QuizAnswerRequest request) async {
+    notifyListeners();
+    try {
+      // Call API to answer quiz
+      final response = await HttpService.post("/quiz/answer",
+          body: request.toJson());
+      // Assuming the response is a Map and contains the learning data
+      log('Answer quiz data: $response');
+    } catch (e) {
+      log('Answer failed: $e');
+      log(errorMessage!);
+    } finally {
+      log('Answer OK');
       notifyListeners();
     }
   }
