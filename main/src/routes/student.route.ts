@@ -58,8 +58,8 @@ studentRouter
     studentController.changePassword.bind(studentController)
   )
 
-  .patch(
-    '/profile',
+  .put(
+    '/update-my-profile',
     classValidate(UpdateProfileReqDto),
     authenticateJWT, // Middleware xác thực người dùng
     studentController.updateProfile.bind(studentController)
