@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/constants/mockdata/courses.dart';
+import 'package:online_course_system/models/CategoryModel.dart';
 import 'package:online_course_system/screens/SignInScreen.dart';
 import 'package:online_course_system/widgets/CourseListCategory.dart';
 import 'package:online_course_system/widgets/HomeExploreCategory.dart';
@@ -20,10 +21,13 @@ class _CourseListScreenState extends State<CourseListScreen> {
   late CourseViewModel _courseVM;
   final storage = FlutterSecureStorage();
   String? token;
+  List<CategoryData?>? _categories = [];
 
   Future<void> _loadData() async {
     try {
       await _courseVM.getAllCourses();
+      var categories = await _courseVM.getCategories() ?? [];
+      _categories = categories;
     } catch (e) {
       debugPrint('Error loading courses: $e');
     }
@@ -114,7 +118,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
                             categoryTitle: 'Lịch học trực tiếp',
                             courses: _courseVM.courses,
                           ),
-                          const HomeExploreCategory(),
+                          HomeExploreCategory(categoryData: _categories,),
                         ],
                       ),
                     ),
@@ -175,7 +179,6 @@ class _CourseListScreenState extends State<CourseListScreen> {
     );
   }
 }
-
 
 Widget _buildInstructorInfoSection(BuildContext context) {
   return Padding(

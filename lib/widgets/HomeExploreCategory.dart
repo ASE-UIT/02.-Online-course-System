@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/mockdata/exploreTags.dart';
+import 'package:online_course_system/models/CategoryModel.dart';
 import 'package:online_course_system/widgets/BorderTag.dart';
 
 import '../constants/colors.dart';
 
 class HomeExploreCategory extends StatelessWidget {
-  const HomeExploreCategory({super.key});
+  final List<CategoryData?>? categoryData;
+
+  const HomeExploreCategory({super.key, this.categoryData});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +19,7 @@ class HomeExploreCategory extends StatelessWidget {
             const Expanded(
               child: Text(
                 "Khám phá EduHub",
-                style:  TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
                 ),
@@ -50,13 +53,13 @@ class HomeExploreCategory extends StatelessWidget {
           height: 40, // Điều chỉnh chiều cao phù hợp với CourseCard
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: exploreTags.length,
+            itemCount: categoryData?.length ?? 0,
             separatorBuilder: (context, index) => const SizedBox(width: 8),
             itemBuilder: (context, index) {
-              final course = exploreTags[index];
+              final course = categoryData?[index];
               return SizedBox(
                 child: BorderTag(
-                  text: course,
+                  text: course?.name ?? "",
                 ),
               );
             },

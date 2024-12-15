@@ -1,5 +1,6 @@
 import 'dart:developer' as developer;
 import 'dart:developer';
+import 'package:online_course_system/models/CategoryModel.dart';
 import 'package:online_course_system/models/course_detail.dart';
 
 import '../models/MyCourses.dart';
@@ -83,5 +84,21 @@ class CourseViewModel extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+    return null;
+  }
+  Future<List<CategoryData>?>? getCategories() async {
+    try {
+      final response = await HttpService.get('/course-category');
+      log('Category data: $response');
+      CategoryModel _categoryResponse = CategoryModel.fromJson(response);
+      return _categoryResponse.data;
+    } catch (e) {
+      log('Error getting categories: $e');
+    }
+    finally {
+      log('Category OK');
+      notifyListeners();
+    }
+    return null;
   }
 }
