@@ -1,7 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:online_course_system/ViewModels/verifyemail_view_model.dart';
+import 'package:online_course_system/ViewModels/signup_view_model.dart';
+import 'package:online_course_system/ViewModels/verifyOTP_view_model.dart';
 import 'package:online_course_system/constants/colors.dart';
+import 'package:online_course_system/models/emailsignup_model.dart';
+import 'package:online_course_system/models/phonesignup_model.dart';
 import 'package:online_course_system/models/verifyemail_model.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'dart:async';
@@ -17,7 +20,8 @@ class EmailVerificationScreen extends StatefulWidget {
 }
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
-  late VerifyEmailViewModel viewModel;
+  late VerifyOTPViewModel viewModel;
+  late SignupViewModel signUpViewModel;
   int _timerCountdown = 30;
   Timer? _timer;
 
@@ -26,7 +30,8 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   @override
   void initState() {
     super.initState();
-    viewModel = Provider.of<VerifyEmailViewModel>(context, listen: false);
+    viewModel = Provider.of<VerifyOTPViewModel>(context, listen: false);
+    signUpViewModel = Provider.of<SignupViewModel>(context, listen: false);
     startTimer();
   }
 
@@ -48,17 +53,31 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
     super.dispose();
   }
 
-  void resendOTP() {
+  Future<void> resendOTP(EmailSignUpRequest emailSignUpRequest) async {
     setState(() {
       _timerCountdown = 30; // Reset timer
     });
     startTimer();
     // Trigger resend OTP function here
+    var info = emailSignUpRequest.toJson().toString();
+    debugPrint('Info: $info');
+    await signUpViewModel.emailSignUp(emailSignUpRequest);
+
+    // Xử lý thành công hoặc lỗi
+    if (viewModel.errorMessage != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(viewModel.errorMessage!)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gửi lại OTP thành công!')),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final String email = ModalRoute.of(context)?.settings.arguments as String;
+    final EmailSignUpRequest emailSignUpRequest = ModalRoute.of(context)?.settings.arguments as EmailSignUpRequest;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -90,7 +109,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               const SizedBox(height: 20),
               const Text(
                 'Chúng tôi đã gửi cho bạn một mã OTP để xác thực email tài khoản. '
-                'Vui lòng nhập OTP được gửi trong email để hoàn tất quá trình cập nhật email.',
+                'Vui lòng nhập OTP được gửi trong email để hoàn tất quá trình đăng ký tài khoản.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: AppColors.black),
               ),
@@ -135,7 +154,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           if (_timerCountdown == 0) {
-                            resendOTP();
+                            resendOTP(emailSignUpRequest);
                           }
                         },
                     ),
@@ -147,11 +166,11 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                 onPressed: () async {
                   if (_pinController.text.length == 6) {
                     final verifyEmailRequest = VerifyEmailRequest(
-                        email: email, code: _pinController.text);
+                        email: emailSignUpRequest.email, code: _pinController.text);
 
                     var req = verifyEmailRequest.toJson().toString();
                     debugPrint('Request: $req');
-                    await viewModel.verify(verifyEmailRequest);
+                    await viewModel.verifyEmail(verifyEmailRequest);
 
                     if (viewModel.errorMessage != null) {
                       ScaffoldMessenger.of(context).showSnackBar(

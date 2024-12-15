@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:online_course_system/models/ProfileModel.dart';
 
 class AccountUpdateScreen extends StatefulWidget {
   const AccountUpdateScreen({super.key});
@@ -18,6 +19,8 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ProfileData profileData = ModalRoute.of(context)?.settings.arguments as ProfileData;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -65,7 +68,7 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
                     ),
                     const SizedBox(height: 8,),
                     _buildNavigationField(
-                        context, Icons.account_circle, 'Họ và tên', _name,
+                        context, Icons.account_circle, 'Họ và tên', profileData.name ?? "",
                         onTap: () {
                       _showEditDialog('Họ và tên', _name, (value) {
                         setState(() {
@@ -79,7 +82,7 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
                       color: AppColors.gray500,
                     ),
                     
-                    _buildNavigationField(context, Icons.email, 'Email', _email,
+                    _buildNavigationField(context, Icons.email, 'Email', profileData.email ?? "",
                         onTap: () {
                       Navigator.pushNamed(
                         context,
@@ -93,7 +96,7 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
                     ),
                     
                     _buildNavigationField(
-                        context, Icons.phone, 'Số điện thoại', _phone,
+                        context, Icons.phone, 'Số điện thoại', profileData.phoneNumber ?? "",
                         onTap: () {
                       Navigator.pushNamed(
                         context,

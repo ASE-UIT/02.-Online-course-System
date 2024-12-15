@@ -211,7 +211,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             TextButton(
                               onPressed: () {
                                 Navigator.pushNamed(
-                                    context, 'SignUpScreen');
+                                    context, 'EmailSignUpScreen');
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,

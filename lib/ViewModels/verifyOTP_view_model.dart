@@ -1,58 +1,58 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:online_course_system/models/phonesignup_model.dart';
+import 'package:online_course_system/models/verifyemail_model.dart';
+import 'package:online_course_system/models/verifyphone_model.dart';
 
-import '../models/emailsignup_model.dart';
 import '../services/HttpConfig.dart';
 
-class SignupViewModel extends ChangeNotifier {
+class VerifyOTPViewModel extends ChangeNotifier {
   bool isLoading = false;
   String? errorMessage;
 
 
-  Future<void> emailSignUp(EmailSignUpRequest request) async {
+  Future<void> verifyEmail(VerifyEmailRequest request) async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
 
-    log(request.toJson().toString(), name: 'SignUpRequest');
+    log(request.toJson().toString(), name: 'VerifyEmailRequest');
 
     try {
       final response = await HttpService.post(
-        '/student/register-email',
+        '/student/activate-email',
         body: request.toJson(),
       );
 
-      log('SignUp success, response: ${response.toString()}');
+      log('VerifyEmail success, response: ${response.toString()}');
     } catch (e) {
       errorMessage = 'Đã xảy ra lỗi: $e';
       debugPrint('Error: $e');
-      log(errorMessage!, name: 'SignUpError');
+      log(errorMessage!, name: 'VerifyEmailError');
     } finally {
       isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> phoneSignUp(PhoneSignUpRequest request) async {
+  Future<void> verifyPhone(VerifyPhoneRequest request) async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
 
-    log(request.toJson().toString(), name: 'SignUpRequest');
+    log(request.toJson().toString(), name: 'VerifyPhoneRequest');
 
     try {
       final response = await HttpService.post(
-        '/student/register-phone',
+        '/student/activate-phone',
         body: request.toJson(),
       );
 
-      log('SignUp success, response: ${response.toString()}');
+      log('VerifyEmail success, response: ${response.toString()}');
     } catch (e) {
       errorMessage = 'Đã xảy ra lỗi: $e';
       debugPrint('Error: $e');
-      log(errorMessage!, name: 'SignUpError');
+      log(errorMessage!, name: 'VerifyPhoneError');
     } finally {
       isLoading = false;
       notifyListeners();

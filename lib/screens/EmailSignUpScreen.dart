@@ -1,19 +1,19 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:online_course_system/ViewModels/signup_view_model.dart';
-import 'package:online_course_system/models/signup_model.dart';
+import 'package:online_course_system/models/emailsignup_model.dart';
 import 'package:online_course_system/widgets/customtextfield.dart';
 import 'package:provider/provider.dart';
 import '../constants/colors.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+class EmailSignUpScreen extends StatefulWidget {
+  const EmailSignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<EmailSignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends State<EmailSignUpScreen> {
   late SignupViewModel viewModel;
 
   final TextEditingController nameController = TextEditingController();
@@ -141,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           onPressed: () async {
                             if (_formKey.currentState!.validate()) {
                               log('Form hợp lệ');
-                              final signupRequest = SignUpRequest(
+                              final signupRequest = EmailSignUpRequest(
                                 name: nameController.text,
                                 email: emailController.text,
                                 password: passwordController.text,
@@ -149,7 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                               var info = signupRequest.toJson().toString();
                               debugPrint('Info: $info');
-                              await viewModel.signup(signupRequest);
+                              await viewModel.emailSignUp(signupRequest);
 
                               // Xử lý thành công hoặc lỗi
                               if (viewModel.errorMessage != null) {
@@ -165,7 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 );
                                 Navigator.pushNamed(
                                     context, 'EmailVerificationScreen',
-                                    arguments: emailController.text);
+                                    arguments: signupRequest);
                               }
                             } else {
                               log('Form không hợp lệ');
@@ -185,6 +185,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white),
                           ),
+                        ),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text('Hoặc đăng ký bằng số thoại? '),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, 'PhoneSignUpScreen');
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: const Text(
+                                'Đăng ký mới',
+                                style: TextStyle(
+                                  color: Color(0xFF0038FF),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 24),
                         Row(

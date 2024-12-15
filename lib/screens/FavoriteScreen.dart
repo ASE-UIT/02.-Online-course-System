@@ -30,6 +30,7 @@ class FavoriteScreen extends StatelessWidget {
             child: Column(
               children: [
                 FavoriteCard(
+                  id: "",
                   courseName: 'Tên khóa học',
                   authorName: 'Tên tác giả',
                   rating: 5.0,
@@ -41,6 +42,7 @@ class FavoriteScreen extends StatelessWidget {
                   isBestSeller: false,
                 ),
                 FavoriteCard(
+                  id: "",
                   courseName: 'Tên khóa học',
                   authorName: 'Tên tác giả',
                   rating: 5.0,
