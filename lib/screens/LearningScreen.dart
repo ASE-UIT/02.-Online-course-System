@@ -33,10 +33,12 @@ class _CourseScreenState extends State<CourseScreen> {
   late ChewieController _chewieController;
   LearningData? _learningModel;
   List<LessonParts>? lessonParts;
+  List<Quizzes>? quizzes;
   Lessons? currentSelect; // Add this variable to track the selected lesson
   SelectedContent? currentItem; // Biến chung để lưu trạng thái
   bool isLoading = true;
-
+  int currentIndex = 0; // Chỉ số câu hỏi hiện tại
+  List<String> selectedAnswers = []; // Danh sách câu trả lời đã chọn
   @override
   void initState() {
     super.initState();
@@ -102,11 +104,18 @@ class _CourseScreenState extends State<CourseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: AppColors.primary950,
-        title: Text(_learningModel?.name ?? "Tên khóa học"),
+        title: Text(_learningModel?.name ?? "Tên khóa học",
+            style: TextStyle(
+              color: Colors.white,
+            )),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
           onPressed: () async {
             log("currentSelect: ${currentSelect?.title}");
             double progress =
@@ -138,27 +147,154 @@ class _CourseScreenState extends State<CourseScreen> {
                             aspectRatio: 16 / 9,
                           )
                   else if (currentItem?.type == ContentType.quiz)
-                    Expanded(
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              "Câu hỏi:",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+                          Text(
+                            "Câu hỏi:",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          // Question UI (based on your design)
+                          Text(
+                            quizzes?[currentIndex].content ?? "Câu hỏi",
+                            // Your question text here
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          SizedBox(height: 20),
+                          // Answer options (radio buttons for multiple choice)
+                          ListView(
+                            shrinkWrap: true,
+                            children: [
+                              CheckboxListTile(
+                                value: selectedAnswers.contains("A"),
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedAnswers.add("A");
+                                    } else {
+                                      selectedAnswers.remove("A");
+                                    }
+                                  });
+                                },
+                                title: Text(quizzes?[currentIndex].choiceA ?? ""),
+                              ),
+                              CheckboxListTile(
+                                value: selectedAnswers.contains("B"),
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedAnswers.add("B");
+                                    } else {
+                                      selectedAnswers.remove("B");
+                                    }
+                                  });
+                                },
+                                title: Text(quizzes?[currentIndex].choiceB ?? ""),
+                              ),
+                              CheckboxListTile(
+                                value: selectedAnswers.contains("C"),
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedAnswers.add("C");
+                                    } else {
+                                      selectedAnswers.remove("C");
+                                    }
+                                  });
+                                },
+                                title: Text(quizzes?[currentIndex].choiceC ?? ""),
+                              ),
+                              CheckboxListTile(
+                                value: selectedAnswers.contains("D"),
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedAnswers.add("D");
+                                    } else {
+                                      selectedAnswers.remove("D");
+                                    }
+                                  });
+                                },
+                                title: Text(quizzes?[currentIndex].choiceD ?? ""),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 20),
+                          // Button to view the answer
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary500,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              onPressed: () {
+                                final quizId = quizzes?[currentIndex].id ?? ""; // Lấy quizId từ dữ liệu
+                                final body = {
+                                  "quizId": quizId,
+                                  "choices": selectedAnswers, // Danh sách các đáp án đã chọn
+                                };
+
+                                // Gửi API (thêm logic gọi API của bạn ở đây)
+                                print("Gửi dữ liệu: $body");
+                                // Logic for viewing the answer
+                                /*showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text("Đáp án đúng"),
+                                      content: Text("Đáp án đúng là: Đáp án 2"),
+                                      // Display correct answer
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text("Đóng"),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );*/
+                              },
+                              child: Text(
+                                "Xem đáp án",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ),
-                          // Giao diện câu hỏi
-                          Text("Giao diện câu hỏi sẽ hiển thị ở đây."),
+                          SizedBox(height: 8),
+                          // Button to view the answer
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primary500,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  currentIndex++;
+                                  selectedAnswers.clear(); // Xóa danh sách đáp án khi chuyển sang câu hỏi tiếp theo
+                                });
+                              },
+                              child: Text(
+                                "Tiếp theo",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
-                      ),
-                    )
-                  else
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Center(
-                        child: Text("Chọn một nội dung để bắt đầu."),
                       ),
                     ),
                   Expanded(
@@ -286,7 +422,7 @@ class _CourseScreenState extends State<CourseScreen> {
                                       ),
                                     ),
                                     subtitle: Text(
-                                        "${lessonPart?.lessons?.length} câu hỏi"),
+                                        "${lessonPart?.quizzes?.length} câu hỏi"),
                                     trailing: Icon(
                                       Icons.check_circle,
                                       color: Colors.green,
@@ -298,8 +434,10 @@ class _CourseScreenState extends State<CourseScreen> {
                                           currentItem = SelectedContent(
                                             type: ContentType.quiz,
                                             data: lessonPart
-                                                ?.lessons, // Dữ liệu quiz
+                                                ?.quizzes, // Dữ liệu quiz
                                           );
+                                          quizzes = lessonPart?.quizzes;
+                                          log(quizzes?[0].content ?? "");
                                         },
                                       );
                                     },
