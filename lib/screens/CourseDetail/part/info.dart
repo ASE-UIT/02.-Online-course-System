@@ -107,7 +107,15 @@ class CourseInfo extends StatelessWidget {
           const SizedBox(height: 20),
           Row(
             children: [
-              const Expanded(child: BuyNowButton()),
+              Expanded(
+                child: BuyNowButton(
+                  courseId: courseDetail.id ?? '',
+                  courseName: courseDetail.name ?? '',
+                  lecturerName: courseDetail.lecturer?.name ?? '',
+                  sellPrice: courseDetail.sellPrice ?? '0',
+                  originalPrice: courseDetail.originalPrice ?? '0',
+                ),
+              ),
               const SizedBox(width: 16),
               FavouriteButton(isFavourite: false),
             ],

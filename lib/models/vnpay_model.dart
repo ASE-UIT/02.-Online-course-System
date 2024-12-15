@@ -1,36 +1,31 @@
+//vnpay_model.dart
 class VNPay {
-  final String? status;
-  final int? code;
-  final bool? success;
-  final String? message;
+  final String status;
+  final int code;
+  final bool success;
+  final String message;
   final VNPayData? data;
   final dynamic errors;
 
   VNPay({
-    this.status,
-    this.code,
-    this.success,
-    this.message,
+    required this.status,
+    required this.code,
+    required this.success,
+    required this.message,
     this.data,
     this.errors,
   });
 
-  VNPay.fromJson(Map<String, dynamic> json)
-    : status = json['status'] as String?,
-      code = json['code'] as int?,
-      success = json['success'] as bool?,
-      message = json['message'] as String?,
-      data = (json['data'] as Map<String,dynamic>?) != null ? VNPayData.fromJson(json['data'] as Map<String,dynamic>) : null,
-      errors = json['errors'];
-
-  Map<String, dynamic> toJson() => {
-    'status' : status,
-    'code' : code,
-    'success' : success,
-    'message' : message,
-    'data' : data?.toJson(),
-    'errors' : errors
-  };
+  factory VNPay.fromJson(Map<String, dynamic> json) {
+    return VNPay(
+      status: json['status'],
+      code: json['code'],
+      success: json['success'],
+      message: json['message'],
+      data: json['data'] != null ? VNPayData.fromJson(json['data']) : null,
+      errors: json['errors'],
+    );
+  }
 }
 
 class VNPayData {
@@ -40,10 +35,9 @@ class VNPayData {
     this.payUrl,
   });
 
-  VNPayData.fromJson(Map<String, dynamic> json)
-    : payUrl = json['payUrl'] as String?;
-
-  Map<String, dynamic> toJson() => {
-    'payUrl' : payUrl
-  };
+  factory VNPayData.fromJson(Map<String, dynamic> json) {
+    return VNPayData(
+      payUrl: json['payUrl'],
+    );
+  }
 }

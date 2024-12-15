@@ -35,7 +35,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
   }
 
 
-
   @override
   void initState() {
     super.initState();
@@ -98,7 +97,18 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                 visible: !_isButtonVisible,
                 child: Padding( 
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                  child: BuyNowButton(),                                         
+                  child: Consumer<CourseViewModel>(
+                    builder: (context, courseViewModel, child) {
+                      final courseDetail = courseViewModel.courseDetail;
+                      return BuyNowButton(
+                        courseId: courseDetail.id ?? '',
+                        courseName: courseDetail.name ?? '',
+                        lecturerName: courseDetail.lecturer?.name ?? '',
+                        sellPrice: courseDetail.sellPrice ?? '0',
+                        originalPrice: courseDetail.originalPrice ?? '0',
+                      );
+                    }, 
+                  ),                                      
                 ),
               ),
             ),
