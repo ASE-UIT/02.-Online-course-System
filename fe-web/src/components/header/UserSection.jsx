@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { List, LogOut, ShoppingCart, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import AvatarSection from "./AvatarSection";
 
 function UserSection() {
   const location = useLocation();
@@ -25,7 +26,7 @@ function UserSection() {
 
   useEffect(() => {
     const auth = JSON.parse(localStorage.getItem("auth"));
-    if (auth && auth.length > 0) {
+    if (auth && auth?.length > 0) {
       setIsStudentLoggedIn(true);
     } else {
       setIsStudentLoggedIn(false);
@@ -34,7 +35,7 @@ function UserSection() {
 
   useEffect(() => {
     const authLecturer = JSON.parse(localStorage.getItem("authLecturer"));
-    if (authLecturer && authLecturer.length > 0) {
+    if (authLecturer && authLecturer?.length > 0) {
       setIsLecturerLogin(true);
     } else {
       setIsLecturerLogin(false);
@@ -73,39 +74,55 @@ function UserSection() {
           onMouseEnter={() => setOpen(true)}
           onMouseLeave={() => setOpen(false)}
         >
-          <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center cursor-pointer">
-            <div className="flex justify-center items-center">
-              <span className="text-white font-semibold w-[40px] h-10 text-center"></span>
-            </div>
-          </div>
+          <AvatarSection isStudentLayout={isStudentLayout} />
 
           {open && (
             <div className="w-[240px] before:w-[120px] before:h-[20px] border  before:absolute before:top-[-20px] before:right-[50%] before:translate-x-[50%]  mt-[5px] bg-white shadow-md rounded-sm right-[50%] translate-x-[50%] top-[100%] absolute">
-              <Link to={"./profile"}>
-                <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
-                  <p className="text-text/md/normal">Hồ sơ tài khoản</p>
-                  <User className="text-lg"></User>
-                </div>
-              </Link>
-              <Link to={"/web/course-list"}>
-                <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
-                  <p className="text-text/md/normal">Danh sách khóa học</p>
-                  <List className="text-lg"></List>
-                </div>
-              </Link>
-              <Link to={"/web/cart"}>
-                <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
-                  <p className="text-text/md/normal">Giỏ hàng của bạn</p>
-                  <ShoppingCart className="text-lg"></ShoppingCart>
-                </div>
-              </Link>
+              {isStudentLayout ? (
+                <Link to={"./profile"}>
+                  <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
+                    <p className="text-text/md/normal">Hồ sơ tài khoản</p>
+                    <User className="text-lg"></User>
+                  </div>
+                </Link>
+              ) : (
+                <Link to={"./lecturer/profile"}>
+                  <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
+                    <p className="text-text/md/normal">Hồ sơ tài khoản</p>
+                    <User className="text-lg"></User>
+                  </div>
+                </Link>
+              )}
+              {isStudentLayout ? (
+                <Link to={"/web/course-list"}>
+                  <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
+                    <p className="text-text/md/normal">Danh sách khóa học</p>
+                    <List className="text-lg"></List>
+                  </div>
+                </Link>
+              ) : (
+                <Link to={"/web/lecturer/course"}>
+                  <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
+                    <p className="text-text/md/normal">Khoá học của tôi</p>
+                    <List className="text-lg"></List>
+                  </div>
+                </Link>
+              )}
+              {isStudentLayout && (
+                <Link to={"/web/cart"}>
+                  <div className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl">
+                    <p className="text-text/md/normal">Giỏ hàng của bạn</p>
+                    <ShoppingCart className="text-lg"></ShoppingCart>
+                  </div>
+                </Link>
+              )}
               <div
                 onClick={() => {
                   handleLogout();
                 }}
                 className="flex justify-between px-4 transition-all rounded-t-md cursor-pointer hover:bg-primary-50 gap-1 items-center py-2 hover:shadow-xl"
               >
-                <p className="text-text/md/normal">Đăng xuất</p>
+                <p className="text-text/md/normal ">Đăng xuất</p>
                 <LogOut className="text-lg"></LogOut>
               </div>
             </div>
