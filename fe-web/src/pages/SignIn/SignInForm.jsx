@@ -22,6 +22,7 @@ import GoogleSignIn from "./Google/GoogleSignIn";
 import CustomFacebookSignIn from "./Facebook/FacebookSignIn";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import config from "@/config";
+import { jwtDecode } from "jwt-decode";
 
 const formSchema = z.object({
   email: z.string().min(6, {
@@ -64,11 +65,9 @@ function SignInForm() {
       if (respone.status === 200 || respone.data.code === 200) {
         console.log("respone.data", respone.data.data.token);
         const token = respone.data.data.token;
-        dispatch(
-          addAuth({
-            token
-          })
-        );
+        const decodeToken = jwtDecode(token);
+
+        dispatch(addAuth({ decodeToken, token }));
         navigate("/web/");
         toast({
           title: <p className=" text-green-700">Đăng nhập thành công</p>,
