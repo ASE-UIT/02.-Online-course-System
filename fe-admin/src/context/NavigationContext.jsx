@@ -29,19 +29,9 @@ export const menuItems = [
         path: "courses/category-list"
       },
       {
-        text: "Danh sách khoá học",
-        id: "courseList",
-        path: "courses/list"
-      },
-      {
         text: "Khoá học chờ duyệt",
         id: "categoryList",
         path: "courses/waiting-course"
-      },
-      {
-        text: "Thu nhập từ khoá học",
-        id: "categoryList",
-        path: "courses/category-list"
       }
     ]
   },
@@ -60,11 +50,6 @@ export const menuItems = [
         text: "Đăng ký giảng viên",
         id: "teacherRegistration",
         path: "teacher/registration"
-      },
-      {
-        text: "Thu nhập của giảng viên",
-        id: "teacherIncome",
-        path: "teacher/income"
       }
     ]
   },
