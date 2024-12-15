@@ -64,11 +64,8 @@ function SignInForm() {
       if (respone.status === 200 || respone.data.code === 200) {
         console.log("respone.data", respone.data.data.token);
         const token = respone.data.data.token;
-        dispatch(
-          addAuth({
-            token
-          })
-        );
+
+        dispatch(addAuth({ token }));
         navigate("/web/");
         toast({
           title: <p className=" text-green-700">Đăng nhập thành công</p>,
