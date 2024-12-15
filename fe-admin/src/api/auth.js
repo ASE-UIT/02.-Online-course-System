@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./apiConfig";
 
 const checkAuth = () => {
   /*  Getting token value stored in localstorage, if token is not present we will open login page 
@@ -15,9 +15,9 @@ const checkAuth = () => {
     // window.location.href = "/login";
     return;
   } else {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${TOKEN.token}`;
+    api.defaults.headers.common["Authorization"] = `Bearer ${TOKEN.token}`;
 
-    axios.interceptors.request.use(
+    api.interceptors.request.use(
       function (config) {
         // UPDATE: Add this code to show global loading indicator
         document.body.classList.add("loading-indicator");
@@ -28,7 +28,7 @@ const checkAuth = () => {
       }
     );
 
-    axios.interceptors.response.use(
+    api.interceptors.response.use(
       function (response) {
         // UPDATE: Add this code to hide global loading indicator
         document.body.classList.remove("loading-indicator");
