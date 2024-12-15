@@ -98,16 +98,39 @@ export const courseRTKApi = baseApi.injectEndpoints({
       },
     }),
     searchCourses: build.query({
+      query: ({ filter, sort, rpp = 10, page = 1 }) => {
+        const body = {
+          min_score: 0.5,
+          query: {
+            bool: {
+              must: filter || [],
+            },
+          },
+          sort: [{ [sort.key]: { order: sort.type.toLowerCase() } }],
+          from: (page - 1) * rpp,
+          size: rpp,
+        };
+
+        // console.log("Request Body:", JSON.stringify(body, null, 2));
+
+        return {
+          url: "https://eduhub.io.vn/eduhub-search/courses/_search?filter_path=hits.hits._source,hits.total",
+          method: "POST",
+          body: JSON.stringify(body),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        };
+      },
+    }),
+    searchBox: build.query({
       query: ({ filter, sort, rpp, page }) => {
-        // Constructing the parameters
         const params = {
           filter: JSON.stringify(filter),
           sort: JSON.stringify(sort),
           rpp,
           page,
         };
-
-        // Constructing the full URL with parameters
         const fullUrl = `course/search?${new URLSearchParams(params).toString()}`;
 
         return { url: fullUrl, method: "GET" };
@@ -130,6 +153,7 @@ export const {
   useGetCoursesByCategoryIdQuery,
   useGetCoursesByLecturerIdQuery,
   useSearchCoursesQuery,
+  useSearchBoxQuery,
   useGetQuizDoneByCourseIdQuery,
 
   useUpdateCourseMutation,
