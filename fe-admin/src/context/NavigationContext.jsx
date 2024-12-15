@@ -3,12 +3,11 @@ import { createContext, useContext, useState } from "react";
 import {
   LayoutDashboard,
   Layers,
-  UserRoundCog,
   Users,
   Building2,
   School,
-  BaggageClaim,
-  ChartNoAxesCombined
+  HandCoins,
+  Package
 } from "lucide-react";
 
 export const menuItems = [
@@ -19,31 +18,8 @@ export const menuItems = [
     path: "dashboard"
   },
   {
-    icon: ChartNoAxesCombined,
-    text: "Báo cáo",
-    id: "revenue",
-    path: "revenue",
-    subItems: [
-      {
-        text: "Doanh thu tổng quan",
-        id: "overall",
-        path: "overall"
-      },
-      {
-        text: "Theo khoá học",
-        id: "byCourse",
-        path: "byCourse"
-      },
-      {
-        text: "Theo giảng viên",
-        id: "byTeacher",
-        path: "byTeacher"
-      }
-    ]
-  },
-  {
     icon: Layers,
-    text: "Khoá học",
+    text: "Quản lý danh mục",
     id: "courses",
     path: "courses/category-list",
     subItems: [
@@ -71,7 +47,7 @@ export const menuItems = [
   },
   {
     icon: School,
-    text: "Giảng viên",
+    text: "Quảng lý giảng viên",
     id: "teacher",
     path: "teacher/list",
     subItems: [
@@ -94,27 +70,44 @@ export const menuItems = [
   },
   {
     icon: Users,
-    text: "Nhân viên",
+    text: "Quản lý hân viên",
     id: "employees",
     path: "employees"
   },
   {
-    icon: UserRoundCog,
-    text: "Phân quyền",
-    id: "users",
-    path: "users"
-  },
-  {
     icon: Building2,
-    text: "Doanh nghiệp",
+    text: "Quản lý doanh nghiệp",
     id: "business",
     path: "business"
   },
   {
-    icon: BaggageClaim,
-    text: "Danh sách đơn hàng",
+    icon: Package,
+    text: "Quản lý đơn hàng",
     id: "order",
     path: "order"
+  },
+  {
+    icon: HandCoins,
+    text: "Doanh thu",
+    id: "revenue",
+    path: "revenue",
+    subItems: [
+      {
+        text: "Doanh thu tổng quan",
+        id: "overall",
+        path: "overall"
+      },
+      {
+        text: "Theo khoá học",
+        id: "byCourse",
+        path: "byCourse"
+      },
+      {
+        text: "Theo giảng viên",
+        id: "byTeacher",
+        path: "byTeacher"
+      }
+    ]
   }
 ];
 
