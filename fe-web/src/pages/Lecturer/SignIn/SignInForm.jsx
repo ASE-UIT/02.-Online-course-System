@@ -17,7 +17,6 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { loginLecturer } from "@/api";
 import { addAuthLercturer } from "@/store/slices/authLecturerSlice";
-import { jwtDecode } from "jwt-decode";
 
 const formSchema = z.object({
   email: z.string().min(6, {
@@ -59,9 +58,8 @@ function SignInForm() {
 
       if (response.status === 200 || response.data?.code === 200) {
         const token = response.data?.data?.token;
-        const decodeToken = jwtDecode(token);
 
-        dispatch(addAuthLercturer({ decodeToken, token }));
+        dispatch(addAuthLercturer({ token }));
         toast({
           title: <p className=" text-green-700">Đăng nhập thành công</p>,
           description: "Chào mừng bạn trở lại",

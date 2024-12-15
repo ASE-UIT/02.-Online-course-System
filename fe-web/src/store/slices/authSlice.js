@@ -15,8 +15,8 @@ export const authSlice = createSlice({
   reducers: {
     addAuth: (state, action) => {
       console.log("action.payload", action.payload);
-      let authInfor = action.payload;
-      state.auth = authInfor;
+      let { token } = action.payload;
+      state.auth = token;
 
       localStorage.setItem("auth", JSON.stringify(state.auth));
     },
