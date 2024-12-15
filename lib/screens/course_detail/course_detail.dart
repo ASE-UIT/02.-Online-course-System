@@ -13,6 +13,7 @@ import 'widgets/add_to_cart_button.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final String courseId;
+
   const CourseDetailPage({Key? key, required this.courseId}) : super(key: key);
 
   @override
@@ -22,21 +23,28 @@ class CourseDetailPage extends StatefulWidget {
 class _CourseDetailPageState extends State<CourseDetailPage> {
   final ScrollController _scrollController = ScrollController();
   bool _isButtonVisible = true;
-
+  bool isLoading = true;
   late CourseViewModel _courseDetailVM;
 
   Future<void> _loadData() async {
     try {
+      setState(() {
+        isLoading =
+            true; // Set loading state to true when starting the data fetch
+      });
       debugPrint('CourseId: ${widget.courseId}');
       await _courseDetailVM.getCourseDetail(widget.courseId);
-      debugPrint('length: ${_courseDetailVM.courseDetail.courseTargets?.length}');
-      debugPrint("model"+_courseDetailVM.courseDetail.toString());
+      debugPrint(
+          'length: ${_courseDetailVM.courseDetail.courseTargets?.length}');
+      debugPrint("model" + _courseDetailVM.courseDetail.toString());
     } catch (e) {
       debugPrint('Error loading courses 2: $e');
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
-
-
 
   @override
   void initState() {
@@ -44,7 +52,8 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     _scrollController.addListener(() {
       setState(() {
         // Khi vị trí cuộn vượt qua một ngưỡng nhất định, ẩn nút "Thêm vào giỏ hàng" ở dưới cùng
-        _isButtonVisible = _scrollController.offset < 500;  // 500 là giá trị ngưỡng
+        _isButtonVisible =
+            _scrollController.offset < 500; // 500 là giá trị ngưỡng
       });
     });
     // Fetch courses asynchronously when the screen initializes
@@ -60,55 +69,60 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    const String courseIntroText = '...';  // Nội dung text của khoá học
+    const String courseIntroText = '...'; // Nội dung text của khoá học
 
     return SafeArea(
       child: Scaffold(
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              controller: _scrollController,
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              ) // Show loading indicator when fetching data
+            : Stack(
                 children: [
-                  CourseHeader(),
-                  const Image(
-                    image: AssetImage('assets/course_image.png'),
-                    width: double.infinity,
+                  SingleChildScrollView(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CourseHeader(),
+                        const Image(
+                          image: AssetImage('assets/course_image.png'),
+                          width: double.infinity,
+                        ),
+                        const SizedBox(height: 20),
+                        CourseInfo(courseDetail: _courseDetailVM.courseDetail),
+                        const SizedBox(height: 16),
+                        CourseIntro(
+                            text: _courseDetailVM.courseDetail.introduction ??
+                                courseIntroText),
+                        const SizedBox(height: 16),
+                        CourseContent(),
+                        const SizedBox(height: 16),
+                        CourseLecturerInfo(
+                            courseDetail: _courseDetailVM.courseDetail),
+                        const SizedBox(height: 16),
+                        CourseReviews(),
+                        const SizedBox(height: 16),
+                        // Các widget khác
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 20),
-                  CourseInfo(courseDetail: _courseDetailVM.courseDetail),
-                  const SizedBox(height: 16),
-                  CourseIntro(text: _courseDetailVM.courseDetail.introduction ?? courseIntroText),
-                  const SizedBox(height: 16),
-                  CourseContent(),
-                  const SizedBox(height: 16),
-                  CourseLecturerInfo(courseDetail: _courseDetailVM.courseDetail),
-                  const SizedBox(height: 16),
-                  CourseReviews(),
-                  const SizedBox(height: 16),
-                  // Các widget khác
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Visibility(
+                      visible: !_isButtonVisible,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
+                        child: AddToCartButton(),
+                      ),
+                    ),
+                  ),
                 ],
               ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-
-              child: Visibility(
-                visible: !_isButtonVisible,
-                child: Padding( 
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-                  child: AddToCartButton(),                                         
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
 }
-
