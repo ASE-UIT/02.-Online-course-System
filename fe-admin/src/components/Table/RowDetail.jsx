@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom";
 import { approveCourse } from "@/api/courseApi";
 import { useToast } from "@/hooks/use-toast";
 import { set } from "date-fns";
+import { approveLecturer } from "@/api/lecturerApi";
 
 const RowDetail = ({ row, headerList, pageName, setLoading }) => {
   const url = useLocation();
@@ -24,6 +25,12 @@ const RowDetail = ({ row, headerList, pageName, setLoading }) => {
       }
       return JSON.stringify(value);
     }
+    if (value === true) {
+      return "Đã duyệt";
+    }
+    if (value === false) {
+      return "Chưa duyệt";
+    }
     return value;
   };
 
@@ -34,6 +41,24 @@ const RowDetail = ({ row, headerList, pageName, setLoading }) => {
       console.log("Approve course", response);
       toast({
         description: `Duyệt khoá học ${row?.name ? row.name : id} thành công`
+      });
+      setLoading(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
+    } catch (error) {
+      console.log("Approve course error", error);
+      setLoading(false);
+    }
+  };
+
+  const handleApproveLecturer = (id) => async () => {
+    try {
+      setLoading(true);
+      const response = await approveLecturer(id);
+      console.log("Approve course", response);
+      toast({
+        description: `Duyệt giảng viên ${row?.name ? row.name : id} thành công`
       });
       setLoading(false);
       setTimeout(() => {
@@ -107,6 +132,17 @@ const RowDetail = ({ row, headerList, pageName, setLoading }) => {
               >
                 Duyệt
                 {/* <ExternalLink size={16} className="ml-1" /> */}
+              </Button>
+            )}
+          </>
+          <>
+            {pageName === CURRENT_PAGES.LECTURER_PAGE && (
+              <Button
+                variant="outline"
+                className=" text-black px-4 py-2 border-black"
+                onClick={handleApproveLecturer(row.id)}
+              >
+                Duyệt giảng viên
               </Button>
             )}
           </>

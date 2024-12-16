@@ -16,11 +16,14 @@ import { getAllCategories } from "@/api/courseApi";
 const ManageCategories = () => {
   const [columnVisibility, setColumnVisibility] = useState({});
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const res = await getAllCategories();
       setData(res.data);
+      setLoading(false);
     }
     fetchData();
   }, []);
@@ -38,6 +41,8 @@ const ManageCategories = () => {
           setColumnVisibility={setColumnVisibility}
           headerList={categoriesList}
           pageName={CURRENT_PAGES.CATEGORY_PAGE}
+          loading={loading}
+          setLoading={setLoading}
         />
       </div>
     </div>

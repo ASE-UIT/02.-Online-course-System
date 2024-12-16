@@ -45,17 +45,17 @@ export const menuItems = [
         text: "Danh sách giảng viên",
         id: "teacherList",
         path: "teacher/list"
-      },
-      {
-        text: "Đăng ký giảng viên",
-        id: "teacherRegistration",
-        path: "teacher/registration"
       }
+      // {
+      //   text: "Đăng ký giảng viên",
+      //   id: "teacherRegistration",
+      //   path: "teacher/registration"
+      // }
     ]
   },
   {
     icon: Users,
-    text: "Quản lý hân viên",
+    text: "Quản lý nhân viên",
     id: "employees",
     path: "employees"
   },

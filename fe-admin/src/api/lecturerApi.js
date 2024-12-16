@@ -9,3 +9,13 @@ export const getAllLecturers = async (rpp, page) => {
     throw error;
   }
 };
+
+export const approveLecturer = async (lecturerId) => {
+  try {
+    const res = await api.put(`/lecturer/approve/${lecturerId}`);
+    return res.data;
+  } catch (error) {
+    console.error("API call error:", error.response || error.message);
+    throw error;
+  }
+};
