@@ -1,3 +1,4 @@
+/*
 
 import 'package:flutter/material.dart';
 import 'package:online_course_system/models/course_detail.dart';
@@ -143,4 +144,4 @@ class CourseInfo extends StatelessWidget {
       ),
     );
   }
-}
+}*/
