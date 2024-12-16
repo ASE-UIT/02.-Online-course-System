@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:typed_data';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class HttpService {
   // Base URL của API
@@ -11,7 +11,7 @@ class HttpService {
   static final storage = new FlutterSecureStorage();
   // API Key nếu cần
   static const String apiKey = 'YOUR_API_KEY';
-  static String getUrl(){
+  static String getUrl() {
     return baseUrl;
   }
 
@@ -20,6 +20,7 @@ class HttpService {
     String? token = await storage.read(key: 'token');
     return token; // Khóa lưu token
   }
+
   // GET Request
   static Future<dynamic> get(String endpoint) async {
     try {
@@ -41,7 +42,8 @@ class HttpService {
 
   // POST Request
   // POST Request
-  static Future<dynamic> post(String endpoint, {Map<String, dynamic>? body}) async {
+  static Future<dynamic> post(String endpoint,
+      {Map<String, dynamic>? body}) async {
     try {
       final token = await _getToken();
 
@@ -62,7 +64,8 @@ class HttpService {
   }
 
   // PUT Request
-  static Future<dynamic> put(String endpoint, {Map<String, dynamic>? body}) async {
+  static Future<dynamic> put(String endpoint,
+      {Map<String, dynamic>? body}) async {
     try {
       final token = await _getToken();
       final response = await http.put(
@@ -100,10 +103,35 @@ class HttpService {
     }
   }
 
+  // Elastic search
+  static Future<dynamic> searchElasticsearchEduhub(
+      Map<String, dynamic> query) async {
+    try {
+      final token = await _getToken();
+      final response = await http.post(
+        Uri.parse(
+            'https://eduhub.io.vn/eduhub-search/courses/_search?filter_path=hits.hits._source,hits.total'),
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(query),
+      );
+
+      return _handleResponse(response);
+    } catch (e) {
+      throw Exception('Failed to perform Elasticsearch search: $e');
+    }
+  }
+
   // Xử lý response
   static dynamic _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      return jsonDecode(response.body);
+      final Uint8List bodyBytes =
+          response.bodyBytes; // Dùng bodyBytes thay vì body
+      final String decodedBody = utf8.decode(bodyBytes);
+      return jsonDecode(decodedBody);
     } else {
       throw HttpException(
         response.statusCode,
@@ -121,6 +149,6 @@ class HttpException implements Exception {
   HttpException(this.statusCode, {required this.message});
 
   @override
-  String toString() => 'HttpException: Status Code: $statusCode, Message: $message';
+  String toString() =>
+      'HttpException: Status Code: $statusCode, Message: $message';
 }
-

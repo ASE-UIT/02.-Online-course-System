@@ -45,7 +45,7 @@ dependencies:
   video_player: ^2.5.0
   flutter_secure_storage: ^9.2.2
   chewie: ^1.6.0
-  win32: ^5.9.0
+  win32: ^5.1.1
 
 
 
