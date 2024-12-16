@@ -13,7 +13,7 @@ const data = [
     phoneNumber: "+84 123 456 789",
     createdBy: "ADMIN",
     updateAt: "2024-12-30T12:00:00Z",
-    createAt: "2024-12-30T12:00:00Z"
+    createAt: "2024-12-30T12:00:00Z",
   },
   {
     id: "EMP-002",
@@ -23,7 +23,7 @@ const data = [
     phoneNumber: "+84 987 654 321",
     createdBy: "ADMIN",
     updateAt: "2024-12-30T12:00:00Z",
-    createAt: "2024-12-30T12:00:00Z"
+    createAt: "2024-12-30T12:00:00Z",
   },
   {
     id: "EMP-003",
@@ -33,8 +33,8 @@ const data = [
     phoneNumber: "+84 456 789 123",
     createdBy: "ADMIN",
     updateAt: "2024-12-30T12:00:00Z",
-    createAt: "2024-12-30T12:00:00Z"
-  }
+    createAt: "2024-12-30T12:00:00Z",
+  },
 ];
 
 const ManageEmployee = () => {
@@ -45,7 +45,7 @@ const ManageEmployee = () => {
     phoneNumber: true,
     createdBy: true,
     updateAt: false,
-    createAt: false
+    createAt: false,
   });
 
   return (

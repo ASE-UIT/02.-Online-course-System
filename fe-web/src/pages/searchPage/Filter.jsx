@@ -3,8 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import RangeSlider from '@/components/ui/slider'
 import { useGetCategoriesQuery } from '@/store/rtk/course.services'
-import { ChevronDown, Sliders, SlidersHorizontal } from 'lucide-react'
-import React, { useState } from 'react'
+import { ChevronDown} from 'lucide-react'
+import  { useState } from 'react'
 const levels = [
     {id:1, name: "Người mới"},{id:2, name: "Trung cấp"},{id:3, name: "Chuyên gia"}
 ];
@@ -137,7 +137,7 @@ const lengths = [
             <Button
                 variant="gray"
                 className="flex items-center gap-2"
-                onClick={toggleDropdown} // Toggle dropdown on button click
+                onClick={toggleDropdown} 
             >
                 {/* Display selected category name or default */}
                 <span>{selectedCategory ? selectedCategory.name : "Chọn danh mục"}</span>
