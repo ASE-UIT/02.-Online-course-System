@@ -1,37 +1,9 @@
 import DataTable from "@/components/Table/DataTable";
 import { lecturerColumns } from "./LecturerColumns";
 import { lecturerList } from "./LecturerList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CURRENT_PAGES } from "@/utils/globalUtils";
-
-const data = [
-  {
-    id: "TASK-8782",
-    avatar:
-      "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
-    name: "Nguyễn Văn A",
-    phone: "+84 123 456 789",
-    email: "email@gmail.com",
-    startDay: "30-12-2024",
-    createdBy: "ADMIN",
-    role: "Giảng viên",
-    rating: 5,
-    course: 5
-  },
-  {
-    id: "TASK-8782",
-    avatar:
-      "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
-    name: "Nguyễn Văn A",
-    phone: "+84 123 456 789",
-    email: "email@gmail.com",
-    startDay: "30-12-2024",
-    createdBy: "Người dùng",
-    role: "Giảng viên",
-    rating: 5,
-    course: 5
-  }
-];
+import { getAllLecturers } from "@/api/lecturerApi";
 
 const ManageLecturer = () => {
   const [columnVisibility, setColumnVisibility] = useState({
@@ -45,6 +17,16 @@ const ManageLecturer = () => {
     rating: false,
     course: false
   });
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await getAllLecturers(10, 1);
+      setData(res.data.items);
+    }
+    fetchData();
+  }, []);
 
   return (
     <div>
