@@ -79,6 +79,8 @@ const CheckoutSuccessPage = withSuspense(
     lazy(() => import ("@/pages/PaymentPage/CheckoutSuccess.jsx")));
 const CheckoutFailPage = withSuspense(
     lazy(() => import ("@/pages/PaymentPage/CheckoutFail.jsx")));
+const AllCoursesPage =withSuspense(
+    lazy(()=> import("@/pages/CourseList/AllCourses.jsx")));
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -115,6 +117,7 @@ const router = createBrowserRouter(
           <Route path="cart" element={<CartPage />} />
           <Route path="result/:content" element={<ResultPage />} />
           <Route path="course-list" element={<CourseList />} />
+          <Route path="course-list/:content" element={<AllCoursesPage/>}/>
           <Route path="checkout" element={<CheckoutPage />} >
             <Route path="*" element={<Navigate to={"/web/checkout/step1"} />} />
             <Route path="step1" element={<CheckoutStep1Page/>}/>

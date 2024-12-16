@@ -5,11 +5,14 @@ import { ResultIcon } from "@/assets";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { formatCurrency } from "@/utils/converter";
+import {useScrollToTop} from "@/hooks/index.js";
 
 export default function CheckoutSuccessPage() {
   const navigate = useNavigate();
   const { setCurrentStep, setResult } = useOutletContext();
   const { totalPrice } = useSelector((state) => state.payment);
+  useScrollToTop();
+
   useEffect(() => {
     setCurrentStep(3);
     setResult(true);
