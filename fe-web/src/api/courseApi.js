@@ -13,15 +13,15 @@ export const courseApi = {
   },
   createCourse: async (courseData) => {
     try {
-      const token = JSON.parse(localStorage.getItem("auth")); // Retrieve the token from localStorage
+      const token = JSON.parse(localStorage.getItem("authLecturer ")); // Retrieve the token from localStorage
       const config = {
         headers: {
           Authorization: `Bearer ${token}`, // Pass the Bearer token for authentication
-          'Content-Type': 'application/json', // Specify content type as JSON
-        }
+          "Content-Type": "application/json", // Specify content type as JSON
+        },
       };
-      
-      const response = await api.post('/course', courseData, config); // Sending POST request with course data
+
+      const response = await api.post("/course", courseData, config); // Sending POST request with course data
       return response.data; // Return response data after course is created
     } catch (error) {
       console.log("Error creating course:", error);
@@ -30,51 +30,49 @@ export const courseApi = {
   },
 
   getMyCourses: async () => {
-    try
-    {
-      const token = JSON.parse(localStorage.getItem("auth"));
+    try {
+      const token = JSON.parse(localStorage.getItem("authLecturer "));
       const config = {
-        headers:{
+        headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       };
 
-      const response = await api.get(`/enrollment/me`,config);
+      const response = await api.get(`/enrollment/me`, config);
       return response.data;
-    }catch (e) {
+    } catch (e) {
       console.log(e);
       return { error: e.message };
     }
-  }
+  },
 };
 
-
-export const courseCartApi ={
+export const courseCartApi = {
   getMyCart: async () => {
-    try{
+    try {
       const token = JSON.parse(localStorage.getItem("auth"));
-      const config ={
+      const config = {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
-      }
-      const response = await api.get(`/cart/me`,config);
+        },
+      };
+      const response = await api.get(`/cart/me`, config);
       return response.data;
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   },
   removeFromCart: async (id) => {
-    try{
+    try {
       const token = JSON.parse(localStorage.getItem("auth"));
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
-      }
+        },
+      };
       const response = await api.delete(`/cart/remove/${id}`, config);
       return response.data;
-    }catch(error){
+    } catch (error) {
       console.log(error);
     }
   },
@@ -84,42 +82,41 @@ export const courseCartApi ={
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
+        },
       };
-      const response = await api.post('/order/create-order', orderData, config);
+      const response = await api.post("/order/create-order", orderData, config);
       return response.data;
     } catch (error) {
-      console.log( error);
+      console.log(error);
       return { error: error.message };
     }
   },
-  getOrder: async()=>{
-    try{
+  getOrder: async () => {
+    try {
       const token = JSON.parse(localStorage.getItem("auth"));
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
-        }
-      }
+        },
+      };
       const response = await api.get(`/order/get-order`, config);
       return response.data;
-    }catch (error){
+    } catch (error) {
       console.log(error);
     }
   },
-  getMyProfile: async()=>{
-    try{
+  getMyProfile: async () => {
+    try {
       const token = JSON.parse(localStorage.getItem("auth"));
       const config = {
-        headers:{
+        headers: {
           Authorization: `Bearer ${token}`,
-        }
-      }
-      const response = await api.get("/student/me",config)
+        },
+      };
+      const response = await api.get("/student/me", config);
       return response.data;
-    }catch(error) {
+    } catch (error) {
       console.log(error);
     }
-  }
-}
-
+  },
+};
