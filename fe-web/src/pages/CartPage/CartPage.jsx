@@ -1,18 +1,18 @@
-import { CourseCard } from "@/components/Courses/CourseCard";
+import {CourseCard} from "@/components/Courses/CourseCard";
 import {CourseCartCard} from "@/pages/CartPage/CourseCartCard.jsx";
 
-import { useEffect, useState } from "react";
-import { courseApi, courseCartApi } from "@/api/courseApi";
+import {useEffect, useState} from "react";
+import {courseApi, courseCartApi} from "@/api/courseApi";
 import * as React from 'react';
-import { Checkbox } from '@/components/ui/checkbox'
+import {Checkbox} from '@/components/ui/checkbox'
 import {CheckIcon} from "lucide-react";
 import {Separator} from "@/components/ui/separator.jsx";
 import {Button} from "@/components/ui/button.jsx";
-import { formatCurrency } from "@/utils/converter";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {formatCurrency} from "@/utils/converter";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {addTotalPrice,addInfoPayment} from "@/store/slices/paymentSlice.js";
-import { useToast } from "@/hooks/use-toast";
+import {addTotalPrice, addInfoPayment} from "@/store/slices/paymentSlice.js";
+import {useToast} from "@/hooks/use-toast";
 import {CustomSkeletonDemo} from "@/pages/CourseList/CustomSkeleton.jsx";
 
 const mockCourseData = [
@@ -106,7 +106,7 @@ const CartPage = () => {
     const navigate = useNavigate();
     const [totalPrice, setTotalPrice] = useState(0);
     const dispatch = useDispatch();
-    const { toast } = useToast();
+    const {toast} = useToast();
     const [isLoading, setIsLoading] = useState(true);
 
     const getMyCart = async () => {
@@ -120,10 +120,10 @@ const CartPage = () => {
         } catch (error) {
             console.log(error.response?.errors.msg);
         }
-        
+
     };
-    const removeFromCart = async(courseId)=>{
-        try{
+    const removeFromCart = async (courseId) => {
+        try {
             const response = await courseCartApi.removeFromCart(courseId);
             if (response?.success) {
                 setRemoveResponse(response.data)
@@ -135,7 +135,7 @@ const CartPage = () => {
                     duration: 2000
                 });
             }
-        }catch(error){
+        } catch (error) {
             console.log(error.response?.errors.msg);
         }
     }
@@ -157,10 +157,10 @@ const CartPage = () => {
     };
     const handleClickPayment = async () => {
 
-        if(myCart.length > 0) {
-            dispatch(addTotalPrice({totalPrice:totalPrice}));
+        if (myCart.length > 0) {
+            dispatch(addTotalPrice({totalPrice: totalPrice}));
             navigate("/web/checkout")
-        }else{
+        } else {
             toast({
                 title: <p className=" text-error-500">Giỏ hàng không có khóa học</p>,
                 status: "success",
@@ -168,17 +168,27 @@ const CartPage = () => {
             });
         }
     };
-    const handleRemoveSelectedCourses = async ()=>{
+    const handleRemoveSelectedCourses = async () => {
         try {
-            const promises = selectedCourses.map(courseId => courseCartApi.removeFromCart(courseId));
-            await Promise.all(promises);
-            setMyCart((prev) => prev.filter((course) => !selectedCourses.includes(course.courseId)));
-            setSelectedCourses([]);
-            toast({
-                title: <p className=" text-green-700">Xóa khóa học khỏi giỏ hàng thành công</p>,
-                status: "success",
-                duration: 2000
-            });
+            console.log(myCart.length);
+            if (myCart.length > 0) {
+                const promises = selectedCourses.map(courseId => courseCartApi.removeFromCart(courseId));
+                await Promise.all(promises);
+                setMyCart((prev) => prev.filter((course) => !selectedCourses.includes(course.courseId)));
+                setSelectedCourses([]);
+                toast({
+                    title: <p className=" text-success">Xóa khóa học khỏi giỏ hàng thành công</p>,
+                    status: "success",
+                    duration: 2000
+                });
+            } else {
+                toast({
+                    title: <p className=" text-warning-500">Không có khóa học nào trong giỏ hàng</p>,
+                    status: "warning",
+                    duration: 2000
+                });
+            }
+
         } catch (error) {
             console.log(error.response?.errors.msg);
         }
@@ -190,10 +200,12 @@ const CartPage = () => {
         setTotalPrice(newTotalPrice);
     }, [myCart]);
     useEffect(() => {
-        getMyCart().then(() => {setIsLoading(false)});
+        getMyCart().then(() => {
+            setIsLoading(false)
+        });
     }, []);
 
-    if(isLoading) return <CustomSkeletonDemo/>
+    if (isLoading) return <CustomSkeletonDemo/>
     return (
         <div className="w-full flex flex-col space-y-5">
             <div className="w-full px-24 mt-5">
@@ -217,18 +229,19 @@ const CartPage = () => {
                                     Chọn tất cả ({myCart.length} sản phẩm)
                                 </label>
                             </div>
-                            <p onClick={handleRemoveSelectedCourses} className="text-text/lg/medium text-error-500 font-worksans cursor-pointer">Xóa
-                                 mục đã chọn</p>
+                            <p onClick={handleRemoveSelectedCourses}
+                               className="text-text/lg/medium text-error-500 font-worksans cursor-pointer">Xóa
+                                mục đã chọn</p>
                         </div>
 
                         <div className="space-y-5 grid grid-cols-1">
-                                {myCart.map((course) => (
+                            {myCart.map((course) => (
                                 <CourseCartCard
                                     key={course.cartId}
                                     course={course.course}
                                     checked={selectedCourses.includes(course.courseId)}
                                     onChange={(checked) => handleSelectCourse(course.courseId, checked)}
-                                    onRemove={()=>removeFromCart(course.courseId)}
+                                    onRemove={() => removeFromCart(course.courseId)}
                                 />
                             ))}
                         </div>
@@ -254,7 +267,8 @@ const CartPage = () => {
                                 đ{formatCurrency(totalPrice)}
                             </p>
                         </div>
-                            <Button onClick={()=>handleClickPayment()} className="py-3 px-4 rounded-[8px] w-full h-[48]">Thanh toán</Button>
+                        <Button onClick={() => handleClickPayment()} className="py-3 px-4 rounded-[8px] w-full h-[48]">Thanh
+                            toán</Button>
 
                     </div>
                 </div>
