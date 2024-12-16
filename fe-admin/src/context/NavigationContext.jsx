@@ -45,12 +45,12 @@ export const menuItems = [
         text: "Danh sách giảng viên",
         id: "teacherList",
         path: "teacher/list"
-      },
-      {
-        text: "Đăng ký giảng viên",
-        id: "teacherRegistration",
-        path: "teacher/registration"
       }
+      // {
+      //   text: "Đăng ký giảng viên",
+      //   id: "teacherRegistration",
+      //   path: "teacher/registration"
+      // }
     ]
   },
   {

@@ -19,11 +19,14 @@ const ManageLecturer = () => {
   });
 
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
+      setLoading(true);
       const res = await getAllLecturers(10, 1);
       setData(res.data.items);
+      setLoading(false);
     }
     fetchData();
   }, []);
@@ -37,6 +40,8 @@ const ManageLecturer = () => {
         setColumnVisibility={setColumnVisibility}
         headerList={lecturerList}
         pageName={CURRENT_PAGES.LECTURER_PAGE}
+        loading={loading}
+        setLoading={setLoading}
       />
     </div>
   );
