@@ -5,13 +5,9 @@ const TOKEN = JSON.parse(localStorage.getItem("adminToken")) || "";
 export const getWaitingCourseWithPage = async (rpp, page) => {
   try {
     const res = await api.get(
-      `/course/waiting-for-approve/paging`,
+      `/course/waiting-for-approve/paging?rpp=${rpp}&page=${page}`,
       {},
       {
-        params: {
-          rpp,
-          page
-        },
         headers: {
           "Content-Type": "application/json"
         }

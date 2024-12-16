@@ -143,9 +143,17 @@ export const waitingCourseColumns = [
       <DataTableColumnHeader column={column} title="TRẠNG THÁI" />
     ),
     cell: ({ row }) => {
+      const status = row.getValue("status");
+
       return (
         <div className="flex items-center">
-          <span>{row.getValue("status")}</span>
+          <span>
+            {status === "WAITING_FOR_APPROVAL"
+              ? "Chờ duyệt"
+              : status === "PUBLISHED"
+              ? "Đã duyệt"
+              : "Từ chối"}
+          </span>
         </div>
       );
     },
