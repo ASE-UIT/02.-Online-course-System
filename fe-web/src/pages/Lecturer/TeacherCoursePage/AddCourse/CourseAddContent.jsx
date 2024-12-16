@@ -2,23 +2,37 @@ import { Button } from "@/components/ui/button";
 import { useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage, FormSelect } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormSelect
+} from "@/components/ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { courseApi } from "@/api/courseApi";
 import { useGetCategoriesQuery } from "@/store/rtk/course.services";
 import { mediaApi } from "@/api/media";
+import axios from "axios";
 
 const formSchema = z.object({
   name_course: z.string().min(6, { message: "Vui lòng nhập tên khóa học" }),
   summary: z.string().min(1, { message: "Vui lòng nhập mô tả khóa học" }),
-  category: z.string().min(1, { message: "Vui lòng chọn chuyên mục của khóa học" }),
+  category: z
+    .string()
+    .min(1, { message: "Vui lòng chọn chuyên mục của khóa học" }),
   // picture: z.any().refine((file) => file instanceof File, { message: "Vui lòng tải lên một tệp" }),
   description: z.string().min(1, { message: "Vui lòng nhập description" }),
   benefits: z.string().min(1, { message: "Vui lòng nhập các lợi ích" }),
-  participant: z.string().min(1, { message: "Vui lòng nhập các đối tượng tham gia" }),
-  requirement: z.string().min(1, { message: "Vui lòng nhập các yêu cầu đầu vào" }),
+  participant: z
+    .string()
+    .min(1, { message: "Vui lòng nhập các đối tượng tham gia" }),
+  requirement: z
+    .string()
+    .min(1, { message: "Vui lòng nhập các yêu cầu đầu vào" })
 });
 export const AddCourseContent = () => {
   const form = useForm({
@@ -31,8 +45,8 @@ export const AddCourseContent = () => {
       picture: null,
       benefits: "",
       participant: "",
-      requirement: "",
-    },
+      requirement: ""
+    }
   });
 
   const [error, setError] = useState(null);
@@ -87,7 +101,31 @@ export const AddCourseContent = () => {
         console.log(`${key}: ${value instanceof File ? value.name : value}`);
       }
 
-      const response = await courseApi.createCourse(formData);
+      // const response = await courseApi.createCourse(formData);
+      const handleData = {
+        name: values.name_course,
+        shortDescription: values.summary,
+        introduction: values.description,
+        thumbnail: url,
+        participants: values.participant,
+        categoryId: values.category,
+        benefits: values.benefits,
+        requirement: values.requirement
+      };
+
+      // const response = await courseApi.createCourse(formData);
+      let tokenLecturer = localStorage.getItem("authLecturer");
+      tokenLecturer = tokenLecturer.replace(/^"|"$/g, "");
+      const response = await axios.post(
+        "https://eduhub.io.vn/eduhub-api/api/v1/course",
+        handleData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenLecturer}`
+          }
+        }
+      );
 
       setSuccessMessage("Course created successfully!");
       console.log("Response from backend:", response);
@@ -113,14 +151,21 @@ export const AddCourseContent = () => {
               <Input />
             </div>
             <div className="button w-[115px]">
-              <Button className="w-full text-text/md/medium text-white">Tải lên</Button>
+              <Button className="w-full text-text/md/medium text-white">
+                Tải lên
+              </Button>
             </div>
           </div>
         </div>
-        <header className="text-display/md/medium py-[20px]">Hoặc điền thông tin vào form dưới đây</header>
+        <header className="text-display/md/medium py-[20px]">
+          Hoặc điền thông tin vào form dưới đây
+        </header>
 
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-5 mt-4"
+          >
             <div className="flex items-start gap-5 w-full">
               {/* First Input Field - Width 542px */}
               <FormField
@@ -132,7 +177,11 @@ export const AddCourseContent = () => {
                       Tên khóa học<span className="text-error-500">*</span>
                     </FormLabel>
                     <FormControl>
-                      <Input className="border-gray-600" placeholder="Nhập tên khóa học" {...field} />
+                      <Input
+                        className="border-gray-600"
+                        placeholder="Nhập tên khóa học"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -154,7 +203,7 @@ export const AddCourseContent = () => {
                           categories
                             ? categories.map((category) => ({
                                 value: category.id, // Assuming category has 'id' and 'name'
-                                label: category.name,
+                                label: category.name
                               }))
                             : []
                         }
@@ -171,7 +220,8 @@ export const AddCourseContent = () => {
                 render={({ field }) => (
                   <FormItem className="basis-[35%]">
                     <FormLabel className="text-text/md/medium">
-                      Ảnh (theo tỉ lệ 2:1)<span className="text-error-500">*</span>
+                      Ảnh (theo tỉ lệ 2:1)
+                      <span className="text-error-500">*</span>
                     </FormLabel>
                     <FormControl>
                       <div className="">
@@ -182,7 +232,11 @@ export const AddCourseContent = () => {
                         >
                           {fileSlt ? fileSlt?.name : "Tải lên một ảnh"}
                         </div>
-                        {errorEmptyFile && <p className="text-text/sm/medium py-2 text-red-500">{errorEmptyFile}</p>}
+                        {errorEmptyFile && (
+                          <p className="text-text/sm/medium py-2 text-red-500">
+                            {errorEmptyFile}
+                          </p>
+                        )}
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -211,7 +265,8 @@ export const AddCourseContent = () => {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel className="text-text/md/medium">
-                    Mô tả ngắn (100-200 ký tự)<span className="text-error-500">*</span>
+                    Mô tả ngắn (100-200 ký tự)
+                    <span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input className="border-gray-600" {...field} />
@@ -230,7 +285,11 @@ export const AddCourseContent = () => {
                     Giới thiệu<span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className="border-gray-600 h-[245px]" placeholder={field.value} {...field} />
+                    <Textarea
+                      className="border-gray-600 h-[245px]"
+                      placeholder={field.value}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -243,10 +302,15 @@ export const AddCourseContent = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-text/md/medium">
-                    Lợi ích (mỗi lợi ích một dòng)<span className="text-error-500">*</span>
+                    Lợi ích (mỗi lợi ích một dòng)
+                    <span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className="border-gray-600 h-[245px]" placeholder={field.value} {...field} />
+                    <Textarea
+                      className="border-gray-600 h-[245px]"
+                      placeholder={field.value}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -262,7 +326,11 @@ export const AddCourseContent = () => {
                     Đối tượng tham gia<span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className="border-gray-600 h-[245px]" placeholder={field.value} {...field} />
+                    <Textarea
+                      className="border-gray-600 h-[245px]"
+                      placeholder={field.value}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -278,7 +346,11 @@ export const AddCourseContent = () => {
                     Yêu cầu đầu vào<span className="text-error-500">*</span>
                   </FormLabel>
                   <FormControl>
-                    <Textarea className="border-gray-600 h-[245px]" placeholder={field.value} {...field} />
+                    <Textarea
+                      className="border-gray-600 h-[245px]"
+                      placeholder={field.value}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -301,7 +373,9 @@ export const AddCourseContent = () => {
 
             {/* Error and Success Messages */}
             {error && <p className="text-red-500 mt-2">{error}</p>}
-            {successMessage && <p className="text-green-500 mt-2">{successMessage}</p>}
+            {successMessage && (
+              <p className="text-green-500 mt-2">{successMessage}</p>
+            )}
           </form>
         </FormProvider>
       </div>
