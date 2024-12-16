@@ -37,7 +37,7 @@ void main() {
           create: (_) => VerifyOTPViewModel(),
         ),
         ChangeNotifierProvider(
-          create: (_) => ProfileViewModel(),
+          create: (context) => ProfileViewModel(),
         )
       ],
       child: MyApp(),

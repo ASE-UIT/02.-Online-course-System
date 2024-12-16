@@ -58,78 +58,96 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         ),
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Center(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: [
-                    Container(
-                      height: 1.5, // Thickness of the separator
-                      color: Colors.black, // Color of the separator
+      body: Consumer<ProfileViewModel>(
+        builder: (context, profileViewModel, child) {
+          if (profileViewModel.isLoading || _isLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          final myProfile = profileViewModel.cachedProfileData;
+          if (myProfile == null) {
+            return Center(child: Text('Không tải được thông tin'));
+          }
+
+          return Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  Container(
+                    height: 1.5, // Thickness of the separator
+                    color: Colors.black, // Color of the separator
+                  ),
+                  const SizedBox(height: 24),
+                  Container(
+                    width: 140, // Fixed size
+                    height: 140,
+                    child: CircleAvatar(
+                      backgroundImage: _myProfile?.avatar != null
+                          ? NetworkImage(
+                              _myProfile!.avatar as String) // Cast if necessary
+                          : const AssetImage('assets/avatar_example.png')
+                              as ImageProvider,
                     ),
-                    const SizedBox(height: 24),
-                    Container(
-                      width: 140, // Fixed size
-                      height: 140,
-                      child: CircleAvatar(
-                        backgroundImage: _myProfile?.avatar != null
-                            ? NetworkImage(_myProfile!.avatar
-                                as String) // Cast if necessary
-                            : const AssetImage('assets/avatar_example.png')
-                                as ImageProvider,
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    _myProfile?.name ?? 'Unknown User',
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 24),
+                  CustomListTile(
+                    title: 'Cập nhật thông tin',
+                    onTap: () async {
+                      final updatedProfile = await Navigator.pushNamed(
+                        context,
+                        'AccountUpdateScreen',
+                        arguments: _myProfile,
+                      ) as ProfileData?;
+
+                      if (updatedProfile != null) {
+                        setState(() {
+                          _myProfile =
+                              updatedProfile; // Cập nhật hồ sơ với dữ liệu mới
+                        });
+                      }
+                    },
+                  ),
+                  CustomListTile(
+                    title: 'Đổi mật khẩu',
+                    onTap: () {},
+                  ),
+                  CustomListTile(
+                    title: 'Xóa tài khoản',
+                    onTap: () {},
+                  ),
+                  const SizedBox(height: 12),
+                  const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.logout,
+                        color: AppColors.error500,
+                        size: 24,
                       ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      _myProfile?.name ?? 'Unknown User',
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 24),
-                    CustomListTile(
-                      title: 'Cập nhật thông tin',
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          'AccountUpdateScreen',
-                          arguments: _myProfile,
-                        );
-                      },
-                    ),
-                    CustomListTile(
-                      title: 'Đổi mật khẩu',
-                      onTap: () {},
-                    ),
-                    CustomListTile(
-                      title: 'Xóa tài khoản',
-                      onTap: () {},
-                    ),
-                    const SizedBox(height: 12),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.logout,
+                      SizedBox(width: 8),
+                      Text(
+                        'ĐĂNG XUẤT',
+                        style: TextStyle(
                           color: AppColors.error500,
-                          size: 24,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
                         ),
-                        SizedBox(width: 8),
-                        Text(
-                          'ĐĂNG XUẤT',
-                          style: TextStyle(
-                            color: AppColors.error500,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
+          );
+        },
+      ),
     );
   }
 }

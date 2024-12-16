@@ -57,6 +57,7 @@ class HomeExploreCategory extends StatelessWidget {
               return SizedBox(
                 child: BorderTag(
                   text: course,
+                  onSelected: (value) => {},
                 ),
               );
             },

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/ViewModels/profile_view_model.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:intl/intl.dart';
+import 'package:online_course_system/models/MaskProfileData.dart';
 import 'package:online_course_system/models/ProfileModel.dart';
+import 'package:online_course_system/models/UpdateStudentInfo.dart';
+import 'package:provider/provider.dart';
 
 class AccountUpdateScreen extends StatefulWidget {
   const AccountUpdateScreen({super.key});
@@ -11,15 +15,47 @@ class AccountUpdateScreen extends StatefulWidget {
 }
 
 class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
-  String _name = 'Nguyễn Hình Di Híu';
-  String _address = 'Thủ Đức';
-  String _email = 'nguyenduyh@gmail.com';
-  String _phone = '+84123456789';
-  String _dob = '25-10-2024';
+  late ProfileViewModel _profileViewModel;
+  MaskProfileData? _maskProfileData;
+  late ProfileData profileData;
+
+  @override
+  void initState() {
+    super.initState();
+    _profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_maskProfileData == null) {
+      profileData = ModalRoute.of(context)?.settings.arguments as ProfileData;
+      setState(() {
+        _maskProfileData = MaskProfileData(
+          name: profileData.name ?? 'None',
+          address: profileData.address ?? 'None',
+          email: profileData.email ?? 'None',
+          phone: profileData.phoneNumber ?? 'None',
+          dob: profileData.birthday ?? 'None',
+        );
+      });
+    }
+  }
+
+  bool _isDataChanged() {
+    if (_maskProfileData == null) {
+      return false;
+    }
+    return _maskProfileData!.name != profileData.name ||
+        _maskProfileData!.address != profileData.address ||
+        _maskProfileData!.dob != profileData.birthday;
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ProfileData profileData = ModalRoute.of(context)?.settings.arguments as ProfileData;
+    if (_maskProfileData == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -28,7 +64,7 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           color: Colors.black,
           onPressed: () {
             Navigator.pop(context);
@@ -66,66 +102,39 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
                           color: AppColors.gray700,
                           fontSize: 16),
                     ),
-                    const SizedBox(height: 8,),
-                    _buildNavigationField(
-                        context, Icons.account_circle, 'Họ và tên', profileData.name ?? "",
-                        onTap: () {
-                      _showEditDialog('Họ và tên', _name, (value) {
+                    const SizedBox(height: 8),
+                    _buildNavigationField(context, Icons.account_circle,
+                        'Họ và tên', _maskProfileData!.name, onTap: () {
+                      _showEditDialog('Họ và tên', _maskProfileData!.name,
+                          (value) {
                         setState(() {
-                          _name = value;
+                          _maskProfileData!.name = value; // Update name
                         });
                       });
                     }),
-                    
-                    Container(
-                      height: 1,
-                      color: AppColors.gray500,
-                    ),
-                    
-                    _buildNavigationField(context, Icons.email, 'Email', profileData.email ?? "",
-                        onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        'UpdateEmailScreen',
-                      );
-                    }),
-                    
-                    Container(
-                      height: 1,
-                      color: AppColors.gray500,
-                    ),
-                    
+                    const Divider(color: AppColors.gray500),
                     _buildNavigationField(
-                        context, Icons.phone, 'Số điện thoại', profileData.phoneNumber ?? "",
+                        context, Icons.email, 'Email', _maskProfileData!.email,
                         onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        'UpdatePhoneScreen'
-                      );
+                      // Email update functionality goes here
                     }),
-                    
-                    Container(
-                      height: 1,
-                      color: AppColors.gray500,
-                    ),
-                    
-                    _buildNavigationField(
-                        context, Icons.calendar_month, 'Ngày sinh', _dob,
-                        onTap: () {
-                      _showDatePicker(context, _dob);
+                    const Divider(color: AppColors.gray500),
+                    _buildNavigationField(context, Icons.phone, 'Số điện thoại',
+                        _maskProfileData!.phone, onTap: () {
+                      // Phone update functionality goes here
                     }),
-                    
-                    Container(
-                      height: 1,
-                      color: AppColors.gray500,
-                    ),
-                    
-                    _buildNavigationField(
-                        context, Icons.location_on, 'Địa chỉ', _address,
-                        onTap: () {
-                      _showEditDialog('Địa chỉ', _address, (value) {
+                    const Divider(color: AppColors.gray500),
+                    _buildNavigationField(context, Icons.calendar_month,
+                        'Ngày sinh', _formatDate(_maskProfileData!.dob), onTap: () {
+                      _showDatePicker(context, _maskProfileData!.dob);
+                    }),
+                    const Divider(color: AppColors.gray500),
+                    _buildNavigationField(context, Icons.location_on, 'Địa chỉ',
+                        _maskProfileData!.address, onTap: () {
+                      _showEditDialog('Địa chỉ', _maskProfileData!.address,
+                          (value) {
                         setState(() {
-                          _address = value;
+                          _maskProfileData!.address = value;
                         });
                       });
                     }),
@@ -134,23 +143,43 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.green),
-                        SizedBox(width: 10),
-                        Text("Cập nhật thông tin thành công!"),
-                      ],
-                    ),
-                    backgroundColor: Colors.black87,
-                    behavior: SnackBarBehavior.floating,
-                    duration: Duration(seconds: 1),
-                  ),
-                );
-                Navigator.pop(context);
-              },
+              onPressed: _isDataChanged()
+                  ? () async {
+                      final updateRequest = UpdateStudentInfo(
+                        name: _maskProfileData!.name,
+                        birthday: _maskProfileData!.dob,
+                        address: _maskProfileData!.address,
+                      );
+
+                      var info = updateRequest.toJson().toString();
+                      debugPrint('Info: $info');
+                      await _profileViewModel.updateMyProfile(updateRequest);
+
+                      // Xử lý thành công hoặc lỗi
+                      if (_profileViewModel.errorMessage != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(_profileViewModel.errorMessage!)),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Row(
+                              children: [
+                                Icon(Icons.check_circle, color: Colors.green),
+                                SizedBox(width: 10),
+                                Text("Cập nhật thông tin thành công!"),
+                              ],
+                            ),
+                            backgroundColor: Colors.black87,
+                            behavior: SnackBarBehavior.floating,
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
+                       Navigator.pop(context, _profileViewModel.cachedProfileData);
+                      }
+                    }
+                  : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary500,
                 minimumSize: const Size(double.infinity, 60),
@@ -186,14 +215,14 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('Hủy'),
+            child: const Text('Hủy'),
           ),
           TextButton(
             onPressed: () {
               onSave(controller.text);
               Navigator.of(context).pop();
             },
-            child: Text('Lưu'),
+            child: const Text('Lưu'),
           ),
         ],
       ),
@@ -212,8 +241,18 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
 
     if (picked != null) {
       setState(() {
-        _dob = DateFormat('dd-MM-yyyy').format(picked);
+        _maskProfileData!.dob = DateFormat('yyyy-MM-dd').format(picked);
       });
+    }
+  }
+
+  String _formatDate(String? date) {
+    if (date == null || date.isEmpty) return 'Chưa cập nhật';
+    try {
+      DateTime parsedDate = DateTime.parse(date);
+      return DateFormat('dd-MM-yyyy').format(parsedDate);
+    } catch (e) {
+      return 'Ngày không hợp lệ';
     }
   }
 

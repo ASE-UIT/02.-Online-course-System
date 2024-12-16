@@ -20,11 +20,14 @@ class _SearchScreenState extends State<SearchScreen> {
   bool isLoading = false;
   bool hasError = false;
   Timer? debounceTimer;
+  bool isQueryEmpty = true;
+  final TextEditingController searchController = TextEditingController();
 
   Future<void> performSearch(String queryText) async {
     if (queryText.isEmpty) {
       setState(() {
         searchResults = [];
+        isQueryEmpty = true;
         hasError = false;
       });
       return;
@@ -33,6 +36,7 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() {
       isLoading = true;
       hasError = false;
+      isQueryEmpty = false;
     });
 
     final Map<String, dynamic> query = {
@@ -74,7 +78,7 @@ class _SearchScreenState extends State<SearchScreen> {
       debounceTimer?.cancel();
     }
 
-    debounceTimer = Timer(const Duration(milliseconds: 300), () {
+    debounceTimer = Timer(const Duration(milliseconds: 500), () {
       performSearch(query);
     });
   }
@@ -82,6 +86,16 @@ class _SearchScreenState extends State<SearchScreen> {
   double _calculateDiscount(double sellPrice, double originalPrice) {
     if (originalPrice <= 0 || sellPrice >= originalPrice) return 0.0;
     return ((originalPrice - sellPrice) / originalPrice) * 100;
+  }
+
+   void updateSearchBar(String text) {
+    setState(() {
+      searchController.text = text; // Update search bar text
+      searchController.selection = TextSelection.fromPosition(
+        TextPosition(offset: searchController.text.length),
+      );
+    });
+    performSearch(text); // Perform search immediately
   }
 
   @override
@@ -97,13 +111,15 @@ class _SearchScreenState extends State<SearchScreen> {
             padding: const EdgeInsets.all(20.0),
             child: CustomSearchBar(
               onSearch: onSearchQueryChanged,
+              controller: searchController,
             ),
           ),
         ),
         body: AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           child: isLoading
-              ? const Center(child: CircularProgressIndicator())
+              ? const Center(
+                  key: Key('loading'), child: CircularProgressIndicator())
               : hasError
                   ? Center(
                       key: const Key('error'),
@@ -112,12 +128,29 @@ class _SearchScreenState extends State<SearchScreen> {
                         style: TextStyle(color: Colors.red, fontSize: 16),
                       ),
                     )
-                  : searchResults.isEmpty
-                      ? const _EmptySearchResults()
-                      : _SearchResultsList(
-                          searchResults: searchResults,
-                          calculateDiscount: _calculateDiscount,
-                        ),
+                  : isQueryEmpty
+                      ? _EmptySearchResults(
+                          key: Key('emptySearchResults'),
+                          onTagSelected: (String query) {
+                            updateSearchBar(query);
+                          },
+                        )
+                      : searchResults.isEmpty
+                          ? Center(
+                              key: const Key('noResults'),
+                              child: Text(
+                                'Không tìm thấy khóa học nào.',
+                                style: TextStyle(
+                                  color: AppColors.black,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            )
+                          : _SearchResultsList(
+                              key: const Key('searchResults'),
+                              searchResults: searchResults,
+                              calculateDiscount: _calculateDiscount,
+                            ),
         ),
       ),
     );
@@ -125,12 +158,14 @@ class _SearchScreenState extends State<SearchScreen> {
 }
 
 class _EmptySearchResults extends StatelessWidget {
-  const _EmptySearchResults();
+  final Function(String) onTagSelected;
+
+  const _EmptySearchResults({required Key key, required this.onTagSelected});
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      key: const Key('empty'),
+      key: key,
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -148,14 +183,49 @@ class _EmptySearchResults extends StatelessWidget {
             Wrap(
               spacing: 12,
               runSpacing: 12,
-              children: const [
-                BorderTag(text: 'Python'),
-                BorderTag(text: 'Java'),
-                BorderTag(text: "Excel"),
-                BorderTag(text: 'React'),
-                BorderTag(text: 'Photoshop'),
-                BorderTag(text: 'Digital Marketing'),
-                BorderTag(text: 'Javascript'),
+              children: [
+                BorderTag(
+                  text: 'Python',
+                  onSelected: (bool value) {
+                    if (value) onTagSelected('Python');
+                  },
+                ),
+                BorderTag(
+                  text: 'Java',
+                  onSelected: (bool value) {
+                    if (value) onTagSelected('Java');
+                  },
+                ),
+                BorderTag(
+                  text: "Excel",
+                  onSelected: (bool value) {
+                    if (value) onTagSelected('Excel');
+                  },
+                ),
+                BorderTag(
+                  text: 'React',
+                  onSelected: (bool value) {
+                    if (value) onTagSelected('React');
+                  },
+                ),
+                BorderTag(
+                  text: 'Photoshop',
+                  onSelected: (bool value) {
+                    if (value) onTagSelected('Photoshop');
+                  }
+                ),
+                BorderTag(
+                  text: 'Digital Marketing',
+                  onSelected: (bool value) {
+                    if (value) onTagSelected('Digital Marketing');
+                  }
+                ),
+                BorderTag(
+                  text: 'Javascript',
+                  onSelected: (bool value) {
+                    if (value) onTagSelected('Javascript');
+                  }
+                ),
               ],
             ),
             const SizedBox(height: 20),
@@ -191,12 +261,13 @@ class _SearchResultsList extends StatelessWidget {
   const _SearchResultsList({
     required this.searchResults,
     required this.calculateDiscount,
+    required Key key,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      key: const Key('results'),
+      key: key,
       padding: const EdgeInsets.all(20.0),
       itemCount: searchResults.length,
       itemBuilder: (context, index) {

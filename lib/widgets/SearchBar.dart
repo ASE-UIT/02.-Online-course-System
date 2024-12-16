@@ -4,8 +4,9 @@ import '../constants/colors.dart';
 
 class CustomSearchBar extends StatefulWidget {
   final ValueChanged<String>? onSearch; // Callback để truyền dữ liệu truy vấn ra ngoài
+  final TextEditingController controller;
 
-  const CustomSearchBar({super.key, this.onSearch});
+  const CustomSearchBar({super.key, this.onSearch, required this.controller});
 
   @override
   _CustomSearchBarState createState() => _CustomSearchBarState();
@@ -41,6 +42,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       ),
       child: TextField(
         onChanged: onQueryChanged,
+        controller: widget.controller,
         decoration: const InputDecoration(
           hintText: 'Tìm kiếm khóa học',
           hintStyle: TextStyle(

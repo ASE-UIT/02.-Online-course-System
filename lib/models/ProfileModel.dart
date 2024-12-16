@@ -43,6 +43,8 @@ class ProfileData {
   final String? name;
   final String? email;
   final dynamic avatar;
+  final dynamic address;
+  final dynamic birthday;
   final dynamic phoneNumber;
   final String? roleId;
 
@@ -56,6 +58,8 @@ class ProfileData {
     this.name,
     this.email,
     this.avatar,
+    this.address,
+    this.birthday,
     this.phoneNumber,
     this.roleId,
   });
@@ -70,6 +74,8 @@ class ProfileData {
       name = json['name'] as String?,
       email = json['email'] as String?,
       avatar = json['avatar'],
+      address = json['address'],
+      birthday = json['birthday'],
       phoneNumber = json['phoneNumber'],
       roleId = json['roleId'] as String?;
 
@@ -83,6 +89,8 @@ class ProfileData {
     'name' : name,
     'email' : email,
     'avatar' : avatar,
+    'address': address,
+    'birthday': birthday,
     'phoneNumber' : phoneNumber,
     'roleId' : roleId
   };
