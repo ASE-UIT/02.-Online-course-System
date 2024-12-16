@@ -10,5 +10,15 @@ export const waitingCourseList = [
   { id: "updateAt", title: "Ngày sửa" },
   { id: "originalPrice", title: "Giá gốc" },
   { id: "sellPrice", title: "Giá bán" },
-  { id: "status", title: "Trạng thái" }
+  { id: "status", title: "Trạng thái" },
+  { id: "createBy", title: "Tạo bởi" },
+  { id: "updateBy", title: "Sửa bởi" },
+  { id: "nameEn", title: "Tên tiếng anh" },
+  { id: "duration", title: "Thời gian" },
+  { id: "isApproved", title: "Trạng thái" },
+  { id: "totalStudents", title: "Tổng học sinh" },
+  { id: "totalReviews", title: "Tổng đánh giá" },
+  { id: "averageRating", title: "Đánh giá trung bình" },
+  { id: "category", title: "Danh mục" },
+  { id: "lecturer", title: "Giảng viên" }
 ];

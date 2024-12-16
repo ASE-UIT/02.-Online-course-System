@@ -21,7 +21,7 @@ export const menuItems = [
     icon: Layers,
     text: "Quản lý danh mục",
     id: "courses",
-    path: "courses/category-list",
+    path: "courses",
     subItems: [
       {
         text: "Danh sách danh mục",
@@ -39,7 +39,7 @@ export const menuItems = [
     icon: School,
     text: "Quảng lý giảng viên",
     id: "teacher",
-    path: "teacher/list",
+    path: "teacher",
     subItems: [
       {
         text: "Danh sách giảng viên",

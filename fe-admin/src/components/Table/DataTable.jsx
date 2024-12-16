@@ -33,7 +33,14 @@ export default function DataTable({
   setColumnVisibility,
   data,
   pageName,
-  headerList
+  headerList,
+  loading,
+  setLoading,
+  rpp,
+  setRpp,
+  page,
+  setPage,
+  total
 }) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState({});
@@ -48,8 +55,13 @@ export default function DataTable({
   };
 
   var CollapsibleRowContent = ({ row, headerList, pageName }) => (
-    <td colSpan={6}>
-      <RowDetail row={row} headerList={headerList} pageName={pageName} />
+    <td colSpan="100%">
+      <RowDetail
+        row={row}
+        headerList={headerList}
+        pageName={pageName}
+        setLoading={setLoading}
+      />
     </td>
   );
 
@@ -146,14 +158,21 @@ export default function DataTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  Không có kết quả
+                  {loading ? "Đang tải trang..." : "Không có kết quả"}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination
+        table={table}
+        rpp={rpp}
+        setRpp={setRpp}
+        page={page}
+        setPage={setPage}
+        total={total}
+      />
     </div>
   );
 }
