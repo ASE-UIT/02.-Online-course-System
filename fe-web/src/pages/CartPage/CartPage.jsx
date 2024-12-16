@@ -13,6 +13,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {addTotalPrice,addInfoPayment} from "@/store/slices/paymentSlice.js";
 import { useToast } from "@/hooks/use-toast";
+import {CustomSkeletonDemo} from "@/pages/CourseList/CustomSkeleton.jsx";
 
 const mockCourseData = [
     {
@@ -106,6 +107,7 @@ const CartPage = () => {
     const [totalPrice, setTotalPrice] = useState(0);
     const dispatch = useDispatch();
     const { toast } = useToast();
+    const [isLoading, setIsLoading] = useState(true);
 
     const getMyCart = async () => {
         try {
@@ -188,8 +190,10 @@ const CartPage = () => {
         setTotalPrice(newTotalPrice);
     }, [myCart]);
     useEffect(() => {
-        getMyCart();
+        getMyCart().then(() => {setIsLoading(false)});
     }, []);
+
+    if(isLoading) return <CustomSkeletonDemo/>
     return (
         <div className="w-full flex flex-col space-y-5">
             <div className="w-full px-24 mt-5">
