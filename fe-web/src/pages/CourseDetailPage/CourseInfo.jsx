@@ -4,7 +4,7 @@ import { Award, BookCopy, Clock, Heart, Video } from "lucide-react";
 export default function CourseInfo({ course }) {
   return (
     <div
-      className="rounded-[4px] mt-[35%] mx-auto w-[450px] h-fit overflow-hidden "
+      className="rounded-[4px] mt-[35%] mx-auto w-[300px] xl:w-[450px] h-fit overflow-hidden "
       style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
     >
       <div

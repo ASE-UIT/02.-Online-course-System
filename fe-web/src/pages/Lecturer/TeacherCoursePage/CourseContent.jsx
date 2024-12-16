@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import CommentIcon from "@/assets/CommentIcon";
 import GroupIcon from "@/assets/GroupIcon";
@@ -20,11 +20,11 @@ export const CourseContent = () => {
   const {
     data: courseData,
     isLoading,
-    error
+    error,
   } = useGetCoursesByLecturerIdQuery({
     lecturerId: lecturerInfor?.id,
     limit: pageSize,
-    page
+    page,
   });
 
   if (isLoading) return <p>Loading courses...</p>;
@@ -33,7 +33,7 @@ export const CourseContent = () => {
   const courses = courseData?.data?.items || [];
   const totalCourses = courseData?.data?.total || 0;
   const totalPages = Math.ceil(totalCourses / pageSize);
-  console.log("cou", courses);
+  // console.log("cou", courses);
 
   const handleSendToApprove = (courseId) => {
     navigate(`${courseId}`);
@@ -66,25 +66,15 @@ export const CourseContent = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-100 h-[38px] border-t">
             <tr>
-              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[210px]">
-                Ảnh
-              </th>
-              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[400px]">
-                Khóa học
-              </th>
-              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[210px]">
-                Trạng thái
-              </th>
-              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[210px]">
-                Giá
-              </th>
-              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[210px]">
-                Hành động
-              </th>
+              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[210px]">Ảnh</th>
+              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[400px]">Khóa học</th>
+              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[210px]">Trạng thái</th>
+              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[210px]">Giá</th>
+              <th className="text-text/md/semibold py-[7px] px-[8px] text-left w-[210px]">Hành động</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {courses.map((item, index) => (
+            {courses.map((item) => (
               <tr key={item.id}>
                 <td className="px-[8px] py-[7px] whitespace-nowrap border-t w-[210px]">
                   <img
@@ -95,15 +85,11 @@ export const CourseContent = () => {
                 </td>
                 <td className="border-t w-[400px]">
                   <div className="flex flex-col py-[7px] px-[8px] gap-[10px]">
-                    <p className="text-text/md/regular text-black">
-                      {item.name}
-                    </p>
+                    <p className="text-text/md/regular text-black">{item.name}</p>
                     <div className="flex gap-[10px]">
                       <div className="flex gap-[4px] items-center">
                         <GroupIcon className="w-4 h-4" />
-                        <p className="text-text/sm/regular">
-                          {item.totalStudents} học viên
-                        </p>
+                        <p className="text-text/sm/regular">{item.totalStudents} học viên</p>
                       </div>
                       <div className="flex gap-[4px] items-center">
                         <StarIcon className="w-4 h-4 bg-warning-500" />
@@ -113,9 +99,7 @@ export const CourseContent = () => {
                       </div>
                       <div className="flex gap-[4px] items-center">
                         <CommentIcon className="w-4 h-4" />
-                        <p className="text-text/sm/regular">
-                          {item.totalReviews} thảo luận
-                        </p>
+                        <p className="text-text/sm/regular">{item.totalReviews} thảo luận</p>
                       </div>
                     </div>
                   </div>
@@ -130,9 +114,7 @@ export const CourseContent = () => {
                 <td className="border-t w-[210px] text-text/md/regular">
                   <div className="flex flex-col">
                     <p className="font-semibold">{item.sellPrice || "0đ"}</p>
-                    <p className="line-through">
-                      {item.originalPrice || "10đ"}
-                    </p>
+                    <p className="line-through">{item.originalPrice || "10đ"}</p>
                   </div>
                 </td>
                 <td className="border-t w-[210px] flex gap-[8px] py-[7px] px-[8px]">
@@ -144,9 +126,7 @@ export const CourseContent = () => {
                     Quản lý
                   </Button>
                   {item.status === "WAITING_FOR_APPROVAL" && (
-                    <Button className="py-[8px] px-[12px] w-[93px]">
-                      Gửi duyệt
-                    </Button>
+                    <Button className="py-[8px] px-[12px] w-[93px]">Gửi duyệt</Button>
                   )}
                 </td>
               </tr>

@@ -69,13 +69,13 @@ const LecturerModalBody = ({ row, isAddOrChange }) => {
     alert(isAddOrChange ? "Lecturer added successfully!" : "Lecturer updated successfully!");
   };
   return (
-    <div>
-      <div className="mt-4 flex flex-col gap-5">
+    <div className="max-h-screen overflow-y-auto">
+      <div className="flex flex-col gap-5 ">
         {/* Avatar */}
         <div
           className={`${
             formErrors.avatar ? "border-red-500 bg-red-50" : "border-gray-600"
-          } py-4 border-2 border-dashed mt-3 flex flex-col gap-2 items-center justify-center`}
+          } py-4 border-2 border-dashed  flex flex-col gap-2 items-center justify-center`}
         >
           <label className="block text-md font-medium mt-4">Ảnh đại diện</label>
           {fileSlt ? (
