@@ -3,6 +3,7 @@ import { IEnrollmentRepository } from '@/repository/interface/i.enrollment.repos
 import { BaseCrudService } from '@/service/base/base.service';
 import { IEnrollmentService } from '@/service/interface/i.enrollment.service';
 import { inject, injectable } from 'inversify';
+import { enrollmentRepository } from '@/container/enrollment.container';
 
 @injectable()
 export class EnrollmentService extends BaseCrudService<Enrollment> implements IEnrollmentService<Enrollment> {
@@ -11,5 +12,9 @@ export class EnrollmentService extends BaseCrudService<Enrollment> implements IE
   constructor(@inject('EnrollmentRepository') enrollmentRepository: IEnrollmentRepository<Enrollment>) {
     super(enrollmentRepository);
     this.enrollmentRepository = enrollmentRepository;
+  }
+
+  getInProgressEnrollment(studentId: string): Promise<Enrollment[]> {
+    return enrollmentRepository.findInProgress(studentId);
   }
 }

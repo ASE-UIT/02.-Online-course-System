@@ -9,5 +9,10 @@ enrollmentRouter.get(
   authenticateJWT,
   enrollmentController.getCompletedEnrollment.bind(enrollmentController)
 );
+enrollmentRouter.get(
+  '/in-progress',
+  authenticateJWT,
+  enrollmentController.getInProgressEnrollment.bind(enrollmentController)
+);
 
 export default enrollmentRouter;

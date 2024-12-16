@@ -83,4 +83,17 @@ export class EnrollmentController {
       next(error);
     }
   }
+
+  /**
+   * * GET /api/enrollments/in-progress
+   */
+  async getInProgressEnrollment(req: Request, res: Response, next: NextFunction) {
+    try {
+      const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+      const enrollments = await this.enrollmentService.getInProgressEnrollment(student.id);
+      res.send_ok('Get completed enrollments success', enrollments);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
