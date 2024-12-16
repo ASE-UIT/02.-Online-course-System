@@ -1,23 +1,36 @@
-import CategoryCard from "@/components/Category/CategoryCard";
 import { CourseCard } from "@/components/Courses/CourseCard";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import { HomeIcon } from "@/assets";
-
 import { useEffect, useState } from "react";
 import { courseApi } from "@/api/courseApi";
-import CourseCardIcon from "/picture/CourseCardIcon.svg";
+import {CourseListCard} from "@/pages/CourseList/CourseListCard.jsx";
+import {CourseLiveCard} from "@/pages/CourseList/CourseLiveCart.jsx";
+import {useGetCoursesQuery} from "@/store/rtk/course.services.js";
+import {useNavigate} from "react-router-dom";
+import {CustomSkeletonDemo} from "@/pages/CourseList/CustomSkeleton.jsx";
 const CourseList = () => {
-    const [liveCourses, setLiveCourses] = useState([]);
-    const getLiveCourses = async () => {
-        const response = await courseApi.getLiveCourses();
+    const [myCourses, setMyCourses] = useState([]);
+    //const [liveCourses, setLiveCourses] = useState([]);
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+
+    const getMyCourses = async () => {
+        const response = await courseApi.getMyCourses();
         if (response?.success) {
-            setLiveCourses(response.data);
+            setMyCourses(response.data);
+            console.log(response.data);
         }
     };
+    const { data: courseResponse } = useGetCoursesQuery({
+        limit: 8,
+        page: 1,
+        isApproved: true,
+    });
+    const liveCourses = courseResponse?.data?.items ? courseResponse.data.items : [];
     useEffect(() => {
-        getLiveCourses();
+        getMyCourses().then(()=>{
+            setIsLoading(false);
+        });
     }, []);
+    if (isLoading) return <CustomSkeletonDemo/>;
     return (
         <div className="w-full flex flex-col space-y-5">
             <div className="w-full flex px-24 mt-5">
@@ -26,22 +39,49 @@ const CourseList = () => {
             <section className="flex flex-col px-24 space-y-4">
                 <div className="flex justify-between py-2.5">
                     <p className=" text-text/lg/bold">Đang học</p>
-                    <p className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
+                    <p onClick={
+                        ()=>{
+                            navigate("/web/course-list/learning")
+                        }
+                    }
+                        className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
                 </div>
                 <div className="grid grid-cols-4 gap-[1rem]">
-                    {liveCourses.slice(0,8).map((course, idx) => {
-                        return <CourseCard key={idx} course={course}></CourseCard>;
+                    {myCourses.slice(0, 8).map((course, idx) => {
+                        return <CourseListCard key={idx} course={course}></CourseListCard>;
                     })}
                 </div>
             </section>
             <section className="flex flex-col px-24 space-y-4">
                 <div className="flex justify-between py-2.5">
                     <p className=" text-text/lg/bold">Đã học</p>
-                    <p className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
+                    <p onClick={
+                        ()=>{
+                            navigate("/web/course-list/completed")
+                        }
+                    }
+                        className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
                 </div>
                 <div className="grid grid-cols-4 gap-[1rem]">
-                    {liveCourses.slice(0,8).map((course, idx) => {
-                        return <CourseCard key={idx} course={course}></CourseCard>;
+                    {myCourses.slice(0, 8).map((course, idx) => {
+                        return <CourseListCard key={idx} course={course}></CourseListCard>;
+                    })}
+                </div>
+            </section>
+            <section className="flex flex-col px-24 space-y-4">
+                <div className="flex justify-between py-2.5">
+                    <p className=" text-text/lg/bold">Đã thích</p>
+                    <p
+                        onClick={
+                            ()=>{
+                                navigate("/web/course-list/favorite")
+                            }
+                        }
+                        className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
+                </div>
+                <div className="grid grid-cols-4 gap-[1rem]">
+                    {liveCourses.slice(0, 8).map((course, idx) => {
+                        return <CourseLiveCard key={idx} course={course}></CourseLiveCard>;
                     })}
                 </div>
             </section>
@@ -51,8 +91,8 @@ const CourseList = () => {
                     <p className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
                 </div>
                 <div className="grid grid-cols-4 gap-[1rem]">
-                    {liveCourses.slice(0,8).map((course, idx) => {
-                        return <CourseCard key={idx} course={course}></CourseCard>;
+                    {liveCourses.slice(0, 8).map((course, idx) => {
+                        return <CourseLiveCard key={idx} course={course}></CourseLiveCard>;
                     })}
                 </div>
             </section>

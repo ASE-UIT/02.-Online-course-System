@@ -3,10 +3,13 @@ import {Stepper} from "@/pages/PaymentPage/Stepper.jsx";
 import {useNavigate, useOutletContext} from "react-router-dom";
 import FailIcon from "@/assets/FailIcon.jsx";
 import {useEffect} from "react";
+import {useScrollToTop} from "@/hooks/index.js";
 
 export default function CheckoutFailPage() {
     const navigate = useNavigate();
     const {setCurrentStep, setResult} = useOutletContext();
+    useScrollToTop();
+
     useEffect(() => {
         setCurrentStep(3)
         setResult(false);

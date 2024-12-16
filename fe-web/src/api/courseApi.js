@@ -27,6 +27,24 @@ export const courseApi = {
       console.log("Error creating course:", error);
       return { error: error.message }; // Return error message if any error occurs
     }
+  },
+
+  getMyCourses: async () => {
+    try
+    {
+      const token = JSON.parse(localStorage.getItem("auth"));
+      const config = {
+        headers:{
+          Authorization: `Bearer ${token}`,
+        }
+      };
+
+      const response = await api.get(`/enrollment/me`,config);
+      return response.data;
+    }catch (e) {
+      console.log(e);
+      return { error: e.message };
+    }
   }
 };
 
