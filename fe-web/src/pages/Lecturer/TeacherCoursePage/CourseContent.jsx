@@ -14,7 +14,7 @@ export const CourseContent = () => {
   const { lecturerInfor } = useSelector((state) => state.lecturerInfor);
   // Pagination state
   const [page, setPage] = useState(1);
-  const pageSize = 6;
+  const pageSize = 100;
   const navigate = useNavigate();
 
   const {
