@@ -10,13 +10,12 @@ import {useScrollToTop} from "@/hooks/index.js";
 export default function CheckoutSuccessPage() {
   const navigate = useNavigate();
   const { setCurrentStep, setResult } = useOutletContext();
-  const { totalPrice } = useSelector((state) => state.payment);
+ // const { totalPrice } = useSelector((state) => state.payment);
   useScrollToTop();
 
   useEffect(() => {
     setCurrentStep(3);
     setResult(true);
-    console.log(totalPrice);
   }, []);
   return (
     <div className="py-20 flex justify-center items-center">
@@ -30,7 +29,7 @@ export default function CheckoutSuccessPage() {
             Thanh toán thành công
           </h1>
           <p className="text-text/md/regular text-black-500">
-            Bạn đã thanh toán thành công số tiền đ{formatCurrency(totalPrice)}{" "}
+            Bạn đã thanh toán thành công
             cho đơn hàng
           </p>
         </div>
