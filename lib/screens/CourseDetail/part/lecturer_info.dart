@@ -23,8 +23,7 @@ class CourseLecturerInfo extends StatelessWidget {
          Text(
           courseDetail.lecturer?.name ?? "",
           style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
         const Text(

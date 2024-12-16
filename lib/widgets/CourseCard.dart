@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
-import 'package:online_course_system/screens/course_detail/course_detail.dart';
+import 'package:online_course_system/screens/CourseDetail/CourseDetailScreen.dart';
 
 class CourseCard extends StatelessWidget {
   final String? id;

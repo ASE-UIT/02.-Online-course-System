@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/constants/colors.dart';
 
 class CourseIntro extends StatefulWidget {
   final String text; 
@@ -25,7 +26,7 @@ class _CourseIntroState extends State<CourseIntro> with TickerProviderStateMixin
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.green, 
+              color: AppColors.success700, 
             ),
           ),
           const SizedBox(height: 8),

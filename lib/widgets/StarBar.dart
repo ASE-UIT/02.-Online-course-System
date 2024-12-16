@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/constants/colors.dart';
 
 class StarBar extends StatelessWidget {
   final double rating; // Rating from 0 to 5
@@ -18,7 +19,7 @@ class StarBar extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: List.generate(5, (index) {
-              return Icon(Icons.star_border, color: Colors.amber, size: starSize);
+              return Icon(Icons.star_border, color: AppColors.warning500, size: starSize);
             }),
           ),
           // Foreground stars (filled stars)
@@ -33,7 +34,7 @@ class StarBar extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.topLeft,
                   widthFactor: starFill,
-                  child: Icon(Icons.star, color: Colors.amber, size: starSize),
+                  child: Icon(Icons.star, color: AppColors.warning500, size: starSize),
                 ),
               );
             }),
