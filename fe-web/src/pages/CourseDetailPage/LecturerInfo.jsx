@@ -6,7 +6,7 @@ export default function LecturerInfo({ course }) {
   return (
     <div
       style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
-      className="w-[450px] mx-auto mt-[25px] p-[20px] rounded-md"
+      className="w-[300px] xl:w-[450px] mx-auto mt-[25px] p-[20px] rounded-md"
     >
       <div className="flex gap-4">
         <div

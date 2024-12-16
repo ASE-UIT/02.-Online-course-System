@@ -86,7 +86,7 @@ export const lecturerColumns = [
     }
   },
   {
-    accessorKey: "phone",
+    accessorKey: "phoneNumber",
     name: "Số điện thoại",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="SỐ ĐIỆN THOẠI" />
@@ -95,7 +95,7 @@ export const lecturerColumns = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate">
-            {row.getValue("phone")}
+            {row.getValue("phoneNumber")}
           </span>
         </div>
       );

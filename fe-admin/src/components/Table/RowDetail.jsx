@@ -5,27 +5,68 @@ import { Button } from "../ui/button";
 import { ExternalLink } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { approveCourse } from "@/api/courseApi";
+import { useToast } from "@/hooks/use-toast";
+import { set } from "date-fns";
+import { approveLecturer } from "@/api/lecturerApi";
 
-const RowDetail = ({ row, headerList, pageName }) => {
+const RowDetail = ({ row, headerList, pageName, setLoading }) => {
   const url = useLocation();
+  const { toast } = useToast();
   const headerTranslator = (id) => {
     const header = headerList.find((header) => header.id === id);
-    return header ? header.title : "";
+    return header ? header.title : id;
   };
 
   const renderValue = (value) => {
     if (typeof value === "object" && value !== null) {
+      if (value?.name) {
+        const valueName = JSON.stringify(value?.name);
+        return valueName.slice(1, valueName.length - 1);
+      }
       return JSON.stringify(value);
+    }
+    if (value === true) {
+      return "Đã duyệt";
+    }
+    if (value === false) {
+      return "Chưa duyệt";
     }
     return value;
   };
 
   const handleApprove = (id) => async () => {
     try {
+      setLoading(true);
       const response = await approveCourse(id);
       console.log("Approve course", response);
+      toast({
+        description: `Duyệt khoá học ${row?.name ? row.name : id} thành công`
+      });
+      setLoading(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
     } catch (error) {
       console.log("Approve course error", error);
+      setLoading(false);
+    }
+  };
+
+  const handleApproveLecturer = (id) => async () => {
+    try {
+      setLoading(true);
+      const response = await approveLecturer(id);
+      console.log("Approve course", response);
+      toast({
+        description: `Duyệt giảng viên ${row?.name ? row.name : id} thành công`
+      });
+      setLoading(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 200);
+    } catch (error) {
+      console.log("Approve course error", error);
+      setLoading(false);
     }
   };
 
@@ -35,7 +76,10 @@ const RowDetail = ({ row, headerList, pageName }) => {
       <div className="px-8 flex flex-col md:gap-8 justify-center items-stretch">
         <ul>
           {Object.entries(row).map(([key, value], index) =>
-            key === "thumbnail" || key === "id" ? (
+            key === "thumbnail" ||
+            key === "id" ||
+            key === null ||
+            key === " " ? (
               <></>
             ) : (
               <li key={index}>
@@ -82,8 +126,8 @@ const RowDetail = ({ row, headerList, pageName }) => {
           <>
             {pageName === CURRENT_PAGES.WAITING_COURSE_PAGE && (
               <Button
-                variant=""
-                className=" text-white px-4 py-2"
+                variant="outline"
+                className=" text-black px-4 py-2 border-black"
                 onClick={handleApprove(row.id)}
               >
                 Duyệt
@@ -91,11 +135,25 @@ const RowDetail = ({ row, headerList, pageName }) => {
               </Button>
             )}
           </>
-          <DialogComponent
-            bodyType={MODAL_BODY_TYPES.EDIT}
-            currentPage={pageName}
-            row={row}
-          />
+          <>
+            {pageName === CURRENT_PAGES.LECTURER_PAGE && (
+              <Button
+                variant="outline"
+                className=" text-black px-4 py-2 border-black"
+                onClick={handleApproveLecturer(row.id)}
+              >
+                Duyệt giảng viên
+              </Button>
+            )}
+          </>
+
+          {pageName !== CURRENT_PAGES.WAITING_COURSE_PAGE && (
+            <DialogComponent
+              bodyType={MODAL_BODY_TYPES.EDIT}
+              currentPage={pageName}
+              row={row}
+            />
+          )}
           <DialogComponent
             bodyType={MODAL_BODY_TYPES.REMOVE}
             currentPage={pageName}
