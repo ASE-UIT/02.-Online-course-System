@@ -26,7 +26,6 @@ class OrderContainer extends BaseContainer {
     //Import
     this.container.bind<IDiscountRepository<any>>('DiscountRepository').toConstantValue(discountRepository);
     this.container.bind<ICartRepository<any>>('CartRepository').toConstantValue(cartRepository);
-    this.container.bind<IEnrollmentRepository<any>>('EnrollmentRepository').toConstantValue(enrollmentRepository);
     this.container.bind<ICourseRepository<any>>('CourseRepository').toConstantValue(courseRepository);
     this.container.bind<ICartItemRepository<any>>('CartItemRepository').toConstantValue(cartItemRepository);
   }

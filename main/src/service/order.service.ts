@@ -30,14 +30,12 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
   private orderRepository: IOrderRepository<Order>;
   private cartRepository: ICartRepository<Cart>;
   private discountRepository: IDiscountRepository<Discount>;
-  private enrollRepository: IEnrollmentRepository<Enrollment>;
   private courseRepository: ICourseRepository<Course>;
   private cartItemRepository: ICartItemRepository<CartItem>;
 
   constructor(
     @inject('OrderRepository') orderRepository: IOrderRepository<Order>,
     @inject('CartRepository') cartRepository: ICartRepository<Cart>,
-    @inject('EnrollmentRepository') enrollRepository: IEnrollmentRepository<Enrollment>,
     @inject('DiscountRepository') discountRepository: IDiscountRepository<Discount>,
     @inject('CourseRepository') courseRepository: ICourseRepository<Course>,
     @inject('CartItemRepository') cartItemRepository: ICartItemRepository<CartItem>
@@ -46,7 +44,6 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
     this.orderRepository = orderRepository;
     this.cartRepository = cartRepository;
     this.discountRepository = discountRepository;
-    this.enrollRepository = enrollRepository;
     this.courseRepository = courseRepository;
     this.cartItemRepository = cartItemRepository;
   }
@@ -94,17 +91,17 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
 
     await this.orderRepository.save(order);
 
-    //Create enrollment
-    for (const item of orderItems) {
-      const enrollment = new Enrollment();
-      enrollment.courseId = item.course.id;
-      enrollment.studentId = studentId;
-      enrollment.enrolledDate = new Date();
-      enrollment.status = 'active';
-      enrollment.completionPercentage = 0;
+    // //Create enrollment
+    // for (const item of orderItems) {
+    //   const enrollment = new Enrollment();
+    //   enrollment.courseId = item.course.id;
+    //   enrollment.studentId = studentId;
+    //   enrollment.enrolledDate = new Date();
+    //   enrollment.status = 'active';
+    //   enrollment.completionPercentage = 0;
 
-      await this.enrollRepository.save(enrollment);
-    }
+    //   await this.enrollRepository.save(enrollment);
+    // }
 
     //Send success email
 
@@ -291,19 +288,19 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
     await this.orderRepository.save(order);
 
     //Create enrollment
-    for (const item of orderItems) {
-      const enrollment = new Enrollment();
-      enrollment.courseId = item.course.id;
-      enrollment.studentId = studentId;
-      enrollment.enrolledDate = new Date();
-      enrollment.status = 'active';
-      enrollment.completionPercentage = 0;
+    // for (const item of orderItems) {
+    //   const enrollment = new Enrollment();
+    //   enrollment.courseId = item.course.id;
+    //   enrollment.studentId = studentId;
+    //   enrollment.enrolledDate = new Date();
+    //   enrollment.status = 'active';
+    //   enrollment.completionPercentage = 0;
 
-      await this.enrollRepository.save(enrollment);
-    }
+    //   await this.enrollRepository.save(enrollment);
+    // }
 
     //Clean cart
-    await this.cartItemRepository.cleanCart(studentId);
+    await this.cartItemRepository.cleanCart(cart.id);
 
     //Send success email
 
