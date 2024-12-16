@@ -50,4 +50,37 @@ export class EnrollmentController {
       next(error);
     }
   }
+
+  /**
+   * * GET /api/enrollments/completed
+   */
+  async getCompletedEnrollment(req: Request, res: Response, next: NextFunction) {
+    try {
+      const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+      const enrollments = await this.enrollmentService.findMany({
+        filter: { studentId: student.id, completionPercentage: 100 },
+        relations: ['course', 'course.lecturer'],
+        select: {
+          studentId: true,
+          courseId: true,
+          enrolledDate: true,
+          status: true,
+          completionPercentage: true,
+          completionDate: true,
+          course: {
+            name: true,
+            nameEn: true,
+            shortDescription: true,
+            thumbnail: true,
+            lecturer: {
+              name: true
+            }
+          }
+        }
+      });
+      res.send_ok('Get completed enrollments success', enrollments);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
