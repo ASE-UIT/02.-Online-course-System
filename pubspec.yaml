@@ -45,6 +45,8 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   chewie: ^1.6.0
   win32: ^5.9.0
+  url_launcher: ^6.3.1
+  path_provider_android: ^2.2.15
 
 
 
