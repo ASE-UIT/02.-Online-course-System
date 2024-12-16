@@ -54,10 +54,13 @@ class FavoriteCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              "assets/coursecard.png",
-              width: 80,
-              fit: BoxFit.fitWidth,
+            SizedBox(
+              width: 80, // Set the width of the image
+              height: 100, // Ensure height is set to prevent overflow
+              child: Image.network(
+                imageUrl ?? 'assets/coursecard.png',
+                fit: BoxFit.contain, // Ensure image covers the available space
+              ),
             ),
             Expanded(
               child: Padding(

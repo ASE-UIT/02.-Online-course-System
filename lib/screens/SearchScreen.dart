@@ -56,7 +56,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
     try {
       final results = await HttpService.searchElasticsearchEduhub(query);
-      debugPrint("Results: $results");
+      // debugPrint("Results:" + results.toString());
 
       setState(() {
         searchResults = (results['hits']?['hits'] as List<dynamic>?) ?? [];
@@ -272,6 +272,7 @@ class _SearchResultsList extends StatelessWidget {
       itemCount: searchResults.length,
       itemBuilder: (context, index) {
         final item = searchResults[index]['_source'];
+        debugPrint("Results:" + item['thumbnail']);
 
         return Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
@@ -288,7 +289,7 @@ class _SearchResultsList extends StatelessWidget {
               item['original_price']?.toDouble() ?? 0.0,
             ),
             imageUrl:
-                item['thumbnail'] ?? 'https://example.com/default-image.jpg',
+                item['thumbnail'],
             isBestSeller: item['is_free_course'] == true,
           ),
         );
