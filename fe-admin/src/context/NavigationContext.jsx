@@ -55,7 +55,7 @@ export const menuItems = [
   },
   {
     icon: Users,
-    text: "Quản lý hân viên",
+    text: "Quản lý nhân viên",
     id: "employees",
     path: "employees"
   },
