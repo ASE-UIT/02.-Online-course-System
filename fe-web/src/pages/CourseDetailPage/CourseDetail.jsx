@@ -56,7 +56,7 @@ export default function CourseDetail() {
         </div>
       </div>
       <div className="flex px-24 py-[24px] gap-12">
-        <div className="basis-[60%] ">
+        <div className="max-w-[60%]">
           <div className="border-[4px] border-primary-100 rounded-[12px]">
             <header className="bg-primary-100 text-primary-500 text-center leading-[48px] text-text/lg/semibold w-[240px] h-[48px] rounded-br-[4px] inline-block">
               Bạn sẽ học được
@@ -103,7 +103,7 @@ export default function CourseDetail() {
                 backgroundImage: `url(https://s3-alpha-sig.figma.com/img/fed6/d8cf/aff81f292ae2e9b6876ec63b242587a6?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gD4r5m1bzKtqU1If6c2w1h1XTUKNHYxIOBWZCrYalcN5uts3uxwjSx5mj7L6GCZ~6G9xq5H16dNgoRMSnLMOLolzjPQvN~R9VYQuiHo7z99fwR-Lyc0A2yMGzDw4orO1iSTeLNXPiBDWj4-phi-AjXoHtbMQ1P2-0ofPQCAB~ltuvuRcS19D3oSIplcb4VcryrVKTu0XvbCx6VKd-GxgyVmNPzbLywCH4SkeQRxbgq3rtIbpyLRxURHUoVJVnIrMt~fMfAnE9XNfZ87ejARlNPgCuWIWGh64D9aQ0F5wsnpOrfQPVlfB-pxX8jG8kswhqj7gHtk8LoklRMBrkS09cw__)`,
               }}
             ></div>
-            <div className="title flex flex-col justify-between items-end w-[400px] mt-10">
+            <div className="title flex flex-col justify-between items-end w-2/3 px-10 mt-10">
               <h1 className="text-display/md/bold text-warning-700 text-right h-[88px] ">
                 Bạn thấy khoá học <br /> hữu ích chứ?
               </h1>
@@ -132,8 +132,6 @@ export default function CourseDetail() {
           {/* Related */}
           <RelatedCourse categoryId={course?.categoryId} courseId={course?.id} />
         </div>
-
-        <div className="basis-[40%]"></div>
       </div>
     </div>
   );

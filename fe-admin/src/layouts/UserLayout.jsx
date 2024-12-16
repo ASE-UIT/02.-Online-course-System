@@ -3,6 +3,7 @@ import Header from "../components/Header/Header";
 import { NavigationProvider } from "@/context/NavigationContext";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { useEffect } from "react";
+import { Toaster } from "@/components/ui/toaster";
 
 const UserLayout = () => {
   const location = useLocation();
@@ -26,6 +27,7 @@ const UserLayout = () => {
           </div>
         </div>
       </NavigationProvider>
+      <Toaster />
     </div>
   );
 };

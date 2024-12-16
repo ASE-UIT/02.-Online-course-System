@@ -5,13 +5,9 @@ const TOKEN = JSON.parse(localStorage.getItem("adminToken")) || "";
 export const getWaitingCourseWithPage = async (rpp, page) => {
   try {
     const res = await api.get(
-      `/course/waiting-for-approve/paging`,
+      `/course/waiting-for-approve/paging?rpp=${rpp}&page=${page}`,
       {},
       {
-        params: {
-          rpp,
-          page
-        },
         headers: {
           "Content-Type": "application/json"
         }
@@ -37,6 +33,16 @@ export const approveCourse = async (courseId) => {
       }
     );
     return res;
+  } catch (error) {
+    console.error("API call error:", error.response || error.message);
+    throw error;
+  }
+};
+
+export const getAllCategories = async () => {
+  try {
+    const res = await api.get(`/course-category/`);
+    return res.data;
   } catch (error) {
     console.error("API call error:", error.response || error.message);
     throw error;
