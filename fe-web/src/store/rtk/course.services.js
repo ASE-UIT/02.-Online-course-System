@@ -123,25 +123,25 @@ export const courseRTKApi = baseApi.injectEndpoints({
         };
       },
     }),
-    searchBox: build.query({
-      query: ({ filter, sort, rpp, page }) => {
-        const params = {
-          filter: JSON.stringify(filter),
-          sort: JSON.stringify(sort),
-          rpp,
-          page,
-        };
-        const fullUrl = `course/search?${new URLSearchParams(params).toString()}`;
+    // searchBox: build.query({
+    //   query: ({ filter, sort, rpp, page }) => {
+    //     const params = {
+    //       filter: JSON.stringify(filter),
+    //       sort: JSON.stringify(sort),
+    //       rpp,
+    //       page,
+    //     };
+    //     const fullUrl = `course/search?${new URLSearchParams(params).toString()}`;
 
-        return { url: fullUrl, method: "GET" };
-      },
-      providesTags: (result, error, { filter, sort, rpp, page }) => [
-        {
-          type: "SearchResults",
-          id: `${JSON.stringify(filter)}-${JSON.stringify(sort)}-${rpp}-${page}`,
-        },
-      ],
-    }),
+    //     return { url: fullUrl, method: "GET" };
+    //   },
+    //   providesTags: (result, error, { filter, sort, rpp, page }) => [
+    //     {
+    //       type: "SearchResults",
+    //       id: `${JSON.stringify(filter)}-${JSON.stringify(sort)}-${rpp}-${page}`,
+    //     },
+    //   ],
+    // }),
   }),
 });
 export const {
@@ -153,7 +153,7 @@ export const {
   useGetCoursesByCategoryIdQuery,
   useGetCoursesByLecturerIdQuery,
   useSearchCoursesQuery,
-  useSearchBoxQuery,
+  // useSearchBoxQuery,
   useGetQuizDoneByCourseIdQuery,
 
   useUpdateCourseMutation,

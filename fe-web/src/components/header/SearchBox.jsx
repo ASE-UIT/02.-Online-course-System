@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchCard from "../Courses/SearchCard";
-import { useSearchBoxQuery } from "@/store/rtk/course.services";
+import { useSearchCoursesQuery } from "@/store/rtk/course.services";
 
 export default function SearchBox() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -12,21 +12,19 @@ export default function SearchBox() {
   const searchBoxRef = useRef(null);
   const [searchedCourse, setSearchedCourse] = useState([]);
   const navigate = useNavigate();
-  // const normalizedSearchQuery = debounceSearch.toLowerCase();
 
-  const { data: searchResults, isFetching } = useSearchBoxQuery(
+  const { data: searchResults, isFetching } = useSearchCoursesQuery(
     {
-      filter: debounceSearch
-        ? [
-            {
-              operator: "like",
-              key: "name",
-              value: debounceSearch,
-            },
-          ]
-        : [],
-      sort: { key: "originalPrice", type: "DESC" },
-      rpp: 5,
+      filter: [
+        { match: { name: debounceSearch } },
+        {
+          range: {
+            sell_price: { gte: 0, lte: 3500000 },
+          },
+        },
+      ],
+      sort: { key: "create_at", type: "DESC" },
+      rpp: 10,
       page: 1,
     },
     {
@@ -35,14 +33,15 @@ export default function SearchBox() {
   );
 
   useEffect(() => {
-    if (searchResults && searchResults.data) {
-      setSearchedCourse(searchResults.data);
+    if (searchResults?.hits?.hits) {
+      const courses = searchResults.hits.hits.map((hit) => hit._source);
+      setSearchedCourse(courses);
+      // console.log("searchedCourse", courses);
     } else {
       setSearchedCourse([]);
     }
   }, [searchResults]);
 
-  // Close search results dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (searchBoxRef.current && !searchBoxRef.current.contains(event.target)) {
@@ -55,14 +54,6 @@ export default function SearchBox() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  useEffect(() => {
-    if (searchResults && searchResults.data) {
-      // console.log("Search results:", searchResults.data);
-      setSearchedCourse(searchResults.data);
-    } else {
-      setSearchedCourse([]);
-    }
-  }, [searchResults]);
 
   // Navigate to search results page
   const handleSearchSubmit = () => {
@@ -70,6 +61,7 @@ export default function SearchBox() {
       navigate(`../web/search?query=${encodeURIComponent(searchQuery)}`);
     }
   };
+
   return (
     <div ref={searchBoxRef} className="relative w-full max-w-[600px]">
       <div className="bg-gray-50 rounded-full h-[45px] flex items-center relative border px-4">
@@ -80,7 +72,7 @@ export default function SearchBox() {
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
-            setIsSearching(true);
+            setIsSearching(true); // Trigger the search as user types
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
