@@ -120,6 +120,21 @@ export const courseCartApi ={
     }catch(error) {
       console.log(error);
     }
+  },
+  addToCart: async(courseId)=>{
+    try{
+      const token = JSON.parse(localStorage.getItem("auth"));
+      const config = {
+        headers:{
+          Authorization: `Bearer ${token}`,
+        }
+      }
+      const response = await api.post(`/cart/add`, courseId ,config);
+      return response.data;
+    }catch(error){
+      console.log(error);
+      return {error: error.message };
+    }
   }
 }
 

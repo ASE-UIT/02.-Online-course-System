@@ -47,7 +47,7 @@ export default function CheckoutStep2Page() {
         try {
             const formData = new FormData();
             formData.append("payType", paymentMethod)
-            formData.append("customFullname",name)
+            formData.append("customerFullname",name)
             formData.append("customerEmail",email)
             formData.append("customerPhone",phone)
             const response = await courseCartApi.createOrder(formData);
