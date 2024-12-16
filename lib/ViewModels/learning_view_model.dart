@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:online_course_system/models/QuizAnswerRequest.dart';
+import 'package:online_course_system/models/QuizAnswerResponse.dart';
 import 'package:online_course_system/models/UpdateLearningProgress.dart';
 import 'package:online_course_system/models/learning_model.dart';
 
@@ -56,12 +57,15 @@ class LearningViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> answerQuiz(QuizAnswerRequest request) async {
+  Future<QuizAnswerData?> answerQuiz(QuizAnswerRequest request) async {
     notifyListeners();
     try {
       // Call API to answer quiz
       final response = await HttpService.post("/quiz/answer",
           body: request.toJson());
+      QuizAnswerResponse _quizAnswerResponse =
+          QuizAnswerResponse.fromJson(response);
+      return _quizAnswerResponse.data;
       // Assuming the response is a Map and contains the learning data
       log('Answer quiz data: $response');
     } catch (e) {
@@ -71,5 +75,6 @@ class LearningViewModel extends ChangeNotifier {
       log('Answer OK');
       notifyListeners();
     }
+    return null;
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:online_course_system/ViewModels/learning_view_model.dart';
@@ -56,7 +55,6 @@ class _CourseScreenState extends State<CourseScreen> {
     _chewieController = ChewieController(
         videoPlayerController: _videoPlayerController,
         autoPlay: true,
-        looping: true,
         startAt: Duration(seconds: 0),
         aspectRatio: 16 / 9);
 
@@ -180,7 +178,8 @@ class _CourseScreenState extends State<CourseScreen> {
                                     }
                                   });
                                 },
-                                title: Text(quizzes?[currentIndex].choiceA ?? ""),
+                                title:
+                                    Text(quizzes?[currentIndex].choiceA ?? ""),
                               ),
                               CheckboxListTile(
                                 value: selectedAnswers.contains("B"),
@@ -193,7 +192,8 @@ class _CourseScreenState extends State<CourseScreen> {
                                     }
                                   });
                                 },
-                                title: Text(quizzes?[currentIndex].choiceB ?? ""),
+                                title:
+                                    Text(quizzes?[currentIndex].choiceB ?? ""),
                               ),
                               CheckboxListTile(
                                 value: selectedAnswers.contains("C"),
@@ -206,7 +206,8 @@ class _CourseScreenState extends State<CourseScreen> {
                                     }
                                   });
                                 },
-                                title: Text(quizzes?[currentIndex].choiceC ?? ""),
+                                title:
+                                    Text(quizzes?[currentIndex].choiceC ?? ""),
                               ),
                               CheckboxListTile(
                                 value: selectedAnswers.contains("D"),
@@ -219,7 +220,8 @@ class _CourseScreenState extends State<CourseScreen> {
                                     }
                                   });
                                 },
-                                title: Text(quizzes?[currentIndex].choiceD ?? ""),
+                                title:
+                                    Text(quizzes?[currentIndex].choiceD ?? ""),
                               ),
                             ],
                           ),
@@ -235,32 +237,30 @@ class _CourseScreenState extends State<CourseScreen> {
                                 ),
                               ),
                               onPressed: () async {
-                                final quizId = quizzes?[currentIndex].id ?? ""; // Lấy quizId từ dữ liệu
+                                final quizId = quizzes?[currentIndex].id ??
+                                    ""; // Lấy quizId từ dữ liệu
                                 final request = QuizAnswerRequest(
                                   quizId: quizId,
                                   choices: selectedAnswers,
                                 );
 
-                                await _learningVM.answerQuiz(request);
-                                // Logic for viewing the answer
-                                /*showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: Text("Đáp án đúng"),
-                                      content: Text("Đáp án đúng là: Đáp án 2"),
-                                      // Display correct answer
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: Text("Đóng"),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );*/
+                                final answerResult =
+                                    await _learningVM.answerQuiz(request);
+                                if (answerResult?.answerResult == true) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Đáp án đúng"),
+                                      backgroundColor: Colors.green,
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text("Đáp án sai"),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
                               },
                               child: Text(
                                 "Xem đáp án",
@@ -281,12 +281,16 @@ class _CourseScreenState extends State<CourseScreen> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  currentIndex++;
-                                  selectedAnswers.clear(); // Xóa danh sách đáp án khi chuyển sang câu hỏi tiếp theo
-                                });
-                              },
+                              onPressed: (currentIndex + 1 >=
+                                      (quizzes?.length ?? 0))
+                                  ? null // Vô hiệu hóa nút nếu là câu hỏi cuối cùng
+                                  : () {
+                                      setState(() {
+                                        currentIndex++;
+                                        selectedAnswers
+                                            .clear(); // Xóa danh sách đáp án khi chuyển sang câu hỏi tiếp theo
+                                      });
+                                    },
                               child: Text(
                                 "Tiếp theo",
                                 style: TextStyle(
@@ -394,7 +398,8 @@ class _CourseScreenState extends State<CourseScreen> {
                                                               videoPlayerController:
                                                                   _videoPlayerController,
                                                               autoPlay: true,
-                                                              looping: true,
+                                                              startAt:
+                                                                  Duration(seconds: 10),
                                                             );
                                                           },
                                                         );
@@ -432,6 +437,10 @@ class _CourseScreenState extends State<CourseScreen> {
                                     onTap: () {
                                       setState(
                                         () {
+                                          _videoPlayerController
+                                              .pause(); // Dừng video hiện tại (nếu có)
+                                          _videoPlayerController
+                                              .dispose(); // Giải phóng bộ nhớ cho controller cũ
                                           currentItem = SelectedContent(
                                             type: ContentType.quiz,
                                             data: lessonPart
