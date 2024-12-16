@@ -1,11 +1,12 @@
-import { CourseCard } from "@/components/Courses/CourseCard";
-import { useEffect, useState } from "react";
-import { courseApi } from "@/api/courseApi";
+import {CourseCard} from "@/components/Courses/CourseCard";
+import {useEffect, useState} from "react";
+import {courseApi} from "@/api/courseApi";
 import {CourseListCard} from "@/pages/CourseList/CourseListCard.jsx";
 import {CourseLiveCard} from "@/pages/CourseList/CourseLiveCart.jsx";
 import {useGetCoursesQuery} from "@/store/rtk/course.services.js";
 import {useNavigate} from "react-router-dom";
 import {CustomSkeletonDemo} from "@/pages/CourseList/CustomSkeleton.jsx";
+
 const CourseList = () => {
     const [myCourses, setMyCourses] = useState([]);
     //const [liveCourses, setLiveCourses] = useState([]);
@@ -13,20 +14,20 @@ const CourseList = () => {
     const [isLoading, setIsLoading] = useState(true);
 
     const getMyCourses = async () => {
-        const response = await courseApi.getMyCourses();
+        const response = await courseApi.getMyStudentCourses();
         if (response?.success) {
             setMyCourses(response.data);
             console.log(response.data);
         }
     };
-    const { data: courseResponse } = useGetCoursesQuery({
+    const {data: courseResponse} = useGetCoursesQuery({
         limit: 8,
         page: 1,
         isApproved: true,
     });
     const liveCourses = courseResponse?.data?.items ? courseResponse.data.items : [];
     useEffect(() => {
-        getMyCourses().then(()=>{
+        getMyCourses().then(() => {
             setIsLoading(false);
         });
     }, []);
@@ -40,11 +41,11 @@ const CourseList = () => {
                 <div className="flex justify-between py-2.5">
                     <p className=" text-text/lg/bold">Đang học</p>
                     <p onClick={
-                        ()=>{
+                        () => {
                             navigate("/web/course-list/learning")
                         }
                     }
-                        className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
+                       className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
                 </div>
                 <div className="grid grid-cols-4 gap-[1rem]">
                     {myCourses.slice(0, 8).map((course, idx) => {
@@ -56,11 +57,11 @@ const CourseList = () => {
                 <div className="flex justify-between py-2.5">
                     <p className=" text-text/lg/bold">Đã học</p>
                     <p onClick={
-                        ()=>{
+                        () => {
                             navigate("/web/course-list/completed")
                         }
                     }
-                        className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
+                       className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
                 </div>
                 <div className="grid grid-cols-4 gap-[1rem]">
                     {myCourses.slice(0, 8).map((course, idx) => {
@@ -73,7 +74,7 @@ const CourseList = () => {
                     <p className=" text-text/lg/bold">Đã thích</p>
                     <p
                         onClick={
-                            ()=>{
+                            () => {
                                 navigate("/web/course-list/favorite")
                             }
                         }
