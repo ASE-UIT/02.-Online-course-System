@@ -50,18 +50,29 @@ export const categoriesColumns = [
       <DataTableColumnHeader column={column} title="ẢNH ĐẠI DIỆN" />
     ),
     cell: ({ row }) => {
-      const avatar = row.getValue("thumbnail");
+      let avatar = row.getValue("thumbnail");
 
-      if (!avatar) {
-        return null;
+      if (!avatar || typeof avatar !== "string") {
+        avatar = BlankImg;
+      } else {
+        avatar = avatar.startsWith("blob:") ? avatar.slice(5) : avatar;
+        try {
+          new URL(avatar);
+        } catch (e) {
+          console.log("Invalid URL", e);
+          avatar = BlankImg;
+        }
       }
 
       return (
         <div className="flex w-[100px] items-center">
           <img
-            src={avatar.value || BlankImg}
+            src={avatar}
             alt="thumbnail"
             className="w-16 h-16"
+            onError={(e) => {
+              e.target.src = BlankImg;
+            }}
           />
         </div>
       );

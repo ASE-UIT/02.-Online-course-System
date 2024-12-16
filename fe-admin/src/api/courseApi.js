@@ -42,3 +42,13 @@ export const approveCourse = async (courseId) => {
     throw error;
   }
 };
+
+export const getAllCategories = async () => {
+  try {
+    const res = await api.get(`/course-category/`);
+    return res.data;
+  } catch (error) {
+    console.error("API call error:", error.response || error.message);
+    throw error;
+  }
+};

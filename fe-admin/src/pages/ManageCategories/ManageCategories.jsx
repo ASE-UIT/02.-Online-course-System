@@ -2,38 +2,10 @@ import Filter from "@/components/Filter/Filter";
 import DataTable from "@/components/Table/DataTable";
 import { categoriesColumns } from "./CategoriesColumns";
 import { categoriesList } from "./CategoriesList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CURRENT_PAGES } from "@/utils/globalUtils";
-
-const data = [
-  {
-    id: "TASK-8782",
-    thumbnail:
-      "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
-    name: "Danh mục 1",
-    totalCourse: 100,
-    createdBy: "ADMIN",
-    updateAt: "2021-10-10"
-  },
-  {
-    id: "TASK-7878",
-    thumbnail:
-      "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
-    name: "Danh mục 1",
-    totalCourse: 100,
-    createdBy: "ADMIN",
-    updateAt: "2021-10-10"
-  },
-  {
-    id: "TASK-7839",
-    thumbnail:
-      "https://www.figma.com/design/H2xQOXOAcFuJXgFATi9VqE/Copy-Place?node-id=129-1780&m=dev",
-    name: "Danh mục 1",
-    totalCourse: 100,
-    createdBy: "ADMIN",
-    updateAt: "2021-10-10"
-  }
-];
+import { use } from "react";
+import { getAllCategories } from "@/api/courseApi";
 
 // const changeButton = (
 //   <Button variant="primary" className="bg-primary-500 text-white px-4 py-2">
@@ -43,6 +15,15 @@ const data = [
 
 const ManageCategories = () => {
   const [columnVisibility, setColumnVisibility] = useState({});
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const res = await getAllCategories();
+      setData(res.data);
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className="flex px-10 gap-10">
