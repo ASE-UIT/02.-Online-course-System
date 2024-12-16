@@ -54,32 +54,32 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   void _handleLogout() async {
-  final shouldLogout = await showDialog<bool>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Đăng xuất'),
-        content: const Text('Bạn có chắc chắn muốn đăng xuất không?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false), 
-            child: const Text('HỦY'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true), 
-            child: const Text('ĐĂNG XUẤT'),
-          ),
-        ],
-      );
-    },
-  );
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Đăng xuất'),
+          content: const Text('Bạn có chắc chắn muốn đăng xuất không?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('HỦY'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('ĐĂNG XUẤT'),
+            ),
+          ],
+        );
+      },
+    );
 
-  if (shouldLogout == true) {
-    _profileViewModel.clearProfileCache();
-    await _secureStorage.delete(key: 'token');
-    Navigator.pushReplacementNamed(context, 'SignInScreen'); 
+    if (shouldLogout == true) {
+      _profileViewModel.clearProfileCache();
+      await _secureStorage.delete(key: 'token');
+      Navigator.pushReplacementNamed(context, 'SignInScreen');
+    }
   }
-}
 
   Widget _buildAccountScreen() {
     return Consumer<ProfileViewModel>(
@@ -176,26 +176,41 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget _buildAboutScreen() {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Welcome to Our App!',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Learn more about us.',
-            style: TextStyle(fontSize: 16),
-          ),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pushNamed(context, 'SignInScreen');
-            },
-            child: const Text('Sign In'),
-          ),
-        ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            Container(
+              height: 1.5,
+              color: Colors.black, // Thanh màu đen ở trên cùng
+            ),
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Chào mừng đến với EduHub!',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Đăng nhập để sử dụng nhiều tính năng hơn!.',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, 'SignInScreen');
+                      },
+                      child: const Text('Đăng nhập'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
