@@ -14,11 +14,15 @@ const paymentSlice = createSlice({
             state.totalPrice = totalPrice;
         },
         addInfoPayment: (state, action) => {
-            let { name,email,phoneNumber } = action.payload;
-            state.name = name;
-            state.email = email;
-            state.phone = phoneNumber;
+            console.log("action.payload", action.payload);
+
+            let {info } = action.payload;
+            state.name = info.name;
+            state.email = info.email;
+            state.phone = info.phone;
+
         }
+
     },
 });
 export const { addTotalPrice,addInfoPayment } = paymentSlice.actions;

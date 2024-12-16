@@ -17,7 +17,7 @@ const AllCoursesPage = () => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const [isLoading, setIsLoading] = useState(true);
         const getMyCourses = async () => {
-            const response = await courseApi.getMyCourses();
+            const response = await courseApi.getMyStudentCourses();
             if (response?.success) {
                 setMyCourses(response.data);
                 console.log(response.data);
@@ -25,11 +25,11 @@ const AllCoursesPage = () => {
         };
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useEffect(() => {
-            getMyCourses().then(()=>{
+            getMyCourses().then(() => {
                 setIsLoading(false);
             })
         }, [])
-        if(isLoading) return <CustomSkeletonDemo/>;
+        if (isLoading) return <CustomSkeletonDemo/>;
 
         return (
             <div className="w-full flex flex-col space-y-5">
@@ -52,7 +52,7 @@ const AllCoursesPage = () => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const [myCourses, setMyCourses] = useState([]);
         const getMyCourses = async () => {
-            const response = await courseApi.getMyCourses();
+            const response = await courseApi.getMyStudentCourses();
             if (response?.success) {
                 setMyCourses(response.data);
                 console.log(response.data);
@@ -80,15 +80,15 @@ const AllCoursesPage = () => {
                 </section>
             </div>
         );
-    } else if(content==="favorite"){
+    } else if (content === "favorite") {
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        const {data: courseResponse,isLoading} = useGetCoursesQuery({
+        const {data: courseResponse, isLoading} = useGetCoursesQuery({
             limit: 8,
             page: 1,
             isApproved: true,
         });
 
-        if(isLoading) return <CustomSkeletonDemo/>;
+        if (isLoading) return <CustomSkeletonDemo/>;
         const liveCourses = courseResponse?.data?.items ? courseResponse.data.items : [];
 
         return (

@@ -31,6 +31,26 @@ export default function CheckoutStep1Page() {
         setCurrentStep(2);
         navigate("/web/checkout/step2");
     }
+
+    const formSchema = z.object({
+        name: z.string().min(2, {
+            message: "Họ tên ít nhất có 2 ký tự"
+        }).max(50),
+        email: z.string().email({
+            message: "Email không hợp lệ."
+        }),
+        phone: z.string().min(10, {
+            message: "Số điện thoại phải có ít nhất 10 ký tự."
+        }),
+    })
+    const form = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            phone: "",
+        },
+    });
     const getMyStudentProfile = async () => {
         try {
             const response = await courseCartApi.getMyProfile();
@@ -47,24 +67,12 @@ export default function CheckoutStep1Page() {
         }
 
     };
-    const formSchema = z.object({
-        name: z.string().min(2, {
-            message: "Họ tên ít nhất có 2 ký tự"
-        }).max(50),
-        email: z.string().email({
-            message: "Email không hợp lệ."
-        }),
-        phone: z.string().min(10, {
-            message: "Số điện thoại phải có ít nhất 10 ký tự."
-        }),
-    })
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-    });
-
     function onSubmit(values) {
         setCurrentStep(2);
-        dispatch(addInfoPayment({state: {name: values.name, email: values.email, phone: values.phoneNumber}}))
+        console.log(values.name, values.email, values.phone);
+
+        dispatch(addInfoPayment({info: {name: values.name, email: values.email, phone: values.phone}}))
+
         navigate("/web/checkout/step2");
     }
 
