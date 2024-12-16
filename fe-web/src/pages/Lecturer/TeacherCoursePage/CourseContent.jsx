@@ -31,7 +31,7 @@ export const CourseContent = () => {
   if (error) return <p>Error fetching courses.</p>;
 
   const courses = courseData?.data?.items || [];
-  const totalCourses = courseData?.data?.totalCount || 0;
+  const totalCourses = courseData?.data?.total || 0;
   const totalPages = Math.ceil(totalCourses / pageSize);
   console.log("cou", courses);
 
@@ -165,7 +165,7 @@ export const CourseContent = () => {
           <ChevronLeft /> <span className="text-sm">Trước</span>
         </Button>
         <p className="text-sm">
-          Trang {page} trên {totalPages + 1}
+          Trang {page} trên {totalPages}
         </p>
         <Button
           onClick={goToNextPage}
