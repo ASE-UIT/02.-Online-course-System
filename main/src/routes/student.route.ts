@@ -51,7 +51,7 @@ studentRouter
 
   .post('/reset-password', classValidate(ResetPasswordReqDto), studentController.resetPassword.bind(studentController))
 
-  .post(
+  .put(
     '/change-password',
     classValidate(ChangePasswordReqDto),
     authenticateJWT, // Middleware xác thực người dùng
@@ -72,6 +72,8 @@ studentRouter
   .get('/me', authenticateJWT, studentController.getMe.bind(studentController))
 
   .get('/:id', studentController.getStudentById.bind(studentController))
+
+  .delete('/delete-my-account', authenticateJWT, studentController.deleteMyAccount.bind(studentController))
 
   .delete('/:id', studentController.softDeleteStudent.bind(studentController));
 
