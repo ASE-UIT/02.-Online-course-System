@@ -81,6 +81,9 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
 
     order.items = orderItems;
     order.studentId = studentId;
+    order.customerEmail = requestBody.customerEmail;
+    order.customerFullname = requestBody.customerFullname;
+    order.customerPhone = requestBody.customerPhone;
 
     //Create payment
     const payment = new Payment();
@@ -91,38 +94,30 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
 
     await this.orderRepository.save(order);
 
-    // //Create enrollment
-    // for (const item of orderItems) {
-    //   const enrollment = new Enrollment();
-    //   enrollment.courseId = item.course.id;
-    //   enrollment.studentId = studentId;
-    //   enrollment.enrolledDate = new Date();
-    //   enrollment.status = 'active';
-    //   enrollment.completionPercentage = 0;
-
-    //   await this.enrollRepository.save(enrollment);
-    // }
-
     //Send success email
 
     if (requestBody.customerEmail) {
-      let content = `Đơn hàng của bạn đã được tạo thành công với tổng giá trị là ${order.totalPrice}`;
-
-      for (const item of orderItems) {
-        content += `\nKhóa học: ${item.course.name} - Giá: ${item.price}`;
-      }
-
-      sendEmail({
-        from: {
-          name: 'Eduhub'
-        },
-        to: { emailAddress: [requestBody.customerEmail] },
-        subject: 'Tạo đơn mua khóa học thành công',
-        text: content
-      });
+      this.sendMailAfterCreatedOrder(requestBody.customerEmail, orderItems, order.totalPrice);
     }
 
     return order;
+  }
+
+  private async sendMailAfterCreatedOrder(customerEmail: string, orderItems: OrderItem[], totalPrice: number) {
+    let content = `Đơn hàng của bạn đã được tạo thành công với tổng giá trị là ${Number(totalPrice)}`;
+
+    for (const item of orderItems) {
+      content += `\nKhóa học: ${item.course.name} - Giá: ${item.price}`;
+    }
+
+    sendEmail({
+      from: {
+        name: 'Eduhub'
+      },
+      to: { emailAddress: [customerEmail] },
+      subject: 'Tạo đơn mua khóa học thành công',
+      text: content
+    });
   }
 
   async getMyOrders(studentId: string, searchData: SearchDataDto): Promise<PagingResponseDto<Order>> {
@@ -277,6 +272,9 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
 
     order.items = orderItems;
     order.studentId = studentId;
+    order.customerEmail = createOrderReq.customerEmail;
+    order.customerFullname = createOrderReq.customerFullname;
+    order.customerPhone = createOrderReq.customerPhone;
 
     //Create payment
     const payment = new Payment();
@@ -305,20 +303,7 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
     //Send success email
 
     if (createOrderReq.customerEmail) {
-      let content = `Đơn hàng của bạn đã được tạo thành công với tổng giá trị là ${order.totalPrice}`;
-
-      for (const item of orderItems) {
-        content += `\nKhóa học: ${item.course.name} - Giá: ${item.price}`;
-      }
-
-      sendEmail({
-        from: {
-          name: 'Eduhub'
-        },
-        to: { emailAddress: [createOrderReq.customerEmail] },
-        subject: 'Tạo đơn mua khóa học thành công',
-        text: content
-      });
+      this.sendMailAfterCreatedOrder(createOrderReq.customerEmail, orderItems, order.totalPrice);
     }
 
     return order;
