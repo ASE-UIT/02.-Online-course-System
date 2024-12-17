@@ -107,10 +107,10 @@ const CartPage = () => {
     const dispatch = useDispatch();
     const {toast} = useToast();
     const [selectedCourses, setSelectedCourses] = useState([]);
-    const { data: cartData, isLoading: isCartLoading } = useGetCartQuery();
-    const [removeFromCart, { isLoading: isRemoveLoading }] = useRemoveFromCartMutation();
+    const {data: cartData, isLoading: isCartLoading} = useGetCartQuery();
+    const [removeFromCart, {isLoading: isRemoveLoading}] = useRemoveFromCartMutation();
     const [totalPrice, setTotalPrice] = useState(0);
-    const myCart = cartData?.data.items || null;
+    const myCart = cartData?.data.items || [];
 
     useEffect(() => {
         if (cartData) {
@@ -164,13 +164,13 @@ const CartPage = () => {
                 console.error(error);
             }
         } else {
-            if(myCart.length>0){
+            if (myCart.length > 0) {
                 toast({
                     title: <p className="text-warning-500">Không có khóa học được chọn</p>,
                     status: "warning",
                     duration: 2000
                 });
-            }else{
+            } else {
                 toast({
                     title: <p className="text-warning-500">Không có khóa học nào trong giỏ hàng</p>,
                     status: "warning",
@@ -180,7 +180,7 @@ const CartPage = () => {
 
         }
     };
-    const handleRemoveFromCart =async (courseId) =>{
+    const handleRemoveFromCart = async (courseId) => {
         await removeFromCart(courseId);
         setSelectedCourses((prev) => prev.filter((id) => id !== courseId));
         toast({
@@ -189,7 +189,7 @@ const CartPage = () => {
             duration: 2000
         });
     }
-    if (isCartLoading) return <CustomSkeletonDemo />;
+    if (isCartLoading) return <CustomSkeletonDemo/>;
     return (
         <div className="w-full flex flex-col space-y-5">
             <div className="w-full px-24 mt-5">
@@ -225,7 +225,7 @@ const CartPage = () => {
                                     course={course.course}
                                     checked={selectedCourses.includes(course.courseId)}
                                     onChange={(checked) => handleSelectCourse(course.courseId, checked)}
-                                    onRemove={ () => handleRemoveFromCart(course.courseId)}
+                                    onRemove={() => handleRemoveFromCart(course.courseId)}
                                 />
                             ))}
                         </div>

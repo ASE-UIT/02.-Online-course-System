@@ -1,7 +1,7 @@
 import {calculateDiscountPercentage, convertToHoursAndMinutes, formatCurrency} from "@/utils/converter";
 import {Award, BookCopy, Clock, Heart, Video} from "lucide-react";
 import {useEffect, useState} from "react";
-import {useAddToCartMutation, useGetCartQuery} from "@/store/rtk/cart.services.js";
+import {useAddToCartMutation, useGetCartQuery, useGetEnrollmentQuery} from "@/store/rtk/cart.services.js";
 import {useNavigate} from "react-router-dom";
 import useScrollToTop from "@/hooks/useScrollToTop.jsx";
 import {useToast} from "@/hooks/use-toast.js";
@@ -12,7 +12,9 @@ export default function CourseInfo({course}) {
     const {data: cart} = useGetCartQuery();
     const [addToCart, {isLoading: isAddLoading}] = useAddToCartMutation();
     const [isInCart, setIsInCart] = useState(false);
+    const [isInEnrollment, setIsInEnrollment] = useState(false);
     const navigate = useNavigate();
+    const {data: enrollment} = useGetEnrollmentQuery()
     useScrollToTop();
     const {toast} = useToast();
 
@@ -22,6 +24,13 @@ export default function CourseInfo({course}) {
             setIsInCart(itemInCart);
         }
     }, [cart, course]);
+
+    useEffect(() => {
+        if (enrollment && course) {
+            const itemInEnrollment = enrollment?.data.some(item => item.courseId === course.id);
+            setIsInEnrollment(itemInEnrollment)
+        }
+    }, [enrollment, course]);
 
     const handleAddToCart = async () => {
         try {
@@ -71,7 +80,7 @@ export default function CourseInfo({course}) {
                         isInCart ? (
                             <div
                                 style={{boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)"}}
-                                className="text-warning-950 px-[16px] py-[12px] hover:bg-warning-200 cursor-pointer select-none bg-warning-100 flex-1 h-[48px] text-text/md/medium rounded-[8px] text-center"
+                                className="text-warning-100 px-[16px] py-[12px] hover:bg-error-950 cursor-pointer select-none bg-error-900 flex-1 h-[48px] text-text/md/medium rounded-[8px] text-center"
                                 onClick={() => navigate('/web/cart')}
                             >
                                 Đi tới giỏ hàng
@@ -120,14 +129,34 @@ export default function CourseInfo({course}) {
                         <p className="text-text/md/regular">Cấp chứng nhận hoàn thành</p>
                     </div>
                 </div>
-                <div
-                    style={{
-                        boxShadow: "3px 10px 20px 0px rgba(0, 56, 255, 0.38)",
-                    }}
-                    className="text-text/md/semibold text-white bg-primary-500 rounded-[4px] mt-8 cursor-pointer hover:bg-primary-600 transition-all h-[40px] flex items-center justify-center"
-                >
-                    Mua ngay
-                </div>
+                {
+                    isInEnrollment ? (
+                        <div
+                            style={{
+                                boxShadow: "3px 10px 20px 0px rgba(0, 56, 255, 0.38)",
+                            }}
+                            className="text-text/md/medium font-worksans py-[12px] px-[16px] text-white bg-primary-500 rounded-[8px] mt-8 cursor-pointer hover:bg-primary-600 transition-all h-[48px] flex items-center justify-center"
+                            onClick={() => {
+                                navigate(`/web/learning/${course.id}`)
+                            }}
+                        >
+                            Đi tới khóa học
+                        </div>
+                    ) : (
+                        <div
+                            style={{
+                                boxShadow: "3px 10px 20px 0px rgba(0, 56, 255, 0.38)",
+                            }}
+                            className="text-text/md/medium font-worksans py-[12px] px-[16px] text-white bg-primary-500 rounded-[8px] mt-8 cursor-pointer hover:bg-primary-600 transition-all h-[48px] flex items-center justify-center"
+                            onClick={async () => {
+                                await handleAddToCart()
+                                navigate("/web/cart")
+                            }}
+                        >
+                            Mua ngay
+                        </div>
+                    )
+                }
             </div>
         </div>
     );

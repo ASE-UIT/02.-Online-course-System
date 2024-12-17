@@ -1,5 +1,5 @@
 // src/redux/cartRTKApi.js
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import config from '@/config';
 
 const baseQuery = fetchBaseQuery({
@@ -17,7 +17,7 @@ const baseQuery = fetchBaseQuery({
 export const cartRTKApi = createApi({
     reducerPath: 'cartRTKApi',
     baseQuery,
-    tagTypes: ['Cart'],
+    tagTypes: ['Cart', 'Enrollment'],
     endpoints: (builder) => ({
         getCart: builder.query({
             query: () => 'cart/me',
@@ -45,6 +45,10 @@ export const cartRTKApi = createApi({
             }),
             invalidatesTags: ['Cart'],
         }),
+        getEnrollment: builder.query({
+            query: () => 'enrollment/me',
+            providesTags: ['Enrollment']
+        }),
     }),
 });
 
@@ -53,4 +57,5 @@ export const {
     useAddToCartMutation,
     useRemoveFromCartMutation,
     useClearCartMutation,
+    useGetEnrollmentQuery,
 } = cartRTKApi;
