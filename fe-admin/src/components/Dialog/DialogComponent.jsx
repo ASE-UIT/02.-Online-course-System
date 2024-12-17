@@ -24,6 +24,8 @@ const DialogComponent = ({ bodyType, currentPage, row }) => {
       return "giảng viên";
     } else if (currentPage === CURRENT_PAGES.EMPLOYEE_PAGE) {
       return "nhân viên";
+    } else if (currentPage === CURRENT_PAGES.WAITING_COURSE_PAGE) {
+      return "khoá học";
     }
   };
 
@@ -79,6 +81,9 @@ const DialogComponent = ({ bodyType, currentPage, row }) => {
               ),
               [CURRENT_PAGES.EMPLOYEE_PAGE]: (
                 <EmployeeModalBody row={row} isAddOrChange={true} />
+              ),
+              [CURRENT_PAGES.WAITING_COURSE_PAGE]: (
+                <EmployeeModalBody row={row} isAddOrChange={true} />
               )
             }[currentPage]
         }
@@ -93,6 +98,9 @@ const DialogComponent = ({ bodyType, currentPage, row }) => {
                 <LecturerModalBody row={row} isAddOrChange={false} />
               ),
               [CURRENT_PAGES.EMPLOYEE_PAGE]: (
+                <EmployeeModalBody row={row} isAddOrChange={false} />
+              ),
+              [CURRENT_PAGES.WAITING_COURSE_PAGE]: (
                 <EmployeeModalBody row={row} isAddOrChange={false} />
               )
             }[currentPage]
