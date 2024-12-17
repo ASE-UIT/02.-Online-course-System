@@ -203,7 +203,7 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
                 }
               }
 
-              total += afterDiscount;
+              total += Number(afterDiscount);
               priceEachCourse.set(course.id, afterDiscount);
 
               continue;
@@ -219,7 +219,7 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
                 }
               }
 
-              total += afterDiscount;
+              total += Number(afterDiscount);
               priceEachCourse.set(course.id, afterDiscount);
 
               continue;
@@ -228,7 +228,7 @@ export class OrderService extends BaseCrudService<Order> implements IOrderServic
         }
       }
 
-      total += course.sellPrice;
+      total += Number(course.sellPrice);
     });
 
     return {
