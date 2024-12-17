@@ -1,4 +1,6 @@
 // payment_view_model.dart
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import '../services/HttpConfig.dart';
 import '../models/payment_model.dart';
@@ -23,11 +25,11 @@ class PaymentViewModel extends ChangeNotifier {
           "courseIds": [courseId],
         },
       );
+      log(response.toString());
 
       _paymentResponse = PaymentResponse.fromJson(response);
-
-      if (_paymentResponse != null && _paymentResponse!.success) {
-        final paymentId = _paymentResponse!.data!.paymentId;
+      if (_paymentResponse != null) {
+        final paymentId = _paymentResponse?.data?.paymentId??"";
         _paymentUrl = await PaymentService.getVnpayUrl(paymentId);
       }
 

@@ -1,118 +1,139 @@
-// payment_model.dart
 class PaymentResponse {
-  final String status;
-  final int code;
-  final bool success;
-  final String message;
-  final PaymentData? data;
+  final String? status;
+  final int? code;
+  final bool? success;
+  final String? message;
+  final PaymentResponseData? data;
   final dynamic errors;
 
   PaymentResponse({
-    required this.status,
-    required this.code,
-    required this.success,
-    required this.message,
+    this.status,
+    this.code,
+    this.success,
+    this.message,
     this.data,
     this.errors,
   });
 
-  factory PaymentResponse.fromJson(Map<String, dynamic> json) {
-    return PaymentResponse(
-      status: json['status'],
-      code: json['code'],
-      success: json['success'],
-      message: json['message'],
-      data: json['data'] != null ? PaymentData.fromJson(json['data']) : null,
-      errors: json['errors'],
-    );
-  }
+  PaymentResponse.fromJson(Map<String, dynamic> json)
+      : status = json['status'] as String?,
+        code = json['code'] as int?,
+        success = json['success'] as bool?,
+        message = json['message'] as String?,
+        data = (json['data'] as Map<String,dynamic>?) != null ? PaymentResponseData.fromJson(json['data'] as Map<String,dynamic>) : null,
+        errors = json['errors'];
+
+  Map<String, dynamic> toJson() => {
+    'status' : status,
+    'code' : code,
+    'success' : success,
+    'message' : message,
+    'data' : data?.toJson(),
+    'errors' : errors
+  };
 }
 
-class PaymentData {
-  final String id;
-  final String totalPrice;
-  final String paymentId;
-  final Payment payment;
-  final List<OrderItem> items;
-  final String studentId;
-  final String status;
+class PaymentResponseData {
+  final String? id;
+  final int? totalPrice;
+  final String? paymentId;
+  final Payment? payment;
+  final List<Items>? items;
+  final String? studentId;
+  final String? status;
 
-  PaymentData({
-    required this.id,
-    required this.totalPrice,
-    required this.paymentId,
-    required this.payment,
-    required this.items,
-    required this.studentId,
-    required this.status,
+  PaymentResponseData({
+    this.id,
+    this.totalPrice,
+    this.paymentId,
+    this.payment,
+    this.items,
+    this.studentId,
+    this.status,
   });
 
-  factory PaymentData.fromJson(Map<String, dynamic> json) {
-    return PaymentData(
-      id: json['id'],
-      totalPrice: json['totalPrice'],
-      paymentId: json['paymentId'],
-      payment: Payment.fromJson(json['payment']),
-      items: List<OrderItem>.from(json['items'].map((item) => OrderItem.fromJson(item))),
-      studentId: json['studentId'],
-      status: json['status'],
-    );
-  }
+  PaymentResponseData.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String?,
+        totalPrice = json['totalPrice'] as int?,
+        paymentId = json['paymentId'] as String?,
+        payment = (json['payment'] as Map<String,dynamic>?) != null ? Payment.fromJson(json['payment'] as Map<String,dynamic>) : null,
+        items = (json['items'] as List?)?.map((dynamic e) => Items.fromJson(e as Map<String,dynamic>)).toList(),
+        studentId = json['studentId'] as String?,
+        status = json['status'] as String?;
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'totalPrice' : totalPrice,
+    'paymentId' : paymentId,
+    'payment' : payment?.toJson(),
+    'items' : items?.map((e) => e.toJson()).toList(),
+    'studentId' : studentId,
+    'status' : status
+  };
 }
 
 class Payment {
-  final String id;
-  final String payType;
-  final bool paymentStatus;
-  final String amount;
+  final String? id;
+  final String? payType;
+  final bool? paymentStatus;
+  final int? amount;
   final dynamic payInfo;
 
   Payment({
-    required this.id,
-    required this.payType,
-    required this.paymentStatus,
-    required this.amount,
+    this.id,
+    this.payType,
+    this.paymentStatus,
+    this.amount,
     this.payInfo,
   });
 
-  factory Payment.fromJson(Map<String, dynamic> json) {
-    return Payment(
-      id: json['id'],
-      payType: json['payType'],
-      paymentStatus: json['paymentStatus'],
-      amount: json['amount'],
-      payInfo: json['payInfo'],
-    );
-  }
+  Payment.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String?,
+        payType = json['payType'] as String?,
+        paymentStatus = json['paymentStatus'] as bool?,
+        amount = json['amount'] as int?,
+        payInfo = json['payInfo'];
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'payType' : payType,
+    'paymentStatus' : paymentStatus,
+    'amount' : amount,
+    'payInfo' : payInfo
+  };
 }
 
-class OrderItem {
-  final String id;
-  final String price;
-  final String courseId;
-  final Course course;
+class Items {
+  final String? id;
+  final String? price;
+  final String? courseId;
+  final Course? course;
 
-  OrderItem({
-    required this.id,
-    required this.price,
-    required this.courseId,
-    required this.course,
+  Items({
+    this.id,
+    this.price,
+    this.courseId,
+    this.course,
   });
 
-  factory OrderItem.fromJson(Map<String, dynamic> json) {
-    return OrderItem(
-      id: json['id'],
-      price: json['price'],
-      courseId: json['courseId'],
-      course: Course.fromJson(json['course']),
-    );
-  }
+  Items.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String?,
+        price = json['price'] as String?,
+        courseId = json['courseId'] as String?,
+        course = (json['course'] as Map<String,dynamic>?) != null ? Course.fromJson(json['course'] as Map<String,dynamic>) : null;
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'price' : price,
+    'courseId' : courseId,
+    'course' : course?.toJson()
+  };
 }
 
 class Course {
-  final String id;
+  final String? id;
   final String? name;
-  final String? nameEn;
+  final dynamic nameEn;
   final String? shortDescription;
   final dynamic introduction;
   final String? participants;
@@ -143,7 +164,7 @@ class Course {
   final String? lecturerId;
 
   Course({
-    required this.id,
+    this.id,
     this.name,
     this.nameEn,
     this.shortDescription,
@@ -176,39 +197,70 @@ class Course {
     this.lecturerId,
   });
 
-  factory Course.fromJson(Map<String, dynamic> json) {
-    return Course(
-      id: json['id'],
-      name: json['name'],
-      nameEn: json['nameEn'],
-      shortDescription: json['shortDescription'],
-      introduction: json['introduction'],
-      participants: json['participants'],
-      courseTargets: json['courseTargets'],
-      welcomeJoin: json['welcomeJoin'],
-      videoSale: json['videoSale'],
-      courseMaterials: json['courseMaterials'],
-      thumbnail: json['thumbnail'],
-      originalPrice: json['originalPrice'],
-      sellPrice: json['sellPrice'],
-      lowestPrice: json['lowestPrice'],
-      socialGroupLink: json['socialGroupLink'],
-      courseLink: json['courseLink'],
-      tags: json['tags'],
-      duration: json['duration'],
-      difficultyLevel: json['difficultyLevel'],
-      isFreeCourse: json['isFreeCourse'],
-      startFreeDate: json['startFreeDate'],
-      endFreeDate: json['endFreeDate'],
-      startDate: json['startDate'],
-      endDate: json['endDate'],
-      isApproved: json['isApproved'],
-      status: json['status'],
-      totalStudents: json['totalStudents'],
-      totalReviews: json['totalReviews'],
-      averageRating: json['averageRating'],
-      categoryId: json['categoryId'],
-      lecturerId: json['lecturerId'],
-    );
-  }
+  Course.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String?,
+        name = json['name'] as String?,
+        nameEn = json['nameEn'],
+        shortDescription = json['shortDescription'] as String?,
+        introduction = json['introduction'],
+        participants = json['participants'] as String?,
+        courseTargets = json['courseTargets'],
+        welcomeJoin = json['welcomeJoin'],
+        videoSale = json['videoSale'],
+        courseMaterials = json['courseMaterials'],
+        thumbnail = json['thumbnail'] as String?,
+        originalPrice = json['originalPrice'] as String?,
+        sellPrice = json['sellPrice'] as String?,
+        lowestPrice = json['lowestPrice'],
+        socialGroupLink = json['socialGroupLink'],
+        courseLink = json['courseLink'],
+        tags = json['tags'],
+        duration = json['duration'] as String?,
+        difficultyLevel = json['difficultyLevel'] as String?,
+        isFreeCourse = json['isFreeCourse'] as bool?,
+        startFreeDate = json['startFreeDate'],
+        endFreeDate = json['endFreeDate'],
+        startDate = json['startDate'],
+        endDate = json['endDate'],
+        isApproved = json['isApproved'] as bool?,
+        status = json['status'] as String?,
+        totalStudents = json['totalStudents'] as int?,
+        totalReviews = json['totalReviews'] as int?,
+        averageRating = json['averageRating'] as int?,
+        categoryId = json['categoryId'] as String?,
+        lecturerId = json['lecturerId'] as String?;
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'name' : name,
+    'nameEn' : nameEn,
+    'shortDescription' : shortDescription,
+    'introduction' : introduction,
+    'participants' : participants,
+    'courseTargets' : courseTargets,
+    'welcomeJoin' : welcomeJoin,
+    'videoSale' : videoSale,
+    'courseMaterials' : courseMaterials,
+    'thumbnail' : thumbnail,
+    'originalPrice' : originalPrice,
+    'sellPrice' : sellPrice,
+    'lowestPrice' : lowestPrice,
+    'socialGroupLink' : socialGroupLink,
+    'courseLink' : courseLink,
+    'tags' : tags,
+    'duration' : duration,
+    'difficultyLevel' : difficultyLevel,
+    'isFreeCourse' : isFreeCourse,
+    'startFreeDate' : startFreeDate,
+    'endFreeDate' : endFreeDate,
+    'startDate' : startDate,
+    'endDate' : endDate,
+    'isApproved' : isApproved,
+    'status' : status,
+    'totalStudents' : totalStudents,
+    'totalReviews' : totalReviews,
+    'averageRating' : averageRating,
+    'categoryId' : categoryId,
+    'lecturerId' : lecturerId
+  };
 }
