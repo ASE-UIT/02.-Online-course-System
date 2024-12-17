@@ -7,6 +7,8 @@ import {OrderInformation} from "@/pages/PaymentPage/OrderInformation.jsx";
 import {courseCartApi} from "@/api/courseApi.js";
 import {paymentApi} from "@/api/paymentApi.js";
 import {useSelector} from "react-redux";
+import * as React from "react";
+import {useToast} from "@/hooks/use-toast.js";
 
 export default function CheckoutStep2Page() {
     const [paymentMethod, setPaymentMethod] = useState("VNPAY")
@@ -39,23 +41,33 @@ export default function CheckoutStep2Page() {
         },
     ]
     const {setCurrentStep, order} = useOutletContext();
+    const {toast} = useToast();
     const createOrder = async () => {
         try {
-            const formData = new FormData();
-            formData.append("payType", paymentMethod)
-            formData.append("customerFullname", name)
-            formData.append("customerEmail", email)
-            formData.append("customerPhone", phone)
-            const response = await courseCartApi.createOrder(formData);
-            if (response?.success) {
-                console.log(response.data);
-                const responseGetPaymentUrl = await paymentApi.getPaymentURL(response.data.payment.id);
-                if (responseGetPaymentUrl?.success) {
-                    console.log(responseGetPaymentUrl.data);
-                    window.history.replaceState(null, '', '/web/cart');
-                    window.location.href = responseGetPaymentUrl.data.payUrl;
+            if(paymentMethod !== "VNPAY"){
+                toast({
+                    title: <p className=" text-error-500">Chỉ hỗ trợ VNPAY</p>,
+                    status: "warning",
+                    duration: 2000
+                });
+            }else{
+                const formData = new FormData();
+                formData.append("payType", paymentMethod)
+                formData.append("customerFullname", name)
+                formData.append("customerEmail", email)
+                formData.append("customerPhone", phone)
+                const response = await courseCartApi.createOrder(formData);
+                if (response?.success) {
+                    console.log(response.data);
+                    const responseGetPaymentUrl = await paymentApi.getPaymentURL(response.data.payment.id);
+                    if (responseGetPaymentUrl?.success) {
+                        console.log(responseGetPaymentUrl.data);
+                        window.history.replaceState(null, '', '/web/cart');
+                        window.location.href = responseGetPaymentUrl.data.payUrl;
+                    }
                 }
             }
+
         } catch (error) {
             console.log(error.response?.errors.msg);
         }
