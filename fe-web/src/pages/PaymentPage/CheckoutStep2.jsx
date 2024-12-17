@@ -46,7 +46,8 @@ export default function CheckoutStep2Page() {
         try {
             if(paymentMethod !== "VNPAY"){
                 toast({
-                    title: <p className=" text-error-500">Chỉ hỗ trợ VNPAY</p>,
+                    title: <p className=" text-warning-500">Phương thức đang bảo trì</p>,
+                    description: "Hiện tại chỉ hỗ trợ VNPAY",
                     status: "warning",
                     duration: 2000
                 });

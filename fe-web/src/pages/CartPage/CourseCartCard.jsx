@@ -6,7 +6,7 @@ import {CheckIcon} from "lucide-react";
 import {Checkbox} from "@/components/ui/checkbox";
 import * as React from "react";
 import Rating from "@/components/Rating/Rating.jsx";
-import { formatCurrency } from "@/utils/converter";
+import {formatCurrency} from "@/utils/converter";
 import {useNavigate} from "react-router-dom";
 
 export const CourseCartCard = ({course, checked, onChange, onRemove}) => {
@@ -19,14 +19,16 @@ export const CourseCartCard = ({course, checked, onChange, onRemove}) => {
                 className="h-6 w-6 rounded-[2px]">
                 <CheckIcon/>
             </Checkbox>
-            <div onClick={()=>{navigate(`/web/course/${course.id}`)}} className="border-[1px] border-black-50 transition-all
+            <div onClick={() => {
+                navigate(`/web/course/${course.id}`)
+            }} className="border-[1px] border-black-50 transition-all
         duration-500 hover:shadow-xl dark:bg-slate-950 dark:text-white
         cursor-pointer overflow-hidden rounded-[12px] h-full flex w-full">
                 <div className="overflow-hidden">
                     <img
                         src={course.thumbnail ? course.thumbnail : CourseCardIcon}
                         alt="No image"
-                        className="mx-auto h-[160px] w-full object-cover transition duration-700 hover:skew-x-2 "
+                        className="mx-auto h-[160px] w-[220px] object-cover transition duration-700 hover:skew-x-2 "
                     />
                 </div>
                 <div className=" py-3 px-4 flex flex-col justify-between ">
@@ -42,7 +44,7 @@ export const CourseCartCard = ({course, checked, onChange, onRemove}) => {
                             </span>
                             <h1 className="text-text/xs/regular text-black-300">
                                 {" "}
-                                ( {course?.totalReviews ? course?.totalReviews : 0}  đánh giá)
+                                ( {course?.totalReviews ? course?.totalReviews : 0} đánh giá)
                             </h1>
                         </div>
                     </div>
@@ -58,7 +60,8 @@ export const CourseCartCard = ({course, checked, onChange, onRemove}) => {
         )} */}
                 </div>
             </div>
-            <p onClick={onRemove} className="text-text/lg/medium text-black-300 cursor-pointer font-worksans h-fit">Xóa</p>
+            <p onClick={onRemove}
+               className="text-text/lg/medium text-black-300 cursor-pointer font-worksans h-fit">Xóa</p>
         </div>
     );
 };

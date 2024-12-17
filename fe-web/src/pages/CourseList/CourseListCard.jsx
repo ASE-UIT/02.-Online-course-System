@@ -1,6 +1,7 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import CourseCardIcon from "/picture/CourseCardIcon.svg";
-export const CourseListCard = ({ course }) => {
+
+export const CourseListCard = ({course}) => {
     return (
         <Link
             to={course?.courseId ? `../learning/${course.courseId}` : "#"}

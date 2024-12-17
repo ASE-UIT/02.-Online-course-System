@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e2442cc2-a25c-4390-89ce-d6f13ac7fb80" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/fe-web/src/pages/CartPage/CartPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/fe-web/src/pages/CartPage/CartPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fe-web/src/pages/CartPage/CourseCartCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/fe-web/src/pages/CartPage/CourseCartCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fe-web/src/pages/CourseDetailPage/CourseInfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/fe-web/src/pages/CourseDetailPage/CourseInfo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fe-web/src/pages/CourseList/CourseListCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/fe-web/src/pages/CourseList/CourseListCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fe-web/src/store/rtk/cart.services.js" beforeDir="false" afterPath="$PROJECT_DIR$/fe-web/src/store/rtk/cart.services.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JSX File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "BuiTrongHoangHuy"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/ASE-UIT/02.-Online-course-System.git",
+    "accountId": "fe00af44-cdd7-4a25-bfdd-e588e010e365"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="2qKflCw5k4b3LSEDLmhE5Qw78y0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "frontend/feature/addToCart",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "actions.on.save",
+    "ts.external.directory.path": "C:\\Users\\LENOVO\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-WS-242.23339.15" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e2442cc2-a25c-4390-89ce-d6f13ac7fb80" name="Changes" comment="" />
+      <created>1734416335559</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1734416335559</updated>
+      <workItem from="1734416336691" duration="13952000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+        <option value="Space.CommitStatus" />
+        <option value="GitHub.CommitStatus" />
+      </list>
+    </option>
+  </component>
+</project>

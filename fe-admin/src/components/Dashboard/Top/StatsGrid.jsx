@@ -10,7 +10,13 @@ const statsData = [
   { label: "Số học viên mới", value: "2,3K", change: "+3.4%" },
   { label: "Số giảng viên mới", value: "2,3K", change: "+3.4%" },
   { label: "Số khóa học mới", value: "1,1K", change: "-3.4%" },
-  { label: "Số khóa học được mua", value: "2,3K", change: "+3.4%" }
+  { label: "Số khóa học được mua", value: "2,3K", change: "+3.4%" },
+  { label: "SỐ LƯỢT ĐÁNH GIÁ KHOÁ HỌC", value: "500K", change: "+3.4%" },
+  {
+    label: "ĐÁNH GIÁ TRUNG BÌNH CỦA KHOÁ HỌC",
+    value: "3 sao",
+    change: "-3.4%"
+  }
   // Add more items as needed
 ];
 

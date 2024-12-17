@@ -20,12 +20,14 @@ const ManageLecturer = () => {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const res = await getAllLecturers(10, 1);
+      const res = await getAllLecturers(20, 1);
       setData(res.data.items);
+      setTotal(res.data.total);
       setLoading(false);
     }
     fetchData();
@@ -42,6 +44,9 @@ const ManageLecturer = () => {
         pageName={CURRENT_PAGES.LECTURER_PAGE}
         loading={loading}
         setLoading={setLoading}
+        rpp={20}
+        page={0}
+        total={total}
       />
     </div>
   );
