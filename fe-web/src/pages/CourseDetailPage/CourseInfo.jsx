@@ -1,7 +1,49 @@
 import { calculateDiscountPercentage, convertToHoursAndMinutes, formatCurrency } from "@/utils/converter";
 import { Award, BookCopy, Clock, Heart, Video } from "lucide-react";
+import {useEffect, useState} from "react";
+import { useAddToCartMutation, useGetCartQuery} from "@/store/rtk/cart.services.js";
+import {useNavigate} from "react-router-dom";
+import useScrollToTop from "@/hooks/useScrollToTop.jsx";
+import { useToast} from "@/hooks/use-toast.js";
 
 export default function CourseInfo({ course }) {
+
+  const { data: cart } = useGetCartQuery();
+  const [addToCart] = useAddToCartMutation();
+  const [isInCart, setIsInCart] = useState(false);
+  const navigate = useNavigate();
+  useScrollToTop();
+  const {toast} = useToast();
+
+  useEffect(() => {
+    if (cart && course) {
+      const itemInCart = cart.data.items.some(item => item.courseId === course.id);
+      setIsInCart(itemInCart);
+    }
+  }, [cart, course]);
+
+  const handleAddToCart = async () => {
+    try {
+      const payload =
+          {
+            courseId: course.id,
+          }
+      await addToCart(payload).unwrap();
+      toast({
+        title: <p className=" text-success">Thêm khóa học vào giỏ hàng thành công</p>,
+        status: "success",
+        duration: 2000
+      });
+    } catch (error) {
+      console.error('Failed to add item to cart', error);
+      toast({
+        title: <p className=" text-error">Thêm khóa học vào giỏ hàng thất bại</p>,
+        status: "error",
+        duration: 2000
+      });
+    }
+  };
+
   return (
     <div
       className="rounded-[4px] mt-[35%] mx-auto w-[300px] xl:w-[450px] h-fit overflow-hidden "
@@ -24,12 +66,23 @@ export default function CourseInfo({ course }) {
           </p>
         </div>
         <div className="flex mt-6 gap-2 justify-between">
-          <div
-            style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
-            className="text-warning-950 cursor-pointer select-none  bg-warning-100 flex-1 h-[40px] leading-[40px] text-text/md/semibold rounded-[4px] text-center"
-          >
-            Thêm vào giỏ hàng
-          </div>
+          {isInCart ? (
+              <div
+                  style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
+                  className="text-warning-950 px-[16px] py-[12px] hover:bg-warning-200 cursor-pointer select-none bg-warning-100 flex-1 h-[48px] text-text/md/medium rounded-[8px] text-center"
+                  onClick={() => navigate('/web/cart')}
+              >
+                Đi tới giỏ hàng
+              </div>
+          ) : (
+              <div
+                  style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
+                  className="text-warning-950 px-[16px] py-[12px] hover:bg-warning-200 cursor-pointer select-none bg-warning-100 flex-1 h-[48px] text-text/md/medium rounded-[8px] text-center"
+                  onClick={handleAddToCart}
+              >
+                Thêm vào giỏ hàng
+              </div>
+          )}
           <div
             style={{ boxShadow: "0px 0px 8px 0px rgba(0, 0, 0, 0.25)" }}
             className="w-[40px] flex items-center cursor-pointer  justify-center rounded-[4px] h-[40px] "
