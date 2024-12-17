@@ -4,10 +4,22 @@ import { waitingCourseList } from "./CourseList";
 import { useEffect, useState } from "react";
 import { CURRENT_PAGES } from "@/utils/globalUtils";
 import { getWaitingCourseWithPage } from "@/api/courseApi";
-import { set } from "date-fns";
 
 const WaitingCourse = () => {
-  const [columnVisibility, setColumnVisibility] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState({
+    select: true,
+    id: true,
+    thumbnail: true,
+    name: true,
+    category: true,
+    shortDescription: true,
+    createdBy: false,
+    createAt: true,
+    updateAt: true,
+    startDate: false,
+    endDate: false,
+    status: true
+  });
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [rpp, setRpp] = useState(10);
