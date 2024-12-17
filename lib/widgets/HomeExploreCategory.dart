@@ -53,13 +53,14 @@ class HomeExploreCategory extends StatelessWidget {
           height: 40, // Điều chỉnh chiều cao phù hợp với CourseCard
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: categoryData?.length ?? 0,
+            itemCount: exploreTags.length,
             separatorBuilder: (context, index) => const SizedBox(width: 8),
             itemBuilder: (context, index) {
-              final course = categoryData?[index];
+              final course = exploreTags[index];
               return SizedBox(
                 child: BorderTag(
-                  text: course?.name ?? "",
+                  text: course,
+                  onSelected: (value) => {},
                 ),
               );
             },

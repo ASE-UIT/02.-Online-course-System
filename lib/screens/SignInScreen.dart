@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:online_course_system/ViewModels/login_view_model.dart';
 import 'package:online_course_system/constants/colors.dart';
 import 'package:online_course_system/screens/HomeScreen.dart';
-import 'package:online_course_system/screens/SignUpScreen.dart';
 import 'package:online_course_system/widgets/customtextfield.dart';
 import 'package:online_course_system/widgets/socialloginbutton.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +12,7 @@ import 'package:provider/provider.dart';
 import '../models/login_model.dart';
 
 class SignInScreen extends StatefulWidget {
-  SignInScreen({super.key});
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
@@ -31,7 +29,8 @@ class _SignInScreenState extends State<SignInScreen> {
   void _showSuccessDialog(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: false, // Người dùng không thể tắt bằng tap bên ngoài dialog
+      barrierDismissible:
+          false, // Người dùng không thể tắt bằng tap bên ngoài dialog
       builder: (context) {
         return AlertDialog(
           title: Text("Đăng nhập thành công"),
@@ -52,7 +51,6 @@ class _SignInScreenState extends State<SignInScreen> {
       },
     );
   }
-
 
   initState() {
     super.initState();
@@ -125,19 +123,19 @@ class _SignInScreenState extends State<SignInScreen> {
                             await viewModel.login(loginRequest);
                             var token = await storage.read(key: 'token');
                             log(token.toString());
-                            if (token != null) { // Kiểm tra token nếu đăng nhập thành công
+                            if (token != null) {
+                              // Kiểm tra token nếu đăng nhập thành công
                               _showSuccessDialog(context);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text("Đăng nhập thất bại, vui lòng thử lại."),
+                                  content: Text(
+                                      "Đăng nhập thất bại, vui lòng thử lại."),
                                   backgroundColor: Colors.red,
                                 ),
                               );
                             }
-
                           },
-
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary500,
                             minimumSize: const Size(double.infinity, 60),
@@ -150,15 +148,13 @@ class _SignInScreenState extends State<SignInScreen> {
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white
-                            ),
+                                color: Colors.white),
                           ),
                         ),
                         ElevatedButton(
                           onPressed: () async {
                             await storage.delete(key: 'token');
                           },
-
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary500,
                             minimumSize: const Size(double.infinity, 60),
@@ -171,8 +167,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.white
-                            ),
+                                color: Colors.white),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -215,11 +210,8 @@ class _SignInScreenState extends State<SignInScreen> {
                             const Text('Bạn chưa có tài khoản? '),
                             TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignUpScreen()),
-                                );
+                                Navigator.pushNamed(
+                                    context, 'EmailSignUpScreen');
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,

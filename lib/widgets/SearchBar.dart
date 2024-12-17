@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 
 class CustomSearchBar extends StatefulWidget {
-  const CustomSearchBar({super.key});
+  final ValueChanged<String>? onSearch; // Callback để truyền dữ liệu truy vấn ra ngoài
+  final TextEditingController controller;
+
+  const CustomSearchBar({super.key, this.onSearch, required this.controller});
 
   @override
   _CustomSearchBarState createState() => _CustomSearchBarState();
@@ -16,6 +19,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     setState(() {
       query = newQuery;
     });
+
+    if (widget.onSearch != null) {
+      widget.onSearch!(newQuery); // Gọi callback để truyền dữ liệu ra ngoài
+    }
   }
 
   @override
@@ -35,6 +42,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       ),
       child: TextField(
         onChanged: onQueryChanged,
+        controller: widget.controller,
         decoration: const InputDecoration(
           hintText: 'Tìm kiếm khóa học',
           hintStyle: TextStyle(
@@ -43,7 +51,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           ),
           prefixIcon: Icon(
             Icons.search,
-            color: AppColors.black ,
+            color: AppColors.black,
           ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(

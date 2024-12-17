@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
-import 'package:online_course_system/screens/EmailVerificationScreen.dart';
-import 'package:online_course_system/screens/PhoneVerificationScreen.dart';
 
 class UpdatePhoneScreen extends StatelessWidget {
   const UpdatePhoneScreen({super.key});

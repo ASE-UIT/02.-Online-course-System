@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/colors.dart';
-import 'package:online_course_system/screens/EmailVerificationScreen.dart';
 
 class UpdateEmailScreen extends StatelessWidget {
   const UpdateEmailScreen({super.key});

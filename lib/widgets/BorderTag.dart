@@ -3,8 +3,9 @@ import 'package:online_course_system/constants/colors.dart';
 
 class BorderTag extends StatelessWidget {
   final String text;
+  final ValueChanged<bool> onSelected;
 
-  const BorderTag({super.key, required this.text});
+  const BorderTag({super.key, required this.text, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +24,7 @@ class BorderTag extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         side: const BorderSide(color: AppColors.black),
       ),
-      onSelected: (bool value) {
-        print("selected");
-      },
+      onSelected: onSelected,
       selected: false,
     );
   }
