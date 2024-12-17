@@ -2,6 +2,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { DataTableColumnHeader } from "@/components/Table/DTColumnHeader";
 import BlankImg from "/blank.png";
+import { format } from "date-fns";
 
 export const lecturerColumns = [
   {
@@ -43,34 +44,34 @@ export const lecturerColumns = [
     enableSorting: false,
     enableHiding: false
   },
-  {
-    accessorKey: "avatar",
-    name: "Ảnh đại diện",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ẢNH ĐẠI DIỆN" />
-    ),
-    cell: ({ row }) => {
-      const avatar = row.getValue("avatar");
+  // {
+  //   accessorKey: "avatar",
+  //   name: "Ảnh đại diện",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="ẢNH ĐẠI DIỆN" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const avatar = row.getValue("avatar");
 
-      if (!avatar) {
-        return null;
-      }
+  //     if (!avatar) {
+  //       return null;
+  //     }
 
-      return (
-        <div className="flex w-[100px] items-center">
-          <img
-            src={avatar.value || BlankImg}
-            alt="avatar"
-            className="w-16 h-16"
-          />
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-    enableSorting: false
-  },
+  //     return (
+  //       <div className="flex w-[100px] items-center">
+  //         <img
+  //           src={avatar.value || BlankImg}
+  //           alt="avatar"
+  //           className="w-16 h-16"
+  //         />
+  //       </div>
+  //     );
+  //   },
+  //   filterFn: (row, id, value) => {
+  //     return value.includes(row.getValue(id));
+  //   },
+  //   enableSorting: false
+  // },
   {
     accessorKey: "name",
     name: "Tên",
@@ -110,7 +111,7 @@ export const lecturerColumns = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex w-[100px] items-center">
+        <div className="flex w-full items-center">
           <span>{row.getValue("email")}</span>
         </div>
       );
@@ -121,14 +122,17 @@ export const lecturerColumns = [
     enableSorting: false
   },
   {
-    accessorKey: "startDay",
+    accessorKey: "createAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="NGÀY BẮT ĐẦU GIẢNG DẠY" />
+      <DataTableColumnHeader column={column} title="TẠO VÀO NGÀY" />
     ),
     cell: ({ row }) => {
+      const dateValue = row.getValue("createAt");
+      const formattedDate = format(new Date(dateValue), "dd/MM/yyyy");
+
       return (
         <div className="flex w-[100px] items-center">
-          <span>{row.getValue("startDay")}</span>
+          <span>{formattedDate}</span>
         </div>
       );
     },
@@ -138,14 +142,41 @@ export const lecturerColumns = [
     enableSorting: false
   },
   {
-    accessorKey: "createdBy",
+    accessorKey: "updateAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="TẠO BỞI" />
+      <DataTableColumnHeader column={column} title="SỬA VÀO NGÀY" />
     ),
     cell: ({ row }) => {
+      const dateValue = row.getValue("updateAt");
+      const formattedDate = format(new Date(dateValue), "dd/MM/yyyy");
+
+      return (
+        <div className="flex w-[100px] items-center">
+          <span>{formattedDate}</span>
+        </div>
+      );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+    enableSorting: false
+  },
+  {
+    accessorKey: "isApproved",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="TRẠNG THÁI DUYỆT" />
+    ),
+    cell: ({ row }) => {
+      const isApproved = row.getValue("isApproved");
       return (
         <div className="flex items-center">
-          <span>{row.getValue("createdBy")}</span>
+          <span
+            className={`px-2 py-1 rounded font-bold ${
+              isApproved ? "bg-green-600 text-white" : "bg-red-600 text-white"
+            }`}
+          >
+            {isApproved ? "Đã duyệt" : "Chưa duyệt"}
+          </span>
         </div>
       );
     },
