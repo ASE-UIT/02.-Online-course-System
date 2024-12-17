@@ -6,7 +6,7 @@ import { Outlet } from "react-router-dom";
 
 const LecturerLayout = () => {
   const dispatch = useDispatch();
-  const { authLecturer } = useSelector((state) => state);
+  const { authLecturer } = useSelector((state) => state.authLecturer);
 
   useEffect(() => {
     document.title = "Eduhub | Lecturer";
@@ -19,8 +19,8 @@ const LecturerLayout = () => {
   useEffect(() => {
     async function getLecturerInfor() {
       try {
-        if (authLecturer && authLecturer?.authLecturer.length > 0) {
-          const response = await lecturerGetProfile(authLecturer.authLecturer);
+        if (authLecturer && authLecturer.length > 0) {
+          const response = await lecturerGetProfile(authLecturer);
           dispatch(addLecturerInfor(response?.data));
         }
       } catch (error) {
