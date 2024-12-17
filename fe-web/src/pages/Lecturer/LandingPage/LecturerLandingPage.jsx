@@ -96,10 +96,10 @@ function LecturerLandingPage() {
           </div>
         </section>
 
-        <section className="bg-warning-950 py-16">
-          <div className="max-w-full mx-auto px-4 sm:px-6 px-8 ">
-            <div className="flex justify-around ">
-              <div className="flex flex-col items-center text-center">
+        <section className="bg-warning-950 py-10 px-20">
+          <div className="max-w-full">
+            <div className="flex justify-between ">
+              <div className="flex flex-col items-center gap-[10px] text-center">
                 <h2 className="text-display/md/semibold text-white">
                   73 triệu
                 </h2>
@@ -110,7 +110,7 @@ function LecturerLandingPage() {
                   Học viên
                 </p>
               </div>
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center gap-[10px] text-center">
                 <h2 className="text-display/md/semibold text-white">Hơn 75</h2>
                 <p
                   className="font-family: Inter;font-size: 12px;font-weight: 400;line-height: 14.52px;
@@ -119,7 +119,7 @@ function LecturerLandingPage() {
                   Ngôn ngữ
                 </p>
               </div>
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center gap-[10px] text-center">
                 <h2 className="text-display/md/semibold text-white">1 tỷ</h2>
                 <p
                   className="font-family: Inter;font-size: 12px;font-weight: 400;line-height: 14.52px;
@@ -128,7 +128,7 @@ function LecturerLandingPage() {
                   Lượt ghi danh
                 </p>
               </div>
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center gap-[10px] text-center">
                 <h2 className="text-display/md/semibold text-white">Hơn 180</h2>
                 <p
                   className="font-family: Inter;font-size: 12px;font-weight: 400;line-height: 14.52px;
@@ -137,7 +137,7 @@ function LecturerLandingPage() {
                   Quốc gia
                 </p>
               </div>
-              <div className="flex flex-col items-center text-center">
+              <div className="flex flex-col items-center gap-[10px] text-center">
                 <h2 className="text-display/md/semibold text-white">
                   Hơn 16,000
                 </h2>
@@ -154,7 +154,7 @@ function LecturerLandingPage() {
       </section>
       {/* How to Start Section */}
       <section className="py-5">
-        <div className="max-w-full px-4  sm:px-6 px-8">
+        <div className="max-w-full  sm:px-6 px-8">
           <h2 className="text-display/sm/semibold text-black text-center">
             Cách thức bắt đầu
           </h2>

@@ -26,11 +26,6 @@ export default function CheckoutStep1Page() {
     const {setCurrentStep, order} = useOutletContext();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        setCurrentStep(2);
-        navigate("/web/checkout/step2");
-    }
 
     const formSchema = z.object({
         name: z.string().min(2, {

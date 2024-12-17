@@ -137,13 +137,13 @@ const router = createBrowserRouter(
           <Route path="cart" element={<CartPage />} />
           <Route path="result/:content" element={<ResultPage />} />
           <Route path="course-list" element={<CourseList />} />
-          <Route path="course-list/:content" element={<AllCoursesPage />} />
-          <Route path="checkout" element={<CheckoutPage />}>
-            <Route path="*" element={<Navigate to={"/web/checkout/step1"} />} />
-            <Route path="step1" element={<CheckoutStep1Page />} />
-            <Route path="step2" element={<CheckoutStep2Page />} />
-            <Route path="success" element={<CheckoutSuccessPage />} />
-            <Route path="fail" element={<CheckoutFailPage />} />
+          <Route path="course-list/:content" element={<AllCoursesPage/>}/>
+          <Route path="checkout" element={<CheckoutPage />} >
+            <Route path="*" element={<Navigate to={"/web/checkout"} />} />
+            <Route index element={<CheckoutStep1Page/>}/>
+            <Route path="step2" element={<CheckoutStep2Page/>}/>
+            <Route path="success" element={<CheckoutSuccessPage/>}/>
+            <Route path="fail" element={<CheckoutFailPage/>}/>
           </Route>
           {/* Lecturer layout */}
           <Route path="lecturer" element={<LecturerLayout />}>
