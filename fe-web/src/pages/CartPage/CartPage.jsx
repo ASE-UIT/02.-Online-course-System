@@ -221,7 +221,7 @@ const CartPage = () => {
                         <div className="space-y-5 grid grid-cols-1">
                             {myCart.map((course) => (
                                 <CourseCartCard
-                                    key={course.cartId}
+                                    key={course.courseId}
                                     course={course.course}
                                     checked={selectedCourses.includes(course.courseId)}
                                     onChange={(checked) => handleSelectCourse(course.courseId, checked)}
