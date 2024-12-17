@@ -20,7 +20,7 @@ class CourseCard extends StatelessWidget {
     required this.reviewCount,
     required this.price,
     required this.id,
-    this.imageUrl = 'assets/coursecard.png',
+    this.imageUrl,
   });
 
   @override
@@ -51,9 +51,16 @@ class CourseCard extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(
                 top: Radius.circular(4),
               ),
-              child: Image.asset(
-                imageUrl!,
-                fit: BoxFit.fitWidth,
+              child: SizedBox(
+                height: 130,
+                width: double.infinity,
+                child: Image.network(
+                  imageUrl ?? 'https://placehold.co/600x400?text=Eduhub',
+                  fit: BoxFit.fitWidth,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Center(child: Text('Failed to load image'));
+                  },
+                ),
               ),
             ),
             Padding(
