@@ -39,6 +39,14 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
     this.studentRepository = studentRepository;
   }
 
+  async deleteMyAccount(studentId: string): Promise<void> {
+    await this.studentRepository.findOneAndDelete({
+      filter: {
+        id: studentId
+      }
+    });
+  }
+
   /**
    * * Đây là hàm xử lý xác thực logic khi người dùng đăng ký bằng email
    * @param email
