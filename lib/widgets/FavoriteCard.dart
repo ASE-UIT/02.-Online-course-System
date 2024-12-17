@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../constants/colors.dart';
-import 'package:online_course_system/screens/course_detail/course_detail.dart';
+import '../screens/CourseDetail/CourseDetailScreen.dart';
 
 
 class FavoriteCard extends StatelessWidget {
