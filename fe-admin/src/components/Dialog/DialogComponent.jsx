@@ -12,6 +12,8 @@ import { Button } from "../ui/button";
 import RemoveCategories from "./Category/RemoveCategories";
 import LecturerModalBody from "./Lecturer/LecturerModalBody";
 import RemoveLecturer from "./Lecturer/RemoveLecturer";
+import EmployeeModalBody from "./Employee/EmployeeModalBody";
+import RemoveEmployee from "./Employee/RemoveEmployee";
 
 const DialogComponent = ({ bodyType, currentPage, row }) => {
   const vietnameseText = () => {
@@ -20,6 +22,8 @@ const DialogComponent = ({ bodyType, currentPage, row }) => {
       return "danh mục";
     } else if (currentPage === CURRENT_PAGES.LECTURER_PAGE) {
       return "giảng viên";
+    } else if (currentPage === CURRENT_PAGES.EMPLOYEE_PAGE) {
+      return "nhân viên";
     }
   };
 
@@ -44,7 +48,7 @@ const DialogComponent = ({ bodyType, currentPage, row }) => {
           }[bodyType]
         }
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll px-4 py-8 mb-16">
         <DialogHeader>
           <DialogTitle>
             {
@@ -72,6 +76,9 @@ const DialogComponent = ({ bodyType, currentPage, row }) => {
               ),
               [CURRENT_PAGES.LECTURER_PAGE]: (
                 <LecturerModalBody row={row} isAddOrChange={true} />
+              ),
+              [CURRENT_PAGES.EMPLOYEE_PAGE]: (
+                <EmployeeModalBody row={row} isAddOrChange={true} />
               )
             }[currentPage]
         }
@@ -84,6 +91,9 @@ const DialogComponent = ({ bodyType, currentPage, row }) => {
               ),
               [CURRENT_PAGES.LECTURER_PAGE]: (
                 <LecturerModalBody row={row} isAddOrChange={false} />
+              ),
+              [CURRENT_PAGES.EMPLOYEE_PAGE]: (
+                <EmployeeModalBody row={row} isAddOrChange={false} />
               )
             }[currentPage]
         }
@@ -92,7 +102,8 @@ const DialogComponent = ({ bodyType, currentPage, row }) => {
           bodyType === MODAL_BODY_TYPES.REMOVE &&
             {
               [CURRENT_PAGES.CATEGORY_PAGE]: <RemoveCategories row={row} />,
-              [CURRENT_PAGES.LECTURER_PAGE]: <RemoveLecturer row={row} />
+              [CURRENT_PAGES.LECTURER_PAGE]: <RemoveLecturer row={row} />,
+              [CURRENT_PAGES.EMPLOYEE_PAGE]: <RemoveEmployee row={row} />
             }[currentPage]
         }
       </DialogContent>

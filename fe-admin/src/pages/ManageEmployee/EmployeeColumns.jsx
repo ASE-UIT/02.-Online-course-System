@@ -1,6 +1,7 @@
 import { Checkbox } from "@/components/ui/checkbox";
 
 import { DataTableColumnHeader } from "@/components/Table/DTColumnHeader";
+import { format } from "date-fns";
 
 export const lecturerColumns = [
   {
@@ -64,7 +65,7 @@ export const lecturerColumns = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex w-[100px] items-center">
+        <div className="flex w-full items-center">
           <span>{row.getValue("email")}</span>
         </div>
       );
@@ -128,12 +129,15 @@ export const lecturerColumns = [
   {
     accessorKey: "updateAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="NGÀY TẠO" />
+      <DataTableColumnHeader column={column} title="NGÀY SỬA GẦN NHẤT" />
     ),
     cell: ({ row }) => {
+      const dateValue = row.getValue("updateAt");
+      const formattedDate = format(new Date(dateValue), "dd/MM/yyyy");
+
       return (
-        <div className="flex items-center">
-          <span>{row.getValue("updateAt")}</span>
+        <div className="flex w-[100px] items-center">
+          <span>{formattedDate}</span>
         </div>
       );
     },
@@ -145,12 +149,15 @@ export const lecturerColumns = [
   {
     accessorKey: "createAt",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="NGÀY SỬA" />
+      <DataTableColumnHeader column={column} title="NGÀY TẠO" />
     ),
     cell: ({ row }) => {
+      const dateValue = row.getValue("createAt");
+      const formattedDate = format(new Date(dateValue), "dd/MM/yyyy");
+
       return (
-        <div className="flex items-center">
-          <span>{row.getValue("createAt")}</span>
+        <div className="flex w-[100px] items-center">
+          <span>{formattedDate}</span>
         </div>
       );
     },
