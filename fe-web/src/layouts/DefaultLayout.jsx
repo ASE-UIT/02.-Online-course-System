@@ -6,13 +6,13 @@ import { Outlet } from "react-router-dom";
 
 const DefaultLayout = () => {
   const dispatch = useDispatch();
-  const { auth } = useSelector((state) => state);
+  const { auth } = useSelector((state) => state.auth);
 
   useEffect(() => {
     async function getStudentInfor() {
       try {
-        if (auth.auth && auth?.auth.length > 0) {
-          const response = await studentGetProfile(auth.auth);
+        if (auth && auth?.length > 0) {
+          const response = await studentGetProfile(auth);
           dispatch(addStudentInfor(response?.data));
         }
       } catch (error) {
