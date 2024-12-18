@@ -19,8 +19,6 @@ import { studentUpdateProfile } from "@/api/profileApi";
 
 const schema = z.object({
   name: z.string().min(1, "Họ và tên là bắt buộc"),
-  email: z.string().nullable().optional(),
-  phone_number: z.string().nullable().optional(),
   birthday: z.string().optional(),
   address: z.string().optional(),
   avatar: z.string().optional()
@@ -28,12 +26,12 @@ const schema = z.object({
 
 const ProfileTab = ({ pageName }) => {
   const { toast } = useToast();
-  const studentInfor = useLoaderData().data; // Use useLoaderData to get student information
+  const studentInfor = useLoaderData()?.data || {}; // Use useLoaderData to get student information
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(
     studentInfor.birthday ? new Date(studentInfor.birthday) : null
   );
-  const [avatarUrl, setAvatarUrl] = useState(studentInfor.avatar);
+  const [avatarUrl, setAvatarUrl] = useState(studentInfor.avatar || "");
   const [avatarError, setAvatarError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -45,12 +43,10 @@ const ProfileTab = ({ pageName }) => {
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: studentInfor.name,
-      email: studentInfor.email,
-      phone_number: studentInfor.phoneNumber,
-      birthday: studentInfor.birthday,
-      address: studentInfor.address,
-      avatar: studentInfor.avatar
+      name: studentInfor?.name || "",
+      birthday: studentInfor?.birthday || "",
+      address: studentInfor?.address || "",
+      avatar: studentInfor?.avatar || ""
     }
   });
 
@@ -66,19 +62,23 @@ const ProfileTab = ({ pageName }) => {
       );
       console.log("Profile updated successfully:", response);
       toast({
-        type: "success",
         title: "Cập nhật thông tin thành công",
-        description: "Thông tin hồ sơ của bạn đã được cập nhật"
+        description: "Thông tin hồ sơ của bạn đã được cập nhật",
+        status: "success",
+        duration: 5000,
+        isClosable: true
       });
-
-      setLoading(false);
     } catch (error) {
       console.error("Error updating profile:", error);
       toast({
-        type: "error",
         title: "Cập nhật thông tin thất bại",
-        description: "Đã xảy ra lỗi không xác định"
+        description: "Đã xảy ra lỗi không xác định",
+        status: "error",
+        duration: 5000,
+        isClosable: true
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,25 +150,19 @@ const ProfileTab = ({ pageName }) => {
           <label className="block text-black">Email</label>
           <input
             type="email"
-            {...register("email")}
+            value={studentInfor.email || ""}
             className="w-full p-2 border rounded-md"
             disabled
           />
-          {errors.email && (
-            <p className="text-red-500">{errors.email.message}</p>
-          )}
         </div>
         <div>
           <label className="block text-black">Điện thoại</label>
           <input
             type="text"
-            {...register("phone_number")}
+            value={studentInfor.phoneNumber || ""}
             className="w-full p-2 border rounded-md"
             disabled
           />
-          {errors.phone_number && (
-            <p className="text-red-500">{errors.phone_number.message}</p>
-          )}
         </div>
         <div>
           <label className="block text-black">Ngày sinh</label>
@@ -191,7 +185,7 @@ const ProfileTab = ({ pageName }) => {
                 selected={selectedDate}
                 onSelect={(date) => {
                   setSelectedDate(date);
-                  setValue("birthday", date);
+                  setValue("birthday", date ? format(date, "yyyy-MM-dd") : "");
                   setIsPopoverOpen(false);
                 }}
                 locale={vi}
@@ -213,7 +207,7 @@ const ProfileTab = ({ pageName }) => {
           disabled={loading}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Cập nhật
+          {loading ? "Đang xử lý..." : "Cập nhật"}
         </button>
       </form>
     </div>
