@@ -105,8 +105,9 @@ export class EnrollmentController {
       const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
       const { courseId } = req.params;
       const certificate = await this.enrollmentService.getCertificate(student.id, courseId);
-      res.setHeader('Content-Type', 'image/jpeg');
-      res.send(certificate);
+      res.send_ok('Get certificate success', {
+        certificate: certificate
+      });
     } catch (error) {
       next(error);
     }

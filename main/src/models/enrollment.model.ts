@@ -23,6 +23,9 @@ export class Enrollment {
   @Column({ type: 'date', nullable: true, name: 'completion_date' })
   completionDate!: Date;
 
+  @Column({ type: 'text', nullable: true })
+  certificate?: string;
+
   @ManyToOne(() => Student, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'student_id' })
   student!: Student;
