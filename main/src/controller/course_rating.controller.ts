@@ -46,10 +46,15 @@ export class CourseRatingController {
     try {
       if (!req.params.id) throw new BaseError(ErrorCode.NF_01, 'Id là bắt buộc');
 
-      await validateRequest(UpdateCourseRatingReq, req.body);
-      const result = await this.courseRatingService.update(req.params.id, req.body);
-      const responseBody = new UpdateCourseRatingRes(result);
-      res.send_ok('Update rating successful', responseBody);
+      const ratingId = req.params.id;
+
+      const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+
+      const studentId = student.id;
+
+      await this.courseRatingService.updateRating(ratingId, req.body as UpdateCourseRatingReq, studentId);
+
+      res.send_ok('Update rating successful');
     } catch (error) {
       next(error);
     }

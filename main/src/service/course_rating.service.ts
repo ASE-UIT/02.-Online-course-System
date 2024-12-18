@@ -33,6 +33,39 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
     this.studentRepository = studentRepository;
   }
 
+  async updateRating(ratingId: string, updateData: UpdateCourseRatingReq, studentId: string): Promise<void> {
+    const rating = await this.courseRatingRepository.findOne({ filter: { id: ratingId } });
+
+    if (!rating) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Đánh giá không tồn tại');
+    }
+
+    const course = await this.courseRepository.findOne({ filter: { id: rating.courseId } });
+    if (!course) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Khóa học không tồn tại');
+    }
+
+    await this.courseRatingRepository.findOneAndUpdate({
+      filter: {
+        id: ratingId
+      },
+      updateData: updateData
+    });
+
+    //Update course info
+    course.averageRating =
+      (course.averageRating * course.totalReviews - rating.ratingPoint! + updateData.ratingPoint!) /
+      course.totalReviews;
+    await this.courseRepository.findOneAndUpdate({
+      filter: {
+        id: course.id
+      },
+      updateData: {
+        averageRating: course.averageRating
+      }
+    });
+  }
+
   async createRating(requestBody: CreateCourseRatingReq, studentId: string): Promise<void> {
     const course = await this.courseRepository.findOne({ filter: { id: requestBody.courseId } });
     if (!course) {
