@@ -142,6 +142,84 @@ export const courseRTKApi = baseApi.injectEndpoints({
     //     },
     //   ],
     // }),
+
+    createRating: build.mutation({
+      query: (payload) => ({
+        url: `/rating`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags: (result, error, { courseId }) => [{ type: "Rating", id: courseId }],
+      async onQueryStarted(payload, { queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          showToast({
+            type: "success",
+            msg: "Đánh giá đã được gửi thành công",
+            desc: "Cảm ơn bạn đã đánh giá khóa học!",
+          });
+        } catch (error) {
+          showToast({
+            type: "error",
+            msg: "Gửi đánh giá thất bại",
+            desc: "Vui lòng thử lại.",
+          });
+        }
+      },
+    }),
+    getRatingStatistics: build.query({
+      query: (courseId) => ({
+        url: `/rating/statistics/${courseId}`,
+      }),
+      providesTags: (result, error, courseId) => [{ type: "Rating", id: courseId }],
+    }),
+    updateRating: build.mutation({
+      query: ({ id, payload }) => ({
+        url: `/rating/${id}`,
+        method: "PUT",
+        body: payload,
+      }),
+      invalidatesTags: (result, error, { courseId }) => [{ type: "Rating", id: courseId }],
+      async onQueryStarted(payload, { queryFulfilled }) {
+        try {
+          const response = await queryFulfilled;
+
+          // Check for a successful response (you can also inspect `response` if needed)
+          if (response?.data?.success) {
+            showToast({
+              type: "success",
+              msg: "Cập nhật đánh giá thành công",
+              desc: "Đánh giá của bạn đã được cập nhật.",
+            });
+          } else {
+            showToast({
+              type: "error",
+              msg: "Cập nhật đánh giá thất bại",
+              desc: "Vui lòng thử lại.",
+            });
+          }
+        } catch {
+          showToast({
+            type: "error",
+            msg: "Cập nhật đánh giá thất bại",
+            desc: "Vui lòng thử lại.",
+          });
+        }
+      },
+    }),
+    searchRating: build.query({
+      query: ({ courseId, sort }) => {
+        const sortParam = JSON.stringify(sort);
+        return {
+          url: `/rating/`,
+          params: {
+            sort: sortParam,
+            courseId,
+          },
+        };
+      },
+      providesTags: (result, error, { courseId }) => [{ type: "Rating", id: courseId }],
+    }),
   }),
 });
 export const {
@@ -160,4 +238,9 @@ export const {
   useCreateCourseMutation,
   useAnswerQuizMutation,
   useUpdateLessonProgressMutation,
+
+  useSearchRatingQuery,
+  useCreateRatingMutation,
+  useGetRatingStatisticsQuery,
+  useUpdateRatingMutation,
 } = courseRTKApi;
