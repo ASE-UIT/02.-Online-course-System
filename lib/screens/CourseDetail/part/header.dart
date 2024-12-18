@@ -1,8 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../SignInScreen.dart';
 
-class CourseHeader extends StatelessWidget {
+class CourseHeader extends StatefulWidget {
+  @override
+  State<CourseHeader> createState() => _CourseHeaderState();
+}
+
+class _CourseHeaderState extends State<CourseHeader> {
+  final storage = FlutterSecureStorage();
+
+  bool _hasToken = false;
+
+  Future<void> _checkToken() async {
+    final token = await storage.read(key: 'token');
+    debugPrint("token: $token");
+    setState(() {
+      _hasToken = token != null;
+    });
+    debugPrint("_hasToken: $_hasToken");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _checkToken();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,18 +41,20 @@ class CourseHeader extends StatelessWidget {
             width: 133,
           ),
           const Spacer(),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SignInScreen()),
-              );
-            },
-            child: const Text(
-              'Đăng nhập',
-              style: TextStyle(color: Colors.black, fontSize: 16),
-            ),
-          ),
+          _hasToken
+              ? Container()
+              : TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignInScreen()),
+                    );
+                  },
+                  child: const Text(
+                    'Đăng nhập',
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                ),
         ],
       ),
     );

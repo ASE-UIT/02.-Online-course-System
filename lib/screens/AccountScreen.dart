@@ -191,7 +191,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   children: [
                     const Text(
                       'Chào mừng đến với EduHub!',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -200,10 +201,24 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                     const SizedBox(height: 24),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary500,
+                        minimumSize: const Size(150, 60),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
                       onPressed: () {
                         Navigator.pushNamed(context, 'SignInScreen');
                       },
-                      child: const Text('Đăng nhập'),
+                      child: Text(
+                        'Đăng nhập',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ],
                 ),

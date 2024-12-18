@@ -14,7 +14,6 @@ import 'package:online_course_system/screens/UpdateEmailScreen.dart';
 import 'package:online_course_system/screens/UpdatePhoneScreen.dart';
 import 'package:online_course_system/screens/SignInScreen.dart';
 import 'package:provider/provider.dart';
-
 import 'ViewModels/course_view_model.dart';
 import 'Views/login_screen.dart';
 

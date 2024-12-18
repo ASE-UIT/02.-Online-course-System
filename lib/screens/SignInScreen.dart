@@ -151,25 +151,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                 color: Colors.white),
                           ),
                         ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            await storage.delete(key: 'token');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary500,
-                            minimumSize: const Size(double.infinity, 60),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: const Text(
-                            "Xoa token",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white),
-                          ),
-                        ),
                         const SizedBox(height: 16),
                         const Align(
                             alignment: Alignment.centerLeft,

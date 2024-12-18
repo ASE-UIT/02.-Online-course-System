@@ -191,10 +191,10 @@ class _SignUpScreenState extends State<PhoneSignUpScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text('Hoặc đăng ký bằng số thoại? '),
+                            const Text('Hoặc đăng ký bằng email? '),
                             TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, 'SignInScreen');
+                                Navigator.pushNamed(context, 'EmailSignUpScreen');
                               },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,

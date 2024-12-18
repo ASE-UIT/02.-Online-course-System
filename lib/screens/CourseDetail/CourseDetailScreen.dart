@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import '../../ViewModels/course_view_model.dart';
 import 'part/content.dart';
@@ -22,8 +23,18 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
   final ScrollController _scrollController = ScrollController();
   bool _isButtonVisible = true;
   bool _isLoading = true; // Add isLoading variable
-
   late CourseViewModel _courseDetailVM;
+  final storage = FlutterSecureStorage();
+  bool _hasToken = false;
+
+  Future<void> _checkToken() async {
+    final token = await storage.read(key: 'token');
+    debugPrint("token: $token");
+    setState(() {
+      _hasToken = token != null;
+    });
+    debugPrint("_hasToken: $_hasToken");
+  }
 
   Future<void> _loadData() async {
     try {
@@ -51,6 +62,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     // Fetch courses asynchronously when the screen initializes
     _courseDetailVM = Provider.of<CourseViewModel>(context, listen: false);
     _loadData();
+    _checkToken();
   }
 
   @override
@@ -88,11 +100,15 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        CourseInfo(courseDetail: _courseDetailVM.courseDetail),
+                        CourseInfo(
+                          courseDetail: _courseDetailVM.courseDetail,
+                          hasToken: _hasToken,
+                        ),
                         const SizedBox(height: 16),
                         CourseIntro(
-                            text: _courseDetailVM.courseDetail.introduction ??
-                                courseIntroText),
+                          text: _courseDetailVM.courseDetail.introduction ??
+                              courseIntroText,
+                        ),
                         const SizedBox(height: 16),
                         CourseContent(),
                         const SizedBox(height: 16),
@@ -116,6 +132,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                           builder: (context, courseViewModel, child) {
                             final courseDetail = courseViewModel.courseDetail;
                             return BuyNowButton(
+                              hasToken: _hasToken,
                               courseId: courseDetail.id ?? '',
                               courseName: courseDetail.name ?? '',
                               lecturerName: courseDetail.lecturer?.name ?? '',

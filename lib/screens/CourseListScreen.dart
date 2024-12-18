@@ -21,7 +21,18 @@ class _CourseListScreenState extends State<CourseListScreen> {
   late CourseViewModel _courseVM;
   final storage = FlutterSecureStorage();
   String? token;
+  bool _hasToken = false;
   List<CategoryData?>? _categories = [];
+
+  Future<void> _checkToken() async {
+    final token = await storage.read(key: 'token');
+    debugPrint("token: $token");
+    setState(() {
+      _hasToken = token != null;
+    });
+    debugPrint("_hasToken: $_hasToken");
+  }
+
 
   Future<void> _loadData() async {
     try {
@@ -46,7 +57,7 @@ class _CourseListScreenState extends State<CourseListScreen> {
     super.initState();
     _courseVM = Provider.of<CourseViewModel>(context, listen: false);
     _loadData();
-    _loadToken();
+    _checkToken();
   }
 
   @override
@@ -64,27 +75,29 @@ class _CourseListScreenState extends State<CourseListScreen> {
                 child: Image.asset("assets/eduhublogo.png"),
               ),
               const Spacer(),
-              Container(
-                height: 40,
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'SignInScreen');
-                  },
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: const Text(
-                    "Đăng nhập",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+              _hasToken
+                  ? Container()
+                  : Container(
+                      height: 40,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, 'SignInScreen');
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          "Đăng nhập",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -115,7 +128,9 @@ class _CourseListScreenState extends State<CourseListScreen> {
                             categoryTitle: 'Lịch học trực tiếp',
                             courses: _courseVM.courses,
                           ),
-                          HomeExploreCategory(categoryData: _categories,),
+                          HomeExploreCategory(
+                            categoryData: _categories,
+                          ),
                         ],
                       ),
                     ),

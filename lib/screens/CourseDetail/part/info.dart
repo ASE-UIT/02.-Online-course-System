@@ -6,8 +6,13 @@ import 'package:online_course_system/widgets/StarBar.dart';
 
 class CourseInfo extends StatelessWidget {
   final CourseDetailData courseDetail;
+  final bool hasToken;
 
-  const CourseInfo({super.key, required this.courseDetail});
+  const CourseInfo({
+    super.key,
+    required this.courseDetail,
+    required this.hasToken,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +44,13 @@ class CourseInfo extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.warning500
-                ),
+                    color: AppColors.warning500),
               ),
               const SizedBox(width: 8),
               StarBar(rating: courseDetail.averageRating!.toDouble()),
               const SizedBox(width: 8),
-              Text(
-                  '(${courseDetail.averageRating} đánh giá)',
-                  style: TextStyle(
-                      fontSize: 16
-                  )
-              ),
+              Text('(${courseDetail.averageRating} đánh giá)',
+                  style: TextStyle(fontSize: 16)),
             ],
           ),
           const SizedBox(height: 8),
@@ -109,6 +109,7 @@ class CourseInfo extends StatelessWidget {
             children: [
               Expanded(
                 child: BuyNowButton(
+                  hasToken: hasToken,
                   courseId: courseDetail.id ?? '',
                   courseName: courseDetail.name ?? '',
                   lecturerName: courseDetail.lecturer?.name ?? '',
@@ -170,7 +171,6 @@ class FavouriteButton extends StatefulWidget {
 }
 
 class _FavouriteButtonState extends State<FavouriteButton> {
-
   void _toggleFavourite() {
     setState(() {
       widget.isFavourite = !widget.isFavourite; // Toggle the state
@@ -216,7 +216,8 @@ class TargetList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: SingleChildScrollView( // Make it scrollable
+      child: SingleChildScrollView(
+        // Make it scrollable
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: List.generate(targets.length, (index) {
@@ -265,16 +266,15 @@ class TargetItem extends StatelessWidget {
 }
 
 class PropertyItem extends StatelessWidget {
-
   final IconData iconData;
   final String propertyName;
   final String propertyValue;
 
   PropertyItem(
-      this.iconData,
-      this.propertyName,
-      this.propertyValue,
-      );
+    this.iconData,
+    this.propertyName,
+    this.propertyValue,
+  );
 
   @override
   Widget build(BuildContext context) {

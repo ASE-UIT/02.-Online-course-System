@@ -9,6 +9,7 @@ class BuyNowButton extends StatelessWidget {
   final String lecturerName;
   final String sellPrice;
   final String originalPrice;
+  final bool hasToken;
 
   const BuyNowButton({
     Key? key,
@@ -17,6 +18,7 @@ class BuyNowButton extends StatelessWidget {
     required this.lecturerName,
     required this.sellPrice,
     required this.originalPrice,
+    required this.hasToken,
   }) : super(key: key);
 
   @override
@@ -35,18 +37,26 @@ class BuyNowButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PaymentScreen(
-                courseId: courseId,
-                courseName: courseName,
-                lecturerName: lecturerName,
-                sellPrice: sellPrice,
-                originalPrice: originalPrice,
+          if (hasToken) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PaymentScreen(
+                  courseId: courseId,
+                  courseName: courseName,
+                  lecturerName: lecturerName,
+                  sellPrice: sellPrice,
+                  originalPrice: originalPrice,
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Vui lòng đăng nhập để mua khóa học"),
+              ),
+            );
+          }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.warning100,
