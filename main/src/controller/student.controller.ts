@@ -21,6 +21,7 @@ import { ChangePasswordReqDto } from '@/dto/student/change-password.req';
 import { UpdateProfileReqDto } from '@/dto/student/update-profile.req';
 import { ErrorCode } from '@/enums/error-code.enums';
 import { PagingDto } from '@/dto/paging.dto';
+import { SessionUtil } from '@/utils/session.util';
 
 @injectable()
 export class StudentController {
@@ -271,6 +272,23 @@ export class StudentController {
 
       await this.studentService.findOneAndDelete({ filter: { id } });
       res.send_ok('Xóa mềm học viên thành công');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * DELETE /student/delete-my-account
+   */
+  async deleteMyAccount(req: Request, res: Response, next: NextFunction) {
+    try {
+      const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+
+      const studentId = student.id;
+
+      await this.studentService.deleteMyAccount(studentId);
+
+      return res.send_ok('Delete account successfully');
     } catch (error) {
       next(error);
     }

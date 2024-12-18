@@ -13,6 +13,7 @@ import { inject, injectable } from 'inversify';
 import bcrypt from 'bcrypt';
 import { Course } from '@/models/course.model';
 import { getRepository } from 'typeorm';
+import { UpdateLecturerRes } from '@/dto/employee/update-lecturer.res';
 
 @injectable()
 export class EmployeeController {
@@ -144,4 +145,75 @@ export class EmployeeController {
       return res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+  async addLecturer(req:Request, res:Response, next:NextFunction) {
+    try {
+      const lecturerData = req.body; // Dữ liệu giảng viên từ body request
+      const user = req.user as unknown; 
+  
+
+      if(!IsEmployee(user)){
+        throw new BaseError(ErrorCode.PERMISSION_01, 'Vui lòng đăng nhập');
+      }
+      const currentEmployee = user as Employee;
+      const result = await this.employeeService.addLecturer(
+        currentEmployee,
+        lecturerData
+      );
+  
+      res.send_ok('Thêm mới giảng viên thành công', result);
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
+  
+  async updateLecturer(req:Request, res:Response, next:NextFunction) {
+    try{
+      const lecturerData = req.body; // Dữ liệu giảng viên từ body request
+    const lecturerId = req.params.id; // Lấy id giảng viên từ params
+    const user = req.user as unknown; 
+  
+
+      if(!IsEmployee(user)){
+        throw new BaseError(ErrorCode.PERMISSION_01, 'Vui lòng đăng nhập');
+      }
+      const currentEmployee = user as Employee;
+    const result= await this.employeeService.updateLecturer(
+      currentEmployee,
+      lecturerId,
+      lecturerData
+    )
+    res.send_ok('Cập nhật giảng viên thành công', result);
+    }
+    catch(error){
+      next(error);
+    }
+  }
+
+
+  async rejectLecturerApplication(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { lecturerId, reason } = req.body; // Lấy dữ liệu từ body request
+
+      const user = req.user as unknown; 
+  
+
+      if(!IsEmployee(user)){
+        throw new BaseError(ErrorCode.PERMISSION_01, 'Vui lòng đăng nhập');
+      }
+      const currentEmployee = user as Employee;
+  
+      await this.employeeService.rejectLecturerApplication(currentEmployee, lecturerId, reason);
+  
+      res.send_ok('Đơn giảng viên đã được từ chối và email đã được gửi.');
+    } catch (error) {
+      next(error);
+    }
+  }
+}
+
+function IsEmployee(user: unknown): user is Employee {
+  return (user as Employee).id !== undefined;
 }

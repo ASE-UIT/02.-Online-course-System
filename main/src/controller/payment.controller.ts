@@ -15,6 +15,11 @@ import requestIp from 'request-ip';
 export class PaymentController {
   public common: IBaseCrudController<Payment>;
   private paymentService: IPaymentService<Payment>;
+
+  //Constants
+  private FE_SUCCESS_PAYMENT_URL = 'https://eduhub.io.vn/web/checkout/success';
+  private FE_FAIL_PAYMENT_URL = 'https://eduhub.io.vn/web/checkout/fail';
+
   constructor(
     @inject('PaymentService') paymentService: IPaymentService<Payment>,
     @inject(ITYPES.Controller) common: IBaseCrudController<Payment>
@@ -54,9 +59,11 @@ export class PaymentController {
 
       await this.paymentService.handleVNPayReturn(vnp_Params);
 
-      return res.send_ok('Payment success');
+      return res.redirect(this.FE_SUCCESS_PAYMENT_URL);
     } catch (error) {
-      next(error);
+      console.log('PAYMENT ERROR', error);
+
+      return res.redirect(this.FE_FAIL_PAYMENT_URL);
     }
   }
 }
