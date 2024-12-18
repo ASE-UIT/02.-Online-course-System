@@ -74,11 +74,6 @@ employeeRouter
     employeeController.updateLecturer.bind(employeeController)
   )
 
-  .post(
-    '/rejectLecturer',
-    authenticateJWT,
-    employeeController.rejectLecturerApplication.bind(employeeController)
-  );
-
+  .post('/rejectLecturer', authenticateJWT, employeeController.rejectLecturerApplication.bind(employeeController));
 
 export default employeeRouter;

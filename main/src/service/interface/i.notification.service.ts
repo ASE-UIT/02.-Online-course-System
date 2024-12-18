@@ -10,6 +10,6 @@ export interface INotificationService<T extends BaseModelType> extends IBaseCrud
   sendWhenHaveNewCourseRating(lecturerId: string, courseRating: CourseRating): Promise<void>;
   sendWhenCompleteCourse(studentId: string, course: Course): Promise<void>;
   sendWhenHaveLecturerRegisterApproveResult(lecturerId: string, approved: boolean): Promise<void>;
-  sendWhenHaveNewLecturerRegister(lecturer: Lecturer, employee:Employee): Promise<void>;
+  sendWhenHaveNewLecturerRegister(lecturer: Lecturer, employee: Employee): Promise<void>;
   sendWhenHaveNewCourseRequest(course: Course): Promise<void>;
 }

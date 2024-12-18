@@ -76,20 +76,16 @@ export class EmployeeService extends BaseCrudService<Employee> implements IEmplo
     return new LoginRes(token);
   }
 
-  async addLecturer(
-    currentEmployee: Employee,
-    lecturerData: Partial<Lecturer>
-  ): Promise<Lecturer> {
+  async addLecturer(currentEmployee: Employee, lecturerData: Partial<Lecturer>): Promise<Lecturer> {
     const ALLOWED_ROLES = ['TECHNICAL_ADMIN', 'MANAGEMENT_ADMIN'];
-  
+
     // Kiểm tra quyền của nhân viên
     if (!ALLOWED_ROLES.includes(currentEmployee.roleId)) {
-      throw new BaseError(
-        ErrorCode.PERMISSION_01,
-        'Bạn không có quyền thực hiện hành động này.'
-      );
+      throw new BaseError(ErrorCode.PERMISSION_01, 'Bạn không có quyền thực hiện hành động này.');
     }
-  
+
+    lecturerData.password = bcrypt.hashSync(lecturerData.password!, 10);
+
     // Tạo mới Lecturer
     return this.lecturerRepository.create({ data: lecturerData });
   }
@@ -100,22 +96,19 @@ export class EmployeeService extends BaseCrudService<Employee> implements IEmplo
     lecturerData: UpdateLecturerDto
   ): Promise<UpdateLecturerRes> {
     const ALLOWED_ROLES = ['TECHNICAL_ADMIN', 'MANAGEMENT_ADMIN'];
-  
+
     // Kiểm tra quyền của nhân viên
     if (!ALLOWED_ROLES.includes(currentEmployee.roleId)) {
-      throw new BaseError(
-        ErrorCode.PERMISSION_01,
-        'Bạn không có quyền thực hiện hành động này.'
-      );
+      throw new BaseError(ErrorCode.PERMISSION_01, 'Bạn không có quyền thực hiện hành động này.');
     }
-  
+
     // Cập nhật Lecturer
     const lecturer = await this.lecturerRepository.findOne({ filter: { id: lecturerId } });
     if (!lecturer) {
       throw new BaseError(ErrorCode.NF_01, 'Không tìm thấy giảng viên.');
     }
 
-    const updatedLecturer = {... lecturer, ...lecturerData};
+    const updatedLecturer = { ...lecturer, ...lecturerData };
 
     await this.lecturerRepository.findOneAndUpdate({
       filter: { id: lecturerId },
@@ -124,37 +117,30 @@ export class EmployeeService extends BaseCrudService<Employee> implements IEmplo
     return convertToDto(UpdateLecturerRes, lecturer);
   }
 
-  async rejectLecturerApplication(
-    currentEmployee: Employee,
-    lecturerId: string,
-    reason: string
-  ): Promise<void> {
+  async rejectLecturerApplication(currentEmployee: Employee, lecturerId: string, reason: string): Promise<void> {
     const ALLOWED_ROLES = ['TECHNICAL_ADMIN', 'MANAGEMENT_ADMIN'];
-  
+
     // Kiểm tra quyền
     if (!ALLOWED_ROLES.includes(currentEmployee.roleId)) {
-      throw new BaseError(
-        ErrorCode.PERMISSION_01,
-        'Bạn không có quyền thực hiện hành động này.'
-      );
+      throw new BaseError(ErrorCode.PERMISSION_01, 'Bạn không có quyền thực hiện hành động này.');
     }
-  
+
     // Tìm Lecturer
     const lecturer = await this.lecturerRepository.findOne({ filter: { id: lecturerId } });
     if (!lecturer) {
       throw new BaseError(ErrorCode.NF_01, 'Không tìm thấy giảng viên.');
     }
-  
+
     // Cập nhật trạng thái isApproved
     await this.lecturerRepository.findOneAndUpdate({
       filter: { id: lecturerId },
       updateData: { isApproved: false }
     });
-  
+
     // Gửi email lý do từ chối
     const currentDate = new Date().toLocaleDateString();
     const emailContent = `Đơn đăng ký giảng viên của bạn không được duyệt vì lý do "${reason}" vào ngày ${currentDate}.`;
-  
+
     await sendEmail({
       from: { name: 'EduHub Admin' },
       to: { emailAddress: [lecturer.email] },
