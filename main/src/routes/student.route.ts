@@ -51,15 +51,15 @@ studentRouter
 
   .post('/reset-password', classValidate(ResetPasswordReqDto), studentController.resetPassword.bind(studentController))
 
-  .post(
+  .put(
     '/change-password',
     classValidate(ChangePasswordReqDto),
     authenticateJWT, // Middleware xác thực người dùng
     studentController.changePassword.bind(studentController)
   )
 
-  .patch(
-    '/profile',
+  .put(
+    '/update-my-profile',
     classValidate(UpdateProfileReqDto),
     authenticateJWT, // Middleware xác thực người dùng
     studentController.updateProfile.bind(studentController)
@@ -69,7 +69,11 @@ studentRouter
 
   .get('/getwithpaging', studentController.getStudentsWithPaging.bind(studentController))
 
+  .get('/me', authenticateJWT, studentController.getMe.bind(studentController))
+
   .get('/:id', studentController.getStudentById.bind(studentController))
+
+  .delete('/delete-my-account', authenticateJWT, studentController.deleteMyAccount.bind(studentController))
 
   .delete('/:id', studentController.softDeleteStudent.bind(studentController));
 

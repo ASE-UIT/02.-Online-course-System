@@ -5,5 +5,7 @@ export enum RedisSchemaEnum {
   notification = 'notification',
   forgetPassword = 'forgetPassword',
   activeStudentEmail = 'activeStudentEmail',
-  activeLecturerEmail = 'activeLecturerEmail'
+  activeLecturerEmail = 'activeLecturerEmail',
+  lecturerStats = 'lecturerStats',
+  courseDetail = 'courseDetail'
 }

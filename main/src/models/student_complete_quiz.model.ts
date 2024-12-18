@@ -18,7 +18,6 @@ export class StudentCompleteQuiz {
   @JoinColumn({ name: 'student_id' })
   student!: Student;
 
-  @CreateDateColumn()
-  @Column({ name: 'create_at' })
+  @CreateDateColumn({ name: 'create_at' })
   createAt!: Date;
 }

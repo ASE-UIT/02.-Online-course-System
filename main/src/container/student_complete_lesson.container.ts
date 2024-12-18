@@ -5,6 +5,10 @@ import { StudentCompleteLessonRepository } from '@/repository/student_complete_l
 import { IStudentCompleteLessonService } from '@/service/interface/i.student_complete_lesson.service';
 import { IStudentCompleteLessonRepository } from '@/repository/interface/i.student_complete_lesson.repository';
 import { BaseContainer } from '@/container/base.container';
+import { ICourseRepository } from '@/repository/interface/i.course.repository';
+import { courseRepository } from '@/container/course.container';
+import { ILessonRepository } from '@/repository/interface/i.lesson.repository';
+import { lessonRepository } from '@/container/lesson.container';
 
 class StudentCompleteLessonContainer extends BaseContainer {
   constructor() {
@@ -16,6 +20,9 @@ class StudentCompleteLessonContainer extends BaseContainer {
       .bind<IStudentCompleteLessonRepository<StudentCompleteLesson>>('StudentCompleteLessonRepository')
       .to(StudentCompleteLessonRepository);
     this.container.bind<StudentCompleteLessonController>(StudentCompleteLessonController).toSelf();
+
+    //Import
+    this.container.bind<ILessonRepository<any>>('LessonRepository').toConstantValue(lessonRepository);
   }
 
   export() {

@@ -29,15 +29,10 @@ import { LecturerGetCourseRes } from '@/dto/lecturer/lecturer-get-course.res';
 @injectable()
 export class LecturerService extends BaseCrudService<Lecturer> implements ILecturerService<Lecturer> {
   private lecturerRepository: ILecturerRepository<Lecturer>;
-  private courseRepository: ICourseRepository<Course>;
 
-  constructor(
-    @inject('LecturerRepository') lecturerRepository: ILecturerRepository<Lecturer>,
-    @inject('CourseRepository') courseRepository: ICourseRepository<Course>
-  ) {
+  constructor(@inject('LecturerRepository') lecturerRepository: ILecturerRepository<Lecturer>) {
     super(lecturerRepository);
     this.lecturerRepository = lecturerRepository;
-    this.courseRepository = courseRepository;
   }
 
   async getDetail(id: string): Promise<LecturerDetailRes> {
@@ -51,11 +46,7 @@ export class LecturerService extends BaseCrudService<Lecturer> implements ILectu
 
     const result = convertToDto(LecturerDetailRes, lecturer);
 
-    result.totalCourse = await this.courseRepository.count({
-      filter: {
-        lecturerId: id
-      }
-    });
+    result.totalCourse = await this.lecturerRepository.countTotalCourse(lecturer.id);
 
     return result;
   }

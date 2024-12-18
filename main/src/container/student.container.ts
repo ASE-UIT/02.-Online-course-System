@@ -17,10 +17,11 @@ class StudentContainer extends BaseContainer {
   export() {
     const studentController = this.container.get<StudentController>(StudentController);
     const studentService = this.container.get<IStudentService<any>>('StudentService');
-    return { studentController, studentService };
+    const studentRepository = this.container.get<IStudentRepository<any>>('StudentRepository');
+    return { studentController, studentService, studentRepository };
   }
 }
 
 const studentContainer = new StudentContainer();
-const { studentController, studentService } = studentContainer.export();
-export { studentController, studentService };
+const { studentController, studentService, studentRepository } = studentContainer.export();
+export { studentController, studentService, studentRepository };

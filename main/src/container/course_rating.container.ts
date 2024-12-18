@@ -25,10 +25,11 @@ class CourseRatingContainer extends BaseContainer {
   export() {
     const courseRatingController = this.container.get<CourseRatingController>(CourseRatingController);
     const courseRatingService = this.container.get<ICourseRatingService<any>>('CourseRatingService');
-    return { courseRatingController, courseRatingService };
+    const courseRatingRepository = this.container.get<ICourseRatingRepository<any>>('CourseRatingRepository');
+    return { courseRatingController, courseRatingService, courseRatingRepository };
   }
 }
 
 const courseRatingContainer = new CourseRatingContainer();
-const { courseRatingController, courseRatingService } = courseRatingContainer.export();
-export { courseRatingController, courseRatingService };
+const { courseRatingController, courseRatingService, courseRatingRepository } = courseRatingContainer.export();
+export { courseRatingController, courseRatingService, courseRatingRepository };

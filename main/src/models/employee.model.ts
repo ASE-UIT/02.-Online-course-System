@@ -22,6 +22,9 @@ export class Employee extends BaseModel {
   @Column({ length: 15, nullable: true, name: 'phone_number' })
   phoneNumber!: string;
 
+  @Column({ type: 'text', nullable: true })
+  avatar?: string;
+
   // @Column({ type: 'enum', enum: LoginTypeEnum, default: LoginTypeEnum.email, name: 'login_type' })
   // loginType!: LoginTypeEnum;
 

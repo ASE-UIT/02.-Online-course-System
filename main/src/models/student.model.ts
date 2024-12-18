@@ -18,6 +18,12 @@ export class Student extends BaseModel {
   @Column({ type: 'text', nullable: true })
   avatar!: string;
 
+  @Column({ length: 100, nullable: true })
+  address?: string;
+
+  @Column({ type: 'date', nullable: true })
+  birthday?: Date;
+
   @Column({ length: 15, nullable: true, name: 'phone_number' })
   phoneNumber!: string;
 

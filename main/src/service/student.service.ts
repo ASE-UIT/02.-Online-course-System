@@ -39,6 +39,14 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
     this.studentRepository = studentRepository;
   }
 
+  async deleteMyAccount(studentId: string): Promise<void> {
+    await this.studentRepository.findOneAndDelete({
+      filter: {
+        id: studentId
+      }
+    });
+  }
+
   /**
    * * Đây là hàm xử lý xác thực logic khi người dùng đăng ký bằng email
    * @param email
@@ -88,7 +96,7 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
         }
       })
     ) {
-      throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Số điện thoại đã tồn tại');
+      throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Email đã tồn tại');
     }
 
     data.password = bcrypt.hashSync(data.password, 10);
@@ -468,24 +476,24 @@ export class StudentService extends BaseCrudService<Student> implements IStudent
       throw new BaseError(ErrorCode.NOT_FOUND, 'Không tìm thấy tài khoản học viên');
     }
 
-    // Kiểm tra nếu email đã tồn tại và khác với email của sinh viên hiện tại
-    if (updateData.email && updateData.email !== student.email) {
-      const existingStudent = await this.studentRepository.findOne({ filter: { email: updateData.email } });
-      if (existingStudent) {
-        throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Email đã tồn tại');
-      }
-    }
+    // // Kiểm tra nếu email đã tồn tại và khác với email của sinh viên hiện tại
+    // if (updateData.email && updateData.email !== student.email) {
+    //   const existingStudent = await this.studentRepository.findOne({ filter: { email: updateData.email } });
+    //   if (existingStudent) {
+    //     throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Email đã tồn tại');
+    //   }
+    // }
 
-    // Kiểm tra nếu số điện thoại đã tồn tại và khác với số hiện tại
-    if (updateData.phoneNumber && updateData.phoneNumber !== student.phoneNumber) {
-      const existingStudent = await this.studentRepository.findOne({ filter: { phoneNumber: updateData.phoneNumber } });
-      if (existingStudent) {
-        throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Số điện thoại đã tồn tại');
-      }
-    }
+    // // Kiểm tra nếu số điện thoại đã tồn tại và khác với số hiện tại
+    // if (updateData.phoneNumber && updateData.phoneNumber !== student.phoneNumber) {
+    //   const existingStudent = await this.studentRepository.findOne({ filter: { phoneNumber: updateData.phoneNumber } });
+    //   if (existingStudent) {
+    //     throw new BaseError(ErrorCode.DUPLICATE_ERROR, 'Số điện thoại đã tồn tại');
+    //   }
+    // }
 
     // Cập nhật các thông tin mới
     Object.assign(student, updateData);
-    await this.studentRepository.findOneAndUpdate({ filter: { id: studentId }, updateData: student });
+    await this.studentRepository.save(student);
   }
 }

@@ -21,6 +21,7 @@ import { ChangePasswordReqDto } from '@/dto/student/change-password.req';
 import { UpdateProfileReqDto } from '@/dto/student/update-profile.req';
 import { ErrorCode } from '@/enums/error-code.enums';
 import { PagingDto } from '@/dto/paging.dto';
+import { SessionUtil } from '@/utils/session.util';
 
 @injectable()
 export class StudentController {
@@ -33,6 +34,30 @@ export class StudentController {
     this.studentService = studentService;
     this.common = common;
   }
+
+  /**
+   * * GET /student/me
+   */
+  async getMe(req: Request, res: Response, next: NextFunction) {
+    try {
+      const studentId = req.user!.id;
+      const result = await this.studentService.findOne({ filter: { id: studentId } });
+
+      if (!result) {
+        throw new BaseError(ErrorCode.AUTH_01, 'Học viên chưa đăng nhập');
+      }
+
+      //Delete sensitive data
+      delete (result as any).password;
+      delete (result as any).googleId;
+      delete (result as any).facebookId;
+
+      res.send_ok('Thông tin học viên', result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   /**
    * * POST /student/login
    */
@@ -247,6 +272,23 @@ export class StudentController {
 
       await this.studentService.findOneAndDelete({ filter: { id } });
       res.send_ok('Xóa mềm học viên thành công');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * DELETE /student/delete-my-account
+   */
+  async deleteMyAccount(req: Request, res: Response, next: NextFunction) {
+    try {
+      const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+
+      const studentId = student.id;
+
+      await this.studentService.deleteMyAccount(studentId);
+
+      return res.send_ok('Delete account successfully');
     } catch (error) {
       next(error);
     }

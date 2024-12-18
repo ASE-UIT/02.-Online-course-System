@@ -17,4 +17,7 @@ export class CreateDiscountReq {
 
   @IsDateString()
   endDate!: Date;
+
+  @IsNotEmpty()
+  courseId!: string;
 }

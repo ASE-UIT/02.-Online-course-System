@@ -23,6 +23,60 @@ export class CartService extends BaseCrudService<Cart> implements ICartService<C
     this.cartItemRepository = cartItemRepository;
   }
 
+  async getMyCart(studentId: string): Promise<Cart> {
+    const cart = await this.cartRepository.findOne({
+      filter: {
+        studentId: studentId
+      }
+    });
+
+    if (!cart) {
+      throw new BaseError(ErrorCode.BAD_REQUEST, 'Giỏ hàng không tồn tại');
+    }
+
+    const cartItems = await this.cartItemRepository.findMany({
+      filter: {
+        cartId: cart.id
+      },
+      relations: ['course.lecturer', 'course.category'],
+      select: {
+        course: {
+          id: true,
+          name: true,
+          nameEn: true,
+          shortDescription: true,
+          introduction: true,
+          participants: true,
+          courseTargets: true,
+          thumbnail: true,
+          originalPrice: true,
+          sellPrice: true,
+          lowestPrice: true,
+          tags: true,
+          duration: true,
+          isFreeCourse: true,
+          totalStudents: true,
+          totalReviews: true,
+          averageRating: true,
+          lecturer: {
+            id: true,
+            name: true,
+            email: true,
+            bio: true
+          },
+          category: {
+            id: true,
+            name: true
+          }
+        }
+      }
+    });
+
+    cart.items = cartItems;
+
+    return cart;
+  }
+
   /**
    * * Remove cart item from cart
    * @param studentId

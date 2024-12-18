@@ -6,6 +6,7 @@ import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
 import { StudentCompleteQuiz } from '@/models/student_complete_quiz.model';
 import { IStudentCompleteQuizRepository } from '@/repository/interface/i.student_complete_quiz.repository';
+import { AnswerQuizzReq } from '@/dto/quizz/answer-quizz.req';
 
 @injectable()
 export class QuizController {
@@ -37,31 +38,17 @@ export class QuizController {
   // }
 
   /**
-   * * GET /quiz/answer?quizId&studentId&choice
+   * * POST /quiz/answer?quizId&studentId&choice
    */
   async answerQuiz(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const quizId = req.query.quizId?.toString();
-      const studentId = req.query.studentId?.toString();
-      const choice = req.query.choice?.toString();
+      const studentId = req.user?.id;
 
-      // Validate quizId, choice
-      const quiz = await this.quizService.findOne({ filter: { id: quizId } });
-      if (!quiz) {
-        res.send_badRequest('Quiz not found');
-        return;
-      }
-      if (choice !== 'A' && choice !== 'B' && choice !== 'C' && choice !== 'D') {
-        res.send_badRequest('Invalid choice');
-        return;
-      }
+      const { quizId, choices }: AnswerQuizzReq = req.body;
 
-      const result = await this.quizService.answerQuiz(quizId, studentId, choice);
-      if (result) {
-        res.send_ok('Right answer', result);
-      } else {
-        res.send_ok('Wrong answer', result);
-      }
+      const result = await this.quizService.answerQuiz(quizId, studentId!, choices);
+
+      res.send_ok('Answer quiz successfully', result);
     } catch (error) {
       next(error);
     }
@@ -72,14 +59,33 @@ export class QuizController {
    */
   async doneQuiz(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
-      const studentId = req.query.studentId?.toString();
+      const studentId = req.user?.id;
       const quizId = req.query.quizId?.toString();
       const result = await this.studentCompleteQuizRepository.findOne({ filter: { studentId, quizId } });
       if (result) {
-        res.send_ok('Quiz done', result);
+        res.send_ok('Quiz done', {
+          isDone: true
+        });
       } else {
-        res.send_ok('Quiz not done', result);
+        res.send_ok('Quiz not done', {
+          isDone: false
+        });
       }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * GET /quiz/done-by-course/:courseId
+   */
+  async doneQuizByCourse(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const studentId = req.user?.id;
+      const courseId = req.query.courseId?.toString();
+      const result = await this.studentCompleteQuizRepository.findQuizDoneByCourse(studentId!, courseId!);
+
+      res.send_ok('Get done quiz by course successfully', result);
     } catch (error) {
       next(error);
     }
