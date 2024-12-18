@@ -7,7 +7,7 @@ export function formatCurrency(amount) {
 // return percent discount
 export function calculateDiscountPercentage(originalPrice, discountedPrice) {
   if (originalPrice === 0) {
-    return 0; 
+    return 0;
   }
   if (originalPrice < 0 || discountedPrice < 0) {
     return 0;
@@ -44,10 +44,24 @@ export function convertMinutesToTime(input) {
 
   // Format the result as hh:mm:ss or mm:ss
   if (hours > 0) {
-    return `${hours}:${String(minutes).padStart(2, "0")}:${String(
-      seconds
-    ).padStart(2, "0")}`;
+    return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   } else {
     return `${minutes}:${String(seconds).padStart(2, "0")}`;
   }
+}
+export function formatDate(dateString) {
+  const date = new Date(dateString); // Convert ISO string to Date object
+
+  // Extract hours, minutes, day, month, and year
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Months are zero-indexed
+  const year = date.getFullYear();
+
+  // Return the formatted string as "HH:mm dd/MM/yyyy"
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")} ${String(day).padStart(
+    2,
+    "0"
+  )}/${String(month).padStart(2, "0")}/${year}`;
 }

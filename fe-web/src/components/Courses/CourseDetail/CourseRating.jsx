@@ -1,38 +1,136 @@
-import React from "react";
+import { useState } from "react";
 import CourseRatingCard from "./CourseRatingCard";
-import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCreateRatingMutation, useSearchRatingQuery } from "@/store/rtk/course.services";
+import { useSelector } from "react-redux";
+import { FaStar } from "react-icons/fa6";
+import EditForm from "./EditForm";
 
-const CourseRatingData = [
-  {
-    img: "https://s3-alpha-sig.figma.com/img/bd66/44b6/b2a44218a37e0f4a110e8345dba0a38a?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mh7ODiu0WfgV6zBme0VteZ1ZHL9u7Imk~tJfb2nawrOSkejebhvK8ISR4Y1GaKpL9Y7EETB9I2qwrt15pOdvHciPgsJYQg14QZU4y-uDmPXW62m1P-DuN~8zdfMbfiSL46MOdrg0ySidN-GOs9GGkaMteJQFDccGtg4uUkpMvimPFAsjy84L4JGNFxx9bsunwB0PgbJV0k7mwMkfRl67~tXjK-1LEKSj8MFHjtu9SiGTG~DdOhx58B726fS8aK8EQAeHkZLHopzKWMwjF5TNpQUoPBmoyAEYAV7acXQ5muCIWWeDh4k8h0HYxlzsTeWI04bJah8NhkYU4sUkLhTYAg__",
-    name: "Nguyen Van B",
-    rating: 4,
-    since: "1 ngày trước",
-    desc: "Khóa học bổ ích. Cảm ơn!",
-  },
-];
-const CourseRating = () => {
+const CourseRating = ({ courseId }) => {
+  const studentInfor = useSelector((state) => state.studentInfor);
+  const [content, setContent] = useState("");
+  const [ratingPoint, setRatingPoint] = useState(5); // Default rating is 5 stars
+  const [editingRatingId, setEditingRatingId] = useState(null);
+  const [selectedReview, setSelectedReview] = useState(null);
+
+  const { data, isLoading } = useSearchRatingQuery({
+    courseId,
+    sort: { key: "createAt", type: "DESC" },
+  });
+
+  const [createRating] = useCreateRatingMutation();
+
+  const handleRatingContentChange = (e) => setContent(e.target.value);
+  const handleRatingChange = (value) => setRatingPoint(value);
+
+  const handleRatingSubmit = async () => {
+    if (!studentInfor?.studentInfor?.id) {
+      console.error("User is not logged in.");
+      return;
+    }
+    try {
+      const payload = {
+        courseId,
+        studentId: studentInfor.studentInfor.id,
+        ratingPoint,
+        comment: content,
+      };
+      if (editingRatingId) {
+        await createRating({ ...payload, ratingId: editingRatingId }).unwrap();
+        setEditingRatingId(null);
+      } else {
+        await createRating(payload).unwrap();
+      }
+      setContent(""); // Reset content
+      setRatingPoint(5); // Reset rating
+    } catch (error) {
+      console.error("Failed to submit rating:", error);
+    }
+  };
+
+  const handleEdit = (review) => {
+    setSelectedReview(review); // Set the selected review to edit
+  };
+  const handleCloseEditForm = () => {
+    setSelectedReview(null); // Close the modal
+  };
+
+  const reviews = data?.data || [];
+  const totalRatings = reviews?.length;
+  const averageRating = reviews.reduce((sum, review) => sum + (review?.ratingPoint || 0), 0) / totalRatings || 0;
+
+  if (isLoading) return <p>Loading ratings...</p>;
+
   return (
     <div className="flex flex-col gap-[10px]">
+      {/* Summary Section */}
       <div className="summary flex w-1/2 gap-[10px]">
-        <Star className="text-yellow-400 fill-yellow-400 w-[24px] h-[24px]" />
-        <p className="text-text/lg/semibold">4.0 xếp hạng khoá học • 8 đánh giá</p>
+        <FaStar className="text-yellow-400 fill-yellow-400 w-[24px] h-[24px]" />
+        <p className="text-text/lg/semibold flex gap-10">
+          {averageRating.toFixed(1)} xếp hạng khoá học • {totalRatings} đánh giá
+        </p>
       </div>
+
+      {/* Rating Form */}
+      {studentInfor?.studentInfor?.id && (
+        <>
+          {/* Star Rating */}
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((el) => (
+              <FaStar
+                key={el}
+                onClick={() => handleRatingChange(el)}
+                className={`cursor-pointer text-2xl ${ratingPoint >= el ? "text-yellow-500" : "text-gray-500"}`}
+              />
+            ))}
+          </div>
+
+          {/* Rating Form */}
+          <div className="form w-full">
+            <textarea
+              value={content}
+              onChange={handleRatingContentChange}
+              placeholder="Write your comment here..."
+              className="border h-[150px] p-2 w-full"
+            />
+          </div>
+          <div
+            onClick={handleRatingSubmit}
+            className="w-[100px] text-center cursor-pointer text-white font-semibold py-2 bg-primary-color inline-block rounded-md"
+          >
+            {editingRatingId ? "Cập nhật" : "Đánh giá"}
+          </div>
+        </>
+      )}
+
+      {/* Ratings List */}
       <div className="content flex flex-col gap-[10px]">
-        {Array.from({ length: 6 }, (_, index) => (
-          // {CourseRatingData.map((item, index)
-          <CourseRatingCard key={index} {...CourseRatingData[0]} />
-        ))}
+        {reviews.length > 0 ? (
+          reviews.map((review) => (
+            <div key={review.id}>
+              <CourseRatingCard review={review} userId={studentInfor?.studentInfor?.id} onEdit={handleEdit} />
+              {/* Display Edit Form below the review if it's selected for editing */}
+              {selectedReview && selectedReview?.id === review?.id && (
+                <EditForm review={selectedReview} onClose={handleCloseEditForm} />
+              )}
+            </div>
+          ))
+        ) : (
+          <p>No reviews yet. Be the first to leave a review!</p>
+        )}
       </div>
-      <div className="more-btn flex justify-center">
-        <Button
-          variant="outline"
-          className=" text-text/md/semibold text-black-500 border-black-500 border-[1px] md:text-base "
-        >
-          Xem thêm đánh giá
-        </Button>
-      </div>
+
+      {/* Load More Button */}
+      {totalRatings > reviews?.length && (
+        <div className="more-btn flex justify-center">
+          <Button
+            variant="outline"
+            className="text-text/md/semibold text-black-500 border-black-500 border-[1px] md:text-base"
+          >
+            Xem thêm đánh giá
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

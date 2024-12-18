@@ -17,7 +17,7 @@ export default function CourseDetail() {
   const { data: courseResponse } = useGetCourseByIdQuery(params?.id);
   const course = courseResponse?.data || null;
   const courseIntroduction = course?.introduction;
-
+  console.log("course", course);
   if (!course) return <></>;
   return (
     <div className="">
@@ -127,7 +127,7 @@ export default function CourseDetail() {
           </div>
           <p className="border-b border-black-100 w-full my-5"></p>
           {/* Review */}
-          <CourseRating />
+          <CourseRating courseId={course?.id} />
           <p className="border-b border-black-100 w-full my-5"></p>
           {/* Related */}
           <RelatedCourse categoryId={course?.categoryId} courseId={course?.id} />
