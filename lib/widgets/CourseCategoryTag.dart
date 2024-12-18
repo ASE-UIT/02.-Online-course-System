@@ -4,8 +4,9 @@ import '../constants/colors.dart';
 
 class CourseCategoryTag extends StatelessWidget {
   final String text;
+  final Function(String) onSelected; // Callback khi tag được nhấn
 
-  const CourseCategoryTag({super.key, required this.text});
+  const CourseCategoryTag({super.key, required this.text, required this.onSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,9 @@ class CourseCategoryTag extends StatelessWidget {
           fontWeight: FontWeight.w400,
         ),
       ),
-      onTap: () {},
+      onTap: () {
+        onSelected(text); // Gọi callback khi nhấn
+      },
       trailing: const Icon(Icons.arrow_forward_ios),
     );
   }

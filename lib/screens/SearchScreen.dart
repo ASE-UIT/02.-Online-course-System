@@ -88,7 +88,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return ((originalPrice - sellPrice) / originalPrice) * 100;
   }
 
-   void updateSearchBar(String text) {
+  void updateSearchBar(String text) {
     setState(() {
       searchController.text = text; // Update search bar text
       searchController.selection = TextSelection.fromPosition(
@@ -210,23 +210,20 @@ class _EmptySearchResults extends StatelessWidget {
                   },
                 ),
                 BorderTag(
-                  text: 'Photoshop',
-                  onSelected: (bool value) {
-                    if (value) onTagSelected('Photoshop');
-                  }
-                ),
+                    text: 'Photoshop',
+                    onSelected: (bool value) {
+                      if (value) onTagSelected('Photoshop');
+                    }),
                 BorderTag(
-                  text: 'Digital Marketing',
-                  onSelected: (bool value) {
-                    if (value) onTagSelected('Digital Marketing');
-                  }
-                ),
+                    text: 'Digital Marketing',
+                    onSelected: (bool value) {
+                      if (value) onTagSelected('Digital Marketing');
+                    }),
                 BorderTag(
-                  text: 'Javascript',
-                  onSelected: (bool value) {
-                    if (value) onTagSelected('Javascript');
-                  }
-                ),
+                    text: 'Javascript',
+                    onSelected: (bool value) {
+                      if (value) onTagSelected('Javascript');
+                    }),
               ],
             ),
             const SizedBox(height: 20),
@@ -239,15 +236,34 @@ class _EmptySearchResults extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            const CourseCategoryTag(text: "Phát triển"),
-            const CourseCategoryTag(text: "CNTT & Phần mềm"),
-            const CourseCategoryTag(text: "Kinh doanh"),
-            const CourseCategoryTag(text: "Năng suất văn phòng"),
-            const CourseCategoryTag(text: "Tài chính & Kế toán"),
-            const CourseCategoryTag(text: "Thiết kế"),
-            const CourseCategoryTag(text: "Marketing"),
-            const CourseCategoryTag(text: "Sức khỏe & Thể dục"),
-            const CourseCategoryTag(text: "Nhiếp ảnh & Video"),
+            CourseCategoryTag(
+              text: "Phát triển",
+              onSelected: (query) => onTagSelected(query),
+            ),
+            CourseCategoryTag(
+                text: "CNTT & Phần mềm",
+                onSelected: (query) => onTagSelected(query)),
+            CourseCategoryTag(
+                text: "Kinh doanh",
+                onSelected: (query) => onTagSelected(query)),
+            CourseCategoryTag(
+                text: "Năng suất văn phòng",
+                onSelected: (query) => onTagSelected(query)),
+            CourseCategoryTag(
+                text: "Tài chính & Kế toán",
+                onSelected: (query) => onTagSelected(query)),
+            CourseCategoryTag(
+                text: "Thiết kế",
+                onSelected: (query) => onTagSelected(query)),
+            CourseCategoryTag(
+                text: "Marketing",
+                onSelected: (query) => onTagSelected(query)),
+            CourseCategoryTag(
+                text: "Sức khỏe & Thể dục",
+                onSelected: (query) => onTagSelected(query)),
+            CourseCategoryTag(
+                text: "Nhiếp ảnh & Video",
+                onSelected: (query) => onTagSelected(query)),
           ],
         ),
       ),
@@ -289,8 +305,7 @@ class _SearchResultsList extends StatelessWidget {
               item['sell_price']?.toDouble() ?? 0.0,
               item['original_price']?.toDouble() ?? 0.0,
             ),
-            imageUrl:
-                item['thumbnail'],
+            imageUrl: item['thumbnail'],
             isBestSeller: item['is_free_course'] == true,
           ),
         );

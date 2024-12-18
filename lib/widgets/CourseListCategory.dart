@@ -71,7 +71,8 @@ class CourseListCategory extends StatelessWidget {
                     author: course.lecturer?.name,
                     reviewCount: course.totalReviews,
                     rating: course.averageRating,
-                    price: course.originalPrice,
+                    sellPrice: course.sellPrice,
+                    originalPrice: course.originalPrice,
                     imageUrl: course.thumbnail,
                   ),
                 );

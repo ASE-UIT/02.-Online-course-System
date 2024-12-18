@@ -206,8 +206,10 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
       String title, String initialValue, ValueChanged<String> onSave) {
     final controller = TextEditingController(text: initialValue);
     showDialog(
+
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
         title: Text(title),
         content: TextField(
           controller: controller,
@@ -237,6 +239,14 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
       initialDate: initial,
       firstDate: DateTime(1900),
       lastDate: DateTime(2100),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            dialogBackgroundColor: Colors.white, // Màu nền của DatePicker
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (picked != null) {
@@ -245,6 +255,7 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
       });
     }
   }
+
 
   String _formatDate(String? date) {
     if (date == null || date.isEmpty) return 'Chưa cập nhật';

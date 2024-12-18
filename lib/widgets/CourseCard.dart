@@ -9,7 +9,8 @@ class CourseCard extends StatelessWidget {
   final String? author;
   final int? rating;
   final int? reviewCount;
-  final String? price;
+  final String? sellPrice;
+  final String? originalPrice;
   final String? imageUrl;
 
   const CourseCard({
@@ -18,9 +19,10 @@ class CourseCard extends StatelessWidget {
     required this.author,
     required this.rating,
     required this.reviewCount,
-    required this.price,
     required this.id,
     this.imageUrl,
+    this.sellPrice,
+    this.originalPrice,
   });
 
   @override
@@ -31,7 +33,7 @@ class CourseCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CourseDetailPage( courseId: id ?? ""),
+            builder: (context) => CourseDetailPage(courseId: id ?? ""),
           ),
         );
       },
@@ -112,13 +114,29 @@ class CourseCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    'đ${price!.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary500,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        'đ${sellPrice?.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary500,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'đ${originalPrice?.replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.gray600,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

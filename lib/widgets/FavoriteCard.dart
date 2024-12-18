@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../screens/CourseDetail/CourseDetailScreen.dart';
 
-
 class FavoriteCard extends StatelessWidget {
   final String? id;
   final String courseName;
@@ -37,7 +36,7 @@ class FavoriteCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CourseDetailPage( courseId: id ?? ""),
+            builder: (context) => CourseDetailPage(courseId: id ?? ""),
           ),
         );
       },
@@ -59,7 +58,13 @@ class FavoriteCard extends StatelessWidget {
               height: 100, // Ensure height is set to prevent overflow
               child: Image.network(
                 imageUrl ?? 'assets/coursecard.png',
-                fit: BoxFit.contain, // Ensure image covers the available space
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image(
+                    image: AssetImage('assets/coursecard.png'),
+                    fit: BoxFit.fitHeight,
+                  );
+                },
               ),
             ),
             Expanded(
@@ -136,7 +141,7 @@ class FavoriteCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    if(isBestSeller)
+                    if (isBestSeller)
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 6,
