@@ -15,6 +15,8 @@ import { IOrderRepository } from '@/repository/interface/i.order.repository';
 import { orderRepository } from '@/container/order.container';
 import { ICourseRatingRepository } from '@/repository/interface/i.course_rating.repository';
 import { courseRatingRepository } from '@/container/course_rating.container';
+import { IStatisticalRepository } from '@/repository/interface/i.statistical.repository';
+import { StatisticalRepository } from '@/repository/statistical.repository';
 
 class StatisticalContainer {
   private container = new Container();
@@ -30,6 +32,7 @@ class StatisticalContainer {
     this.container.bind<IStudentRepository<any>>('StudentRepository').toConstantValue(studentRepository);
     this.container.bind<IOrderRepository<any>>('OrderRepository').toConstantValue(orderRepository);
     this.container.bind<ICourseRatingRepository<any>>('CourseRatingRepository').toConstantValue(courseRatingRepository);
+    this.container.bind<IStatisticalRepository>('StatisticalRepository').to(StatisticalRepository);
   }
 
   export() {
