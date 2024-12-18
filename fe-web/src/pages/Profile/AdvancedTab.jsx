@@ -1,6 +1,48 @@
-import React from "react";
+import { useState } from "react";
+import { studentDeleteAccount } from "../../api/studentApi";
+import { useToast } from "@/hooks/use-toast";
+import { useDispatch } from "react-redux";
+import { removeAuth } from "@/store/slices/authSlice";
+import { removeStudentInfor } from "@/store/slices/studentInforSlice";
+import { useNavigate } from "react-router-dom";
 
 const AdvancedTab = () => {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleDeleteAccount = async () => {
+    setLoading(true);
+    try {
+      await studentDeleteAccount();
+      toast({
+        title: "Thành công",
+        description: "Tài khoản của bạn đã được xoá thành công.",
+        status: "success",
+        duration: 5000,
+        isClosable: true
+      });
+      dispatch(removeAuth());
+      dispatch(removeStudentInfor());
+      localStorage.removeItem("auth");
+      localStorage.removeItem("studentInfor");
+      navigate("./web/sign-in");
+      // Handle successful account deletion (e.g., redirect to a different page)
+    } catch (error) {
+      toast({
+        title: "Lỗi",
+        description: "Đã xảy ra lỗi khi xoá tài khoản của bạn.",
+        status: "error",
+        duration: 5000,
+        isClosable: true
+      });
+      console.error("Failed to delete account:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <h2 className="text-text/xl/semibold mb-4">Cài đặt nâng cao</h2>
@@ -20,8 +62,10 @@ const AdvancedTab = () => {
       <button
         className="bg-error-600 text-white px-4 py-2 mt-4 rounded hover:bg-error-700 rouded-lg"
         type="button"
+        onClick={handleDeleteAccount}
+        disabled={loading}
       >
-        Tôi đồng ý
+        {loading ? "Đang xử lý..." : "Tôi đồng ý"}
       </button>
     </div>
   );

@@ -23,12 +23,11 @@ export const studentGetProfile = async (token) => {
 };
 
 export const studentGetProfileNotAuth = async () => {
-  let token = JSON.parse(localStorage.getItem("auth"));
-  if (!token) {
-    throw new Error("No token found");
-  }
-  token = token.replace(/^"|"$/g, ""); // Remove surrounding quotes if any
   try {
+    let token = JSON.parse(localStorage.getItem("auth"));
+    if (!token) {
+      throw new Error("No token found");
+    }
     const res = await api.get("/student/me", {
       headers: {
         Accept: "application/json",
@@ -41,7 +40,7 @@ export const studentGetProfileNotAuth = async () => {
       "Error fetching student profile:",
       error.response || error.message
     );
-    throw error;
+    return null;
   }
 };
 
