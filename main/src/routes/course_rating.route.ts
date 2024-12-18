@@ -19,7 +19,7 @@ courseRatingRouter
   )
 
   .put(
-    '/',
+    '/:id',
     authenticateJWT,
     classValidate(UpdateCourseRatingReq),
     courseRatingController.update.bind(courseRatingController)

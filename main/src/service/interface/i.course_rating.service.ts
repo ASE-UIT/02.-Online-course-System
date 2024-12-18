@@ -7,6 +7,7 @@ import { IBaseCrudService } from '@/service/interface/i.base.service';
 import { BaseModelType } from '@/types/base-model.types';
 
 export interface ICourseRatingService<T extends BaseModelType> extends IBaseCrudService<T> {
+  updateRating(ratingId: string, arg1: UpdateCourseRatingReq, studentId: string): Promise<void>;
   createRating(requestBody: CreateCourseRatingReq, studentId: string): Promise<void>;
   update(id: string, data: UpdateCourseRatingReq): Promise<UpdateCourseRatingRes>;
   search(sort: CourseRatingSortReq, rpp: number, page: number, courseId?: string): Promise<CourseRating[]>;
