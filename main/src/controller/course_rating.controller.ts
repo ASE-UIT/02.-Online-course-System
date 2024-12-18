@@ -9,6 +9,7 @@ import { ICourseRatingService } from '@/service/interface/i.course_rating.servic
 import { ITYPES } from '@/types/interface.types';
 import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
 import BaseError from '@/utils/error/base.error';
+import { SessionUtil } from '@/utils/session.util';
 import { validateRequest } from '@/utils/validate/validate-request.util';
 import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
@@ -26,11 +27,14 @@ export class CourseRatingController {
   }
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+
+      const studentId = student.id;
+
       const requestBody: CreateCourseRatingReq = req.body;
 
-      const result = await this.courseRatingService.create({
-        data: requestBody
-      });
+      const result = await this.courseRatingService.createRating(requestBody, studentId);
+
       const responseBody = convertToDto(CreateCourseRatingReq, result);
       res.send_created('Create new rating successful', responseBody);
     } catch (error) {
@@ -55,10 +59,29 @@ export class CourseRatingController {
       const sort: CourseRatingSortReq = JSON.parse(req.query.sort as string);
       const rpp = parseInt(req.query.rpp as string) || 10;
       const page = parseInt(req.query.page as string) || 1;
+      let couseId = undefined;
 
-      const result = await this.courseRatingService.search(sort, rpp, page);
+      if (req.query.courseId) {
+        couseId = req.query.courseId as string;
+      }
+
+      const result = await this.courseRatingService.search(sort, rpp, page, couseId);
 
       res.send_ok(`Get search rating successfully`, result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getStatistics(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const courseId = req.params.courseId; // Lấy courseId từ tham số URL
+      if (!courseId) {
+        throw new BaseError(ErrorCode.NOT_FOUND, 'Course ID is required');
+      }
+
+      const statistics = await this.courseRatingService.getRatingStatistics(courseId);
+      res.send_ok('Get rating statistics successfully', statistics);
     } catch (error) {
       next(error);
     }

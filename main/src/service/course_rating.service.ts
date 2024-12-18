@@ -3,6 +3,7 @@ import { CourseRatingSortReq } from '@/dto/course_rating/course_rating-sort.req'
 import { CreateCourseRatingReq } from '@/dto/course_rating/create-course_rating.req';
 import { UpdateCourseRatingReq } from '@/dto/course_rating/update-course_rating.req';
 import { UpdateCourseRatingRes } from '@/dto/course_rating/update-course_rating.res';
+import { ErrorCode } from '@/enums/error-code.enums';
 import { Course } from '@/models/course.model';
 import { CourseRating } from '@/models/course_rating.model';
 import { Student } from '@/models/student.model';
@@ -32,6 +33,36 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
     this.studentRepository = studentRepository;
   }
 
+  async createRating(requestBody: CreateCourseRatingReq, studentId: string): Promise<void> {
+    const course = await this.courseRepository.findOne({ filter: { id: requestBody.courseId } });
+    if (!course) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Khóa học không tồn tại');
+    }
+
+    let rating = new CourseRating();
+    rating = requestBody as unknown as CourseRating;
+    rating.studentId = studentId;
+
+    await this.courseRatingRepository.create({ data: rating });
+
+    //Update course info
+    const totalReviews = course.totalReviews + 1;
+    const averageRating = (course.averageRating * (totalReviews - 1) + rating.ratingPoint!) / totalReviews;
+
+    console.log('totalReviews', totalReviews);
+    console.log('averageRating', averageRating);
+
+    await this.courseRepository.findOneAndUpdate({
+      filter: {
+        id: course.id
+      },
+      updateData: {
+        totalReviews,
+        averageRating
+      }
+    });
+  }
+
   async createrating(data: CreateCourseRatingReq, studentId: string) {
     const course = await this.courseRepository.findOne({ filter: { id: data.courseId } });
     if (!course) {
@@ -58,7 +89,36 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
 
     return convertToDto(UpdateCourseRatingRes, updatedData);
   }
-  search(sort: CourseRatingSortReq, rpp: number, page: number): Promise<CourseRating[]> {
-    return this.courseRatingRepository.search(sort, rpp, page);
+  search(sort: CourseRatingSortReq, rpp: number, page: number, courseId?: string): Promise<CourseRating[]> {
+    return this.courseRatingRepository.search(sort, rpp, page, courseId);
+  }
+
+  async getRatingStatistics(courseId: string) {
+    const ratings = await this.courseRatingRepository.findMany({
+      filter: { courseId }
+    });
+
+    if (!ratings || ratings.length === 0) {
+      throw new BaseError(ErrorCode.NOT_FOUND, 'Khóa học chưa có đánh giá');
+    }
+
+    // Tính điểm trung bình
+    const totalPoints = ratings.reduce((sum, rating) => sum + (rating.ratingPoint || 0), 0);
+    const averageRating = totalPoints / ratings.length;
+
+    // Tính phần trăm các mức sao
+    const ratingCounts = [0, 0, 0, 0, 0]; // Tương ứng với các sao từ 1 đến 5
+    ratings.forEach((rating) => {
+      if (rating.ratingPoint) {
+        ratingCounts[rating.ratingPoint - 1]++;
+      }
+    });
+
+    const percentageRating = ratingCounts.map((count) => (count / ratings.length) * 100);
+
+    return {
+      averageRating,
+      ratingDistribution: percentageRating
+    };
   }
 }

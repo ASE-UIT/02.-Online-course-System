@@ -24,4 +24,6 @@ courseRatingRouter
     classValidate(UpdateCourseRatingReq),
     courseRatingController.update.bind(courseRatingController)
   )
-  .get('/', courseRatingController.search.bind(courseRatingController));
+  .get('/', courseRatingController.search.bind(courseRatingController))
+
+  .get('/statistics/:courseId', courseRatingController.getStatistics.bind(courseRatingController));

@@ -7,6 +7,8 @@ import { IEmployeeRepository } from '@/repository/interface/i.employee.repositor
 import { BaseContainer } from '@/container/base.container';
 import { IRoleRepository } from '@/repository/interface/i.role.repository';
 import { roleRepository } from '@/container/role.container';
+import { ILecturerRepository } from '@/repository/interface/i.lecturer.repository';
+import { lecturerRepository } from '@/container/lecturer.container';
 
 class EmployeeContainer extends BaseContainer {
   constructor() {
@@ -17,16 +19,18 @@ class EmployeeContainer extends BaseContainer {
 
     //Import
     this.container.bind<IRoleRepository<any>>('RoleRepository').toConstantValue(roleRepository);
+    this.container.bind<ILecturerRepository<any>>('LecturerRepository').toConstantValue(lecturerRepository);
   }
 
   export() {
     const employeeController = this.container.get<EmployeeController>(EmployeeController);
     const employeeService = this.container.get<IEmployeeService<any>>('EmployeeService');
     const employeeRepository = this.container.get<IEmployeeRepository<any>>('EmployeeRepository');
-    return { employeeController, employeeService, employeeRepository };
+    //const lecturerRepository = this.container.get<ILecturerRepository<any>>('LecturerRepository');
+    return { employeeController, employeeService, employeeRepository /*,lecturerRepository*/ };
   }
 }
 
 const employeeContainer = new EmployeeContainer();
-const { employeeController, employeeService, employeeRepository } = employeeContainer.export();
-export { employeeController, employeeService, employeeRepository };
+const { employeeController, employeeService, employeeRepository /*, lecturerRepository*/ } = employeeContainer.export();
+export { employeeController, employeeService, employeeRepository /*, lecturerRepository*/ };

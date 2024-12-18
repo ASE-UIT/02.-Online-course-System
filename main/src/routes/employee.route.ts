@@ -6,7 +6,9 @@ import { UpdateEmployeeReq } from '@/dto/employee/update-employee.req';
 import { authenticateJWT } from '@/middleware/authenticate.middleware';
 import { checkPermission } from '@/middleware/check-permission.middleware';
 import { classValidate } from '@/middleware/class-validate.middleware';
+import { AddLecturerDto } from '@/dto/employee/create-lecturer.req';
 import express from 'express';
+import { UpdateLecturerDto } from '@/dto/employee/update-lecturer.req';
 const employeeRouter = express.Router();
 
 employeeRouter
@@ -56,6 +58,22 @@ employeeRouter
     authenticateJWT,
     checkPermission([PERMISSIONS.MANAGE_EMPLOYEE]),
     employeeController.common.delete.bind(employeeController.common)
-  );
+  )
+
+  .post(
+    '/createlecturer',
+    authenticateJWT,
+    classValidate(AddLecturerDto),
+    employeeController.addLecturer.bind(employeeController)
+  )
+
+  .put(
+    '/updateLecturer/:id',
+    authenticateJWT,
+    classValidate(UpdateLecturerDto),
+    employeeController.updateLecturer.bind(employeeController)
+  )
+
+  .post('/rejectLecturer', authenticateJWT, employeeController.rejectLecturerApplication.bind(employeeController));
 
 export default employeeRouter;
