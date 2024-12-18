@@ -1,7 +1,7 @@
 export class PrintCertificateReq {
   studentName!: string;
   courseName!: string;
-  date!: Date;
+  date!: string;
   instructor!: string;
   appFounder!: string;
 }
