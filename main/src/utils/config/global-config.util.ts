@@ -3,6 +3,13 @@ import cors from 'cors';
 
 export class GlobalConfig {
   /**
+   * * Print service config
+   */
+  static print_service: {
+    url: string;
+  } = config.get('print_service');
+
+  /**
    * * Media service config
    */
   static media_service: {
