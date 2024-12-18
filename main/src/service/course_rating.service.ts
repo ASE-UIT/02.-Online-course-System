@@ -45,6 +45,11 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
       throw new BaseError(ErrorCode.NOT_FOUND, 'Khóa học không tồn tại');
     }
 
+    //Check if user own this rating
+    if (rating.studentId !== studentId) {
+      throw new BaseError(ErrorCode.AUTH_01, 'Bạn không được quyền sửa đánh giá này');
+    }
+
     await this.courseRatingRepository.findOneAndUpdate({
       filter: {
         id: ratingId
