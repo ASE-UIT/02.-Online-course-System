@@ -58,7 +58,7 @@ export class EnrollmentController {
     try {
       const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
       const enrollments = await this.enrollmentService.findMany({
-        filter: { studentId: student.id, completionPercentage: 100 },
+        filter: { studentId: student.id, status: 'completed' },
         relations: ['course', 'course.lecturer'],
         select: {
           studentId: true,
@@ -92,6 +92,21 @@ export class EnrollmentController {
       const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
       const enrollments = await this.enrollmentService.getInProgressEnrollment(student.id);
       res.send_ok('Get completed enrollments success', enrollments);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * * GET /api/enrollments/certificate/:courseId
+   */
+  async getCertificate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const student = SessionUtil.getStudentCurrentlyLoggedIn(req);
+      const { courseId } = req.params;
+      const certificate = await this.enrollmentService.getCertificate(student.id, courseId);
+      res.setHeader('Content-Type', 'image/jpeg');
+      res.send(certificate);
     } catch (error) {
       next(error);
     }
