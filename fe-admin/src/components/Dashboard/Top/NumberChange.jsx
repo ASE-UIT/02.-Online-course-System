@@ -1,6 +1,6 @@
 const NumberChange = ({ change }) => {
   const changeString = change.toString();
-  const isPositive = changeString.startsWith("+");
+  const isPositive = !changeString.startsWith("-");
 
   return (
     <span
