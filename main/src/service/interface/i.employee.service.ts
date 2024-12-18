@@ -9,7 +9,7 @@ import { UpdateLecturerRes } from '@/dto/employee/update-lecturer.res';
 
 export interface IEmployeeService<T extends BaseModelType> extends IBaseCrudService<T> {
   login(data: EmployeeLoginReq): Promise<LoginRes>;
-  addLecturer(employee:Employee ,data: any): Promise<Lecturer>;
-  updateLecturer(employee:Employee,lecturerId:string, data: any): Promise<UpdateLecturerRes>;
-  rejectLecturerApplication(employee:Employee,lecturerId:string, reason:string): Promise<void>;
+  addLecturer(employee: Employee, data: any): Promise<Lecturer>;
+  updateLecturer(employee: Employee, lecturerId: string, data: any): Promise<UpdateLecturerRes>;
+  rejectLecturerApplication(employee: Employee, lecturerId: string, reason: string): Promise<void>;
 }

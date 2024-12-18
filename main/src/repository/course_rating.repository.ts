@@ -14,7 +14,7 @@ export class CourseRatingRepository
   constructor(@inject(ITYPES.Datasource) dataSource: DataSource) {
     super(dataSource.getRepository(CourseRating));
   }
-  async search(sort: CourseRatingSortReq, rpp: number, page: number): Promise<CourseRating[]> {
+  async search(sort: CourseRatingSortReq, rpp: number, page: number, courseId?: string): Promise<CourseRating[]> {
     // Build order
     const order: FindOptionsOrder<CourseRating> = {
       [sort.key]: sort.type
@@ -28,7 +28,8 @@ export class CourseRatingRepository
     return await this.ormRepository.find({
       order,
       skip,
-      take
+      take,
+      where: courseId ? { courseId } : {}
     });
   }
 }

@@ -1,8 +1,6 @@
-import { IsString, IsOptional, IsUUID} from 'class-validator';
+import { IsString, IsOptional, IsUUID } from 'class-validator';
 
 export class UpdateLecturerDto {
-
-
   @IsString()
   @IsOptional()
   avatar?: string; // Ảnh đại diện

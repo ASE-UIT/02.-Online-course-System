@@ -8,7 +8,7 @@ import { BaseContainer } from '@/container/base.container';
 import { IRoleRepository } from '@/repository/interface/i.role.repository';
 import { roleRepository } from '@/container/role.container';
 import { ILecturerRepository } from '@/repository/interface/i.lecturer.repository';
-import { lecturerRepository} from '@/container/lecturer.container';
+import { lecturerRepository } from '@/container/lecturer.container';
 
 class EmployeeContainer extends BaseContainer {
   constructor() {
@@ -32,5 +32,5 @@ class EmployeeContainer extends BaseContainer {
 }
 
 const employeeContainer = new EmployeeContainer();
-const { employeeController, employeeService, employeeRepository/*, lecturerRepository*/ } = employeeContainer.export();
-export { employeeController, employeeService, employeeRepository/*, lecturerRepository*/ };
+const { employeeController, employeeService, employeeRepository /*, lecturerRepository*/ } = employeeContainer.export();
+export { employeeController, employeeService, employeeRepository /*, lecturerRepository*/ };

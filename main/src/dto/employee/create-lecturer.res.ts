@@ -1,7 +1,7 @@
-import { BaseRes } from "../base.res";
+import { BaseRes } from '../base.res';
 
 export class CreateLecturerRes extends BaseRes {
-    id!: string; // ID của giảng viên
+  id!: string; // ID của giảng viên
 
   avatar?: string; // Ảnh đại diện (nếu có)
 
