@@ -14,5 +14,10 @@ enrollmentRouter.get(
   authenticateJWT,
   enrollmentController.getInProgressEnrollment.bind(enrollmentController)
 );
+enrollmentRouter.get(
+  '/certificate/:courseId',
+  authenticateJWT,
+  enrollmentController.getCertificate.bind(enrollmentController)
+);
 
 export default enrollmentRouter;

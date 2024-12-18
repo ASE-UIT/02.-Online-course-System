@@ -29,6 +29,24 @@ export class CourseRatingRepository
       order,
       skip,
       take,
+      select: {
+        id: true,
+        courseId: true,
+        studentId: true,
+        ratingPoint: true,
+        comment: true,
+        student: {
+          name: true,
+          avatar: true
+        },
+        liked: true,
+        unliked: true,
+        createAt: true,
+        createBy: true,
+        updateAt: true,
+        updateBy: true
+      },
+      relations: ['student'],
       where: courseId ? { courseId } : {}
     });
   }
