@@ -38,5 +38,8 @@
     "image_bucket": {
       "path": "eduhub-image"
     }
+  },
+  "print_service": {
+    "url": "http://eduhub.io.vn/eduhub-print-service"
   }
 }
