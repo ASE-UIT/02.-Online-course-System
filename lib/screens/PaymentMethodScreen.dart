@@ -64,6 +64,7 @@ class _PaymentMethodScreenState extends State<PaymentMethodScreen> {
     return ChangeNotifierProvider<PaymentViewModel>(
       create: (context) => PaymentViewModel(),
       child: Scaffold(
+        backgroundColor: AppColors.white,
         appBar: AppBar(
           backgroundColor: AppColors.white,
           leading: IconButton(

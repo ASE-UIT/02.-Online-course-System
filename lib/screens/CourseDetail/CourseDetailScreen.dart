@@ -77,6 +77,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: _isLoading
             ? Center(
                 child:

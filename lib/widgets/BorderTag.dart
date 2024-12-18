@@ -10,6 +10,7 @@ class BorderTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilterChip(
+
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       label: Text(
         text,
@@ -19,7 +20,7 @@ class BorderTag extends StatelessWidget {
           color: AppColors.black,
         ),
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: const BorderSide(color: AppColors.black),

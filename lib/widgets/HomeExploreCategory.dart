@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:online_course_system/constants/mockdata/exploreTags.dart';
 import 'package:online_course_system/models/CategoryModel.dart';
@@ -53,14 +55,16 @@ class HomeExploreCategory extends StatelessWidget {
           height: 40, // Điều chỉnh chiều cao phù hợp với CourseCard
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: exploreTags.length,
+            itemCount: categoryData?.length ?? 0,
             separatorBuilder: (context, index) => const SizedBox(width: 8),
             itemBuilder: (context, index) {
-              final course = exploreTags[index];
+              final category = categoryData?[index];
               return SizedBox(
                 child: BorderTag(
-                  text: course,
-                  onSelected: (value) => {},
+                  text: category?.name ?? "",
+                  onSelected: (value) {
+                    debugPrint('Selected category: ${category?.name}');
+                  },
                 ),
               );
             },

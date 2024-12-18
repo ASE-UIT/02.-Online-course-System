@@ -44,6 +44,7 @@ class _StudyCourseListScreenState extends State<StudyCourseListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
         automaticallyImplyLeading: false,
