@@ -24,31 +24,19 @@ ChartJS.register(
   Filler // Register Filler for area chart
 );
 
-const RevenueChart = () => {
+const RevenueChart = ({ dailyRevenue }) => {
   const chartRef = useRef(null);
 
+  // Map dailyRevenue to labels and data
+  const labels = dailyRevenue.revenue.map((item) => item.date);
+  const dataPoints = dailyRevenue.revenue.map((item) => item.revenue);
+
   const data = {
-    labels: [
-      "01/12",
-      "02/12",
-      "03/12",
-      "04/12",
-      "05/12",
-      "06/12",
-      "07/12",
-      "08/12",
-      "09/12",
-      "10/12",
-      "11/12",
-      "12/12",
-      "13/12",
-      "14/12",
-      "15/12"
-    ],
+    labels: labels,
     datasets: [
       {
         label: "Doanh Thu",
-        data: [10, 25, 5, 30, 20, 45, 35, 50, 40, 55, 30, 40, 20, 45, 42],
+        data: dataPoints,
         fill: true, // Enable fill for area chart
         backgroundColor: (context) => {
           const chart = context.chart;
@@ -76,35 +64,6 @@ const RevenueChart = () => {
   };
 
   const options = {
-    scales: {
-      x: {
-        display: false, // Hide x-axis
-        grid: {
-          display: false // Hide x-axis grid lines
-        },
-        ticks: {
-          display: false // Hide x-axis tick labels
-        }
-      },
-      y: {
-        display: false, // Hide y-axis
-        beginAtZero: true,
-        grid: {
-          display: false // Hide y-axis grid lines
-        },
-        ticks: {
-          display: false // Hide y-axis tick labels
-        }
-      }
-    },
-    plugins: {
-      legend: {
-        display: false // Disable legend
-      },
-      tooltip: {
-        enabled: false // Disable tooltip
-      }
-    },
     layout: {
       padding: {
         top: 50 // Add more space above the chart
