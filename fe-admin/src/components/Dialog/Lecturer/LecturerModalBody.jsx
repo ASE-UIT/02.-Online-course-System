@@ -1,4 +1,7 @@
+import { mediaApi } from "@/api/mediaApi";
 import { Button } from "@/components/ui/button";
+import { useCreateCategoryMutation } from "@/store/rtk/category.service";
+import { useUpdateLecturerMutation } from "@/store/rtk/lecturer.service";
 import { UploadCloud } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { z } from "zod";
@@ -25,6 +28,9 @@ const LecturerModalBody = ({ row, isAddOrChange }) => {
   const [lecturerAvatar, setLecturerAvatar] = useState(null);
   const [formErrors, setFormErrors] = useState({});
 
+  const [createLecturer] = useCreateCategoryMutation();
+  const [updateLecturer] = useUpdateLecturerMutation();
+
   useEffect(() => {
     if (!isAddOrChange && row) {
       setLecturerName(row.name || "");
@@ -44,29 +50,64 @@ const LecturerModalBody = ({ row, isAddOrChange }) => {
     const file = e.target.files?.[0];
     setFileSlt(file || null);
   };
+  const uploadImage = async () => {
+    const fileUrlResponse = await mediaApi.getImageUrl();
+    if (!fileUrlResponse?.data) return;
+    const formData = new FormData();
+    formData.append("file", fileSlt);
+    await mediaApi.uploadImage(fileUrlResponse.data.fileName, formData);
+    return fileUrlResponse.data.mediaUrl; // The URL of the uploaded image
+  };
 
-  const handleFormSubmit = () => {
+  const handleFormSubmit = async () => {
+    setFormErrors({});
+    if (!fileSlt && !lecturerAvatar) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        avatar: "Ảnh đại diện là bắt buộc.",
+      }));
+      return;
+    }
     const payload = {
       name: lecturerName,
       title: lecturerTitle,
       email: lecturerEmail,
       phone: lecturerPhone,
       password: lecturerPassword,
-      avatar: fileSlt,
+      avatar: fileSlt || lecturerAvatar,
     };
-    const result = lecturerSchema.safeParse(payload);
+    const baseValidation = lecturerSchema.safeParse(payload);
 
-    if (!result.success) {
+    if (!baseValidation.success) {
       const errors = {};
-      result.error.errors.forEach((err) => {
+      baseValidation.error.errors.forEach((err) => {
         errors[err.path[0]] = err.message;
       });
       setFormErrors(errors);
       return;
     }
+    try {
+      let imageUrl = lecturerAvatar;
+      if (fileSlt) {
+        imageUrl = await uploadImage();
+      }
 
-    // Simulate submission
-    alert(isAddOrChange ? "Lecturer added successfully!" : "Lecturer updated successfully!");
+      const finalPayload = {
+        ...payload,
+        avatar: imageUrl,
+      };
+      console.log("Final Payload:", finalPayload);
+      if (isAddOrChange) {
+        await createLecturer(finalPayload).unwrap();
+        alert("Lecturer created successfully!");
+      } else {
+        await updateLecturer({ id: row.id, ...finalPayload }).unwrap();
+        alert("Lecturer updated successfully!");
+      }
+    } catch (error) {
+      console.error("Failed to submit form:", error);
+      setFormErrors({ global: "Failed to submit lecturer. Please try again." });
+    }
   };
   return (
     <div className="max-h-screen overflow-y-auto">
