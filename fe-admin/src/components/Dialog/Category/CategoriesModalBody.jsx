@@ -31,7 +31,7 @@ const CategoriesModalBody = ({ row, isAddOrChange }) => {
     const categoryData = await Promise.resolve({
       name: "Danh mục mẫu",
       description: "Mô tả danh mục mẫu",
-      thumbnail: "https://m.media-amazon.com/images/I/21kRx-CJsUL.png", // Replace with actual image URL from API
+      thumbnail: "https://m.media-amazon.com/images/I/21kRx-CJsUL.png",
     });
     setCategoryName(categoryData.name);
     setCategoryDescription(categoryData.description);
