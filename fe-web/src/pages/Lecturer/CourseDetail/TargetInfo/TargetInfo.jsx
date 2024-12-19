@@ -18,20 +18,21 @@ const formSchema = z.object({
 export default function TargetInfo({ course }) {
   const [targets, setTargets] = useState([""]);
   const [updateCourse, { isLoading }] = useUpdateCourseMutation();
-
+  const [txt, setTxt] = useState("");
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       target: "",
-      welcome: "",
+      welcome: course.welcomeJoin,
     },
   });
   async function onSubmit(values) {
-    console.log(values);
     await updateCourse({
       courseId: course.id,
       payload: {
         courseTargets: targets,
+        welcomeJoin: values.welcome,
+        participants: values.target,
       },
     });
   }
@@ -45,6 +46,7 @@ export default function TargetInfo({ course }) {
   useEffect(() => {
     if (course?.courseTargets) {
       setTargets(course.courseTargets);
+      form.setValue("target", course.participants);
     }
   }, [course]);
   return (
