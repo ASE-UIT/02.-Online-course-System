@@ -87,6 +87,11 @@ export default function DataTable({
     getFacetedUniqueValues: getFacetedUniqueValues()
   });
 
+  // Update pageSize when rpp changes
+  React.useEffect(() => {
+    table.setPageSize(rpp);
+  }, [rpp, table]);
+
   return (
     <div className="py-4 rounded-md border space-y-4 bg-[rgba(244,247,252,0.75)] shadow-md">
       <div className="w-full flex justify-end items-center gap-4 px-4">
