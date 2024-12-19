@@ -6,46 +6,41 @@ import YellowLine from "@/assets/YellowLine";
 import BlueLine from "@/assets/BlueLine";
 import { ChooseDayComboBox } from "./ChooseDay";
 
-const StatsGrid = ({ information }) => {
+const StatsGrid = ({ timePeriod, setTimePeriod, information }) => {
+  console.log("🚀 ~ StatsGrid ~ information:", information);
   const formatNumber = (num) =>
     typeof num === "number" ? num.toFixed(1) : num;
-
-  // const revenue = {
-  //   label: "Doanh thu",
-  //   value: formatNumber(information.revenue),
-  //   change: `${formatNumber(information.revenuePercentage)}%`
-  // };
 
   const statsData = [
     {
       label: "Số học viên mới",
-      value: formatNumber(information.newStudents),
-      change: `${formatNumber(information.newStudentsPercentage)}%`
+      value: formatNumber(information?.newStudents ?? 0),
+      change: `${formatNumber(information?.newStudentsPercentage ?? 0)}%`
     },
     {
       label: "Số giảng viên mới",
-      value: formatNumber(information.newLecturer),
-      change: `${formatNumber(information.newLecturerPercentage)}%`
+      value: formatNumber(information?.newLecturer ?? 0),
+      change: `${formatNumber(information?.newLecturerPercentage ?? 0)}%`
     },
     {
       label: "Số khóa học mới",
-      value: formatNumber(information.newCourses),
-      change: `${formatNumber(information.newCoursesPercentage)}%`
+      value: formatNumber(information?.newCourses ?? 0),
+      change: `${formatNumber(information?.newCoursesPercentage ?? 0)}%`
     },
     {
       label: "Số khóa học được mua",
-      value: formatNumber(information.coursesPurchased),
-      change: `${formatNumber(information.coursesPurchasedPercentage)}%`
+      value: formatNumber(information?.coursesPurchased ?? 0),
+      change: `${formatNumber(information?.coursesPurchasedPercentage ?? 0)}%`
     },
     {
       label: "SỐ LƯỢT ĐÁNH GIÁ KHOÁ HỌC",
-      value: formatNumber(information.courseRatings),
-      change: `${formatNumber(information.courseRatingsPercentage)}%`
+      value: formatNumber(information?.courseRatings ?? 0),
+      change: `${formatNumber(information?.courseRatingsPercentage ?? 0)}%`
     },
     {
       label: "ĐÁNH GIÁ TRUNG BÌNH CỦA KHOÁ HỌC",
-      value: `${formatNumber(information.averageRating)} sao`,
-      change: `${formatNumber(information.averageRatingPercentage)}%`
+      value: `${formatNumber(information?.averageRating ?? 0)} sao`,
+      change: `${formatNumber(information?.averageRatingPercentage ?? 0)}%`
     }
   ];
 
@@ -56,7 +51,7 @@ const StatsGrid = ({ information }) => {
           <h2 className="text-text/xl/medium text-black-300 uppercase">
             CƠ HỘI
           </h2>
-          <ChooseDayComboBox />
+          <ChooseDayComboBox value={timePeriod} setValue={setTimePeriod} />
         </div>
         <div className="flex justify-start items-center gap-1">
           <p className="text-display/lg/medium text-black"> {"8.0K"}</p>

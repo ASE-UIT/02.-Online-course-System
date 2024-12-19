@@ -10,7 +10,7 @@ import {
   Legend,
   Filler // Import Filler for area chart
 } from "chart.js";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 
 // Register the components
 ChartJS.register(
@@ -24,12 +24,51 @@ ChartJS.register(
   Filler // Register Filler for area chart
 );
 
-const RevenueChart = ({ dailyRevenue }) => {
+const RevenueChart = ({
+  timePeriod,
+  dailyRevenue,
+  weekRevenue,
+  monthRevenue
+}) => {
   const chartRef = useRef(null);
+  const [labels, setLabels] = useState([]);
+  console.log("🚀 ~ RevenueChart ~ labels:", labels);
+  const [dataPoints, setDataPoints] = useState([]);
+  console.log("🚀 ~ RevenueChart ~ dataPoints:", dataPoints);
+  const [revenueData, setRevenueData] = useState(null);
 
-  // Map dailyRevenue to labels and data
-  const labels = dailyRevenue.revenue.map((item) => item.date);
-  const dataPoints = dailyRevenue.revenue.map((item) => item.revenue);
+  // Determine which revenue data to use
+  useEffect(() => {
+    switch (timePeriod) {
+      case "month":
+        setRevenueData(weekRevenue);
+        break;
+      case "year":
+        setRevenueData(monthRevenue);
+        break;
+      case "week":
+      default:
+        setRevenueData(dailyRevenue);
+        break;
+    }
+  }, [timePeriod, monthRevenue, weekRevenue, dailyRevenue]);
+
+  useEffect(() => {
+    // Map revenueData to labels and data
+    switch (timePeriod) {
+      case "month":
+        setLabels(revenueData?.revenue?.map((item) => item.week));
+        break;
+      case "year":
+        setLabels(revenueData?.revenue?.map((item) => item.month));
+        break;
+      case "week":
+      default:
+        setLabels(revenueData?.revenue?.map((item) => item.date));
+        break;
+    }
+    setDataPoints(revenueData?.revenue?.map((item) => item.revenue));
+  }, [revenueData, timePeriod]);
 
   const data = {
     labels: labels,

@@ -20,22 +20,21 @@ import {
 
 const frameworks = [
   {
-    value: "7 ngày qua",
+    value: "week",
     label: "7 ngày qua"
   },
   {
-    value: "30 ngày qua",
+    value: "month",
     label: "30 ngày qua"
   },
   {
-    value: "1 năm qua",
+    value: "year",
     label: "1 năm qua"
   }
 ];
 
-export function ChooseDayComboBox() {
+export function ChooseDayComboBox({ value, setValue }) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("7 ngày qua");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
