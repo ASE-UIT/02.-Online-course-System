@@ -6,7 +6,8 @@ import { ICourseRecommendationService } from '@/service/interface/i.course_recom
 import { ICourseRecommendationRepository } from '@/repository/interface/i.course_recommendation.repository';
 import { BaseContainer } from '@/container/base.container';
 import { ICourseService } from '@/service/interface/i.course.service';
-import { courseService } from '@/container/course.container';
+import { courseRepository, courseService } from '@/container/course.container';
+import { ICourseRepository } from '@/repository/interface/i.course.repository';
 
 class CourseRecommendationContainer extends BaseContainer {
   constructor() {
@@ -20,7 +21,7 @@ class CourseRecommendationContainer extends BaseContainer {
     this.container.bind<CourseRecommendationController>(CourseRecommendationController).toSelf();
 
     //Import
-    this.container.bind<ICourseService<any>>('CourseService').toConstantValue(courseService);
+    this.container.bind<ICourseRepository<any>>('CourseRepository').toConstantValue(courseRepository);
   }
 
   export() {

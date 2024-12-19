@@ -12,15 +12,12 @@ import { inject, injectable } from 'inversify';
 export class CourseRecommendationController {
   public common: IBaseCrudController<CourseRecommendation>;
   private courseRecommendationService: ICourseRecommendationService<CourseRecommendation>;
-  private courseService: ICourseService<Course>;
   constructor(
     @inject('CourseRecommendationService')
     courseRecommendationService: ICourseRecommendationService<CourseRecommendation>,
-    @inject(ITYPES.Controller) common: IBaseCrudController<CourseRecommendation>,
-    @inject('CourseService') courseService: ICourseService<Course>
+    @inject(ITYPES.Controller) common: IBaseCrudController<CourseRecommendation>
   ) {
     this.courseRecommendationService = courseRecommendationService;
-    this.courseService = courseService;
     this.common = common;
   }
 
@@ -30,27 +27,11 @@ export class CourseRecommendationController {
   async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const user = req.user;
-      const page = req.query.page ? parseInt(req.query.page as string) : 1;
-      const rpp = req.query.rpp ? parseInt(req.query.rpp as string) : 10;
+      const topN = Number(req.query.topN) || 10;
 
-      if (user!.roleId == RoleEnum.STUDENT) {
-        const studentId = user!.id;
-        const result = await this.courseRecommendationService.findOne({
-          filter: {
-            studentId: studentId
-          }
-        });
-        res.send_ok('Get all course recommendation successful', result);
-      } else {
-        const result = await this.courseRecommendationService.findMany({
-          order: [{ column: 'averageRating', direction: 'DESC' }],
-          paging: {
-            page: page,
-            rpp: rpp
-          }
-        });
-        res.send_ok('Get all course recommendation successful', result);
-      }
+      const result = await this.courseRecommendationService.getRecommend(user!, topN);
+
+      res.send_ok('Lấy danh sách khóa học gợi ý thành công', result);
     } catch (error) {
       next(error);
     }
