@@ -1,11 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:online_course_system/ViewModels/signup_view_model.dart';
-import 'package:online_course_system/ViewModels/verifyOTP_view_model.dart';
+import 'package:online_course_system/ViewModels/send_OTP_view_model.dart';
+import 'package:online_course_system/ViewModels/verify_OTP_view_model.dart';
 import 'package:online_course_system/constants/colors.dart';
-import 'package:online_course_system/models/emailsignup_model.dart';
-import 'package:online_course_system/models/phonesignup_model.dart';
-import 'package:online_course_system/models/verifyemail_model.dart';
+import 'package:online_course_system/models/email_signup_model.dart';
+import 'package:online_course_system/models/phone_signup_model.dart';
+import 'package:online_course_system/models/verify_email_model.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
@@ -21,7 +21,7 @@ class EmailVerificationScreen extends StatefulWidget {
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   late VerifyOTPViewModel viewModel;
-  late SignupViewModel signUpViewModel;
+  late SenOTPViewModel signUpViewModel;
   int _timerCountdown = 30;
   Timer? _timer;
 
@@ -31,7 +31,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   void initState() {
     super.initState();
     viewModel = Provider.of<VerifyOTPViewModel>(context, listen: false);
-    signUpViewModel = Provider.of<SignupViewModel>(context, listen: false);
+    signUpViewModel = Provider.of<SenOTPViewModel>(context, listen: false);
     startTimer();
   }
 

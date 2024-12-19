@@ -135,7 +135,9 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
                 CustomListTile(
                   title: 'Đổi mật khẩu',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(context, 'ChangePasswordScreen');
+                  },
                 ),
                 CustomListTile(
                   title: 'Xóa tài khoản',

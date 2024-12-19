@@ -1,8 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:online_course_system/models/verifyemail_model.dart';
-import 'package:online_course_system/models/verifyphone_model.dart';
+import 'package:online_course_system/models/verify_email_model.dart';
+import 'package:online_course_system/models/verify_otp_model.dart';
+import 'package:online_course_system/models/verify_phone_model.dart';
 
 import '../services/HttpConfig.dart';
 
@@ -53,6 +54,30 @@ class VerifyOTPViewModel extends ChangeNotifier {
       errorMessage = 'Đã xảy ra lỗi: $e';
       debugPrint('Error: $e');
       log(errorMessage!, name: 'VerifyPhoneError');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> verifyForgotPassword(VerifyOTPRequest request) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    log(request.toJson().toString(), name: 'VerifyOTPRequest');
+
+    try {
+      final response = await HttpService.post(
+        '/student/verify-otp',
+        body: request.toJson(),
+      );
+
+      log('VerifyOTPl success, response: ${response.toString()}');
+    } catch (e) {
+      errorMessage = 'Đã xảy ra lỗi: $e';
+      debugPrint('Error: $e');
+      log(errorMessage!, name: 'VerifyOTPError');
     } finally {
       isLoading = false;
       notifyListeners();

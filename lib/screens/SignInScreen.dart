@@ -77,7 +77,15 @@ class _SignInScreenState extends State<SignInScreen> {
                             icon: Image.asset('assets/arrowleft_icon.png',
                                 height: 40),
                             onPressed: () {
-                              Navigator.pop(context);
+                              if (Navigator.canPop(context)) {
+                                Navigator.pop(context);
+                              } else {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()),
+                                );
+                              }
                             },
                           ),
                         ),
@@ -152,16 +160,28 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text('Quên mật khẩu?',
+                        Align(
+                          alignment:
+                              Alignment.centerLeft, 
+                          child: IntrinsicWidth(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(context, 'ForgotPasswordScreen');
+                                debugPrint('Quên mật khẩu? đã được nhấn');
+                              },
+                              child: Text(
+                                'Quên mật khẩu?',
                                 style: TextStyle(
                                   color: Color(0xFF0038FF),
                                   fontWeight: FontWeight.w600,
                                   fontSize: 16,
                                   decoration: TextDecoration.underline,
                                   decorationColor: Color(0xFF0038FF),
-                                ))),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                         const SizedBox(height: 16),
                         const Row(children: [
                           Expanded(child: Divider()),

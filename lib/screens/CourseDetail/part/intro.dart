@@ -11,6 +11,7 @@ class CourseIntro extends StatefulWidget {
   _CourseIntroState createState() => _CourseIntroState();
 }
 
+
 class _CourseIntroState extends State<CourseIntro>
     with TickerProviderStateMixin {
   bool isExpanded = false;

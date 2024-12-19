@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/ViewModels/send_OTP_view_model.dart';
 import 'package:online_course_system/constants/colors.dart';
+import 'package:online_course_system/models/send_otp_model.dart';
+import 'package:provider/provider.dart';
 
-class UpdateEmailScreen extends StatelessWidget {
-  const UpdateEmailScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
+
+  @override
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  late SenOTPViewModel viewModel;
+
+  final TextEditingController emailOrPhoneController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    viewModel = Provider.of<SenOTPViewModel>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +37,7 @@ class UpdateEmailScreen extends StatelessWidget {
           },
         ),
         title: const Text(
-          'Cập nhật email',
+          'Quên mật khẩu',
           style: TextStyle(
             color: Colors.black,
             fontSize: 20,
@@ -44,7 +62,7 @@ class UpdateEmailScreen extends StatelessWidget {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: 'Nhập email mới',
+                    text: 'Nhập email hoặc số điện thoại',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                   ),
                   TextSpan(
@@ -55,22 +73,37 @@ class UpdateEmailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            const TextField(
-              decoration: InputDecoration(
+            TextField(
+              controller: emailOrPhoneController,
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
               ),
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 height: 1,
               ),
             ),
             const SizedBox(height: 12),
             ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  'EmailVerificationScreen'
-                );
+              onPressed: () async {
+                final sentOTPRequest =
+                    SendOTPRequest(emailOrPhone: emailOrPhoneController.text);
+                debugPrint("EmailorPhone: " +emailOrPhoneController.text);
+                await viewModel.forgotPassword(sentOTPRequest);
+
+                if (viewModel.errorMessage != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(viewModel.errorMessage!)),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Tiến hành xác thực OTP!')),
+                  );
+                  Navigator.pushNamed(
+                      context, 'ForgotPasswordVerificationScreen',
+                      arguments: sentOTPRequest);
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary500,

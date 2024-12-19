@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:online_course_system/ViewModels/signup_view_model.dart';
-import 'package:online_course_system/models/emailsignup_model.dart';
+import 'package:online_course_system/ViewModels/send_OTP_view_model.dart';
+import 'package:online_course_system/models/email_signup_model.dart';
 import 'package:online_course_system/widgets/customtextfield.dart';
 import 'package:provider/provider.dart';
 import '../constants/colors.dart';
@@ -14,7 +14,7 @@ class EmailSignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<EmailSignUpScreen> {
-  late SignupViewModel viewModel;
+  late SenOTPViewModel viewModel;
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -28,7 +28,7 @@ class _SignUpScreenState extends State<EmailSignUpScreen> {
   @override
   void initState() {
     super.initState();
-    viewModel = Provider.of<SignupViewModel>(context, listen: false);
+    viewModel = Provider.of<SenOTPViewModel>(context, listen: false);
   }
 
   @override

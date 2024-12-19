@@ -53,10 +53,6 @@ class _AccountUpdateScreenState extends State<AccountUpdateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_maskProfileData == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
