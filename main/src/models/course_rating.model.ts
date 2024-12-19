@@ -1,9 +1,10 @@
 import { BaseModel } from '@/models/base.model';
 import { Course } from '@/models/course.model';
 import { Student } from '@/models/student.model';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('course_ratings')
+@Index(['courseId', 'studentId'], { unique: true })
 export class CourseRating extends BaseModel {
   @PrimaryGeneratedColumn('uuid')
   id!: string;

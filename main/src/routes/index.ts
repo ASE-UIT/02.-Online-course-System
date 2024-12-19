@@ -18,6 +18,7 @@ import studentCompleteLessonRouter from '@/routes/student_complete_lesson.route'
 import paymentRouter from '@/routes/payment.route';
 import statisticalRouter from '@/routes/statistical.route';
 import enrollmentRouter from '@/routes/enrollment.route';
+import courseRecommendationRouter from '@/routes/course_recommendation.route';
 
 export function route(app: any, root_api: string) {
   app.use(`${root_api}/student`, studentRouter);
@@ -38,6 +39,7 @@ export function route(app: any, root_api: string) {
   app.use(`${root_api}/payment`, paymentRouter);
   app.use(`${root_api}/statistical`, statisticalRouter);
   app.use(`${root_api}/enrollment`, enrollmentRouter);
+  app.use(`${root_api}/course-recommendation`, courseRecommendationRouter);
 
   //Check health
   app.get(`${root_api}/health`, (req: any, res: any) => {

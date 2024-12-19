@@ -77,6 +77,18 @@ export class CourseRatingService extends BaseCrudService<CourseRating> implement
       throw new BaseError(ErrorCode.NOT_FOUND, 'Khóa học không tồn tại');
     }
 
+    //Check if student already rated this course
+    const existingRating = await this.courseRatingRepository.findOne({
+      filter: {
+        courseId: requestBody.courseId,
+        studentId
+      }
+    });
+
+    if (existingRating) {
+      throw new BaseError('ALREADY_RATED', 'Bạn đã đánh giá khóa học này rồi');
+    }
+
     let rating = new CourseRating();
     rating = requestBody as unknown as CourseRating;
     rating.studentId = studentId;
