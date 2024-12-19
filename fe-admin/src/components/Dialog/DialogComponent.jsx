@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -14,8 +15,17 @@ import LecturerModalBody from "./Lecturer/LecturerModalBody";
 import RemoveLecturer from "./Lecturer/RemoveLecturer";
 import EmployeeModalBody from "./Employee/EmployeeModalBody";
 import RemoveEmployee from "./Employee/RemoveEmployee";
+import { set } from "date-fns";
 
-const DialogComponent = ({ bodyType, currentPage, row, setLoading }) => {
+const DialogComponent = ({
+  bodyType,
+  currentPage,
+  row,
+  setLoading,
+  reload
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const vietnameseText = () => {
     // CATEGORY_PAGE
     if (currentPage === CURRENT_PAGES.CATEGORY_PAGE) {
@@ -29,8 +39,12 @@ const DialogComponent = ({ bodyType, currentPage, row, setLoading }) => {
     }
   };
 
+  const handleClostDialog = () => {
+    setIsOpen(false);
+  };
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {
           {
@@ -38,14 +52,24 @@ const DialogComponent = ({ bodyType, currentPage, row, setLoading }) => {
               <Button
                 variant="primary"
                 className="bg-primary-500 text-white px-4 py-2"
+                onClick={() => setIsOpen(true)}
               >
                 <span className="text-text/xl/medium pr-6">+</span>
                 Thêm
               </Button>
             ),
-            [MODAL_BODY_TYPES.EDIT]: <Button className="">Cập nhật</Button>,
+            [MODAL_BODY_TYPES.EDIT]: (
+              <Button className="" onClick={() => setIsOpen(true)}>
+                Cập nhật
+              </Button>
+            ),
             [MODAL_BODY_TYPES.REMOVE]: (
-              <Button className=" bg-error-500 px-8">Xoá</Button>
+              <Button
+                className=" bg-error-500 px-8"
+                onClick={() => setIsOpen(true)}
+              >
+                Xoá
+              </Button>
             )
           }[bodyType]
         }
@@ -125,9 +149,22 @@ const DialogComponent = ({ bodyType, currentPage, row, setLoading }) => {
           // REMOVE
           bodyType === MODAL_BODY_TYPES.REMOVE &&
             {
-              [CURRENT_PAGES.CATEGORY_PAGE]: <RemoveCategories row={row} />,
+              [CURRENT_PAGES.CATEGORY_PAGE]: (
+                <RemoveCategories
+                  row={row}
+                  setLoading={setLoading}
+                  handleClostDialog={handleClostDialog}
+                  reload={reload}
+                />
+              ),
               [CURRENT_PAGES.LECTURER_PAGE]: <RemoveLecturer row={row} />,
-              [CURRENT_PAGES.EMPLOYEE_PAGE]: <RemoveEmployee row={row} />
+              [CURRENT_PAGES.EMPLOYEE_PAGE]: (
+                <RemoveEmployee
+                  row={row}
+                  setLoading={setLoading}
+                  handleClostDialog={handleClostDialog}
+                />
+              )
             }[currentPage]
         }
       </DialogContent>

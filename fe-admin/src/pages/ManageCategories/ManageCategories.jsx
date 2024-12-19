@@ -20,16 +20,21 @@ const ManageCategories = () => {
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
 
+  async function fetchData() {
+    setLoading(true);
+    const res = await getAllCategoriesWithPage(rpp, page + 1);
+    setData(res.data.items);
+    setTotal(res.data.total);
+    setLoading(false);
+  }
+
   useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      const res = await getAllCategoriesWithPage(rpp, page + 1);
-      setData(res.data.items);
-      setTotal(res.data.total);
-      setLoading(false);
-    }
     fetchData();
-  }, [data, page, rpp]);
+  }, [page, rpp]);
+
+  function reload() {
+    fetchData();
+  }
 
   return (
     <div className="flex px-10 gap-10">
@@ -51,6 +56,7 @@ const ManageCategories = () => {
           page={page}
           setPage={setPage}
           total={total}
+          reload={reload}
         />
       </div>
     </div>
