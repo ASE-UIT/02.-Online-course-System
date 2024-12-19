@@ -35,8 +35,7 @@ export class CourseRatingController {
 
       const result = await this.courseRatingService.createRating(requestBody, studentId);
 
-      const responseBody = convertToDto(CreateCourseRatingReq, result);
-      res.send_created('Create new rating successful', responseBody);
+      res.send_created('Create new rating successful');
     } catch (error) {
       next(error);
     }
