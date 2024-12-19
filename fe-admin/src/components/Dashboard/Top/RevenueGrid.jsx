@@ -4,8 +4,8 @@ const RevenueGrid = ({ information }) => {
 
   const revenueData = {
     label: "Doanh thu",
-    value: formatNumber(information.revenue),
-    change: `${formatNumber(information.revenuePercentage)}%`
+    value: formatNumber(information?.revenue),
+    change: `${formatNumber(information?.revenuePercentage)}%`
   };
 
   return (
