@@ -43,8 +43,8 @@ export default function PriceInfo({ course }) {
   async function onSubmit(values) {
     const payload = {
       originalPrice: values.original_price,
-      sellPrice: values.sellPrice,
-      lowestPrice: values.lowestPrice,
+      sellPrice: values.price,
+      lowestPrice: values.min_price,
     };
     await updateCourse({ courseId: course.id, payload });
   }
