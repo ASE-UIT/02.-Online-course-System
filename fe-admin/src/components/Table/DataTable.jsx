@@ -40,7 +40,8 @@ export default function DataTable({
   setRpp,
   page,
   setPage,
-  total
+  total,
+  reload
 }) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState({});
@@ -152,6 +153,8 @@ export default function DataTable({
                           row={row.original}
                           headerList={headerList}
                           pageName={pageName}
+                          setLoading={setLoading}
+                          reload={reload}
                         />
                       </CollapsibleContent>
                     </tr>
