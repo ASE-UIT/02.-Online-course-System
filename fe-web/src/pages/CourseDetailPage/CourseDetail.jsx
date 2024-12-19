@@ -100,7 +100,7 @@ export default function CourseDetail() {
             <div
               className="image w-[188px] h-[200px] bg-cover mt-[59px] ml-[51px]"
               style={{
-                backgroundImage: `url(https://s3-alpha-sig.figma.com/img/fed6/d8cf/aff81f292ae2e9b6876ec63b242587a6?Expires=1729468800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gD4r5m1bzKtqU1If6c2w1h1XTUKNHYxIOBWZCrYalcN5uts3uxwjSx5mj7L6GCZ~6G9xq5H16dNgoRMSnLMOLolzjPQvN~R9VYQuiHo7z99fwR-Lyc0A2yMGzDw4orO1iSTeLNXPiBDWj4-phi-AjXoHtbMQ1P2-0ofPQCAB~ltuvuRcS19D3oSIplcb4VcryrVKTu0XvbCx6VKd-GxgyVmNPzbLywCH4SkeQRxbgq3rtIbpyLRxURHUoVJVnIrMt~fMfAnE9XNfZ87ejARlNPgCuWIWGh64D9aQ0F5wsnpOrfQPVlfB-pxX8jG8kswhqj7gHtk8LoklRMBrkS09cw__)`,
+                backgroundImage: `url(https://s3-alpha-sig.figma.com/img/fed6/d8cf/aff81f292ae2e9b6876ec63b242587a6?Expires=1735516800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=Yyift5~P4L5oyeeyBeKdLonUA5K~6Bal1J-PlnQttz306r7Y63IOqzhRTbhil9ZWz9BIah7gy4CQ2B0UsBToxGZM0mEMMo1uFx3Ox7ktb~7P2VBMBBLjTOQh9x3UuNQVVqeeak2i6-DKvwqefgVNq5CglJX6lV-bZFgKdsIeB~W5wwGe9zMDORANIInuquivWnRNsO7-RKqMUkFvd1sHPtDoIPSS-PnYY-BxBusS1eyjxB-rvjuQ7wxPyYUqBls0MRm-rfvFCEFa1SYVYA7T52L7aGIrAFJ0sVusV8tFwpYmtPfh8w4~PtyWCsUmHXszFXZnoTy8iLXXIbTajlBqnQ__)`,
               }}
             ></div>
             <div className="title flex flex-col justify-between items-end w-2/3 px-10 mt-10">
