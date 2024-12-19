@@ -48,3 +48,21 @@ export const getAllCategories = async () => {
     throw error;
   }
 };
+
+export const getAllCategoriesWithPage = async (rpp, page) => {
+  try {
+    const res = await api.get(
+      `/course-category/paging?rpp=${rpp}&page=${page}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.error("API call error:", error.response || error.message);
+    throw error;
+  }
+};
