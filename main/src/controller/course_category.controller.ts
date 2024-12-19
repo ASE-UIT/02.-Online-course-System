@@ -7,11 +7,13 @@ import { ITYPES } from '@/types/interface.types';
 import { convertToDto } from '@/utils/dto-convert/convert-to-dto.util';
 import { NextFunction, Request, Response } from 'express';
 import { inject, injectable } from 'inversify';
+import { CourseCategorySelect } from '@/dto/course_category/course_category.select';
 
 @injectable()
 export class CourseCategoryController {
   public common: IBaseCrudController<CourseCategory>;
   private courseCategoryService: ICourseCategoryService<CourseCategory>;
+
   constructor(
     @inject('CourseCategoryService') courseCategoryService: ICourseCategoryService<CourseCategory>,
     @inject(ITYPES.Controller) common: IBaseCrudController<CourseCategory>
@@ -19,6 +21,7 @@ export class CourseCategoryController {
     this.courseCategoryService = courseCategoryService;
     this.common = common;
   }
+
   async findAll(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const categories = await this.courseCategoryService.findAll();
@@ -28,6 +31,7 @@ export class CourseCategoryController {
       next(error);
     }
   }
+
   async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const requestBody: CreateCourseCategoryReq = req.body;
@@ -76,6 +80,20 @@ export class CourseCategoryController {
       });
 
       res.send_ok('Cập nhật thành công');
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async findAllWithPaging(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const { page, rpp } = req.query;
+      const paging = { page: Number(page), rpp: Number(rpp) };
+      const result = await this.courseCategoryService.findAllWithPaging({
+        paging,
+        select: CourseCategorySelect
+      });
+      res.send_ok('Found successfully', result);
     } catch (error) {
       next(error);
     }
