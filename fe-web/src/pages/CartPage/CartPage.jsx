@@ -189,7 +189,7 @@ const CartPage = () => {
             duration: 2000
         });
     }
-    if (isCartLoading) return <CustomSkeletonDemo/>;
+    if (isCartLoading || isRemoveLoading) return <CustomSkeletonDemo/>;
     return (
         <div className="w-full flex flex-col space-y-5">
             <div className="w-full px-24 mt-5">
