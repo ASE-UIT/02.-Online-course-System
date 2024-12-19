@@ -82,7 +82,7 @@ export class QuizController {
   async doneQuizByCourse(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const studentId = req.user?.id;
-      const courseId = req.query.courseId?.toString();
+      const courseId = req.params.courseId?.toString();
       const result = await this.studentCompleteQuizRepository.findQuizDoneByCourse(studentId!, courseId!);
 
       res.send_ok('Get done quiz by course successfully', result);

@@ -9,6 +9,12 @@ import { ICourseRepository } from '@/repository/interface/i.course.repository';
 import { courseRepository } from '@/container/course.container';
 import { ILessonRepository } from '@/repository/interface/i.lesson.repository';
 import { lessonRepository } from '@/container/lesson.container';
+import { IEnrollmentRepository } from '@/repository/interface/i.enrollment.repository';
+import { enrollmentRepository } from '@/container/enrollment.container';
+import { IStudentCompleteQuizRepository } from '@/repository/interface/i.student_complete_quiz.repository';
+import { studentCompleteQuizRepository } from '@/container/student_complete_quiz.container';
+import { IQuizRepository } from '@/repository/interface/i.quiz.repository';
+import { quizRepository } from '@/container/quiz.container';
 
 class StudentCompleteLessonContainer extends BaseContainer {
   constructor() {
@@ -23,6 +29,11 @@ class StudentCompleteLessonContainer extends BaseContainer {
 
     //Import
     this.container.bind<ILessonRepository<any>>('LessonRepository').toConstantValue(lessonRepository);
+    this.container.bind<IEnrollmentRepository<any>>('EnrollmentRepository').toConstantValue(enrollmentRepository);
+    this.container
+      .bind<IStudentCompleteQuizRepository<any>>('StudentCompleteQuizRepository')
+      .toConstantValue(studentCompleteQuizRepository);
+    this.container.bind<IQuizRepository<any>>('QuizRepository').toConstantValue(quizRepository);
   }
 
   export() {

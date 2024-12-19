@@ -14,7 +14,23 @@ export class StudentCompleteQuizRepository
     super(dataSource.getRepository(StudentCompleteQuiz));
   }
 
+  async countCompletedByCourseIdAndStudentId(courseId: string, studentId: string): Promise<number> {
+    return await this.ormRepository.count({
+      where: {
+        studentId: studentId,
+        quiz: {
+          lessonPart: {
+            courseId: courseId
+          }
+        }
+      }
+    });
+  }
+
   async findQuizDoneByCourse(studentId: string, courseId: string): Promise<StudentCompleteQuiz[]> {
+    console.log('QUERY FIND QUIZ DONE');
+    console.log('courseId', courseId);
+
     return await this.ormRepository.find({
       where: {
         studentId: studentId,

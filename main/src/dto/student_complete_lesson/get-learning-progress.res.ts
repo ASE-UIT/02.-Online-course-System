@@ -10,4 +10,6 @@ export class GetLearningProgressRes {
   courseProgress!: number;
   totalCompleteLesson!: number;
   totalLesson!: number;
+  totalQuiz!: number;
+  totalCompleteQuiz!: number;
 }
