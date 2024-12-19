@@ -92,7 +92,7 @@ const CourseList = () => {
                 </div>
             </section>
 */}
-            <section className="flex flex-col px-24 space-y-4">
+            {/*<section className="flex flex-col px-24 space-y-4">
                 <div className="flex justify-between py-2.5">
                     <p className=" text-text/lg/bold">Khóa học đề xuất</p>
                     <p className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
@@ -102,7 +102,7 @@ const CourseList = () => {
                         return <CourseLiveCard key={idx} course={course}></CourseLiveCard>;
                     })}
                 </div>
-            </section>
+            </section>*/}
         </div>
     );
 };

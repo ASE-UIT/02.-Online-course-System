@@ -3,7 +3,6 @@ import {Award, BookCopy, Clock, Heart, Video} from "lucide-react";
 import {useEffect, useState} from "react";
 import {useAddToCartMutation, useGetCartQuery, useGetEnrollmentQuery} from "@/store/rtk/cart.services.js";
 import {useNavigate} from "react-router-dom";
-import useScrollToTop from "@/hooks/useScrollToTop.jsx";
 import {useToast} from "@/hooks/use-toast.js";
 import {cn} from "@/lib/utils.js";
 
@@ -15,7 +14,6 @@ export default function CourseInfo({course}) {
     const [isInEnrollment, setIsInEnrollment] = useState(false);
     const navigate = useNavigate();
     const {data: enrollment} = useGetEnrollmentQuery()
-    useScrollToTop();
     const {toast} = useToast();
 
     useEffect(() => {
@@ -62,7 +60,10 @@ export default function CourseInfo({course}) {
             <div
                 className="w-full bg-no-repeat bg-center bg-cover h-[276px]"
                 style={{
-                    backgroundImage: `url(https://d1csarkz8obe9u.cloudfront.net/posterpreviews/online-course-banner-template-design-119d86c3b79b2aca2c9241e064c7908d_screen.jpg?ts=1644080238)`,
+                    backgroundImage: `url(${
+                        course?.thumbnail ||
+                        "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/online-course-banner-template-design-119d86c3b79b2aca2c9241e064c7908d_screen.jpg?ts=1644080238"
+                    })`,
                 }}
             ></div>
             <div className="p-[20px] bg-white">
