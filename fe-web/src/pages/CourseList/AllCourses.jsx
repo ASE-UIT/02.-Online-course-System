@@ -6,6 +6,8 @@ import {useGetCoursesQuery} from "@/store/rtk/course.services.js";
 import {useParams} from "react-router-dom";
 import {useScrollToTop} from "@/hooks/index.js";
 import {CustomSkeletonDemo} from "@/pages/CourseList/CustomSkeleton.jsx";
+import {useGetCompletedEnrollmentQuery, useGetInProgressEnrollmentQuery} from "@/store/rtk/cart.services.js";
+import {CompletedCourseListCard} from "@/pages/CourseList/CompletedCourseListCard.jsx";
 
 const AllCoursesPage = () => {
     //const [liveCourses, setLiveCourses] = useState([]);
@@ -13,23 +15,10 @@ const AllCoursesPage = () => {
     useScrollToTop();
     if (content === "learning") {
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        const [myCourses, setMyCourses] = useState([]);
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const [isLoading, setIsLoading] = useState(true);
-        const getMyCourses = async () => {
-            const response = await courseApi.getMyStudentCourses();
-            if (response?.success) {
-                setMyCourses(response.data);
-                console.log(response.data);
-            }
-        };
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useEffect(() => {
-            getMyCourses().then(() => {
-                setIsLoading(false);
-            })
-        }, [])
-        if (isLoading) return <CustomSkeletonDemo/>;
+        const {data: myInProgressEnrollmentsResponse, isLoading: isGetLoading} = useGetInProgressEnrollmentQuery()
+        const myInProgressEnrollments = myInProgressEnrollmentsResponse?.data ? myInProgressEnrollmentsResponse.data : [];
+
+        if (isGetLoading) return <CustomSkeletonDemo/>;
 
         return (
             <div className="w-full flex flex-col space-y-5">
@@ -41,7 +30,7 @@ const AllCoursesPage = () => {
                         <p className=" text-text/lg/bold">Đang học</p>
                     </div>
                     <div className="grid grid-cols-4 gap-[1rem]">
-                        {myCourses.slice(0, 8).map((course, idx) => {
+                        {myInProgressEnrollments.slice(0, 8).map((course, idx) => {
                             return <CourseListCard key={idx} course={course}></CourseListCard>;
                         })}
                     </div>
@@ -50,18 +39,9 @@ const AllCoursesPage = () => {
         );
     } else if (content === "completed") {
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        const [myCourses, setMyCourses] = useState([]);
-        const getMyCourses = async () => {
-            const response = await courseApi.getMyStudentCourses();
-            if (response?.success) {
-                setMyCourses(response.data);
-                console.log(response.data);
-            }
-        };
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useEffect(() => {
-            getMyCourses();
-        }, [])
+        const {data: myCompletedEnrollmentsResponse, isLoading: isGetLoading} = useGetCompletedEnrollmentQuery();
+        const myCompletedEnrollments = myCompletedEnrollmentsResponse?.data ? myCompletedEnrollmentsResponse.data : [];
+        if (isGetLoading) return <CustomSkeletonDemo/>;
 
         return (
             <div className="w-full flex flex-col space-y-5">
@@ -73,8 +53,8 @@ const AllCoursesPage = () => {
                         <p className=" text-text/lg/bold">Đã học</p>
                     </div>
                     <div className="grid grid-cols-4 gap-[1rem]">
-                        {myCourses.slice(0, 8).map((course, idx) => {
-                            return <CourseListCard key={idx} course={course}></CourseListCard>;
+                        {myCompletedEnrollments.slice(0, 8).map((course, idx) => {
+                            return <CompletedCourseListCard key={idx} course={course}></CompletedCourseListCard>;
                         })}
                     </div>
                 </section>

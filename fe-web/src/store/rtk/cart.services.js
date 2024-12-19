@@ -49,6 +49,19 @@ export const cartRTKApi = createApi({
             query: () => 'enrollment/me',
             providesTags: ['Enrollment']
         }),
+        getCompletedEnrollment: builder.query({
+            query: () => 'enrollment/completed',
+            providesTags: ['Enrollment'],
+
+        }),
+        getInProgressEnrollment: builder.query({
+            query: () => 'enrollment/in-progress',
+            providesTags: ['Enrollment'],
+        }),
+        getCertificate: builder.query({
+            query: (courseId) => `enrollment/certificate/${courseId}`,
+            providesTags: ['Enrollment'],
+        }),
     }),
 });
 
@@ -58,4 +71,7 @@ export const {
     useRemoveFromCartMutation,
     useClearCartMutation,
     useGetEnrollmentQuery,
+    useGetCompletedEnrollmentQuery,
+    useGetInProgressEnrollmentQuery,
+    useGetCertificateQuery,
 } = cartRTKApi;

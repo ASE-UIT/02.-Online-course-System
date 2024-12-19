@@ -6,32 +6,36 @@ import {CourseLiveCard} from "@/pages/CourseList/CourseLiveCart.jsx";
 import {useGetCoursesQuery} from "@/store/rtk/course.services.js";
 import {useNavigate} from "react-router-dom";
 import {CustomSkeletonDemo} from "@/pages/CourseList/CustomSkeleton.jsx";
+import {
+    useGetCompletedEnrollmentQuery,
+    useGetEnrollmentQuery,
+    useGetInProgressEnrollmentQuery
+} from "@/store/rtk/cart.services.js";
+import {CompletedCourseListCard} from "@/pages/CourseList/CompletedCourseListCard.jsx";
 
 const CourseList = () => {
     const [myCourses, setMyCourses] = useState([]);
     //const [liveCourses, setLiveCourses] = useState([]);
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(true);
 
-    const getMyCourses = async () => {
+    /*const getMyCourses = async () => {
         const response = await courseApi.getMyStudentCourses();
         if (response?.success) {
             setMyCourses(response.data);
             console.log(response.data);
         }
-    };
+    };*/
     const {data: courseResponse} = useGetCoursesQuery({
         limit: 8,
         page: 1,
         isApproved: true,
     });
     const liveCourses = courseResponse?.data?.items ? courseResponse.data.items : [];
-    useEffect(() => {
-        getMyCourses().then(() => {
-            setIsLoading(false);
-        });
-    }, []);
-    if (isLoading) return <CustomSkeletonDemo/>;
+    const {data: myInProgressEnrollmentsResponse} = useGetInProgressEnrollmentQuery()
+    const myInProgressEnrollments = myInProgressEnrollmentsResponse?.data ? myInProgressEnrollmentsResponse.data : [];
+    const {data: myCompletedEnrollmentsResponse} = useGetCompletedEnrollmentQuery();
+    const myCompletedEnrollments = myCompletedEnrollmentsResponse?.data ? myCompletedEnrollmentsResponse.data : [];
+    //if (isGetLoading) return <CustomSkeletonDemo/>;
     return (
         <div className="w-full flex flex-col space-y-5">
             <div className="w-full flex px-24 mt-5">
@@ -48,7 +52,7 @@ const CourseList = () => {
                        className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
                 </div>
                 <div className="grid grid-cols-4 gap-[1rem]">
-                    {myCourses.slice(0, 8).map((course, idx) => {
+                    {myInProgressEnrollments.slice(0, 8).map((course, idx) => {
                         return <CourseListCard key={idx} course={course}></CourseListCard>;
                     })}
                 </div>
@@ -64,11 +68,12 @@ const CourseList = () => {
                        className="text-text/md/semibold text-primary-500 cursor-pointer">Xem tất cả</p>
                 </div>
                 <div className="grid grid-cols-4 gap-[1rem]">
-                    {myCourses.slice(0, 8).map((course, idx) => {
-                        return <CourseListCard key={idx} course={course}></CourseListCard>;
+                    {myCompletedEnrollments.slice(0, 8).map((course, idx) => {
+                        return <CompletedCourseListCard key={idx} course={course}></CompletedCourseListCard>;
                     })}
                 </div>
             </section>
+            {/*
             <section className="flex flex-col px-24 space-y-4">
                 <div className="flex justify-between py-2.5">
                     <p className=" text-text/lg/bold">Đã thích</p>
@@ -86,6 +91,7 @@ const CourseList = () => {
                     })}
                 </div>
             </section>
+*/}
             <section className="flex flex-col px-24 space-y-4">
                 <div className="flex justify-between py-2.5">
                     <p className=" text-text/lg/bold">Khóa học đề xuất</p>
