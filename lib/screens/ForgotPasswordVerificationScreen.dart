@@ -3,25 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:online_course_system/ViewModels/send_OTP_view_model.dart';
 import 'package:online_course_system/ViewModels/verify_OTP_view_model.dart';
 import 'package:online_course_system/constants/colors.dart';
-import 'package:online_course_system/models/phone_signup_model.dart';
-import 'package:online_course_system/models/verify_phone_model.dart';
+import 'package:online_course_system/models/send_otp_model.dart';
+import 'package:online_course_system/models/verify_otp_model.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
 
-class PhoneVerificationScreen extends StatefulWidget {
-  const PhoneVerificationScreen({super.key});
+class ForgotPasswordVerificationScreen extends StatefulWidget {
+  const ForgotPasswordVerificationScreen({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _PhoneVerificationScreenState createState() =>
-      _PhoneVerificationScreenState();
+  _ForgotPasswordVerificationScreenState createState() =>
+      _ForgotPasswordVerificationScreenState();
 }
 
-class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
-  late VerifyOTPViewModel viewModel;
-  late SenOTPViewModel signUpViewModel;
-  // late PhoneSignUpRequest phoneSignUpRequest;
+class _ForgotPasswordVerificationScreenState extends State<ForgotPasswordVerificationScreen> {
+  late VerifyOTPViewModel verifyViewModel;
+  late SenOTPViewModel sendViewModel;
   int _timerCountdown = 30;
   Timer? _timer;
 
@@ -30,8 +28,8 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
   @override
   void initState() {
     super.initState();
-    viewModel = Provider.of<VerifyOTPViewModel>(context, listen: false);
-    signUpViewModel = Provider.of<SenOTPViewModel>(context, listen: false);
+    verifyViewModel = Provider.of<VerifyOTPViewModel>(context, listen: false);
+    sendViewModel = Provider.of<SenOTPViewModel>(context, listen: false);
     startTimer();
   }
 
@@ -53,20 +51,20 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
     super.dispose();
   }
 
-  Future<void> resendOTP(PhoneSignUpRequest phoneSignUpRequest) async {
+  Future<void> resendOTP(SendOTPRequest sendOTPRequest) async {
     setState(() {
       _timerCountdown = 30; // Reset timer
     });
     startTimer();
     // Trigger resend OTP function here
-    var info = phoneSignUpRequest.toJson().toString();
+    var info = sendOTPRequest.toJson().toString();
     debugPrint('Info: $info');
-    await signUpViewModel.phoneSignUp(phoneSignUpRequest);
+    await sendViewModel.forgotPassword(sendOTPRequest);
 
     // Xử lý thành công hoặc lỗi
-    if (viewModel.errorMessage != null) {
+    if (verifyViewModel.errorMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(viewModel.errorMessage!)),
+        SnackBar(content: Text(verifyViewModel.errorMessage!)),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -77,7 +75,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final PhoneSignUpRequest phoneSignUpRequest = ModalRoute.of(context)?.settings.arguments as PhoneSignUpRequest;
+    final SendOTPRequest sendOTPRequest = ModalRoute.of(context)?.settings.arguments as SendOTPRequest;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -86,7 +84,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         title: const Text(
-          'Xác thực SĐT',
+          'Xác thực thông tin',
           style: TextStyle(
             color: Colors.black,
             fontSize: 28,
@@ -108,8 +106,8 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
               ),
               const SizedBox(height: 20),
               const Text(
-                'Chúng tôi đã gửi cho bạn một mã OTP để xác thực SĐT tài khoản. '
-                'Vui lòng nhập OTP được gửi trong tin nhắn để hoàn tất quá trình đăng ký tài khoản.',
+                'Chúng tôi đã gửi cho bạn một mã OTP để xác thực thông tin tài khoản. '
+                'Vui lòng nhập OTP được gửi trong tin nhắn để tiếp tục quá trình lấy lại mật khẩu.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16, color: AppColors.black),
               ),
@@ -142,11 +140,11 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                   style: const TextStyle(fontSize: 16, color: Colors.black),
                   children: [
                     const TextSpan(
-                      text: 'Chưa nhận được SMS? ',
+                      text: 'Chưa nhận được OTP? ',
                       style: TextStyle(fontWeight: FontWeight.w400),
                     ),
                     TextSpan(
-                      text: 'Gửi lại SĐT sau ${_timerCountdown}s',
+                      text: 'Gửi lại sau ${_timerCountdown}s',
                       style: TextStyle(
                           color:
                               _timerCountdown == 0 ? Colors.blue : Colors.grey,
@@ -154,7 +152,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           if (_timerCountdown == 0) {
-                            resendOTP(phoneSignUpRequest);
+                            resendOTP(sendOTPRequest);
                           }
                         },
                     ),
@@ -165,17 +163,17 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
               ElevatedButton(
                 onPressed: () async {
                   if (_pinController.text.length == 6) {
-                    final verifyPhoneRequest = VerifyPhoneRequest(
-                        phoneNumber: phoneSignUpRequest.phoneNumber,
-                        code: _pinController.text);
+                    final verifyOTPRequest = VerifyOTPRequest(
+                        emailOrPhone: sendOTPRequest.emailOrPhone,
+                        otp: _pinController.text);
 
-                    var req = verifyPhoneRequest.toJson().toString();
+                    var req = verifyOTPRequest.toJson().toString();
                     debugPrint('Request: $req');
                     // await viewModel.verify(verifyPhoneRequest);
 
-                    if (viewModel.errorMessage != null) {
+                    if (verifyViewModel.errorMessage != null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(viewModel.errorMessage!)),
+                        SnackBar(content: Text(verifyViewModel.errorMessage!)),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -184,7 +182,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                             children: [
                               Icon(Icons.check_circle, color: Colors.green),
                               SizedBox(width: 10),
-                              Text("Xác thực SĐT thành công!"),
+                              Text("Xác thực thành công!"),
                             ],
                           ),
                           backgroundColor: Colors.black87,
@@ -193,11 +191,9 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                         ),
                       );
 
-                      Navigator.popUntil(
-                        context,
-                        (Route<dynamic> route) =>
-                            route.settings.name == 'SignInScreen',
-                      );
+                      Navigator.pushNamed(
+                      context, 'ResetPasswordScreen',
+                      arguments: verifyOTPRequest);
                     }
                   } else {
                     // Handle invalid OTP input

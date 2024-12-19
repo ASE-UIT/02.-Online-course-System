@@ -3,16 +3,19 @@ import 'package:online_course_system/ViewModels/change_password_view_model.dart'
 import 'package:online_course_system/ViewModels/learning_view_model.dart';
 import 'package:online_course_system/ViewModels/login_view_model.dart';
 import 'package:online_course_system/ViewModels/profile_view_model.dart';
-import 'package:online_course_system/ViewModels/signup_view_model.dart';
-import 'package:online_course_system/ViewModels/verifyOTP_view_model.dart';
+import 'package:online_course_system/ViewModels/reset_password.viewmodel.dart';
+import 'package:online_course_system/ViewModels/send_OTP_view_model.dart';
+import 'package:online_course_system/ViewModels/verify_OTP_view_model.dart';
 import 'package:online_course_system/screens/AccountUpdateScreen.dart';
 import 'package:online_course_system/screens/ChangePasswordScreen.dart';
 import 'package:online_course_system/screens/EmailVerificationScreen.dart';
+import 'package:online_course_system/screens/ForgotPasswordVerificationScreen.dart';
 import 'package:online_course_system/screens/HomeScreen.dart';
 import 'package:online_course_system/screens/PhoneSignUpScreen.dart';
 import 'package:online_course_system/screens/PhoneVerificationScreen.dart';
 import 'package:online_course_system/screens/EmailSignUpScreen.dart';
-import 'package:online_course_system/screens/UpdateEmailScreen.dart';
+import 'package:online_course_system/screens/ForgotPasswordScreen.dart';
+import 'package:online_course_system/screens/ResetPasswordScreen.dart';
 import 'package:online_course_system/screens/UpdatePhoneScreen.dart';
 import 'package:online_course_system/screens/SignInScreen.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +35,7 @@ void main() {
           create: (_) => LoginViewModel(),
         ),
         ChangeNotifierProvider(
-          create: (_) => SignupViewModel(),
+          create: (_) => SenOTPViewModel(),
         ),
         ChangeNotifierProvider(
           create: (_) => VerifyOTPViewModel(),
@@ -42,6 +45,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => ChangePasswordViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ResetPasswordViewModel(),
         )
       ],
       child: MyApp(),
@@ -64,11 +70,13 @@ class MyApp extends StatelessWidget {
         'PhoneSignUpScreen': (context) => const PhoneSignUpScreen(),
         'SignInScreen': (context) => const SignInScreen(),
         'AccountUpdateScreen': (context) => const AccountUpdateScreen(),
-        'UpdateEmailScreen': (context) => const UpdateEmailScreen(),
+        'ForgotPasswordScreen': (context) => const ForgotPasswordScreen(),
+        'ForgotPasswordVerificationScreen': (context) => const ForgotPasswordVerificationScreen(),
         'UpdatePhoneScreen': (context) => const UpdatePhoneScreen(),
         'PhoneVerificationScreen': (context) => const PhoneVerificationScreen(),
         'EmailVerificationScreen': (context) => const EmailVerificationScreen(),
         'ChangePasswordScreen': (context) => ChangePasswordScreen(),
+        'ResetPasswordScreen': (context) => ResetPasswordScreen(),
       },
     );
   }

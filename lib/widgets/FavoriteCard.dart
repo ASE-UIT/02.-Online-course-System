@@ -33,11 +33,58 @@ class FavoriteCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         // Navigate to course detail screen
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CourseDetailPage(courseId: id ?? ""),
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => CourseDetailPage(courseId: id ?? ""),
+        //   ),
+        // );
+
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.white,
+          isScrollControlled: true,
+          enableDrag: true, // Allow dragging to dismiss
+          isDismissible: true, // Allow tapping outside to dismiss
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
           ),
+          builder: (context) {
+            return DraggableScrollableSheet(
+              initialChildSize: 0.95, // 93% of screen height
+              minChildSize: 0.3, // Minimum size when collapsed
+              maxChildSize: 0.95, // Maximum size when fully expanded
+              builder: (context, scrollController) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(16),
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      // Draggable handle
+                      Container(
+                        height: 5,
+                        width: 40,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade400,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      Expanded(
+                        child: CourseDetailPage(
+                          courseId: id ?? "",
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
         );
       },
       child: Card(
