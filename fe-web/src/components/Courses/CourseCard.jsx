@@ -10,7 +10,7 @@ export const CourseCard = ({ course }) => {
     >
       <div className="overflow-hidden">
         <img
-          src={CourseCardIcon}
+          src={course.thumbnail}
           alt="No image"
           className="mx-auto h-[160px] w-full object-cover transition duration-700 hover:skew-x-2 "
         />

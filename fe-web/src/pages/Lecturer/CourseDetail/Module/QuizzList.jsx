@@ -13,7 +13,7 @@ export default function QuizzList({ onClose, moduleSlt, course }) {
   const [quizzSlt, setQuizSlt] = useState(-1);
   const [quizzDeleteSlt, setQuizDeleteSlt] = useState(-1);
   const [updateCourse, { isLoading }] = useUpdateCourseMutation();
-
+  const [isAdding, setIsAdding] = useState(false);
   const handleDragEnd = (event) => {
     const { active, over } = event;
     if (active.id !== over.id) {
@@ -68,6 +68,25 @@ export default function QuizzList({ onClose, moduleSlt, course }) {
       },
     });
   };
+  const handleCreateNewTempQuiz = async () => {
+    setIsAdding(true);
+    const id = nanoid();
+    const newQuiz = {
+      id: `temp-${id}`,
+      order: quizzes.length + 1,
+      content: `temp-${id}`,
+      explanation: null,
+      choiceA: null,
+      choiceB: null,
+      choiceC: null,
+      choiceD: null,
+      correctChoices: [],
+    };
+    const newQuizzes = [...quizzes, newQuiz];
+    setQuizzes(newQuizzes);
+    await handleSaveQuiz(newQuizzes);
+    setIsAdding(false);
+  };
   useEffect(() => {
     if (moduleSlt?.quizzes) {
       const idx = course?.lessonParts?.findIndex((module) => module.id === moduleSlt.id);
@@ -91,23 +110,13 @@ export default function QuizzList({ onClose, moduleSlt, course }) {
             </div>
             <div
               onClick={() => {
-                const id = nanoid();
-                const newQuiz = {
-                  id: `temp-${id}`,
-                  order: quizzes.length + 1,
-                  content: `temp-${id}`,
-                  explanation: null,
-                  choiceA: null,
-                  choiceB: null,
-                  choiceC: null,
-                  choiceD: null,
-                  correctChoices: [],
-                };
-                const newQuizzes = [...quizzes, newQuiz];
-                setQuizzes(newQuizzes);
-                handleSaveQuiz(newQuizzes);
+                if (!isAdding) {
+                  handleCreateNewTempQuiz();
+                }
               }}
-              className="flex items-center justify-center gap-2 bg-primary-500 px-[16px] py-[12px] rounded-[8px] text-white cursor-pointer hover:bg-primary-600 transition-all"
+              className={`${
+                isAdding && "opacity-60 select-none"
+              } flex items-center justify-center gap-2 bg-primary-500 px-[16px] py-[12px] rounded-[8px] text-white cursor-pointer hover:bg-primary-600 transition-all`}
             >
               <PlusIcon className="w-[24px] h-[24px]" />
               <p className="text-text/md/medium">Thêm mới</p>

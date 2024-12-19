@@ -12,7 +12,7 @@ import { useSelector } from "react-redux";
 
 export const CourseContent = () => {
   const { lecturerInfor } = useSelector((state) => state.lecturerInfor);
-  console.log("lecture", lecturerInfor);
+  // console.log("lecture", lecturerInfor);
   // Pagination state
   const [page, setPage] = useState(1);
   const pageSize = 6;
