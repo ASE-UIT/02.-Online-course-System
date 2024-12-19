@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { set } from "date-fns";
 import { approveLecturer } from "@/api/lecturerApi";
 
-const RowDetail = ({ row, headerList, pageName, setLoading }) => {
+const RowDetail = ({ row, headerList, pageName, setLoading, reload }) => {
   const url = useLocation();
   const { toast } = useToast();
   const headerTranslator = (id) => {
@@ -152,12 +152,15 @@ const RowDetail = ({ row, headerList, pageName, setLoading }) => {
               bodyType={MODAL_BODY_TYPES.EDIT}
               currentPage={pageName}
               row={row}
+              setLoading={setLoading}
             />
           )}
           <DialogComponent
             bodyType={MODAL_BODY_TYPES.REMOVE}
             currentPage={pageName}
             row={row}
+            setLoading={setLoading}
+            reload={reload}
           />
         </div>
       </div>

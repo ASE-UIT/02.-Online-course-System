@@ -99,15 +99,14 @@ export const categoriesColumns = [
     }
   },
   {
-    accessorKey: "totalCourse",
-    name: "Số khóa học",
+    accessorKey: "description",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="SÔ KHOÁ HỌC" />
+      <DataTableColumnHeader column={column} title="MÔ TẢ" />
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex w-[100px] items-center">
-          <span>{row.getValue("totalCourse")}</span>
+        <div className="flex w-[200px] items-center">
+          <span>{row.getValue("description")}</span>
         </div>
       );
     },

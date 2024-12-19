@@ -4,8 +4,7 @@ import { categoriesColumns } from "./CategoriesColumns";
 import { categoriesList } from "./CategoriesList";
 import { useEffect, useState } from "react";
 import { CURRENT_PAGES } from "@/utils/globalUtils";
-import { use } from "react";
-import { getAllCategories } from "@/api/courseApi";
+import { getAllCategoriesWithPage } from "@/api/courseApi";
 
 // const changeButton = (
 //   <Button variant="primary" className="bg-primary-500 text-white px-4 py-2">
@@ -17,16 +16,25 @@ const ManageCategories = () => {
   const [columnVisibility, setColumnVisibility] = useState({});
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [rpp, setRpp] = useState(10);
+  const [page, setPage] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  async function fetchData() {
+    setLoading(true);
+    const res = await getAllCategoriesWithPage(rpp, page + 1);
+    setData(res.data.items);
+    setTotal(res.data.total);
+    setLoading(false);
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      setLoading(true);
-      const res = await getAllCategories();
-      setData(res.data);
-      setLoading(false);
-    }
     fetchData();
-  }, []);
+  }, [page, rpp]);
+
+  function reload() {
+    fetchData();
+  }
 
   return (
     <div className="flex px-10 gap-10">
@@ -43,6 +51,12 @@ const ManageCategories = () => {
           pageName={CURRENT_PAGES.CATEGORY_PAGE}
           loading={loading}
           setLoading={setLoading}
+          rpp={rpp}
+          setRpp={setRpp}
+          page={page}
+          setPage={setPage}
+          total={total}
+          reload={reload}
         />
       </div>
     </div>
