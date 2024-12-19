@@ -98,6 +98,7 @@ export default function DataTable({
         <DialogComponent
           bodyType={MODAL_BODY_TYPES.ADD}
           currentPage={pageName}
+          setLoading={setLoading}
         />
         <div className="flex items-center justify-between">
           <DataTableViewOptions table={table} headerList={headerList} />
