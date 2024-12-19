@@ -1,30 +1,21 @@
 import { CourseCard } from "@/components/Courses/CourseCard";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
-import { useGetCoursesByCategoryIdQuery } from "@/store/rtk/course.services";
+import { useGetCourseRecommendationQuery } from "@/store/rtk/course.services";
 
-function RelatedCourse({ categoryId, courseId }) {
-  // Fetch related courses based on categoryId
-  const { data, error, isLoading } = useGetCoursesByCategoryIdQuery({
-    categoryId,
-    limit: 10,  
-    page: 1,   
-  });
+function RelatedCourse({ courseId }) {
+  const { data, error, isLoading } = useGetCourseRecommendationQuery(6);
 
-  // Loading state
   if (isLoading) return <p>Loading related courses...</p>;
 
-  // Error handling
   if (error) return <p>Error loading related courses</p>;
 
-  // Ensure we are getting courses
-  const relatedCourses = data?.data?.items || [];
+  const relatedCourses = data?.data || [];
 
-  // Filter out the course that matches the current courseId
-  const filteredCourses = relatedCourses.filter(item => item.id !== courseId);
+  const filteredCourses = relatedCourses.filter((item) => item.id !== courseId);
 
   return (
     <div className="related flex gap-[20px] flex-col">
-      <header className="text-text-lg/semibold">Khóa học liên quan</header>
+      <header className="text-text-lg/semibold">Khóa học gợi ý</header>
       <div className="content">
         {/* Render courses in a carousel */}
         <Carousel>

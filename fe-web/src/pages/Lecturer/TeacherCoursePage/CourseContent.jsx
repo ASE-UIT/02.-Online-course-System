@@ -22,10 +22,11 @@ export const CourseContent = () => {
     data: courseData,
     isLoading,
     error,
-  } = useGetCoursesByLecturerIdQuery(
-    // eslint-disable-next-line no-undef
-    lecturerInfor ? { lecturerId: lecturerInfor.id, limit: pageSize, page } : skipToken
-  );
+  } = useGetCoursesByLecturerIdQuery({
+    lecturerId: lecturerInfor?.id,
+    limit: pageSize,
+    page,
+  });
 
   if (isLoading) {
     return <p>Loading courses...</p>;
