@@ -20,7 +20,7 @@ export default function LecturerCourseDetail() {
   return (
     <div className="px-16 flex gap-8">
       <div className="w-[30%]">
-        <SideBar />
+        <SideBar course={course} />
       </div>
       {course && (
         <div className="w-[66%] ">

@@ -1,14 +1,13 @@
-import React from 'react'
-import LecturerNav from './LecturerNav'
-import { CourseContent } from './CourseContent'
+import LecturerNav from "./LecturerNav";
+import { CourseContent } from "./CourseContent";
 
 const TeacherCoursePage = () => {
   return (
-    <div className='flex flex-col gap-[20px]'>
+    <div className="flex flex-col gap-[20px]">
       <LecturerNav />
-      <CourseContent/>
+      <CourseContent />
     </div>
-  )
-}
+  );
+};
 
-export default TeacherCoursePage
+export default TeacherCoursePage;
