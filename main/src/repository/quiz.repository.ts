@@ -11,6 +11,16 @@ export class QuizRepository extends BaseRepository<Quiz> implements IQuizReposit
     super(dataSource.getRepository(Quiz));
   }
 
+  async countByCourseId(courseId: string): Promise<number> {
+    return await this.ormRepository.count({
+      where: {
+        lessonPart: {
+          courseId: courseId
+        }
+      }
+    });
+  }
+
   // async findByLessonId(lessonId: string): Promise<Quiz[]> {
   //   return await this.ormRepository.find({
   //     where: {
