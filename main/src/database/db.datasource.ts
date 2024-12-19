@@ -27,6 +27,7 @@ import { GlobalConfig } from '@/utils/config/global-config.util';
 import { CourseRating } from '@/models/course_rating.model';
 import { LessonPart } from '@/models/lesson_part.model';
 import { Notification } from '@/models/notification.model';
+import { CourseRecommendation } from '@/models/course_recommendation.model';
 
 const models = [
   Account,
@@ -53,7 +54,8 @@ const models = [
   Student,
   CourseRating,
   LessonPart,
-  Notification
+  Notification,
+  CourseRecommendation
 ];
 
 export class AppDataSourceSingleton {
