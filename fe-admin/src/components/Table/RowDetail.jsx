@@ -142,7 +142,7 @@ const RowDetail = ({ row, headerList, pageName, setLoading }) => {
                 className=" text-black px-4 py-2 border-black"
                 onClick={handleApproveLecturer(row.id)}
               >
-                Duyệt giảng viên
+                {row?.isApproved ? "Hủy duyệt" : "Duyệt"}
               </Button>
             )}
           </>
