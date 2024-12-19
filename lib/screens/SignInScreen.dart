@@ -77,7 +77,16 @@ class _SignInScreenState extends State<SignInScreen> {
                             icon: Image.asset('assets/arrowleft_icon.png',
                                 height: 40),
                             onPressed: () {
-                              Navigator.pop(context);
+                              if (Navigator.canPop(context)) {
+                                Navigator.pop(
+                                    context); 
+                              } else {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()),
+                                );
+                              }
                             },
                           ),
                         ),

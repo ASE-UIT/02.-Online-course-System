@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:online_course_system/models/verifyemail_model.dart';
-import 'package:online_course_system/models/verifyphone_model.dart';
+import 'package:online_course_system/models/verify_email_model.dart';
+import 'package:online_course_system/models/verify_phone_model.dart';
 
 import '../services/HttpConfig.dart';
 

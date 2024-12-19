@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:online_course_system/models/phonesignup_model.dart';
+import 'package:online_course_system/models/phone_signup_model.dart';
 
-import '../models/emailsignup_model.dart';
+import '../models/email_signup_model.dart';
 import '../services/HttpConfig.dart';
 
 class SignupViewModel extends ChangeNotifier {

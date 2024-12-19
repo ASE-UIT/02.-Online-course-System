@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:online_course_system/ViewModels/signup_view_model.dart';
-import 'package:online_course_system/models/phonesignup_model.dart';
+import 'package:online_course_system/models/phone_signup_model.dart';
 import 'package:online_course_system/widgets/customtextfield.dart';
 import 'package:provider/provider.dart';
 import '../constants/colors.dart';

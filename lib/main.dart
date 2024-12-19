@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:online_course_system/ViewModels/change_password_view_model.dart';
 import 'package:online_course_system/ViewModels/learning_view_model.dart';
 import 'package:online_course_system/ViewModels/login_view_model.dart';
 import 'package:online_course_system/ViewModels/profile_view_model.dart';
 import 'package:online_course_system/ViewModels/signup_view_model.dart';
 import 'package:online_course_system/ViewModels/verifyOTP_view_model.dart';
 import 'package:online_course_system/screens/AccountUpdateScreen.dart';
+import 'package:online_course_system/screens/ChangePasswordScreen.dart';
 import 'package:online_course_system/screens/EmailVerificationScreen.dart';
 import 'package:online_course_system/screens/HomeScreen.dart';
 import 'package:online_course_system/screens/PhoneSignUpScreen.dart';
@@ -15,7 +17,6 @@ import 'package:online_course_system/screens/UpdatePhoneScreen.dart';
 import 'package:online_course_system/screens/SignInScreen.dart';
 import 'package:provider/provider.dart';
 import 'ViewModels/course_view_model.dart';
-import 'Views/login_screen.dart';
 
 void main() {
   runApp(
@@ -38,6 +39,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => ProfileViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChangePasswordViewModel(),
         )
       ],
       child: MyApp(),
@@ -64,6 +68,7 @@ class MyApp extends StatelessWidget {
         'UpdatePhoneScreen': (context) => const UpdatePhoneScreen(),
         'PhoneVerificationScreen': (context) => const PhoneVerificationScreen(),
         'EmailVerificationScreen': (context) => const EmailVerificationScreen(),
+        'ChangePasswordScreen': (context) => ChangePasswordScreen(),
       },
     );
   }
