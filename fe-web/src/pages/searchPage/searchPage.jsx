@@ -11,12 +11,10 @@ const SearchPage = () => {
   const [sortOrder, setSortOrder] = useState("DESC");
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("query");
-  // console.log("Search Query:", searchQuery);
 
   // Build the filter query dynamically based on selected filters
   const buildFilterQuery = useCallback((filters, searchQuery) => {
     const filterQuery = [];
-
     // Always include the search query
     if (searchQuery) {
       filterQuery.push({
@@ -39,17 +37,41 @@ const SearchPage = () => {
 
     // Add difficulty level filters
     if (filters.levels?.length) {
-      filters.levels.forEach((level) => {
-        filterQuery.push({
-          match: { difficultyLevel: level },
-        });
+      filterQuery.push({
+        bool: {
+          should: filters.levels.map((level) => ({
+            match: { difficulty_level: level },
+          })),
+        },
       });
     }
-
+    // Add duration filters
+    if (filters.lengths?.length) {
+      filterQuery.push({
+        bool: {
+          should: filters.lengths.map(({ min, max }) => ({
+            range: {
+              duration: {
+                gte: min,
+                lte: max,
+              },
+            },
+          })),
+        },
+      });
+    }
+    // Add rating filters
+    if (filters.ratings && filters.ratings.length > 0) {
+      filterQuery.push({
+        terms: {
+          average_rating: filters.ratings,
+        },
+      });
+    }
     // Add category filter
     if (filters.category?.id) {
       filterQuery.push({
-        match: { categoryId: filters.category.id },
+        match: { category_id: filters.category.id },
       });
     }
 
