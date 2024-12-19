@@ -296,7 +296,7 @@ class _SearchResultsList extends StatelessWidget {
           child: FavoriteCard(
             id: item['id'] ?? '',
             courseName: item['name'] ?? 'Không có tên',
-            authorName: item['create_by'] ?? 'Không rõ giảng viên',
+            authorName: item['lecturer_name'] ?? 'Không rõ giảng viên',
             rating: item['average_rating']?.toDouble() ?? 0.0,
             numberOfRatings: item['total_reviews'] ?? 0,
             price: item['sell_price']?.toDouble() ?? 0.0,
