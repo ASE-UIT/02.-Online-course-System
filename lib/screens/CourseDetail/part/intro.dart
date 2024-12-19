@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:online_course_system/constants/colors.dart';
 
 class CourseIntro extends StatefulWidget {
@@ -10,7 +11,8 @@ class CourseIntro extends StatefulWidget {
   _CourseIntroState createState() => _CourseIntroState();
 }
 
-class _CourseIntroState extends State<CourseIntro> with TickerProviderStateMixin {
+class _CourseIntroState extends State<CourseIntro>
+    with TickerProviderStateMixin {
   bool isExpanded = false;
 
   @override
@@ -35,18 +37,20 @@ class _CourseIntroState extends State<CourseIntro> with TickerProviderStateMixin
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
             child: ConstrainedBox(
-              constraints: isExpanded
-                  ? const BoxConstraints()
-                  : const BoxConstraints(maxHeight: 200),
-              child: Text(
+                constraints: isExpanded
+                    ? const BoxConstraints()
+                    : const BoxConstraints(maxHeight: 200),
+                child: Html(
+                    data: widget
+                        .text) /*Text(
                 widget.text,
                 softWrap: true,
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
                 ),
-              ),
-            ),
+              ),*/
+                ),
           ),
           const SizedBox(height: 16),
           // Nút "Hiện thêm"
@@ -65,7 +69,9 @@ class _CourseIntroState extends State<CourseIntro> with TickerProviderStateMixin
                 ),
                 const SizedBox(width: 8),
                 Icon(
-                  isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  isExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
                   color: Colors.black,
                 ),
               ],
