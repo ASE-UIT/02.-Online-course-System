@@ -15,7 +15,7 @@ export const CourseListCard = ({course}) => {
                 />
             </div>
             <div className=" p-3 items-center ">
-                <h1 className="line-clamp-2 text-text/md/bold">{course.course.name}</h1>
+                <h1 className=" line-clamp-1 text-text/md/bold">{course.course.name}</h1>
                 <h1 className="line-clamp-1 py-1 text-text/sm/medium text-black-300">{course.course.lecturer?.name ? course.course.lecturer?.name : ""}</h1>
                 {/*<div className="flex items-center gap-2 opacity-70">
                     <div className="rating flex justify-center items-center gap-3">

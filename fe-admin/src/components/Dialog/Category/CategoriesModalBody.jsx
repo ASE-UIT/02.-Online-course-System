@@ -1,6 +1,6 @@
 import { mediaApi } from "@/api/mediaApi";
 import { Button } from "@/components/ui/button";
-import { useCreateCategoryMutation } from "@/store/rtk/category.service";
+import { useCreateCategoryMutation, useUpdateCategoryMutation } from "@/store/rtk/category.service";
 import { UploadCloud } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { z } from "zod";
@@ -22,26 +22,19 @@ const CategoriesModalBody = ({ row, isAddOrChange }) => {
   const [categoryThumbnail, setCategoryThumbnail] = useState(null);
   const [formErrors, setFormErrors] = useState({});
   const [createCategory] = useCreateCategoryMutation();
+  const [updateCategory] = useUpdateCategoryMutation();
 
-  useEffect(() => {
-    console.log("CategoriesModalBody: rowData", row);
-  }, [row]);
+  // useEffect(() => {
+  //   console.log("CategoriesModalBody: rowData", row);
+  // }, [row]);
 
-  const fetchCategoryDetails = async () => {
-    const categoryData = await Promise.resolve({
-      name: "Danh mục mẫu",
-      description: "Mô tả danh mục mẫu",
-      thumbnail: "https://m.media-amazon.com/images/I/21kRx-CJsUL.png",
-    });
-    setCategoryName(categoryData.name);
-    setCategoryDescription(categoryData.description);
-    setCategoryThumbnail(categoryData.thumbnail);
-  };
   useEffect(() => {
     if (!isAddOrChange) {
-      fetchCategoryDetails();
+      setCategoryName(row?.name || "");
+      setCategoryDescription(row?.description || "");
+      setCategoryThumbnail(row?.thumbnail || null);
     }
-  }, [isAddOrChange]);
+  }, [isAddOrChange, row]);
 
   const handleUploadClick = () => fileInputRef.current?.click();
 
@@ -107,9 +100,14 @@ const CategoriesModalBody = ({ row, isAddOrChange }) => {
         setFormErrors(errors);
         return;
       }
-
-      await createCategory(finalPayload).unwrap();
-      alert(isAddOrChange ? "Category created successfully!" : "Category updated successfully!");
+      if (isAddOrChange) {
+        await createCategory(finalPayload).unwrap();
+        alert("Category created successfully!");
+      } else {
+        const updatedPayload = { ...finalPayload, id: row?.id }; // Assuming `row` contains the category ID
+        await updateCategory(updatedPayload).unwrap();
+        alert("Category updated successfully!");
+      }
     } catch (error) {
       console.error("Category submission failed:", error);
       setFormErrors({ global: "Failed to submit category. Please try again." });

@@ -15,7 +15,7 @@ import RemoveLecturer from "./Lecturer/RemoveLecturer";
 import EmployeeModalBody from "./Employee/EmployeeModalBody";
 import RemoveEmployee from "./Employee/RemoveEmployee";
 
-const DialogComponent = ({ bodyType, currentPage, row }) => {
+const DialogComponent = ({ bodyType, currentPage, row, setLoading }) => {
   const vietnameseText = () => {
     // CATEGORY_PAGE
     if (currentPage === CURRENT_PAGES.CATEGORY_PAGE) {
@@ -74,16 +74,32 @@ const DialogComponent = ({ bodyType, currentPage, row }) => {
           bodyType === MODAL_BODY_TYPES.ADD &&
             {
               [CURRENT_PAGES.CATEGORY_PAGE]: (
-                <CategoriesModalBody row={row} isAddOrChange={true} />
+                <CategoriesModalBody
+                  row={row}
+                  isAddOrChange={true}
+                  setLoading={setLoading}
+                />
               ),
               [CURRENT_PAGES.LECTURER_PAGE]: (
-                <LecturerModalBody row={row} isAddOrChange={true} />
+                <LecturerModalBody
+                  row={row}
+                  isAddOrChange={true}
+                  setLoading={setLoading}
+                />
               ),
               [CURRENT_PAGES.EMPLOYEE_PAGE]: (
-                <EmployeeModalBody row={row} isAddOrChange={true} />
+                <EmployeeModalBody
+                  row={row}
+                  isAddOrChange={true}
+                  setLoading={setLoading}
+                />
               ),
               [CURRENT_PAGES.WAITING_COURSE_PAGE]: (
-                <EmployeeModalBody row={row} isAddOrChange={true} />
+                <EmployeeModalBody
+                  row={row}
+                  isAddOrChange={true}
+                  setLoading={setLoading}
+                />
               )
             }[currentPage]
         }

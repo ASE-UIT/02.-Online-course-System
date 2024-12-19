@@ -23,7 +23,41 @@ export const categoryApi = baseApi.injectEndpoints({
         }
       },
     }),
+    updateCategory: build.mutation({
+      query: ({ id, updatedCategory }) => ({
+        url: `/course-category/${id}/`,
+        method: "PUT",
+        body: updatedCategory,
+      }),
+      onQueryStarted: async (arg, { queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+          showToast("Category updated successfully", "success");
+        } catch {
+          showToast("Failed to update category", "error");
+        }
+      },
+    }),
+    deleteCategory: build.mutation({
+      query: (id) => ({
+        url: `/course-category/${id}/`,
+        method: "DELETE",
+      }),
+      onQueryStarted: async (arg, { queryFulfilled }) => {
+        try {
+          await queryFulfilled;
+          showToast("Category deleted successfully", "success");
+        } catch {
+          showToast("Failed to delete category", "error");
+        }
+      },
+    }),
   }),
 });
 
-export const { useGetCategoriesQuery, useCreateCategoryMutation } = categoryApi;
+export const {
+  useGetCategoriesQuery,
+  useCreateCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
+} = categoryApi;

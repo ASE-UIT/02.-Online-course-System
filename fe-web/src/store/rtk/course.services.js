@@ -220,6 +220,12 @@ export const courseRTKApi = baseApi.injectEndpoints({
       },
       providesTags: (result, error, { courseId }) => [{ type: "Rating", id: courseId }],
     }),
+    getCourseRecommendation: build.query({
+      query: (topN) => ({
+        url: `/course-recommendation?topN=${topN}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 export const {
@@ -243,4 +249,6 @@ export const {
   useCreateRatingMutation,
   useGetRatingStatisticsQuery,
   useUpdateRatingMutation,
+
+  useGetCourseRecommendationQuery,
 } = courseRTKApi;

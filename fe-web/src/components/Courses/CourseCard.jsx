@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import Rating from "../Rating/Rating";
-import CourseCardIcon from "/picture/CourseCardIcon.svg";
 import { formatCurrency } from "@/utils/converter";
 export const CourseCard = ({ course }) => {
   return (
