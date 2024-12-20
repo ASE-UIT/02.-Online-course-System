@@ -29,7 +29,7 @@ export class CourseRecommendationController {
       const user = req.user;
       const topN = Number(req.query.topN) || 10;
 
-      const result = await this.courseRecommendationService.getRecommend(user!, topN);
+      const result = await this.courseRecommendationService.getRecommend(user, topN);
 
       res.send_ok('Lấy danh sách khóa học gợi ý thành công', result);
     } catch (error) {
