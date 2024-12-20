@@ -43,7 +43,11 @@ export class CourseRecommendationService
     return courses;
   }
 
-  async getRecommend(user: JwtClaimDto, topN: number): Promise<Course[]> {
+  async getRecommend(user: JwtClaimDto | undefined, topN: number): Promise<Course[]> {
+    if (!user) {
+      return await this.getTopRatingCourses(topN);
+    }
+
     if (user.roleId === RoleEnum.STUDENT) {
       const studentId = user.id;
       const result = await this.courseRecommendationRepository.findOne({

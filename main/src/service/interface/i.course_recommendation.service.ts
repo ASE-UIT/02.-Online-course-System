@@ -5,5 +5,5 @@ import { BaseModelType } from '@/types/base-model.types';
 import { ParsedQs } from 'qs';
 
 export interface ICourseRecommendationService<T> extends IBaseCrudService<T> {
-  getRecommend(user: JwtClaimDto, topN: number): Promise<Course[]>;
+  getRecommend(user: JwtClaimDto | undefined, topN: number): Promise<Course[]>;
 }
