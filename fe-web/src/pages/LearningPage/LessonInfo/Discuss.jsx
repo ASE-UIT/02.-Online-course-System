@@ -101,9 +101,9 @@ export default function Discuss() {
       </div>
       <div className="flex gap-[10px] items-start mt-[20px]">
         <div
-          className="min-w-[32px] h-[32px] bg-center bg-cover"
+          className="rounded-full min-w-[32px] h-[32px] bg-center bg-cover"
           style={{
-            backgroundImage: `url(https://s3-alpha-sig.figma.com/img/bd66/44b6/b2a44218a37e0f4a110e8345dba0a38a?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cKkUOfyL9yVSVDUe76SpuRZc6JBJBEv7py7W9K8RIHJr7-HT~0lJYKfa4Kcmb3-emVSkBXyOIgrCF~eC8K6-KrBiUyu-~A99PvySQBqbR1-D6YA2-pAF20cJx2zsGW5vpwfD~RQPGyxObhRGnWtHSAX6V2pi6icUAJpQpY4UMY5XMVeUBuJtOwLq5df0Nh6mReqywsym3pOckZjp21GsE2bzISASpAbM-qZd2eA-Makr7STF5BRwXde~pxQm1A74c7Wy13OgXiBd1nwRHNrM9kS6oX0qkrGiZ-KxTSm6yi3CA8dn6bRcwmEFTZ4UF1vzGZyHSvWizBEgUUG5RzMEtg__)`,
+            backgroundImage: `url(https://s3-alpha-sig.figma.com/img/5641/7762/309a183aa654f1aef9769c111e38197a?Expires=1735516800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=RTRxYdSOAVpFt4DWrw2SW5ixIpLDfBFK2X9aYNHoIrZ2bOglZ84s-pXqWoXfAc-KYeny9BgOPm9nUJL1hxQFDh0fjIECCAQgy83Ig-60LFvpNaU6qGY0ePQ5bxUeLwjfKHof6QgVcBgoBe9OguhpvVVKlvGWYLdJ-6KeUg9XlDvlZekh30STptNhwxR2tE9EBYtsspcdXR8Ut09RYM-e-ymoSk4HCeegLdjVYuY-~TtulMl-XBnhfJedW39X-OEx2vyjKmtH30t-FjqVx67Hp9JY~ErT2cxq80kr7hwW~UlCqIegxw5y8lK0DRtXmAkNrPKgokpPcVFE-9zLmKfy4w__)`,
           }}
         ></div>
         <div className=" flex-1">

@@ -29,7 +29,7 @@ export default function General() {
               style={{
                 backgroundImage: `url(${
                   lecturer?.avatar ||
-                  "https://s3-alpha-sig.figma.com/img/5641/7762/309a183aa654f1aef9769c111e38197a?Expires=1734307200&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gtlKAshVvgQFjbAgbNr3ddFdRY5KQAE-UYivYe0wTyg-hLWt2xWkMoWYndnqsqGOuDKT0PBf4xyvtf-16TuZUH4~5yf6wJVzRkWvsGxuf2OCvbOkYKgvREXPyaoIYPHYQEW-m-P17---DOAJaLesG9kJZiRapvOcYlV-Q~IP8Ka2xmf8mY~X4fk2yYEJcAZto1I71aQ5J2NNCqvSbJvFhrp1xdGT~LLZ2UO6GGjI6DCEsGATO2T5cfGG3tDswJPTzQe3i4HlinNu86NiqvZ-YM6PkyOSUVCmcC4CxhEDxtJNFAORv-aVCvOSj0NsMF9eckLuqa-Cg4DYtLQr2qeUIQ__"
+                  "https://s3-alpha-sig.figma.com/img/5641/7762/309a183aa654f1aef9769c111e38197a?Expires=1735516800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=RTRxYdSOAVpFt4DWrw2SW5ixIpLDfBFK2X9aYNHoIrZ2bOglZ84s-pXqWoXfAc-KYeny9BgOPm9nUJL1hxQFDh0fjIECCAQgy83Ig-60LFvpNaU6qGY0ePQ5bxUeLwjfKHof6QgVcBgoBe9OguhpvVVKlvGWYLdJ-6KeUg9XlDvlZekh30STptNhwxR2tE9EBYtsspcdXR8Ut09RYM-e-ymoSk4HCeegLdjVYuY-~TtulMl-XBnhfJedW39X-OEx2vyjKmtH30t-FjqVx67Hp9JY~ErT2cxq80kr7hwW~UlCqIegxw5y8lK0DRtXmAkNrPKgokpPcVFE-9zLmKfy4w__"
                 })`,
               }}
             ></div>
